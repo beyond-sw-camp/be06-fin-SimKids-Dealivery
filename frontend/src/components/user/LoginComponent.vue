@@ -33,11 +33,11 @@
                         <span class="css-nytqmg e4nu7ef1">로그인</span>
                     </button>
                     
-                    <button class="css-hxorrg e4nu7ef3" id="user" @click="routeToSignup" type="button" height="54" radius="3" style="margin-top: 10px;">
+                    <button class="css-hxorrg e4nu7ef3" id="user" @click="routeToSignup('user')" type="button" height="54" radius="3" style="margin-top: 10px;">
                         <span class="css-nytqmg e4nu7ef1" >일반회원가입</span>
                     </button>
-                    <button class="css-hxorrg e4nu7ef3" id="company" @click="routeToSignup" type="button" height="54" radius="3">
-                        <span class="css-nytqmg e4nu7ef1" @click="routeToSignup" >업체회원가입</span>
+                    <button class="css-hxorrg e4nu7ef3" id="company" @click="routeToSignup('company')" type="button" height="54" radius="3">
+                        <span class="css-nytqmg e4nu7ef1" >업체회원가입</span>
                     </button>
                 </div>
             </form>
@@ -54,10 +54,8 @@ export default {
     return {userType:'user'}
   },
   methods:{
-    routeToSignup(event){
-      const clickedId = event.target.id;
-      console.log(clickedId);
-        if(clickedId === "user"){
+    routeToSignup(type){
+        if(type === 'user'){
           this.$router.push('/auth/user/signup');
         }else{
           this.$router.push('/auth/company/signup');
