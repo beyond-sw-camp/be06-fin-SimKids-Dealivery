@@ -14,8 +14,8 @@
                                     class="css-u52dqk e1uzxhvi2" value=""></div>
                         </div>
                     </div>
-                    <div class="css-1w0ksfz e744wfw2"><button class="css-ufulao e4nu7ef3" type="button" @click="doEmailAuth"><span
-                                class="css-nytqmg e4nu7ef1">
+                    <div class="css-1w0ksfz e744wfw2"><button class="css-ufulao e4nu7ef3" type="button"
+                            @click="doEmailAuth"><span class="css-nytqmg e4nu7ef1">
                                 <img src="https://res.kurly.com/pc/service/cart/2007/ico_search.svg" alt=""
                                     class="css-1m3kac1 e4nu7ef0">이메일 인증</span></button></div>
                 </div>
@@ -91,12 +91,12 @@
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
                             <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="mobileNumber"
-                                    name="mobileNumber" readonly type="text" required="" class="css-u52dqk e1uzxhvi2 read-only"
-                                    value="" v-model="address"></div>
+                                    name="mobileNumber" readonly type="text" required=""
+                                    class="css-u52dqk e1uzxhvi2 read-only" value="" v-model="address"></div>
                         </div>
                     </div>
-                    <div class="css-1w0ksfz e744wfw2"><button class="css-ufulao e4nu7ef3" type="button" @click="openPostcode"><span
-                                class="css-nytqmg e4nu7ef1">
+                    <div class="css-1w0ksfz e744wfw2"><button class="css-ufulao e4nu7ef3" type="button"
+                            @click="openPostcode"><span class="css-nytqmg e4nu7ef1">
                                 <img src="https://res.kurly.com/pc/service/cart/2007/ico_search.svg" alt=""
                                     class="css-1m3kac1 e4nu7ef0">주소 검색</span></button></div>
                 </div>
@@ -107,8 +107,8 @@
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
                             <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="mobileNumber"
-                                    name="mobileNumber" readonly type="text" required="" class="css-u52dqk e1uzxhvi2 read-only"
-                                    value="" v-model="postNumber"></div>
+                                    name="mobileNumber" readonly type="text" required=""
+                                    class="css-u52dqk e1uzxhvi2 read-only" value="" v-model="postNumber"></div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"></div>
@@ -143,44 +143,28 @@
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-ov2xfu e1sjmfnv6"><label class="css-msja7w e1dcessg3" for="TermsAgreeAll"><input
                                     id="TermsAgreeAll" type="checkbox" class="css-agvwxo e1dcessg2">
-                                <div class="css-79hxr7 e1dcessg1"></div><span>전체 동의합니다.</span>
+                                <div class="css-79hxr7 e1dcessg1">
+                                    <img :src="radioAllStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')" @click="checkRadio('radioAll')" alt="Icon">
+                                </div><span>전체 동의합니다.</span>
                             </label>
-
-
-                            <!--체크 path d= M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z -->
-                             <!--미체크 M23.5 12C23.5 18.3513 18.3513 23.5 12 23.5C5.64873 23.5 0.5 18.3513 0.5 12C0.5 5.64873 5.64873 0.5 12 0.5C18.3513 0.5 23.5 5.64873 23.5 12Z -->
-                             <!--체크 path fill= #5f0080 -->
-                             <!-- 미체크 #fff -->
                         </div>
                         <div class="css-ov2xfu e1sjmfnv6">
                             <div class="css-s5xdrg e1sjmfnv3"><label class="css-1mjkje9 e1dcessg3"
                                     for="RequiredTermsCondition"><input id="RequiredTermsCondition" type="checkbox"
                                         class="css-agvwxo e1dcessg2">
-                                    <div class="css-79hxr7 e1dcessg1"><svg width="24" height="24" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M23.5 12C23.5 18.3513 18.3513 23.5 12 23.5C5.64873 23.5 0.5 18.3513 0.5 12C0.5 5.64873 5.64873 0.5 12 0.5C18.3513 0.5 23.5 5.64873 23.5 12Z"
-                                                stroke="#ddd" fill="#fff"></path>
-                                            <path d="M7 12.6667L10.3846 16L18 8.5" stroke="#ddd" stroke-width="1.5"
-                                                stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg></div><span>이용약관 동의</span>
-                                </label><span class="css-64z8en e1sjmfnv4">(필수)</span></div><a
-                                class="css-7chi73 e1sjmfnv2">약관보기</a>
+                                    <div class="css-79hxr7 e1dcessg1">
+                                        <img :src="radioFirstStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')" @click="checkRadio('radioFirst')" alt="Icon">
+                                    </div><span>이용약관 동의</span>
+                                </label><span class="css-64z8en e1sjmfnv4">(필수)</span></div>
                         </div>
                         <div class="css-ov2xfu e1sjmfnv6">
                             <div class="css-s5xdrg e1sjmfnv3"><label class="css-1mjkje9 e1dcessg3"
                                     for="RequiredTermsOfPrivacy"><input id="RequiredTermsOfPrivacy" type="checkbox"
                                         class="css-agvwxo e1dcessg2">
-                                    <div class="css-79hxr7 e1dcessg1"><svg width="24" height="24" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M23.5 12C23.5 18.3513 18.3513 23.5 12 23.5C5.64873 23.5 0.5 18.3513 0.5 12C0.5 5.64873 5.64873 0.5 12 0.5C18.3513 0.5 23.5 5.64873 23.5 12Z"
-                                                stroke="#ddd" fill="#fff"></path>
-                                            <path d="M7 12.6667L10.3846 16L18 8.5" stroke="#ddd" stroke-width="1.5"
-                                                stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg></div><span>개인정보 수집∙이용 동의</span>
-                                </label><span class="css-64z8en e1sjmfnv4">(필수)</span></div><a
-                                class="css-7chi73 e1sjmfnv2">약관보기</a>
+                                    <div class="css-79hxr7 e1dcessg1">
+                                        <img :src="radioSecondStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')" @click="checkRadio('radioSecond')" alt="Icon">
+                                    </div><span>개인정보 수집∙이용 동의</span>
+                                </label><span class="css-64z8en e1sjmfnv4">(필수)</span></div>
                         </div>
 
 
@@ -189,14 +173,9 @@
                             <div class="css-s5xdrg e1sjmfnv3"><label class="css-1mjkje9 e1dcessg3"
                                     for="RequiredSignupAge"><input id="RequiredSignupAge" type="checkbox"
                                         class="css-agvwxo e1dcessg2">
-                                    <div class="css-79hxr7 e1dcessg1"><svg width="24" height="24" viewBox="0 0 24 24"
-                                            fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M23.5 12C23.5 18.3513 18.3513 23.5 12 23.5C5.64873 23.5 0.5 18.3513 0.5 12C0.5 5.64873 5.64873 0.5 12 0.5C18.3513 0.5 23.5 5.64873 23.5 12Z"
-                                                stroke="#ddd" fill="#fff"></path>
-                                            <path d="M7 12.6667L10.3846 16L18 8.5" stroke="#ddd" stroke-width="1.5"
-                                                stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg></div><span>본인은 만 14세 이상입니다.</span>
+                                    <div class="css-79hxr7 e1dcessg1">
+                                        <img :src="radioThirdStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')" @click="checkRadio('radioThird')" alt="Icon">
+                                    </div><span>본인은 만 14세 이상입니다.</span>
                                 </label><span class="css-64z8en e1sjmfnv4">(필수)</span></div>
                         </div>
                     </div>
@@ -215,43 +194,81 @@
 export default {
     name: 'UserSignupComponent',
     data() {
-        return { address: "", postNumber: "", isClickedEmailAuth: false
-            }
+        return {
+            address: "", postNumber: "", isClickedEmailAuth: false,
+            radioAllStatus: false, radioFirstStatus: false, radioSecondStatus: false, radioThirdStatus: false
+        }
     },
-    methods:{
-        openPostcode(){
+    methods: {
+        openPostcode() {
             let width = 500;
             let height = 600;
-            
+
             // eslint가 daum을 전역변수로 인식할 수 있도록 끄는 주석
             console.log("gd");
             // eslint-disable-next-line no-undef
             new daum.Postcode({
                 width: width,
                 height: height,
-                oncomplete: (data) => {    
+                oncomplete: (data) => {
                     this.address = data.address;
                     this.postNumber = data.zonecode;
                 }
             }).open({
                 left: (window.screen.width / 2) - (width / 2),
                 top: (window.screen.height / 2) - (height / 2)
-            });     
+            });
         },
-        doEmailAuth(){
-          this.isClickedEmailAuth = true;
+        doEmailAuth() {
+            this.isClickedEmailAuth = true;
+        },
+        checkRadio(target){
+            if(target === "radioAll"){
+                if(!this.radioAllStatus){
+                    this.radioAllStatus = true;
+                    this.radioFirstStatus = true;
+                    this.radioSecondStatus = true;
+                    this.radioThirdStatus = true;
+                }else{
+                    this.radioAllStatus = false;
+                    this.radioFirstStatus = false;
+                    this.radioSecondStatus = false;
+                    this.radioThirdStatus = false;
+                }
+                
+            }else if(target === "radioFirst"){
+                this.radioFirstStatus = !this.radioFirstStatus
+            }else if(target === "radioSecond"){
+                this.radioSecondStatus = !this.radioSecondStatus
+            }else{
+                this.radioThirdStatus = !this.radioThirdStatus
+            }
+            
+            this.checkRadioAll();
+        },
+        checkRadioAll(){
+            if(this.radioFirstStatus && this.radioSecondStatus && this.radioThirdStatus){
+                this.radioAllStatus = true;
+            }else{
+                this.radioAllStatus = false;
+            }
         }
     }
 }
 </script>
 <style scoped>
-*{
+* {
     font-family: "Noto Sans KR", "malgun gothic", "AppleGothic", "dotum", "sans-serif";
 }
 
-.read-only{
+img{
+    cursor: pointer;
+}
+
+.read-only {
     background-color: #f1f3f5;
 }
+
 .css-pculus {
     min-width: 1050px;
     margin-top: 50px;
@@ -259,12 +276,19 @@ export default {
     background-color: #fff;
 }
 
-*, :after, :before {
+*,
+:after,
+:before {
     box-sizing: border-box;
     margin: 0;
 }
 
-*, :after, :before, legend, td, th {
+*,
+:after,
+:before,
+legend,
+td,
+th {
     padding: 0;
 }
 
@@ -273,10 +297,15 @@ div {
     unicode-bidi: isolate;
 }
 
-body, button, input, select, textarea {
+body,
+button,
+input,
+select,
+textarea {
     font-size: 14px;
     color: #333;
 }
+
 body {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -287,7 +316,11 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
-html, button, input, select, textarea {
+html,
+button,
+input,
+select,
+textarea {
     font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
 }
 
@@ -404,16 +437,19 @@ html {
     width: 120px;
     margin-left: 8px;
 }
+
 .css-ufulao:disabled {
     border-color: rgb(221, 221, 221);
     color: rgb(221, 221, 221);
 }
-.css-1w0ksfz > button {
+
+.css-1w0ksfz>button {
     height: 44px;
     border-radius: 3px;
 }
 
-button[disabled], input[disabled] {
+button[disabled],
+input[disabled] {
     cursor: default;
 }
 
@@ -430,28 +466,40 @@ button[disabled], input[disabled] {
     border: 1px solid rgb(95, 0, 128);
 }
 
-[type=button], [type=reset], [type=submit], button {
+[type=button],
+[type=reset],
+[type=submit],
+button {
     -webkit-appearance: button;
 }
 
-button, select {
+button,
+select {
     text-transform: none;
 }
 
-button, input, optgroup, select, textarea {
+button,
+input,
+optgroup,
+select,
+textarea {
     font-family: inherit;
     font-size: 100%;
     line-height: 1.15;
     margin: 0;
 }
 
-button, input, optgroup, select, textarea {
+button,
+input,
+optgroup,
+select,
+textarea {
     color: inherit;
     font: inherit;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-.css-1w0ksfz > button > span {
+.css-1w0ksfz>button>span {
     font-weight: 500;
     font-size: 14px;
 }
@@ -479,12 +527,15 @@ img {
     border-style: none;
 }
 
-img, legend {
+img,
+legend {
     border: 0;
     vertical-align: top;
 }
 
-canvas, img, video {
+canvas,
+img,
+video {
     max-width: 100%;
 }
 
@@ -536,7 +587,8 @@ canvas, img, video {
     font-size: 18px;
 }
 
-input[type=checkbox], input[type=radio] {
+input[type=checkbox],
+input[type=radio] {
     box-sizing: border-box;
     padding: 0;
 }
@@ -570,6 +622,7 @@ svg:not(:root) {
 :not(svg) {
     transform-origin: 0px 0px;
 }
+
 .css-s5xdrg {
     display: -webkit-box;
     display: -webkit-flex;
@@ -603,7 +656,9 @@ svg:not(:root) {
     padding: 10px 0px 10px 20px;
 }
 
-*, :after, :before {
+*,
+:after,
+:before {
     box-sizing: border-box;
     margin: 0;
 }
@@ -638,7 +693,10 @@ div {
     border: 0px none;
 }
 
-[type=button], [type=reset], [type=submit], button {
+[type=button],
+[type=reset],
+[type=submit],
+button {
     -webkit-appearance: button;
 }
 
@@ -647,7 +705,11 @@ div {
     font-size: 16px;
     font-weight: 500;
 }
-button, input[type=button], input[type=reset], input[type=submit] {
+
+button,
+input[type=button],
+input[type=reset],
+input[type=submit] {
     -webkit-appearance: button;
     cursor: pointer;
 }
