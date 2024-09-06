@@ -3,6 +3,8 @@ import UserSignupComponent from "@/components/user/UserSignupComponent.vue";
 import AuthPage from "@/pages/common/AuthPage.vue";
 import MainPage from "@/pages/common/MainPage.vue";
 import CompanyBoardPostPage from "../pages/company/board/CompanyBoardPostPage.vue";
+import OrdersPage from "@/pages/user/orders/OrdersPage.vue";
+
 import { createRouter, createWebHistory } from "vue-router";
 import CompanySignupComponent from "@/components/company/CompanySignupComponent.vue";
 
@@ -18,6 +20,7 @@ const router = createRouter({
           component: CompanyBoardPostPage,
           meta: { requiresAuth: false },
         },
+        { path: "orders", component: OrdersPage }
       ],
     },
 
