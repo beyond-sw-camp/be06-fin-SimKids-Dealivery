@@ -1,4 +1,31 @@
+<template>
+  <div id="container">
+    <div id="main">
+      <div id="content">
+        <div class="page_aticle aticle_type2">
+          <CompanyAsideComponent></CompanyAsideComponent>
+          <CompanyBoardPostComponent></CompanyBoardPostComponent>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import CompanyAsideComponent from "@/components/company/CompanyAsideComponent.vue";
+import CompanyBoardPostComponent from "@/components/company/CompanyBoardPostComponent.vue";
+export default {
+  name: "MainPage",
+  components: {
+    CompanyAsideComponent,
+    CompanyBoardPostComponent,
+  },
+};
+</script>
+
+<style scoped>
 #content {
+  min-height: 1800px;
   min-width: 1050px;
 }
 
@@ -113,3 +140,4 @@ span {
   padding: 0;
   box-sizing: border-box;
 }
+</style>

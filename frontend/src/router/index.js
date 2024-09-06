@@ -1,5 +1,5 @@
 import MainPage from "@/pages/MainPage.vue";
-import CompanyBoardPage from "../pages/company/board/CompanyBoardPage.vue";
+import CompanyBoardPostPage from "../pages/company/board/CompanyBoardPostPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -11,7 +11,7 @@ const router = createRouter({
       children: [
         {
           path: "company",
-          component: CompanyBoardPage,
+          component: CompanyBoardPostPage,
           meta: { requiresAuth: false },
         },
       ],
