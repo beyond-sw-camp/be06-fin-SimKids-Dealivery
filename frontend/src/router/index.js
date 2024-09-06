@@ -8,22 +8,30 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-
-      path: "/",component: MainPage,
+      path: "/",
+      component: MainPage,
+      children: [
+        {
+          path: "company",
+          component: CompanyBoardPostPage,
+          meta: { requiresAuth: false },
+        },
+      ],
     },
 
     {
-      path: "/auth", component: AuthPage,
+      path: "/auth",
+      component: AuthPage,
       children: [
-        {path: "login", component: LoginComponent, meta: { requiresAuth: false } },
-        {path: "", redirect: "/auth/login", meta: { requiresAuth: false } },
-        {path: "company",
-          component: CompanyBoardPostPage,
+        {
+          path: "login",
+          component: LoginComponent,
           meta: { requiresAuth: false },
-        }
-      ]
-    }
-  ]
+        },
+        { path: "", redirect: "/auth/login", meta: { requiresAuth: false } },
+      ],
+    },
+  ],
 });
 
 export default router;
