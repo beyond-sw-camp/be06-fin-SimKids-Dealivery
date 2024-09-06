@@ -38,12 +38,12 @@ export default {
   padding-top: 65px;
 }
 
-#snb {
+/* #snb {
   float: left;
   width: 200px;
-}
+} */
 
-#snb .tit_snb {
+/* #snb .tit_snb {
   padding: 8px 0 33px 1px;
   font-weight: 700;
   font-size: 30px;
@@ -59,9 +59,9 @@ export default {
 
 #snb .list_menu li {
   border-bottom: 1px solid #f2f2f2;
-}
+} */
 
-#snb .list_menu li.on a,
+/* #snb .list_menu li.on a,
 #snb .list_menu li a:hover {
   background: #fafafa
     url(https://res.kurly.com/pc/ico/2008/ico_arrow_6x11_on.svg) no-repeat 174px
@@ -69,9 +69,9 @@ export default {
   background-size: 6px 11px;
   font-weight: 700;
   color: #5f0080;
-}
+} */
 
-#snb .list_menu li a {
+/* #snb .list_menu li a {
   display: block;
   overflow: hidden;
   padding: 15px 0 15px 20px;
@@ -85,11 +85,10 @@ export default {
 }
 
 .snb_my {
-  position: absolute;
   top: 220px;
   left: 400px;
   margin-right: -670px;
-}
+} */
 
 .page_aticle.aticle_type2 .page_section {
   float: right;

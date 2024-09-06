@@ -88,7 +88,6 @@ export default {
 }
 
 .snb_my {
-  position: absolute;
   top: 220px;
   left: 400px;
   margin-right: -670px;
