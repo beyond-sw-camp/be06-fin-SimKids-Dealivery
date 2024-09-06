@@ -7,6 +7,7 @@ import OrdersPage from "@/pages/user/orders/OrdersPage.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
 import CompanySignupComponent from "@/components/company/CompanySignupComponent.vue";
+import FindPasswordComponent from "@/components/user/FindPasswordComponent.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,6 +32,7 @@ const router = createRouter({
         {path: "login", component: LoginComponent, meta: { requiresAuth: false } },
         {path: "user/signup", component: UserSignupComponent, meta: { requiresAuth: false } },
         {path: "company/signup", component: CompanySignupComponent, meta: { requiresAuth: false } },
+        {path: "pwd/find", component: FindPasswordComponent, meta: { requiresAuth: false } },
         {path: "", redirect: "/auth/login", meta: { requiresAuth: false } },
       ]
     }
