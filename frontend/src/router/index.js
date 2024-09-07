@@ -31,16 +31,16 @@ const router = createRouter({
       path: "/auth",
       component: AuthPage,
       children: [
-        {path: "login", component: LoginComponent, meta: { requiresAuth: false } },
-        {path: "user/signup", component: UserSignupComponent, meta: { requiresAuth: false } },
-        {path: "company/signup", component: CompanySignupComponent, meta: { requiresAuth: false } },
-        {path: "pwd/reset", component: ResetPasswordComponent, meta: { requiresAuth: false } },
-        {path: "id/find/success", component: FindIdSuccessComponent, meta: { requiresAuth: false } },
-        {path: "id/find", component: FindIdComponent, meta: { requiresAuth: false } },
-        {path: "", redirect: "/auth/login", meta: { requiresAuth: false } },
+        { path: "login", component: LoginComponent, meta: { requiresAuth: false } },
+        { path: "user/signup", component: UserSignupComponent, meta: { requiresAuth: false } },
+        { path: "company/signup", component: CompanySignupComponent, meta: { requiresAuth: false } },
+        { path: "pwd/reset", component: ResetPasswordComponent, meta: { requiresAuth: false } },
+        { path: "id/find/success", component: FindIdSuccessComponent, meta: { requiresAuth: false } },
+        { path: "id/find", component: FindIdComponent, meta: { requiresAuth: false } },
+        { path: "", redirect: "/auth/login", meta: { requiresAuth: false } },
       ]
     },
-    
+
     {
       path: "/mypage",
       component: MyPage,
