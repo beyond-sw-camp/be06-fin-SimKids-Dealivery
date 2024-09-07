@@ -59,309 +59,288 @@ export default {
 }
 </script>
 <style scoped>
-*{
-    font-family: "Noto Sans KR", "malgun gothic", "AppleGothic", "dotum", "sans-serif";
+* {
+  font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
 }
-
 .css-140915z {
-    min-width: 1050px;
-    margin-top: 90px;
-    margin-bottom: 60px;
-    background-color: white;
+  min-width: 1050px;
+  margin-top: 90px;
+  margin-bottom: 60px;
+  background-color: #fff;
 }
-
 body {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-color: #fff;
-    -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #fff;
+  -webkit-tap-highlight-color: transparent;
 }
-
-html, button, input, select, textarea {
-    font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
+button,
+html,
+input {
+  font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
 }
-
 html {
-    line-height: 1.15;
-    -webkit-text-size-adjust: 100%;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
 }
-
-*, :after, :before {
-    box-sizing: border-box;
-    margin: 0;
+*,
+:after,
+:before {
+  box-sizing: border-box;
+  margin: 0;
 }
-
-body, button, input, select, textarea {
-    font-size: 14px;
-    color: #333;
+body,
+button,
+input {
+  font-size: 14px;
+  color: #333;
 }
-
 div {
-    display: block;
-    unicode-bidi: isolate;
+  display: block;
+  unicode-bidi: isolate;
 }
-
 .css-7500ra {
-    padding-bottom: 30px;
-    font-weight: 700;
-    font-size: 20px;
-    text-align: center;
+  padding-bottom: 30px;
+  font-weight: 700;
+  font-size: 20px;
+  text-align: center;
 }
-
 .css-u3y03b {
-    max-width: 400px;
-    padding: 0 10px 6px 10px;
-    margin: auto;
-    position: relative;
-    background-color: white;
+  max-width: 400px;
+  padding: 0 10px 6px 10px;
+  margin: auto;
+  position: relative;
+  background-color: #fff;
 }
-
 .css-1izr46f {
-    background-color: white;
-    padding: 0 15px 0 15px;
-    margin: 0;
-    box-shadow: inset 0 -0.5px 0 0 #ddd;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-flex-wrap: nowrap;
-    -webkit-flex-wrap: nowrap;
-    -ms-flex-wrap: nowrap;
-    flex-wrap: nowrap;
-    text-align: center;
+  background-color: #fff;
+  padding: 0 15px 0 15px;
+  margin: 0;
+  box-shadow: inset 0 -0.5px 0 0 #ddd;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  text-align: center;
 }
-
 .inactive {
-    display: block;
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    position: relative;
-    height: 48px;
-    font-weight: 400;
-    font-size: 16px;
-    color: #666;
-    line-height: 18px;
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  position: relative;
+  height: 48px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #666;
+  line-height: 18px;
 }
-
-[type=button], [type=reset], [type=submit], button {
-    -webkit-appearance: button;
-}
-
-html, button, input, select, textarea {
-    font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
-}
-
-button, select {
-    text-transform: none;
-}
-
-button, input {
-    overflow: visible;
-}
-
+[type="button"],
+[type="reset"],
+[type="submit"],
 button {
-    border-radius: 0;
+  -webkit-appearance: button;
 }
-
+button,
+html,
+input {
+  font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
+}
+button {
+  text-transform: none;
+}
+button,
+input {
+  overflow: visible;
+}
+button {
+  border-radius: 0;
+}
 .active {
-    display: block;
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    position: relative;
-    height: 48px;
-    font-weight: 500;
-    font-size: 16px;
-    color: #5f0080;
-    line-height: 18px;
-    box-shadow: inset 0px -2px 0px 0px #5f0080;
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  position: relative;
+  height: 48px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #5f0080;
+  line-height: 18px;
+  box-shadow: inset 0 -2px 0 0 #5f0080;
 }
-
-
 .css-s3iz85 {
-    padding: 24px 20px;
+  padding: 24px 20px;
 }
-
 form {
-    display: block;
-    margin-top: 0em;
-    unicode-bidi: isolate;
+  display: block;
+  margin-top: 0;
+  unicode-bidi: isolate;
 }
-
 .css-1yjqrpx {
-    padding-bottom: 12px;
+  padding-bottom: 12px;
 }
-
 .css-c3g9of {
-    display: inline-block;
-    padding: 8px 0 11px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 19px;
-    color: #333;
+  display: inline-block;
+  padding: 8px 0 11px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19px;
+  color: #333;
 }
-
 .css-176lya2 {
-    position: relative;
-    height: 48px;
+  position: relative;
+  height: 48px;
 }
 .css-u52dqk {
-    width: 100%;
-    height: 46px;
-    padding: 0 11px 1px 15px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.5;
-    color: #333;
-    outline: none;
-    box-sizing: border-box;
+  width: 100%;
+  height: 46px;
+  padding: 0 11px 1px 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  outline: 0;
+  box-sizing: border-box;
 }
-
-html, button, input, select, textarea {
-    font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
+button,
+html,
+input {
+  font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
 }
-
-button, input[type=button], input[type=reset], input[type=submit] {
-    -webkit-appearance: button;
-    cursor: pointer;
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  cursor: pointer;
 }
-
 button {
-    overflow: visible;
-    background-color: transparent;
-    border: none;
+  overflow: visible;
+  background-color: transparent;
+  border: none;
 }
-
-*, :after, :before {
-    box-sizing: border-box;
-    margin: 0;
+*,
+:after,
+:before {
+  box-sizing: border-box;
+  margin: 0;
 }
-
-button, input, optgroup, select, textarea {
-    color: inherit;
-    font: inherit;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+button,
+input {
+  color: inherit;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
-
 .css-1blp8ou:not(:first-of-type) {
-    margin-top: 8px;
+  margin-top: 8px;
 }
-
 .css-1yjqrpx {
-    padding-bottom: 12px;
+  padding-bottom: 12px;
 }
-
 .css-c3g9of {
-    display: inline-block;
-    padding: 8px 0 11px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 19px;
-    color: #333;
+  display: inline-block;
+  padding: 8px 0 11px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19px;
+  color: #333;
 }
-
 .css-176lya2 {
-    position: relative;
-    height: 48px;
+  position: relative;
+  height: 48px;
 }
-
 .css-u52dqk {
-    width: 100%;
-    height: 46px;
-    padding: 0 11px 1px 15px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.5;
-    color: #333;
-    outline: none;
-    box-sizing: border-box;
+  width: 100%;
+  height: 46px;
+  padding: 0 11px 1px 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  outline: 0;
+  box-sizing: border-box;
 }
-
 .css-3vxi16 {
-    margin-top: 18px;
+  margin-top: 18px;
 }
-
 .css-1s9rhb5:disabled {
-    background-color: #ddd;
+  background-color: #ddd;
 }
-
-button[disabled], input[disabled] {
-    cursor: default;
+button[disabled],
+input[disabled] {
+  cursor: default;
 }
-
 .css-1s9rhb5 {
-    display: block;
-    padding: 0 10px;
-    text-align: center;
-    overflow: hidden;
-    width: 100%;
-    height: 52px;
-    border-radius: 4px;
-    color: #fff;
-    background-color: #5f0080;
-    border: 0 none;
+  display: block;
+  padding: 0 10px;
+  text-align: center;
+  overflow: hidden;
+  width: 100%;
+  height: 52px;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #5f0080;
+  border: 0 none;
 }
-
 .css-nytqmg {
-    display: inline-block;
-    font-size: 16px;
-    font-weight: 500;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 500;
 }
-
-body, button, input, select, textarea {
-    font-size: 14px;
-    color: #333;
+body,
+button,
+input {
+  font-size: 14px;
+  color: #333;
 }
-
 body {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-color: #fff;
-    -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #fff;
+  -webkit-tap-highlight-color: transparent;
 }
-
-html, button, input, select, textarea {
-    font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
+button,
+html,
+input {
+  font-family: "Noto Sans KR", "malgun gothic", AppleGothic, dotum, sans-serif;
 }
-
 label {
-    cursor: default;
+  cursor: default;
 }
-
 .css-c3g9of {
-    display: inline-block;
-    padding: 8px 0 11px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 19px;
-    color: #333;
+  display: inline-block;
+  padding: 8px 0 11px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19px;
+  color: #333;
 }
-
-.css-1iilz1t {
-    position: relative;
-    height: 46px;
+*,
+:after,
+:before {
+  box-sizing: border-box;
+  margin: 0;
 }
-
-*, :after, :before {
-    box-sizing: border-box;
-    margin: 0;
-}
-
-*, :after, :before, legend, td, th {
-    padding: 0;
+*,
+:after,
+:before {
+  padding: 0;
 }
 </style>
