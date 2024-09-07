@@ -22,12 +22,12 @@
                                         <div>
                                             <p
                                                 class="_97oqoup _97oqouv _97oqou5 ldmw177c _97oqou19 _97oqouj ldmw177q _97oqou12 _97oqouc ldmw177j css-wcc2f6 e1rmfz7b3">
-                                                2023.05.31
+                                                2024.09.05
                                             </p>
                                             <div class="css-k7chvl e1rmfz7b1">
                                                 <p
                                                     class="_97oqoup _97oqoux _97oqou7 ldmw177a _97oqou1b _97oqoul ldmw177s _97oqou13 _97oqoud ldmw177i css-1vgapaa e1rmfz7b2">
-                                                    주문번호 2307216320131
+                                                    주문번호 2307216320130
                                                 </p>
                                             </div>
                                         </div>
@@ -45,21 +45,21 @@
                                         <div class="css-1tf2711 e73mjag8">
                                             <a href="/goods/5054274" class="css-1ll9bqd e73mjag0">
                                                 <img src="https://img-cf.kurly.com/hdims/resize/%5E%3E120x%3E156/cropcenter/120x156/quality/85/src/shop/data/goods/1594097581645l0.jpg"
-                                                    alt="[콜린스 다이닝] 한끼 보리 샐러드" class="css-13pph03 e73mjag7">
+                                                    alt="[정기배송] 한 끼 보리샐러드" class="css-13pph03 e73mjag7">
                                             </a>
                                             <div class="_17g6wc40">
                                                 <a href="/goods/5054274" class="css-1ll9bqd e73mjag0">
                                                     <p
                                                         class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-1dl78ek e73mjag3">
-                                                        [콜린스 다이닝] 한끼 보리 샐러드
+                                                        [정기배송] 한 끼 보리샐러드
                                                     </p>
                                                 </a>
                                                 <div class="css-1tf2711 e73mjag8">
                                                     <p
                                                         class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou11 _97oqoub ldmw177k css-1dl78ek e73mjag4">
-                                                        6,480원
+                                                        89,900원
                                                     </p>
-                                                    <p class="css-if5wh3 e73mjag1">7,200원</p>
+                                                    <p class="css-if5wh3 e73mjag1">145,000원</p>
                                                     <div width="1px" height="10px" class="css-9ib26w e1ypu1ln0"></div>
                                                 </div>
                                             </div>
@@ -88,7 +88,7 @@
                                 상품금액</p>
                             <p
                                 class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
-                                14,000원</p>
+                                145,000원</p>
                         </div>
                         <div class="css-1aim50k e2upnqp1">
                             <p
@@ -97,7 +97,7 @@
                             <div class="css-8yre18 e2upnqp1">
                                 <p
                                     class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                    -720원</p>
+                                    -55,100원</p>
                             </div>
                         </div>
                         <div class="css-1aim50k e2upnqp1">
@@ -107,7 +107,7 @@
                             <div class="css-8yre18 e2upnqp1">
                                 <p
                                     class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                    0원</p>
+                                    -2,000원</p>
                             </div>
                         </div>
                         <div class="css-1aim50k e2upnqp1">
@@ -117,7 +117,7 @@
                             <div class="css-8yre18 e2upnqp1">
                                 <p
                                     class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                    3,000원</p>
+                                    +3,000원</p>
                             </div>
                         </div>
                         <div class="css-1aim50k e2upnqp1">
@@ -128,6 +128,16 @@
                                 <p
                                     class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
                                     카카오페이</p>
+                            </div>
+                        </div>
+                        <div class="css-1aim50k e2upnqp1">
+                            <p
+                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
+                                총 결제금액</p>
+                            <div class="css-8yre18 e2upnqp1">
+                                <p
+                                    class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
+                                    90,900원</p>
                             </div>
                         </div>
                     </div>
@@ -145,7 +155,7 @@
                                 주문번호</p>
                             <p
                                 class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
-                                2307216320131</p>
+                                2307216320130</p>
                         </div>
                         <div class="css-1aim50k e2upnqp1">
                             <p
@@ -154,7 +164,7 @@
                             <div class="css-8yre18 e2upnqp1">
                                 <p
                                     class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                    2023.05.31 16:33:45</p>
+                                    2024.09.05 16:33:45</p>
                             </div>
                         </div>
                     </div>
@@ -191,7 +201,7 @@
                             주문 취소</p>
                     </button>
                 </div>
-            </div> 
+            </div>
         </div>
     </div>
 </template>
