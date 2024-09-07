@@ -2,12 +2,12 @@
 <div class="css-140915z e13dlrpy2">
         <div class="css-7500ra e13dlrpy0">비밀번호 재설정</div>
         <div class="css-u3y03b e13dlrpy1">
-            <form class="css-s3iz85 e1mnvs534">
+            <form class="css-s3iz85 e1mnvs534" method="post">
                 <div class="css-1blp8ou e1mnvs533">
                     <div class="css-1yjqrpx e1uzxhvi6">
                         <label for="name" class="css-c3g9of e1uzxhvi4">새 비밀번호 등록</label>
                         <div class="css-176lya2 e1uzxhvi3">
-                            <input data-testid="input-box" id="name" name="name" placeholder="이름을 입력해 주세요" type="text"
+                            <input data-testid="input-box" id="name" name="name" placeholder="비밀번호를 입력해 주세요" type="password"
                                 class="css-u52dqk e1uzxhvi2" value="">
                         </div>
                     </div>
@@ -17,8 +17,8 @@
                     <div class="css-1yjqrpx e1uzxhvi6">
                         <label for="phone" class="css-c3g9of e1uzxhvi4">새 비밀번호 확인</label>
                         <div class="css-176lya2 e1uzxhvi3">
-                            <input data-testid="input-box" id="phone" name="phone" placeholder="휴대폰 번호를 입력해 주세요"
-                                type="tel" height="46" class="css-u52dqk e1uzxhvi2" value="">
+                            <input data-testid="input-box" id="phone" name="phone" placeholder="비밀번호를 입력해 주세요"
+                                type="password" height="46" class="css-u52dqk e1uzxhvi2" value="">
                         </div>
                     </div>
                 </div>
