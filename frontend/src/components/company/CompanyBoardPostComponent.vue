@@ -5,7 +5,6 @@
     </div>
 
     <div class="list_order">
-      <!-- <form action="" method="post" class=""> -->
       <div class="size">
         <div class="p_board">
           <table width="100%">
@@ -71,80 +70,30 @@
                   </div>
                 </td>
               </tr>
-
               <tr class="product_detail">
-                <th>이미지 등록</th>
-
+                <th>상품 썸네일 이미지 등록</th>
                 <td>
-                  <div class="product_main">
-                    <span class="product_tit">상품 썸네일 이미지</span>
-                  </div>
-
                   <div>
                     <div class="image_box">
                       <div class="image_add">
-                        <input
-                          type="file"
-                          name="product_main_image"
-                          accept="image/*"
-                          id="image_input"
-                          onchange="set_main_image(event);"
-                        />
-                        <button
-                          type="button"
-                          class="image_input_button"
-                        ></button>
-                        <div id="image_main_container"></div>
-                        <div style="margin-bottom: 20px">
-                          <button
-                            type="button"
-                            name="image_main_container"
-                            class="remove"
-                            onclick="img_remove(this)"
-                          >
-                            <span> 삭제 </span>
-                          </button>
-                        </div>
+                        <CompanyBoardPhotoUploadComponent :maxImages="8" />
                       </div>
                     </div>
                   </div>
-
                   <div style="margin-top: 70px"></div>
-
-                  <div class="product_main" style="margin-top: 30px">
-                    <span class="product_tit">상품 상세 이미지</span>
-                  </div>
-
+                </td>
+              </tr>
+              <tr class="product_detail">
+                <th>상품 상세 이미지 등록</th>
+                <td>
                   <div>
                     <div class="image_box">
                       <div class="image_add">
-                        <input
-                          type="file"
-                          name="product_detail_image"
-                          accept="image/*"
-                          id="image_input"
-                          onchange="set_detail_image(event);"
-                        />
-                        <button
-                          type="button"
-                          class="image_input_button"
-                        ></button>
-                        <div id="image_detail_container"></div>
-
-                        <div style="margin-bottom: 20px">
-                          <button
-                            type="button"
-                            name="image_detail_container"
-                            class="remove"
-                            onclick="img_remove(this)"
-                          >
-                            <span> 삭제 </span>
-                          </button>
-                        </div>
+                        <!-- <CompanyBoardDetailImageUploadComponent :maxImage="1" /> -->
+                        <CompanyBoardPhotoUploadComponent :maxImages="1" />
                       </div>
                     </div>
                   </div>
-
                   <div style="margin-top: 70px"></div>
                 </td>
               </tr>
@@ -156,17 +105,19 @@
           <!-- <button type="submit">등록하기</button> -->
         </div>
       </div>
-      <!-- </form> -->
     </div>
   </div>
 </template>
 
 <script>
 import CompanyBoardModalComponent from "./CompanyBoardModalComponent.vue";
+import CompanyBoardPhotoUploadComponent from "./CompanyBoardPhotoUploadComponent.vue";
+
 export default {
   name: "CompanyBoardPostComponent",
   components: {
     CompanyBoardModalComponent,
+    CompanyBoardPhotoUploadComponent,
   },
   data() {
     return {
@@ -175,14 +126,8 @@ export default {
   },
   methods: {
     displayModal() {
-      //   event.stopPropagation();
-      if (this.isDisplayModal) {
-        this.isDisplayModal = false;
-      } else {
-        this.isDisplayModal = true;
-      }
+      this.isDisplayModal = !this.isDisplayModal;
       console.log(this.isDisplayModal);
-      //   this.isDisplayModal = true;
     },
   },
 };
@@ -827,7 +772,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .product_detail .image_box {
   width: 100%;
-  height: 500px;
+  height: 250px;
 }
 
 #image_main_container img {
