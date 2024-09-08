@@ -15,18 +15,18 @@
                   <div class="datetime-container">
                     <input
                       type="datetime-local"
-                      v-model="starttime"
-                      id="starttime"
-                      name="starttime"
+                      v-model="startTime"
+                      id="startTime"
+                      name="startTime"
                       class="datetime-input"
                       @change="validateDates"
                     />
                     <span class="separator">~</span>
                     <input
                       type="datetime-local"
-                      v-model="endtime"
-                      id="endtime"
-                      name="endtime"
+                      v-model="endTime"
+                      id="endTime"
+                      name="endTime"
                       class="datetime-input"
                       @change="validateDates"
                     />
@@ -36,15 +36,17 @@
               <tr>
                 <th>게시글 제목</th>
                 <td colspan="2">
-                  <div>
+                  <div class="input-container">
                     <span>
                       <input
                         type="text"
-                        name="product_name"
+                        v-model="productName"
                         class="i_text text1"
-                        onkeyup="chkword_name(this, 80)"
+                        @input="validateProductName"
+                        placeholder="제목을 입력하세요"
                       />
                     </span>
+                    <p class="char-count">{{ charCount }} / 50</p>
                   </div>
                 </td>
               </tr>
@@ -126,20 +128,23 @@ export default {
   data() {
     return {
       isDisplayModal: false,
-      starttime: "",
-      endtime: "",
+      startTime: "",
+      endTime: "",
       isOccuredDateError: false,
+      productName: "",
+      charCount: 0,
+      isOccuredTitleError: false,
     };
   },
   methods: {
     validateDates() {
-      if (this.starttime === null || this.endtime === null) {
+      if (this.startTime === null || this.endTime === null) {
         this.isOccuredDateError = true;
         return;
       }
 
-      const startTime = new Date(this.starttime);
-      const endTime = new Date(this.endtime);
+      const startTime = new Date(this.startTime);
+      const endTime = new Date(this.endTime);
       const now = new Date();
 
       console.log(startTime);
@@ -165,6 +170,20 @@ export default {
       }
       this.isOccuredDateError = false;
       console.log(this.isOccuredDateError);
+    },
+    validateProductName() {
+      this.charCount = this.productName.length;
+      if (this.productName.trim() === "") {
+        this.isOccuredTitleError = true;
+      }
+      if (this.charCount > 50) {
+        alert("게시글 제목은 50자 이하로 입력해야 합니다.");
+        this.productName = this.productName.slice(0, 50);
+        this.charCount = 50;
+        this.isOccuredTitleError = true;
+        return;
+      }
+      this.isOccuredTitleError = false;
     },
     displayModal() {
       this.isDisplayModal = !this.isDisplayModal;
@@ -506,6 +525,12 @@ textarea {
 
 .text1 {
   width: 400px;
+}
+
+.char-count {
+  margin-left: 10px;
+  margin-top: 6px;
+  color: #666;
 }
 
 input:focus,
@@ -897,5 +922,9 @@ input[type="number"]::-webkit-inner-spin-button {
 #addrList .delete_position {
   padding: 10px 10px 10px 10px;
   background-color: #fff;
+}
+
+.input-container {
+  display: flex;
 }
 </style>
