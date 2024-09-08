@@ -65,7 +65,7 @@ export default {
       this.$emit("addProduct", {
         name: this.productName,
         price: this.productPrice,
-        quantity: this.productQuantity,
+        stock: this.productQuantity,
       });
       this.closeModal();
     },

@@ -40,9 +40,9 @@
                     <span>
                       <input
                         type="text"
-                        v-model="productName"
+                        v-model="title"
                         class="i_text text1"
-                        @input="validateProductName"
+                        @input="validateTitle"
                         placeholder="제목을 입력하세요"
                       />
                     </span>
@@ -78,10 +78,18 @@
                           <tr v-for="(product, index) in products" :key="index">
                             <th class="name">{{ product.name }}</th>
                             <th class="price">
-                              <span>{{ product.price }}원</span>
+                              <span
+                                >{{
+                                  parseInt(product.price).toLocaleString()
+                                }}원</span
+                              >
                             </th>
                             <th class="stock">
-                              <span>{{ product.quantity }}개</span>
+                              <span
+                                >{{
+                                  parseInt(product.stock).toLocaleString()
+                                }}개</span
+                              >
                             </th>
                             <th class="delete_position">
                               <button
@@ -125,7 +133,10 @@
                   <div>
                     <div class="image_box">
                       <div class="image_add">
-                        <CompanyBoardPhotoUploadComponent :maxImages="8" />
+                        <CompanyBoardPhotoUploadComponent
+                          :maxImages="8"
+                          @updateContent="updateThumbnailImages"
+                        />
                       </div>
                     </div>
                   </div>
@@ -138,7 +149,10 @@
                   <div>
                     <div class="image_box">
                       <div class="image_add">
-                        <CompanyBoardPhotoUploadComponent :maxImages="1" />
+                        <CompanyBoardPhotoUploadComponent
+                          :maxImages="1"
+                          @updateContent="updateDetailImage"
+                        />
                       </div>
                     </div>
                   </div>
@@ -150,7 +164,7 @@
         </div>
 
         <div id="product_submit" class="pd_submit">
-          <!-- <button type="submit">등록하기</button> -->
+          <button @click="sendData">등록하기</button>
         </div>
       </div>
     </div>
@@ -158,6 +172,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import CompanyBoardModalComponent from "./CompanyBoardModalComponent.vue";
 import CompanyBoardPhotoUploadComponent from "./CompanyBoardPhotoUploadComponent.vue";
 
@@ -170,64 +185,60 @@ export default {
   data() {
     return {
       isDisplayModal: false,
-      startTime: "",
-      endTime: "",
+      startTime: "", // 전송 데이터
+      endTime: "", // 전송 데이터
       isOccuredDateError: false,
-      productName: "",
+      dateErrorMsg: "",
+      title: "", // 전송 데이터
       charCount: 0,
-      isOccuredTitleError: false,
-      products: [],
-      category: "",
+      products: [], // 전송 데이터
+      category: "", // 전송 데이터
+      thumbnailImages: [], // 전송 데이터
+      detailImage: [], // 전송 데이터
     };
   },
   methods: {
     validateDates() {
-      if (this.startTime === null || this.endTime === null) {
-        this.isOccuredDateError = true;
-        return;
-      }
-
       const startTime = new Date(this.startTime);
       const endTime = new Date(this.endTime);
       const now = new Date();
 
-      console.log(startTime);
       if (startTime < now) {
-        alert(`시작 시간은 ${now} 이후로 설정해야 합니다.`);
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1; // getMonth()는 0부터 시작
+        const date = now.getDate();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+
+        const nowTime = `${year}년 ${month}월 ${date}일 ${hours}시 ${minutes}분`;
+        this.dateErrorMsg = `시작 시간은 ${nowTime} 이후로 설정해야 합니다.`;
         this.isOccuredDateError = true;
-        console.log(this.isOccuredDateError);
         return;
       }
 
       const startHour = startTime.getHours();
       if (startHour < 9 || startHour >= 22) {
-        alert("시작 시간은 09:00 ~ 22:00 사이여야 합니다.");
+        this.dateErrorMsg = "시작 시간은 09:00 ~ 22:00 사이여야 합니다.";
         this.isOccuredDateError = true;
         return;
       }
 
       const duration = (endTime - startTime) / (1000 * 60 * 60);
       if (duration < 2 || duration > 48) {
-        alert("시작 시간 ~ 종료 시간은 2 ~ 48시간 사이여야 합니다.");
+        this.dateErrorMsg =
+          "시작 시간 ~ 종료 시간은 2 ~ 48시간 사이여야 합니다.";
         this.isOccuredDateError = true;
-        return;
       }
       this.isOccuredDateError = false;
-      console.log(this.isOccuredDateError);
     },
-    validateProductName() {
-      this.charCount = this.productName.length;
-      if (this.productName.trim() === "") {
-        this.isOccuredTitleError = true;
-      }
+    validateTitle() {
+      this.charCount = this.title.length;
       if (this.charCount > 50) {
         alert("게시글 제목은 50자 이하로 입력해야 합니다.");
-        this.productName = this.productName.slice(0, 50);
+        this.title = this.title.slice(0, 50);
         this.charCount = 50;
-        this.isOccuredTitleError = true;
         return;
       }
-      this.isOccuredTitleError = false;
     },
     displayModal() {
       this.isDisplayModal = !this.isDisplayModal;
@@ -244,6 +255,67 @@ export default {
     },
     deleteProduct(index) {
       this.products.splice(index, 1);
+    },
+    updateThumbnailImages(imageData) {
+      this.thumbnailImages = imageData.images;
+      console.log("Thumbnail images updated:", this.thumbnailImages);
+    },
+    updateDetailImage(imageData) {
+      this.detailImage = imageData.images;
+      console.log("detail image updated:", this.detailImage);
+    },
+    sendData() {
+      if (this.startTime.length < 1 || this.endTime.length < 1) {
+        alert("기간 설정을 해주세요.");
+        return;
+      }
+      if (this.isOccuredDateError) {
+        alert(this.dateErrorMsg);
+        return;
+      }
+      if (this.title.length < 1) {
+        alert("제목을 입력해주세요.");
+        return;
+      }
+      if (this.title.length > 50) {
+        alert("제목을 50자 이하로 입력해주세요.");
+        return;
+      }
+      if (this.category === "") {
+        alert("카테고리를 설정해주세요.");
+        return;
+      }
+      if (this.products.length === 0) {
+        alert("상품을 등록해주세요.");
+        return;
+      }
+      if (this.thumbnailImages.length === 0) {
+        alert("상품 썸네일 이미지를 최소 1장이상 등록해주세요.");
+        return;
+      }
+      if (this.detailImage.length === 0) {
+        alert("상품 상세 이미지를 등록해주세요.");
+        return;
+      }
+      const productBoard = {
+        productThumbnailUrls: this.thumbnailImages.map((image) => image.src),
+        productDetailUrl: this.detailImage.map((image) => image.src),
+        title: this.title,
+        products: this.products,
+        startedAt: this.startTime,
+        endedAt: this.endTime,
+        category: this.category,
+      };
+      axios
+        .post("http://localhost:8000/", productBoard)
+        .then((response) => {
+          console.log("Success:", response.data);
+          alert("상품이 성공적으로 등록되었습니다!");
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+          alert("상품 등록 중 오류가 발생했습니다.");
+        });
     },
   },
 };
