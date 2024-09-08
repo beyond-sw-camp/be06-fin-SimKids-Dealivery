@@ -56,7 +56,47 @@
                 <td colspan="2">
                   <button id="board-link" @click="displayModal">추가</button>
                   <div v-if="isDisplayModal">
-                    <CompanyBoardModalComponent @closeModal="displayModal" />
+                    <CompanyBoardModalComponent
+                      @closeModal="displayModal"
+                      @addProduct="addProduct"
+                    />
+                  </div>
+                </td>
+                <td class="tbl_product">
+                  <div v-if="products.length > 0">
+                    <div id="tblParent" class="type_select">
+                      <table class="tbl tbl_type1">
+                        <thead>
+                          <tr>
+                            <th class="tit_name">상품명</th>
+                            <th class="tit_price">가격</th>
+                            <th class="tit_stock">남은 수량</th>
+                            <th class="tit_delete">삭제</th>
+                          </tr>
+                        </thead>
+                        <thead id="addrList">
+                          <tr v-for="(product, index) in products" :key="index">
+                            <th class="name">{{ product.name }}</th>
+                            <th class="price">
+                              <span>{{ product.price }}원</span>
+                            </th>
+                            <th class="stock">
+                              <span>{{ product.quantity }}개</span>
+                            </th>
+                            <th class="delete_position">
+                              <button
+                                type="submit"
+                                name="delete"
+                                value=""
+                                class="product_delete"
+                              >
+                                삭제하기
+                              </button>
+                            </th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -95,7 +135,6 @@
                   <div>
                     <div class="image_box">
                       <div class="image_add">
-                        <!-- <CompanyBoardDetailImageUploadComponent :maxImage="1" /> -->
                         <CompanyBoardPhotoUploadComponent :maxImages="1" />
                       </div>
                     </div>
@@ -134,6 +173,7 @@ export default {
       productName: "",
       charCount: 0,
       isOccuredTitleError: false,
+      products: [],
     };
   },
   methods: {
@@ -188,6 +228,18 @@ export default {
     displayModal() {
       this.isDisplayModal = !this.isDisplayModal;
       console.log(this.isDisplayModal);
+    },
+    addProduct(product) {
+      console.log("Product added:", product);
+      const isDuplicate = this.products.some((p) => p.name === product.name);
+      if (isDuplicate) {
+        alert("이미 존재하는 상품명입니다.");
+        return;
+      }
+      this.products.push(product);
+    },
+    deleteProduct(index) {
+      this.products.splice(index, 1);
     },
   },
 };
