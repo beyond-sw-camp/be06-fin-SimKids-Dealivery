@@ -9,8 +9,8 @@
 <script>
 import HeaderComponent from '@/components/common/HeaderComponent.vue';
 import FooterComponent from '@/components/common/FooterComponent.vue';
-import BannerComponent from '@/components/common/BannerComponent.vue';
-import SectionTitleComponent from '@/components/common/SectionTitleComponent.vue';
+import BannerComponent from '@/components/mainpage/BannerComponent.vue';
+import SectionTitleComponent from '@/components/mainpage/SectionTitleComponent.vue';
 
 export default {
   name: 'MainPage',
