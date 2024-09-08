@@ -10,13 +10,11 @@ import FooterComponent from '@/components/common/FooterComponent.vue';
 
 export default {
   name: 'AuthPage',
-  components:{
+  components: {
     HeaderComponent,
     FooterComponent
   }
 
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>
