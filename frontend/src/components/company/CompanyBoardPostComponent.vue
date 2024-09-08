@@ -85,10 +85,9 @@
                             </th>
                             <th class="delete_position">
                               <button
-                                type="submit"
                                 name="delete"
-                                value=""
                                 class="product_delete"
+                                @click="deleteProduct(index)"
                               >
                                 삭제하기
                               </button>
@@ -105,7 +104,11 @@
                 <td>
                   <div>
                     <span>
-                      <select name="product_category" class="product_category">
+                      <select
+                        v-model="category"
+                        name="product_category"
+                        class="product_category"
+                      >
                         <option value="">------- 선택하세요 -------</option>
                         <option>식품</option>
                         <option>의류</option>
@@ -174,6 +177,7 @@ export default {
       charCount: 0,
       isOccuredTitleError: false,
       products: [],
+      category: "",
     };
   },
   methods: {
