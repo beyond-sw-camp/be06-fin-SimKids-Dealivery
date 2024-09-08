@@ -15,16 +15,20 @@
                   <div class="datetime-container">
                     <input
                       type="datetime-local"
+                      v-model="starttime"
                       id="starttime"
                       name="starttime"
                       class="datetime-input"
+                      @change="validateDates"
                     />
                     <span class="separator">~</span>
                     <input
                       type="datetime-local"
+                      v-model="endtime"
                       id="endtime"
                       name="endtime"
                       class="datetime-input"
+                      @change="validateDates"
                     />
                   </div>
                 </td>
@@ -122,9 +126,46 @@ export default {
   data() {
     return {
       isDisplayModal: false,
+      starttime: "",
+      endtime: "",
+      isOccuredDateError: false,
     };
   },
   methods: {
+    validateDates() {
+      if (this.starttime === null || this.endtime === null) {
+        this.isOccuredDateError = true;
+        return;
+      }
+
+      const startTime = new Date(this.starttime);
+      const endTime = new Date(this.endtime);
+      const now = new Date();
+
+      console.log(startTime);
+      if (startTime < now) {
+        alert(`시작 시간은 ${now} 이후로 설정해야 합니다.`);
+        this.isOccuredDateError = true;
+        console.log(this.isOccuredDateError);
+        return;
+      }
+
+      const startHour = startTime.getHours();
+      if (startHour < 9 || startHour >= 22) {
+        alert("시작 시간은 09:00 ~ 22:00 사이여야 합니다.");
+        this.isOccuredDateError = true;
+        return;
+      }
+
+      const duration = (endTime - startTime) / (1000 * 60 * 60);
+      if (duration < 2 || duration > 48) {
+        alert("시작 시간 ~ 종료 시간은 2 ~ 48시간 사이여야 합니다.");
+        this.isOccuredDateError = true;
+        return;
+      }
+      this.isOccuredDateError = false;
+      console.log(this.isOccuredDateError);
+    },
     displayModal() {
       this.isDisplayModal = !this.isDisplayModal;
       console.log(this.isDisplayModal);
