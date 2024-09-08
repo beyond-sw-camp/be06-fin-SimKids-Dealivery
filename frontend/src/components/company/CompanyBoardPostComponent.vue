@@ -140,7 +140,6 @@
                       </div>
                     </div>
                   </div>
-                  <div style="margin-top: 70px"></div>
                 </td>
               </tr>
               <tr class="product_detail">
@@ -156,7 +155,6 @@
                       </div>
                     </div>
                   </div>
-                  <div style="margin-top: 70px"></div>
                 </td>
               </tr>
             </tbody>
@@ -172,9 +170,10 @@
 </template>
 
 <script>
-import axios from "axios";
 import CompanyBoardModalComponent from "./CompanyBoardModalComponent.vue";
 import CompanyBoardPhotoUploadComponent from "./CompanyBoardPhotoUploadComponent.vue";
+import { mapStores } from "pinia";
+import { useCompanyBoardStore } from "../../stores/UseCompanyBoardStore";
 
 export default {
   name: "CompanyBoardPostComponent",
@@ -185,10 +184,10 @@ export default {
   data() {
     return {
       isDisplayModal: false,
-      startTime: "", // 전송 데이터
-      endTime: "", // 전송 데이터
       isOccuredDateError: false,
       dateErrorMsg: "",
+      startTime: "", // 전송 데이터
+      endTime: "", // 전송 데이터
       title: "", // 전송 데이터
       charCount: 0,
       products: [], // 전송 데이터
@@ -196,6 +195,9 @@ export default {
       thumbnailImages: [], // 전송 데이터
       detailImage: [], // 전송 데이터
     };
+  },
+  computed: {
+    ...mapStores(useCompanyBoardStore),
   },
   methods: {
     validateDates() {
@@ -264,139 +266,75 @@ export default {
       this.detailImage = imageData.images;
       console.log("detail image updated:", this.detailImage);
     },
-    sendData() {
+    validateAllData() {
       if (this.startTime.length < 1 || this.endTime.length < 1) {
         alert("기간 설정을 해주세요.");
-        return;
+        return false;
       }
       if (this.isOccuredDateError) {
         alert(this.dateErrorMsg);
-        return;
+        return false;
       }
-      if (this.title.length < 1) {
-        alert("제목을 입력해주세요.");
-        return;
-      }
-      if (this.title.length > 50) {
-        alert("제목을 50자 이하로 입력해주세요.");
-        return;
+      if (this.title.length < 1 || this.title.length > 50) {
+        alert(
+          this.title.length === 0
+            ? "제목을 입력해주세요."
+            : "제목을 50자 이하로 입력해주세요."
+        );
+        return false;
       }
       if (this.category === "") {
         alert("카테고리를 설정해주세요.");
-        return;
+        return false;
       }
       if (this.products.length === 0) {
         alert("상품을 등록해주세요.");
-        return;
+        return false;
       }
       if (this.thumbnailImages.length === 0) {
         alert("상품 썸네일 이미지를 최소 1장이상 등록해주세요.");
-        return;
+        return false;
       }
       if (this.detailImage.length === 0) {
         alert("상품 상세 이미지를 등록해주세요.");
+        return false;
+      }
+      return true;
+    },
+    sendData() {
+      if (!this.validateAllData()) {
         return;
       }
-      const productBoard = {
-        productThumbnailUrls: this.thumbnailImages.map((image) => image.src),
-        productDetailUrl: this.detailImage.map((image) => image.src),
+      const req = {
         title: this.title,
         products: this.products,
         startedAt: this.startTime,
         endedAt: this.endTime,
         category: this.category,
+        thumbnailImages: this.thumbnailImages,
+        detailImage: this.detailImage,
       };
-      axios
-        .post("http://localhost:8000/", productBoard)
-        .then((response) => {
-          console.log("Success:", response.data);
-          alert("상품이 성공적으로 등록되었습니다!");
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-          alert("상품 등록 중 오류가 발생했습니다.");
-        });
+      this.companyBoardStore.createProductBoard(req);
     },
   },
 };
 </script>
 
 <style scoped>
-#content {
-  min-width: 1050px;
-}
-
 .page_aticle {
   width: 1050px;
   margin: 0 auto;
 }
-
 .page_aticle.aticle_type2 {
   padding-top: 65px;
 }
-
-#snb {
-  float: left;
-  width: 200px;
-}
-
-#snb .tit_snb {
-  padding: 8px 0 33px 1px;
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 34px;
-  color: #333;
-  letter-spacing: -0.5px;
-}
-
-#snb .inner_snb {
-  border: 1px solid #f2f2f2;
-  border-bottom: 0;
-}
-
-#snb .list_menu li {
-  border-bottom: 1px solid #f2f2f2;
-}
-
-#snb .list_menu li.on a,
-#snb .list_menu li a:hover {
-  background: #fafafa
-    url(https://res.kurly.com/pc/ico/2008/ico_arrow_6x11_on.svg) no-repeat 174px
-    52%;
-  background-size: 6px 11px;
-  font-weight: 700;
-  color: #5f0080;
-}
-
-#snb .list_menu li a {
-  display: block;
-  overflow: hidden;
-  padding: 15px 0 15px 20px;
-  background: #fff url(https://res.kurly.com/pc/ico/2008/ico_arrow_6x11.svg)
-    no-repeat 174px 52%;
-  background-size: 6px 11px;
-  font-size: 14px;
-  color: #666;
-  line-height: 20px;
-  letter-spacing: -0.3px;
-}
-
-.snb_my {
-  position: absolute;
-  top: 220px;
-  left: 400px;
-  margin-right: -670px;
-}
-
 .page_aticle.aticle_type2 .page_section {
   float: right;
   width: 820px;
 }
-
 .page_aticle .head_aticle {
   padding: 5px 0 34px;
 }
-
 .page_aticle .head_aticle .tit {
   height: 36px;
   font-weight: 700;
@@ -406,33 +344,20 @@ export default {
   letter-spacing: -0.5px;
   display: inline-block;
 }
-
 body,
+button,
 div,
-dl,
-dt,
-dd,
-ul,
-ol,
-li,
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
-form,
-fieldset,
-legend,
 input,
-button,
-textarea,
 p,
-blockquote,
-th,
+span,
 td,
-a,
-span {
+th {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -446,7 +371,6 @@ span {
     url(https://res.kurly.com/fonts/NanumGothic-Regular.woff) format("woff"),
     url(https://res.kurly.com/fonts/NanumGothic-Regular.otf) format("opentype");
 }
-
 @font-face {
   font-family: noto sans;
   font-style: normal;
@@ -455,7 +379,6 @@ span {
     url(https://res.kurly.com/fonts/NotoSansKR-Light.woff) format("woff"),
     url(https://res.kurly.com/fonts/NotoSansKR-Light.otf) format("opentype");
 }
-
 @font-face {
   font-family: noto sans;
   font-style: normal;
@@ -464,7 +387,6 @@ span {
     url(https://res.kurly.com/fonts/NotoSansKR-Regular.woff) format("woff"),
     url(https://res.kurly.com/fonts/NotoSansKR-Regular.otf) format("opentype");
 }
-
 @font-face {
   font-family: noto sans;
   font-style: normal;
@@ -473,7 +395,6 @@ span {
     url(https://res.kurly.com/fonts/NotoSansKR-Medium.woff) format("woff"),
     url(https://res.kurly.com/fonts/NotoSansKR-Medium.otf) format("opentype");
 }
-
 @font-face {
   font-family: noto sans;
   font-style: normal;
@@ -482,48 +403,32 @@ span {
     url(https://res.kurly.com/fonts/NotoSansKR-Bold.woff) format("woff"),
     url(https://res.kurly.com/fonts/NotoSansKR-Bold.otf) format("opentype");
 }
-
 body,
+button,
 div,
-dl,
-dt,
-dd,
-ul,
-ol,
-li,
 h1,
 h2,
 h3,
 h4,
 h5,
 h6,
-form,
-fieldset,
-legend,
 input,
-button,
-textarea,
 p,
-blockquote,
-th,
+span,
 td,
-a,
-span {
+th {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-html,
-body {
+body,
+html {
   height: 100%;
 }
-
 body,
+button,
 input,
-select,
-textarea,
-button {
+select {
   font-family: noto sans, malgun gothic, AppleGothic, dotum;
   line-height: 1;
   letter-spacing: -0.05em;
@@ -531,81 +436,35 @@ button {
   font-size: 15px;
   max-width: 100%;
 }
-
 div,
-th,
+p,
 td,
-li,
-dt,
-dd,
-p {
+th {
   word-break: break-all;
 }
-
-img,
-video,
-canvas {
-  max-width: 100%;
-}
-
-img {
-  border: none;
-  vertical-align: top;
-}
-
 button {
-  outline: none;
+  outline: 0;
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
-
-a {
-  text-decoration: none;
-  background-color: transparent;
-  color: inherit;
-}
-
-a:active,
-a:hover {
-  outline: 0;
-  cursor: pointer;
-}
-
-b,
-strong {
-  font-weight: 700;
-}
-
 h1 {
   font-size: 2em;
 }
-
-fieldset {
-  border: none;
-}
-
-li {
-  list-style: none;
-}
-
 input {
   line-height: normal;
-  outline: none;
+  outline: 0;
 }
-
-*::after,
-*::before {
+::after,
+::before {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 .section_orderlist .list_order {
   padding-top: 10px;
   border-top: 2px solid #333;
 }
-
 .p_board tbody th {
   border: 1px solid #dedede;
   text-align: left;
@@ -617,134 +476,89 @@ input {
   width: 177px;
   font-size: 15px;
 }
-
 .p_board tbody td {
   border: 1px solid #dedede;
   padding: 10px 15px;
   line-height: 24px;
   vertical-align: top;
 }
-
 .size {
   padding-bottom: 50px;
   background: #fff;
   position: relative;
 }
-
 tbody th {
   width: 100px;
 }
-
-tbody input,
-textarea {
+tbody input {
   border: 1px solid #d4d4d4;
 }
-
-.form_style {
-  padding: 30px 30px 0 30px;
-  box-sizing: border-box;
-}
-
 .i_text {
   height: 32px;
   line-height: 14px;
   font-size: 14px;
 }
-
 .text1 {
   width: 400px;
 }
-
 .char-count {
   margin-left: 10px;
   margin-top: 6px;
   color: #666;
 }
-
-input:focus,
-textarea:focus {
+input:focus {
   outline: 1px solid #5f0080;
 }
-
 .text2 {
   width: 500px;
 }
-
 .text3 {
   width: 75px;
   text-align: right;
 }
-
 .text4 {
   width: 75px;
   text-align: right;
 }
-
-.num1 {
-  width: 45px;
-  text-align: center;
-}
-
 .text5 {
   width: 75px;
   text-align: right;
 }
-
-#delivery_type {
-  height: 34px;
-  font-size: 16px;
-  border: 1px solid #d4d4d4;
-}
-
 select:focus {
   outline: 1px solid #5f0080;
 }
-
 .text6 {
   width: 150px;
 }
-
-#packing_type {
-  height: 34px;
-  font-size: 16px;
-  border: 1px solid #d4d4d4;
-}
-
 table td .product_category {
   height: 34px;
   font-size: 16px;
   border: 1px solid #d4d4d4;
 }
-
 .text7 {
   width: 150px;
 }
-
 table .text8 {
   height: 150px;
   width: 500px;
   resize: none;
 }
-
 #image_input {
   width: 100%;
   height: 100%;
   cursor: pointer;
 }
-
 .image_box {
   width: 268px;
   height: 268px;
   position: relative;
 }
-
 .image_add {
   width: 100%;
   height: 100%;
   border: 1px solid #d4d4d4;
   position: relative;
 }
-
 .image_add .image_input_button::before {
   content: "";
   position: absolute;
@@ -756,7 +570,6 @@ table .text8 {
   background-color: #565656;
   background-image: none;
 }
-
 .image_add .image_input_button::after {
   content: "";
   position: absolute;
@@ -768,125 +581,13 @@ table .text8 {
   background-color: #565656;
   background-image: none;
 }
-
 .image_add input {
-  /* 파일 업로드 찾아보기 버튼 숨기기 */
   opacity: 0;
   position: absolute;
 }
-
 #image_container {
   overflow: hidden;
 }
-
-#image_container img {
-  position: absolute;
-  top: -1px;
-  left: 0px;
-  width: 269px;
-  height: 227px;
-}
-
-.image_save {
-  display: block;
-  float: left;
-  text-align: center;
-}
-
-.image_save ul {
-  display: flex;
-}
-
-.image_save ul li {
-  width: 120px;
-  height: 120px;
-  position: relative;
-  border: 1px solid #d4d4d4;
-  margin-left: 35px;
-}
-
-.re_upload {
-  border: 1px solid #d4d4d4;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  height: 40px;
-  width: 134.5px;
-}
-
-.remove {
-  border: 1px solid #d4d4d4;
-  position: absolute;
-  bottom: -1px;
-  right: 0px;
-  height: 40px;
-  width: 100%;
-  background-color: #f3f3f3;
-}
-
-.sub_image .sub_image_input_button::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -1px 0 0 -8px;
-  width: 16px;
-  height: 2px;
-  background-color: #565656;
-  background-image: none;
-}
-
-.sub_image .sub_image_input_button::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 2px;
-  height: 16px;
-  margin: -8px 0 0 -1px;
-  background-color: #565656;
-  background-image: none;
-}
-
-.sub_image input {
-  /* 파일 업로드 찾아보기 버튼 숨기기 */
-  opacity: 0;
-  position: absolute;
-  left: 0px;
-}
-
-#sub_image_input {
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-
-#sub_image_container img,
-#sub2_image_container img {
-  position: absolute;
-  top: -1px;
-  left: 0px;
-  width: 122px;
-  height: 119px;
-}
-
-.img_upload {
-  display: flex;
-}
-
-.sub_button {
-  position: relative;
-}
-
-.sub_re_upload {
-  border: 1px solid #d4d4d4;
-  position: absolute;
-  top: -1px;
-  left: 35px;
-  height: 31px;
-  width: 61.5px;
-}
-
 #product_submit {
   border: 1px solid #d4d4d4;
   position: absolute;
@@ -895,163 +596,61 @@ table .text8 {
   height: 40px;
   width: 134.5px;
 }
-
-.txtByte {
-  vertical-align: bottom;
-  color: #97989b;
-}
-
-span.txtByte {
-  margin-left: 5px;
-  margin-top: 8px;
-}
-
-.txtByte strong {
-  color: #5f0080;
-  vertical-align: bottom;
-}
-
 .p_board td {
   display: flex;
 }
-
-.p_board td .won {
-  margin-left: 5px;
-  font-size: 16px;
-  margin-top: 5px;
-}
-
-.won_type {
-  margin-left: 10px;
-  font-size: 13px;
-  margin-top: 5px;
-  color: #c15858;
-}
-
-.input_ex {
-  margin-left: 7px;
-  margin-top: 4px;
-  font-size: 14px;
-}
-
-.p_board table td .txtByte_big {
-  margin-top: 55px;
-  margin-left: 5px;
-}
-
 #product_submit button {
   width: 100%;
   height: 100%;
 }
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 .product_detail td {
   display: block;
 }
-
-.product_detail .product_main {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
 .product_detail .product_tit {
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 700;
 }
-
 .product_detail .image_box {
   width: 100%;
   height: 250px;
 }
-
-#image_main_container img {
-  position: absolute;
-  top: -1px;
-  left: 0px;
-  width: 605px;
-  height: 500px;
-}
-
-.product_detail .re_upload {
-  border: 1px solid #d4d4d4;
-  position: absolute;
-  bottom: -40px;
-  left: 0px;
-  height: 40px;
-  width: 50%;
-}
-
-.product_detail .remove {
-  border: 1px solid #d4d4d4;
-  position: absolute;
-  bottom: -40px;
-  right: 0px;
-  height: 40px;
-  width: 100%;
-  background-color: #f3f3f3;
-}
-
-.product_detail .main_description {
-  height: 150px;
-  width: 100%;
-  resize: none;
-  padding: 10px 10px;
-  font-size: 18px;
-}
-
-#image_detail_container img {
-  position: absolute;
-  top: -1px;
-  left: 0px;
-  width: 605px;
-  height: 500px;
-}
-
 .datetime-container {
   display: flex;
   align-items: center;
 }
-
 .datetime-input {
   padding: 5px;
   width: 200px;
   font-size: 16px;
 }
-
 .separator {
   font-size: 16px;
   margin: 0 20px;
 }
-
 .p_board .tbl_product {
   display: block;
 }
-
 #addrList .name {
   padding: 10px 10px 10px 10px;
   background-color: #fff;
 }
-
 #addrList .price {
   padding: 10px 10px 10px 10px;
   background-color: #fff;
 }
-
 #addrList .stock {
   padding: 10px 10px 10px 10px;
   background-color: #fff;
 }
-
 #addrList .delete_position {
   padding: 10px 10px 10px 10px;
   background-color: #fff;
 }
-
 .input-container {
   display: flex;
 }
