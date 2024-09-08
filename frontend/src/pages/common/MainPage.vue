@@ -1,6 +1,7 @@
 <template>
   <HeaderComponent></HeaderComponent>
   <BannerComponent></BannerComponent>
+  <SectionTitleComponent></SectionTitleComponent>
   <router-view></router-view>
   <FooterComponent></FooterComponent>
 </template>
@@ -9,6 +10,7 @@
 import HeaderComponent from '@/components/common/HeaderComponent.vue';
 import FooterComponent from '@/components/common/FooterComponent.vue';
 import BannerComponent from '@/components/common/BannerComponent.vue';
+import SectionTitleComponent from '@/components/common/SectionTitleComponent.vue';
 
 export default {
   name: 'MainPage',
@@ -18,7 +20,8 @@ export default {
   components: {
     HeaderComponent,
     BannerComponent,
-    FooterComponent
+    SectionTitleComponent,
+    FooterComponent,
   }
 
 }
