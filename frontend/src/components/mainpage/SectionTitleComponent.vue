@@ -2,14 +2,30 @@
     <div class="css-ws3ctz ezs8n5y0">
         <div type="RANDOM_COLLECTION_NUMBER" class="css-1ytvbby ezs8n5y4">
             <span class="css-vonb0q ezs8n5y2">
-                🎉 특가 가득! 진행 중인 세일
+                {{ title }}
             </span>
             <span class="css-1dms2ey ezs8n5y1">
-                놓치지 말고 지금 주문하세요!
+                {{ subtitle }}
             </span>
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    props: {
+        title: {
+            type: String,
+            default: '🎉 특가 가득!',
+        },
+        subtitle: {
+            type: String,
+            default: '놓치지 말고 지금 주문하세요!',
+        },
+    },
+}
+</script>
+
 
 <style scoped>
 .css-ws3ctz {

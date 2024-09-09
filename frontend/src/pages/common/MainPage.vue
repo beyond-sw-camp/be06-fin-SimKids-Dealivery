@@ -2,7 +2,7 @@
   <HeaderComponent></HeaderComponent>
   <BannerComponent></BannerComponent>
   <div class="container">
-    <SectionTitleComponent></SectionTitleComponent>
+    <SectionTitleComponent :title="notice[0]" :subtitle="notice[1]"></SectionTitleComponent>
     <div class="card-container">
       <MainCardViewComponent></MainCardViewComponent>
       <MainCardViewComponent></MainCardViewComponent>
@@ -10,6 +10,7 @@
       <MainCardViewComponent></MainCardViewComponent>
       <!-- 추가 카드들 -->
     </div>
+    <SectionTitleComponent :title="notice[2]" :subtitle="notice[3]"></SectionTitleComponent>
   </div>
   <router-view></router-view>
   <FooterComponent></FooterComponent>
@@ -30,6 +31,11 @@ export default {
     SectionTitleComponent,
     MainCardViewComponent,
     FooterComponent,
+  },
+  data() { 
+    return {
+      "notice": ["🎉 특가 가득! 진행 중인 세일 🎉", "놓치지 말고 지금 주문하세요!", "✨ 오픈 예정 이벤트 ✨", "관심 등록 후 찾아보세요!"],
+    }
   }
 }
 </script>
