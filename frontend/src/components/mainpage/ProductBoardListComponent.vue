@@ -51,7 +51,7 @@ export default {
     name: 'ProductBoardListComponent',
     data() {
         return {
-            num: 9,
+            num: 21,
             categories: ['의류', '가전제품', '가구', '식품', '스포츠', '악기'],
             selectedIndex: 0,
             selectedCategory: null,

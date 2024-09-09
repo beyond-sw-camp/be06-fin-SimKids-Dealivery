@@ -1,13 +1,17 @@
 <template>
-    <li class="css-1tvfamc ea4dcdh0"><a href="https://product.29cm.co.kr/catalog/2499794"
+    <li class="absolute-parent css-1tvfamc ea4dcdh0">
+        <div class="absolute top-2 z-10 right-2 w-6 h-6">
+            <label for=":R4d0ekqpb6:"  class="relative cursor-pointer" @click="like">
+                    <img :src="isLiked ? require('@/assets/board-list-filled-heart.svg') : require('@/assets/board-list-outline-heart.svg')"
+                         alt="Icon" class="pointer-events-none w-6 h-6 .svg"  >
+                </label>
+        </div>
+        
+        <a href="https://product.29cm.co.kr/catalog/2499794"
             class="css-3f55di ea4dcdh1"><img
                 src="//img.29cm.co.kr/next-edition/2024/08/22/a5bc747e66474c508e0c8928adbe16b2_20240822161238.jpg"
                 alt="">
             <div class="css-wjc4eh ea4dcdh2">
-                <label for=":R4d0ekqpb6:" onclick="like(this)" class="relative cursor-pointer">
-                    <img :src="isLiked ? require('@/assets/board-list-filled-heart.svg') : require('@/assets/board-list-outline-heart.svg')"
-                        @click="checkRadio('radioThird')" alt="Icon" class="pointer-events-none w-6 h-6" >
-                </label>
                 <h2 class="css-sdq6iq ea4dcdh3">클래식 분위기의 아우터</h2>
                 <p class="css-11z2gb8 ea4dcdh4">우아함이 느껴지는 시야쥬 베스트 트위드재킷 단독 20% 및 사진 후기 이벤트</p>
                 <div class="css-1712oqi e1lvum6h0">
@@ -33,7 +37,8 @@ export default {
     },
     methods: {
         like(){
-            this.isLiked = true;
+            console.log(this.isLiked);
+            this.isLiked = !this.isLiked;
         }
     }
 
@@ -598,7 +603,7 @@ a {
     pointer-events: none;
 }
 
-svg {
+.svg {
     display: block;
     vertical-align: middle;
 }
