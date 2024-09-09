@@ -1,287 +1,94 @@
 <template>
-    <div class="card-container">
-        <div class="card-item">
-            <div class="e1e6st7u6 css-17p5a04 e1ne12di0">
-                <div class="css-ghsdgz e1e6st7u4">
-                    <h2 class="css-n9ehvd e1e6st7u3">일일특가</h2>
-                    <h3 class="css-1fc0npt e1e6st7u2">24시간 한정 특가</h3>
-                    <div class="e1e6st7u5 css-we1gxf e17lobue1">
-                        <div class="lottie-timer">
-                            <img src="@/assets/clock.svg" alt="timer" style="width: 36px; height: 36px;" />
-                        </div>
-                        <div class="time-units css-hb6k3w e17lobue0">
-                            <span>19</span>
-                            <span>34</span>
-                            <span>48</span>
-                        </div>
-                    </div>
-                    <p class="css-d0y7nj e1e6st7u1">망설이면 늦어요!</p>
+    <div class="e1e6st7u6 css-17p5a04 e1ne12di0">
+        <div class="css-ghsdgz e1e6st7u4">
+            <h2 class="css-n9ehvd e1e6st7u3">일일특가</h2>
+            <h3 class="css-1fc0npt e1e6st7u2">24시간 한정 특가</h3>
+            <div class="e1e6st7u5 css-we1gxf e17lobue1">
+                <div class="lottie-timer">
+                    <img src="@/assets/clock.svg" alt="timer" style="width: 36px; height: 36px;" />
                 </div>
-                <div class="css-1yx948y e1e6st7u0"><a href="/goods/1000030900"
-                        class="deal-size-2 e1nucwdg0 e14udynn0 css-ae5x66 e1cmg4vm6">
-                        <div class="css-p55uhh">
-                            <div class="css-4vnm46">
-                                <div class="css-pw7jst e9elpup1" style="padding-bottom: 128.402%;">
-                                    <div class="css-j2pfbl e9elpup0">
-                                        <span
-                                            style="box-sizing: border-box; display: block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: absolute; inset: 0px;"><img
-                                                alt=""
-                                                src="https://product-image.kurly.com/hdims/resize/%5E%3E720x%3E936/cropcenter/720x936/quality/85/src/product/image/d11bd78c-e4a9-432e-89f7-862f5092bf49.jpg"
-                                                decoding="async" data-nimg="fill" class="css-1zjvv7"
-                                                style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; object-fit: cover;"
-                                                sizes="100vw">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="button-wrapper">
-                            <button type="button" class="product-function css-13xu5fn e17x72af0">
-                                <img src="@/assets/heart-icon.svg" alt="timer"
-                                    style="width: 21px; height: 21px;  margin: 5px;" />
-                                이벤트 찜
-                            </button>
-                        </div>
-                        <div class="product-info css-1ud9i0q e1cmg4vm4">
-                            <h2 class="product-name css-eaolx3 e1cmg4vm5">[정관장]</h2>
-                            <h3 class="product-name css-eaolx3 e1cmg4vm5">홍삼정 에브리타임</h3>
-                            <div class="content-row css-1066lcq e1cmg4vm3">
-                                <div class="product-price discount-price css-1fttcpj ei5rudb2">
-                                    <div><span class="dimmed-price css-105zgxh ei5rudb1"><span
-                                                class="price-number">77,000</span><span class="won">원</span></span>
-                                    </div>
-                                    <div class="discount"><span
-                                            class="discount-rate css-19lkxd2 ei5rudb0">10%</span><span
-                                            class="sales-price css-105zgxh ei5rudb1"><span
-                                                class="price-number">69,300</span><span class="won">원</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                <div class="time-units css-hb6k3w e17lobue0">
+                    <span>19</span>
+                    <span>34</span>
+                    <span>48</span>
                 </div>
             </div>
+            <p class="css-d0y7nj e1e6st7u1">망설이면 늦어요!</p>
         </div>
-        <div class="card-item">
-            <div class="e1e6st7u6 css-17p5a04 e1ne12di0">
-                <div class="css-ghsdgz e1e6st7u4">
-                    <h2 class="css-n9ehvd e1e6st7u3">일일특가</h2>
-                    <h3 class="css-1fc0npt e1e6st7u2">24시간 한정 특가</h3>
-                    <div class="e1e6st7u5 css-we1gxf e17lobue1">
-                        <div class="lottie-timer">
-                            <img src="@/assets/clock.svg" alt="timer" style="width: 36px; height: 36px;" />
-                        </div>
-                        <div class="time-units css-hb6k3w e17lobue0">
-                            <span>19</span>
-                            <span>34</span>
-                            <span>48</span>
+        <div class="css-1yx948y e1e6st7u0">
+            <div class="deal-size-2 e1nucwdg0 e14udynn0 css-ae5x66 e1cmg4vm6">
+                <div class="css-p55uhh">
+                    <div class="css-4vnm46">
+                        <div class="css-pw7jst e9elpup1" style="padding-bottom: 128.402%;">
+                            <div class="css-j2pfbl e9elpup0">
+                                <span
+                                    style="box-sizing: border-box; display: block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: absolute; inset: 0px;"><img
+                                        alt=""
+                                        src="https://product-image.kurly.com/hdims/resize/%5E%3E720x%3E936/cropcenter/720x936/quality/85/src/product/image/d11bd78c-e4a9-432e-89f7-862f5092bf49.jpg"
+                                        decoding="async" data-nimg="fill" class="css-1zjvv7"
+                                        style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; object-fit: cover;"
+                                        sizes="100vw">
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <p class="css-d0y7nj e1e6st7u1">망설이면 늦어요!</p>
                 </div>
-                <div class="css-1yx948y e1e6st7u0"><a href="/goods/1000030900"
-                        class="deal-size-2 e1nucwdg0 e14udynn0 css-ae5x66 e1cmg4vm6">
-                        <div class="css-p55uhh">
-                            <div class="css-4vnm46">
-                                <div class="css-pw7jst e9elpup1" style="padding-bottom: 128.402%;">
-                                    <div class="css-j2pfbl e9elpup0">
-                                        <span
-                                            style="box-sizing: border-box; display: block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: absolute; inset: 0px;"><img
-                                                alt=""
-                                                src="https://product-image.kurly.com/hdims/resize/%5E%3E720x%3E936/cropcenter/720x936/quality/85/src/product/image/403ca72b-34da-41d9-b269-1642ae18ff10.jpg"
-                                                decoding="async" data-nimg="fill" class="css-1zjvv7"
-                                                style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; object-fit: cover;"
-                                                sizes="100vw">
-                                        </span>
-                                    </div>
+                <div class="button-wrapper">
+                    <button type="button" @click="toggleHeart" class="product-function css-13xu5fn e17x72af0">
+                        <img :src="heartIcon" alt="heart icon" style="width: 21px; height: 21px; margin: 5px;" />
+                        관심 등록
+                    </button>
+                </div>
+                <a href="/goods/1000030900">
+                    <div class="product-info css-1ud9i0q e1cmg4vm4">
+                        <h2 class="product-name css-eaolx3 e1cmg4vm5">[정관장]</h2>
+                        <h3 class="product-name css-eaolx3 e1cmg4vm5">홍삼정 에브리타임</h3>
+                        <div class="content-row css-1066lcq e1cmg4vm3">
+                            <div class="product-price discount-price css-1fttcpj ei5rudb2">
+                                <div><span class="dimmed-price css-105zgxh ei5rudb1"><span
+                                            class="price-number">77,000</span><span class="won">원</span></span>
+                                </div>
+                                <div class="discount"><span class="discount-rate css-19lkxd2 ei5rudb0">10%</span><span
+                                        class="sales-price css-105zgxh ei5rudb1"><span
+                                            class="price-number">69,300</span><span class="won">원</span></span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="button-wrapper">
-                            <button type="button" class="product-function css-13xu5fn e17x72af0">
-                                <img src="@/assets/heart-icon.svg" alt="timer"
-                                    style="width: 21px; height: 21px;  margin: 5px;" />
-                                이벤트 찜
-                            </button>
-                        </div>
-                        <div class="product-info css-1ud9i0q e1cmg4vm4">
-                            <h2 class="product-name css-eaolx3 e1cmg4vm5">[정미소]</h2>
-                            <h3 class="product-name css-eaolx3 e1cmg4vm5">'24년 햅쌀' 비단쌀 4kg</h3>
-                            <div class="content-row css-1066lcq e1cmg4vm3">
-                                <div class="product-price discount-price css-1fttcpj ei5rudb2">
-                                    <div><span class="dimmed-price css-105zgxh ei5rudb1"><span
-                                                class="price-number">26,900</span><span class="won">원</span></span>
-                                    </div>
-                                    <div class="discount"><span
-                                            class="discount-rate css-19lkxd2 ei5rudb0">44%</span><span
-                                            class="sales-price css-105zgxh ei5rudb1"><span
-                                                class="price-number">14,900</span><span class="won">원</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="card-item">
-            <div class="e1e6st7u6 css-17p5a04 e1ne12di0">
-                <div class="css-ghsdgz e1e6st7u4">
-                    <h2 class="css-n9ehvd e1e6st7u3">일일특가</h2>
-                    <h3 class="css-1fc0npt e1e6st7u2">24시간 한정 특가</h3>
-                    <div class="e1e6st7u5 css-we1gxf e17lobue1">
-                        <div class="lottie-timer">
-                            <img src="@/assets/clock.svg" alt="timer" style="width: 36px; height: 36px;" />
-                        </div>
-                        <div class="time-units css-hb6k3w e17lobue0">
-                            <span>19</span>
-                            <span>34</span>
-                            <span>48</span>
                         </div>
                     </div>
-                    <p class="css-d0y7nj e1e6st7u1">망설이면 늦어요!</p>
-                </div>
-                <div class="css-1yx948y e1e6st7u0"><a href="/goods/1000030900"
-                        class="deal-size-2 e1nucwdg0 e14udynn0 css-ae5x66 e1cmg4vm6">
-                        <div class="css-p55uhh">
-                            <div class="css-4vnm46">
-                                <div class="css-pw7jst e9elpup1" style="padding-bottom: 128.402%;">
-                                    <div class="css-j2pfbl e9elpup0">
-                                        <span
-                                            style="box-sizing: border-box; display: block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: absolute; inset: 0px;"><img
-                                                alt=""
-                                                src="https://product-image.kurly.com/hdims/resize/%5E%3E720x%3E936/cropcenter/720x936/quality/85/src/product/image/22adceb1-3ac7-4b7d-b370-77dcc7ab957e.jpg"
-                                                decoding="async" data-nimg="fill" class="css-1zjvv7"
-                                                style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; object-fit: cover;"
-                                                sizes="100vw">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="button-wrapper">
-                            <button type="button" class="product-function css-13xu5fn e17x72af0">
-                                <img src="@/assets/heart-icon.svg" alt="timer"
-                                    style="width: 21px; height: 21px;  margin: 5px;" />
-                                이벤트 찜
-                            </button>
-                        </div>
-                        <div class="product-info css-1ud9i0q e1cmg4vm4">
-                            <h2 class="product-name css-eaolx3 e1cmg4vm5">[랑콤]</h2>
-                            <h3 class="product-name css-eaolx3 e1cmg4vm5">제니피끄 세럼</h3>
-                            <div class="content-row css-1066lcq e1cmg4vm3">
-                                <div class="product-price discount-price css-1fttcpj ei5rudb2">
-                                    <div><span class="dimmed-price css-105zgxh ei5rudb1"><span
-                                                class="price-number">169,000</span><span class="won">원</span></span>
-                                    </div>
-                                    <div class="discount"><span
-                                            class="discount-rate css-19lkxd2 ei5rudb0">20%</span><span
-                                            class="sales-price css-105zgxh ei5rudb1"><span
-                                                class="price-number">135,200</span><span class="won">원</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="card-item">
-            <div class="e1e6st7u6 css-17p5a04 e1ne12di0">
-                <div class="css-ghsdgz e1e6st7u4">
-                    <h2 class="css-n9ehvd e1e6st7u3">일일특가</h2>
-                    <h3 class="css-1fc0npt e1e6st7u2">24시간 한정 특가</h3>
-                    <div class="e1e6st7u5 css-we1gxf e17lobue1">
-                        <div class="lottie-timer">
-                            <img src="@/assets/clock.svg" alt="timer" style="width: 36px; height: 36px;" />
-                        </div>
-                        <div class="time-units css-hb6k3w e17lobue0">
-                            <span>19</span>
-                            <span>34</span>
-                            <span>48</span>
-                        </div>
-                    </div>
-                    <p class="css-d0y7nj e1e6st7u1">망설이면 늦어요!</p>
-                </div>
-                <div class="css-1yx948y e1e6st7u0"><a href="/goods/1000030900"
-                        class="deal-size-2 e1nucwdg0 e14udynn0 css-ae5x66 e1cmg4vm6">
-                        <div class="css-p55uhh">
-                            <div class="css-4vnm46">
-                                <div class="css-pw7jst e9elpup1" style="padding-bottom: 128.402%;">
-                                    <div class="css-j2pfbl e9elpup0">
-                                        <span
-                                            style="box-sizing: border-box; display: block; overflow: hidden; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 0px; position: absolute; inset: 0px;"><img
-                                                alt=""
-                                                src="https://product-image.kurly.com/hdims/resize/%5E%3E360x%3E468/cropcenter/360x468/quality/85/src/product/image/be60b6b3-0026-419f-8562-01da172c9c69.jpeg"
-                                                decoding="async" data-nimg="fill" class="css-1zjvv7"
-                                                style="position: absolute; inset: 0px; box-sizing: border-box; padding: 0px; border: none; margin: auto; display: block; width: 0px; height: 0px; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; object-fit: cover;"
-                                                sizes="100vw">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="button-wrapper">
-                            <button type="button" class="product-function css-13xu5fn e17x72af0">
-                                <img src="@/assets/heart-icon.svg" alt="timer"
-                                    style="width: 21px; height: 21px;  margin: 5px;" />
-                                이벤트 찜
-                            </button>
-                        </div>
-                        <div class="product-info css-1ud9i0q e1cmg4vm4">
-                            <h2 class="product-name css-eaolx3 e1cmg4vm5">[시화당]</h2>
-                            <h3 class="product-name css-eaolx3 e1cmg4vm5">명절 상차림 세트</h3>
-                            <div class="content-row css-1066lcq e1cmg4vm3">
-                                <div class="product-price discount-price css-1fttcpj ei5rudb2">
-                                    <div><span class="dimmed-price css-105zgxh ei5rudb1"><span
-                                                class="price-number">130,500</span><span class="won">원</span></span>
-                                    </div>
-                                    <div class="discount"><span
-                                            class="discount-rate css-19lkxd2 ei5rudb0">10%</span><span
-                                            class="sales-price css-105zgxh ei5rudb1"><span
-                                                class="price-number">145,000</span><span class="won">원</span></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                </a>
             </div>
         </div>
     </div>
 </template>
 
+<script>
+import heartIcon from '@/assets/heart-icon.svg';
+import heartIconActive from '@/assets/heart-icon-active.svg';
+
+export default {
+    data() {
+        return {
+            isActive: false,
+            heartIcon: heartIcon
+        };
+    },
+    methods: {
+        toggleHeart() {
+            this.isActive = !this.isActive;
+            this.heartIcon = this.isActive ? heartIconActive : heartIcon;
+        }
+    },
+}
+</script>
+
 <style scoped>
-.card-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    /* 카드 사이의 간격을 설정 */
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    /* 중앙 정렬 */
-    padding: 0 15px;
-    /* 좌우 여백 추가 */
-    box-sizing: border-box;
-    /* padding을 포함하여 전체 너비를 설정 */
+.heart-icon {
+    transition: fill 0.3s, stroke 0.3s;
 }
 
-.card-item {
-    width: 100%;
-    height: auto;
-    /* 카드 높이는 내용에 따라 자동 조정 */
-    box-sizing: border-box;
-    /* 패딩과 보더를 너비에 포함 */
-    padding: 0;
-    /* 카드 내부의 패딩 설정 */
-}
-
-.card-item img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    /* 이미지 비율 유지 */
+.active {
+    fill: pink;
+    stroke: pink;
 }
 
 .button-wrapper {
@@ -302,7 +109,7 @@ a {
     margin: 0px 0px;
     display: flex;
     -webkit-box-pack: justify;
-    /* justify-content: space-between; */
+    justify-content: center;
     padding: 50px 0px;
 }
 
@@ -415,7 +222,7 @@ rect {
 }
 
 .css-ghsdgz {
-    width: 250px;
+    width: 220px;
 }
 
 .css-1yx948y {
@@ -424,14 +231,13 @@ rect {
 }
 
 .css-ae5x66.deal-size-2 {
-    width: 200px;
+    width: 290px;
 }
 
 .css-ae5x66 {
     display: block;
     width: fit-content;
     color: rgb(51, 51, 51);
-    cursor: pointer;
     padding: 0px;
 }
 
