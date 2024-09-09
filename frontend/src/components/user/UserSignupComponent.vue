@@ -312,25 +312,21 @@ export default {
             ];
 
             // 검증 로직
-
-
             for (const field of fields) {
                 if (field.value.trim().length === 0) {
                     alert(field.message);
                     return false;
                 }
-
-                // 비밀번호 확인
-            if (this.signupRequest.password !== this.confirmPassword) {
-                    alert("비밀번호와 확인 비밀번호가 일치하지 않습니다.");
-                    return false;
-                }
-
                 if (field.regex && !field.regex.test(field.value)) {
                     alert(field.regexMessage);
                     return false;
                 }
             }
+
+            if (this.signupRequest.password !== this.confirmPassword) {
+                    alert("비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+                    return false;
+                }
 
 
             if(!this.radioAllStatus){
