@@ -1,0 +1,165 @@
+<template>
+  <div id="container">
+    <div id="main">
+      <div id="content">
+        <div class="page_aticle aticle_type2">
+          <CompanyAsideComponent></CompanyAsideComponent>
+          <div id="viewOrderList" class="page_section section_orderlist">
+            <div class="head_aticle">
+              <h2 class="tit">게시글 조회</h2>
+            </div>
+            <DropdownMenu
+              :dropdown_menu="'search_date'"
+              title="기간 선택"
+              :options="dateOptions"
+              :selectedOption="selectedDateRange"
+              @update:selectedOption="selectDateRange"
+              :btn_layer_class="'btn_layer_date'"
+              :layer_search_class="'layer_search_date'"
+            />
+
+            <DropdownMenu
+              :dropdown_menu="'order_state'"
+              title="상태 선택"
+              :options="statusOptions"
+              :selectedOption="selectedOrderStatus"
+              @update:selectedOption="selectOrderStatus"
+              :btn_layer_class="'btn_layer_order'"
+              :layer_search_class="'layer_search_order'"
+            />
+
+            <ListCardComponent
+              :dataList="boards"
+              :noDataMsg="'작성한 게시글이 없습니다.'"
+              @deleteItem="deleteItem"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import CompanyAsideComponent from "@/components/company/CompanyAsideComponent.vue";
+import DropdownMenu from "../../../components/company/DropdownMenu.vue";
+import ListCardComponent from "../../../components/company/ListCardComponent.vue";
+export default {
+  name: "CompanyBoardListPage",
+  components: {
+    CompanyAsideComponent,
+    DropdownMenu,
+    ListCardComponent,
+  },
+  data() {
+    return {
+      selectedDateRange: "전체기간",
+      selectedOrderStatus: "전체보기",
+      dateOptions: ["전체기간", "1개월", "3개월", "6개월", "12개월"],
+      statusOptions: ["전체보기", "진행 중", "진행 완료"],
+      boards: [
+        {
+          id: 1,
+          dateRange: "2024-09-05 10:00 ~ 2024-09-05 22:00",
+          duration: "12시간",
+          image: "https://i.ytimg.com/vi/TcyKiW73L9Q/maxresdefault.jpg",
+          title: "[9월 픽] 짱 맛있는 샌드위치 더블 기획",
+          info: {
+            카테고리: "식품",
+          },
+          status: "진행중",
+        },
+        {
+          id: 2,
+          dateRange: "2024-08-04 10:00 ~ 2024-08-04 22:00",
+          duration: "12시간",
+          image:
+            "https://raw.githubusercontent.com/beyond-sw-camp/be06-3rd-404x-GreenPlate/develop/img/greenplate.jpg",
+          title: "[9월 픽] 짱 맛있는 샌드위치 더블 기획",
+          info: {
+            카테고리: "식품",
+          },
+          status: "진행 완료",
+        },
+      ],
+    };
+  },
+  methods: {
+    selectDateRange(option) {
+      this.selectedDateRange = option;
+    },
+    selectOrderStatus(option) {
+      this.selectedOrderStatus = option;
+    },
+    deleteItem(id) {
+      this.boards = this.boards.filter((board) => board.id !== id);
+    },
+  },
+};
+</script>
+
+<style scoped>
+#content {
+  min-height: 1800px;
+  min-width: 1050px;
+}
+
+.page_aticle {
+  width: 1050px;
+  margin: 0 auto;
+}
+
+.page_aticle.aticle_type2 {
+  padding-top: 65px;
+}
+
+.page_aticle.aticle_type2 .page_section {
+  float: right;
+  width: 820px;
+}
+
+.page_aticle .head_aticle {
+  padding: 5px 0 34px;
+}
+
+.page_aticle .head_aticle .tit {
+  height: 36px;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 36px;
+  color: #333;
+  letter-spacing: -0.5px;
+  display: inline-block;
+}
+
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+p,
+blockquote,
+th,
+td,
+a,
+span {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+</style>
