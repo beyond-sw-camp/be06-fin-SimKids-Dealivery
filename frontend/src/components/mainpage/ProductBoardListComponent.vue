@@ -1,48 +1,126 @@
 <template>
-    <li class="absolute-parent css-1tvfamc ea4dcdh0">
-        <div class="absolute top-2 z-10 right-2 w-6 h-6">
-            <label for=":R4d0ekqpb6:"  class="relative cursor-pointer" @click="like">
-                    <img :src="isLiked ? require('@/assets/board-list-filled-heart.svg') : require('@/assets/board-list-outline-heart.svg')"
-                         alt="Icon" class="pointer-events-none w-6 h-6 .svg"  >
-                </label>
-        </div>   
-        <a href="https://product.29cm.co.kr/catalog/2499794"
-            class="css-3f55di ea4dcdh1"><img
-                src="//img.29cm.co.kr/next-edition/2024/08/22/a5bc747e66474c508e0c8928adbe16b2_20240822161238.jpg"
-                alt="">
-            <div class="css-wjc4eh ea4dcdh2">
-                <h2 class="css-sdq6iq ea4dcdh3">클래식 분위기의 아우터</h2>
-                <p class="css-11z2gb8 ea4dcdh4">우아함이 느껴지는 시야쥬 베스트 트위드재킷 단독 20% 및 사진 후기 이벤트</p>
-                <div class="css-1712oqi e1lvum6h0">
-                    <div class="css-1d3r7u5 e1lvum6h3" style="left: 93.4524%;">
-                        <div class="css-2ugc89 e1lvum6h4">D-1</div>
-                    </div>
-                    <div class="css-8frsro e1lvum6h2" style="left: calc(93.4524% + 0px);">
-                        <div class="css-eio8nx e1lvum6h4">D-1</div>
-                    </div>
-                    <div class="css-e335q6 e1lvum6h1" style="width: 93.4524%;"></div>
-                </div><span class="css-islv3w etq0wqf0"><span class="css-12f2xxd etq0wqf1">D-1</span>2024.08.23.
-                    ~ 09.06.</span>
+    <div class="css-18tunez ei8jk451">
+        <div class="css-1i60c0e extobua1">
+            <h3 class="css-i804ml extobua0">{{ selectedCategory }}</h3>
+            <ul class="css-raoddi erzdokb2">
+                <li v-for="(category, index) in categories" :key="index" class="css-1h52dri erzdokb1"
+                    @click="handleClick(index)">
+                    <a
+                        :class="{ 'category-selected': selectedIndex === index, 'category-unselected': selectedIndex !== index }">
+                        {{ category }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+
+
+
+        <div class="css-uh04a1 e19n19480">
+            <ul class="css-6q2h7w e19n19481">
+                <ProductBoardListCardComponent v-for="n in num" :key="n"></ProductBoardListCardComponent>
+
+            </ul>
+            <div class="css-rdz8z7 e82lnfz1">
+                <a class="page-unselected e82lnfz0" @click="goToPage(1)"><img
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
+                        alt="처음 페이지로 이동하기 아이콘" ></a><a class="page-unselected e82lnfz0" @click="prevPageGroup"><img
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
+                        alt="이전 페이지로 이동하기 아이콘"></a>
+
+                <a v-for="pageNumber in visiblePages" :key="pageNumber"
+                    :class="pageNumber === currentPage ? 'page-selected e82lnfz0' : 'page-unselected e82lnfz0'"
+                    @click="goToPage(pageNumber)">
+                    {{ pageNumber }}
+                </a>
+
+                <a class="page-unselected e82lnfz0" @click="nextPageGroup"><img
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
+                        alt="다음 페이지로 이동하기 아이콘"></a><a class="page-unselected e82lnfz0" @click="goToPage(totalPages)"><img
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
+                        alt="마지막 페이지로 이동하기 아이콘"></a>
             </div>
-        </a></li>
+        </div>
+    </div>
+
 </template>
+
 <script>
+import ProductBoardListCardComponent from './ProductBoardListCardComponent.vue';
 export default {
-    name: 'ProductBoardListCardComponent',
-    data (){
+    name: 'ProductBoardListComponent',
+    data() {
         return {
-            isLiked: false
+            num: 21,
+            categories: ['의류', '가전제품', '가구', '식품', '스포츠', '악기'],
+            selectedIndex: 0,
+            selectedCategory: null,
+            currentPage: 1,
+            totalPages: 100,
+            pages: [],
+            pagesPerGroup: 5
+
+        }
+    },
+    components: {
+        ProductBoardListCardComponent
+    },
+    created() {
+        this.selectedCategory = this.categories[0];
+    },
+    computed: {
+        // 시작 페이지 번호 계산
+        startPage() {
+            return Math.floor((this.currentPage - 1) / this.pagesPerGroup) * this.pagesPerGroup + 1;
+        },
+        // 끝 페이지 번호 계산
+        endPage() {
+            return Math.min(this.startPage + this.pagesPerGroup - 1, this.totalPages);
+        },
+        // 현재 보여질 페이지 번호 목록
+        visiblePages() {
+            const pageNumbers = [];
+            for (let i = this.startPage; i <= this.endPage; i++) {
+                pageNumbers.push(i);
+            }
+            return pageNumbers;
         }
     },
     methods: {
-        like(){
-            console.log(this.isLiked);
-            this.isLiked = !this.isLiked;
+
+        handleClick(index) {
+            this.selectedIndex = index;
+            this.selectedCategory = this.categories[index];
+        },
+        // 특정 페이지로 이동
+        goToPage(pageNumber) {
+            if(pageNumber >= 1){
+                this.currentPage = pageNumber;
+            }else{
+                alert("첫 번째 페이지입니다.")
+            }
+            
+        },
+        // 이전 페이지 그룹으로 이동
+        prevPageGroup() {
+            if (this.startPage > 1) {
+                this.currentPage = this.startPage - 1;
+            }else{
+                alert("첫번째 페이지입니다.");
+            }
+        },
+        // 다음 페이지 그룹으로 이동
+        nextPageGroup() {
+            if (this.endPage < this.totalPages) {
+                this.currentPage = this.endPage + 1;
+            }else{
+                alert("마지막 페이지입니다.");
+            }
         }
     }
-
 }
 </script>
+
 
 <style scoped>
 * {
@@ -602,7 +680,7 @@ a {
     pointer-events: none;
 }
 
-.svg {
+svg {
     display: block;
     vertical-align: middle;
 }

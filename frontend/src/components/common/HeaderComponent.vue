@@ -1,21 +1,30 @@
 <template>
     <div>
         <div class="css-t79vuj e15sbxqa2">
-            <div class="css-1xfyvd1 eo7pjfk4">
-                <a class="css-oyffzd eo7pjfk2 top-menu-link"><router-link to="/auth/login">로그인</router-link></a>
+            <div v-show="!userStore.isLogined" class="css-1xfyvd1 eo7pjfk4">
+                <router-link to="/auth/login" class="css-oyffzd eo7pjfk2 top-menu-link">로그인</router-link>
                 <div class="css-1qgm48u eo7pjfk0">
                 </div>
-                <a class="css-xygizb eo7pjfk2 top-menu-link"><RouterLink to="/auth/user/signup">일반회원가입</RouterLink></a>
+                <RouterLink to="/auth/user/signup" class="css-xygizb eo7pjfk2 top-menu-link">일반회원가입</RouterLink>
                 <div class="css-1qgm48u eo7pjfk0">
                 </div>
-                <a class="css-xygizb eo7pjfk2 top-menu-link"><RouterLink to="/auth/company/signup">업체회원가입</RouterLink></a>
+                <RouterLink to="/auth/company/signup" class="css-xygizb eo7pjfk2 top-menu-link">업체회원가입</RouterLink>
+            </div>
+
+            <div v-show="userStore.isLogined" class="css-1xfyvd1 eo7pjfk4">
+                <span class="css-oyffzd eo7pjfk2 top-menu-link" @click="logout">로그아웃</span>
+                <div class="css-1qgm48u eo7pjfk0">
+                </div>
+                <RouterLink to="/mypage" class="css-xygizb eo7pjfk2 top-menu-link">마이페이지</RouterLink>
                 
                 
             </div>
+
+
             <div class="css-r7wmjj e15sbxqa3">
                 <div class="css-boc80u ekdqe1a1"><img
                         src="https://github.com/user-attachments/assets/97e43864-23d5-4f0d-844d-8a8e20aeade2"
-                        alt="딜리버리 로고" class="css-17mnrrx e1s3pt0j0 logo" @click="routeToMain"><button
+                        alt="딜리버리 로고" class="css-17mnrrx e1s3pt0j0 logo" @click="routeTo('/')"><button
                         class="active css-mxd3pm ekdqe1a0"><router-link
                             to="/">Dealivery</router-link></button><button
                         class=" css-mxd3pm ekdqe1a0">Company</button></div>
@@ -52,14 +61,21 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/useUserStore';
+import { mapStores } from 'pinia';
 export default {
     name: 'HeaderComponent',
-    props: {
-        msg: String
+    computed: {
+        ...mapStores(useUserStore)
     },
     methods:{
-        routeToMain(){
-            this.$router.push("/");
+        routeTo(path){
+            this.$router.push(path);
+        },
+        logout(){
+            this.userStore.isLogined = false;
+            this.userStore.roles = [];
+            this.routeTo('/');
         }
     }
 }

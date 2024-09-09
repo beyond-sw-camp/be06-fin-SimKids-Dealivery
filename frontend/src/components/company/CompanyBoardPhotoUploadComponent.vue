@@ -56,8 +56,15 @@ const removeImage = (id) => {
 
 <template>
   <div class="image-upload-container">
-    <input :id="props.maxImages" name="media" type="file" multiple accept="image/png, image/jpeg, image/jpg"
-      class="hidden" @change="handleImageUpload" />
+    <input
+      :id="props.maxImages"
+      name="media"
+      type="file"
+      multiple
+      accept="image/png, image/jpeg, image/jpg"
+      class="hidden"
+      @change="handleImageUpload"
+    />
     <label :for="props.maxImages" class="product-image-btn">
       <div class="flex flex-col">
         <img src="../../assets/image_upload.svg" />
