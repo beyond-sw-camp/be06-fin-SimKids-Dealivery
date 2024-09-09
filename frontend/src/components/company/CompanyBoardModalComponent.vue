@@ -46,7 +46,7 @@ export default {
       this.$emit("closeModal");
     },
     submitProduct() {
-      const regex = /^[0-9]*$/;
+      const regex = /^[1-9][0-9]*$/;
       if (!this.productName || !this.productPrice || !this.productQuantity) {
         alert("모든 필드를 입력해주세요.");
         return;
@@ -113,7 +113,7 @@ export default {
 }
 
 button {
-  background-color: #5f0080;
+  background-color: #4c4c4c;
   color: white;
   padding: 14px 30px;
   margin-top: 30px;
@@ -123,7 +123,7 @@ button {
 }
 
 button:hover {
-  background-color: #5f0080;
+  background-color: #4c4c4c;
 }
 
 .submitButton {
