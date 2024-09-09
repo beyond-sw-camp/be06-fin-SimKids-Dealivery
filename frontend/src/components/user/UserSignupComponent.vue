@@ -247,8 +247,18 @@ export default {
             });
         },
         doEmailAuth() {
-            this.isClickedEmailAuth = true;
-            alert("이메일이 발송되었습니다.");
+            const idRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            
+            if(!this.signupRequest.id.length > 0){
+                
+                alert("아이디를 입력해주세요.");
+            }else if(!idRegex.test(this.signupRequest.id)){
+                alert("아이디는 이메일 형식이어야 합니다.")
+            }else{
+                this.isClickedEmailAuth = true;
+                this.userStore.sendEmailCode(this.signupRequest.id);
+                alert("이메일이 발송되었습니다.");
+            }
         },
         checkRadio(target) {
             if (target === "radioAll") {
