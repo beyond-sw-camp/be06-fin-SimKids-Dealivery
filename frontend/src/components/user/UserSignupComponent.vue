@@ -4,14 +4,15 @@
         <div class="css-mhmtvt e15so55l1">
             <div class="css-rb0i47 e1yyjjij1"><span class="css-qq9ke6 e1yyjjij0">*</span> 필수입력사항</div>
             <div class="css-y8aj3r eo6ykj40">
+                <form>
                 <div class="css-1pjgd36 e744wfw6">
                     <div class="css-1y8737n e744wfw5"><label class="css-1obgjqh e744wfw4">아이디<span
                                 class="css-qq9ke6 e744wfw0">*</span></label></div>
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="memberId"
-                                    name="memberId" placeholder="아이디를 입력해주세요" type="text" required=""
-                                    class="css-u52dqk e1uzxhvi2" value=""></div>
+                            <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.id" data-testid="input-box"
+                                    id="memberId" name="memberId" placeholder="아이디를 입력해주세요 (이메일 형식)" type="text"
+                                    required="" class="css-u52dqk e1uzxhvi2" maxlength="40" value="" @keydown.enter="userSignup"></div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"><button class="css-ufulao e4nu7ef3" type="button"
@@ -26,9 +27,9 @@
                                 class="css-qq9ke6 e744wfw0">*</span></label></div>
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="memberId"
-                                    name="memberId" placeholder="인증코드 6자리" type="text" required=""
-                                    class="css-u52dqk e1uzxhvi2" value=""></div>
+                            <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.emailCode"
+                                    data-testid="input-box" id="emailCode" name="emailCode" placeholder="인증코드 6자리"
+                                    type="text" required="" maxlength="6" class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="userSignup"></div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"></div>
@@ -40,9 +41,9 @@
                                 class="css-qq9ke6 e744wfw0">*</span></label></div>
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="password"
-                                    name="password" placeholder="비밀번호를 입력해주세요" type="password" autocomplete="off"
-                                    class="css-u52dqk e1uzxhvi2" value=""></div>
+                            <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.password"
+                                    data-testid="input-box" id="password" name="password" placeholder="비밀번호를 입력해주세요"
+                                    type="password" autocomplete="off" maxlength="20" class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="userSignup"></div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"></div>
@@ -52,9 +53,9 @@
                                 class="css-qq9ke6 e744wfw0">*</span></label></div>
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="passwordConfirm"
-                                    name="passwordConfirm" placeholder="비밀번호를 한번 더 입력해주세요" type="password"
-                                    autocomplete="off" class="css-u52dqk e1uzxhvi2" value=""></div>
+                            <div class="css-176lya2 e1uzxhvi3"><input v-model="confirmPassword" data-testid="input-box"
+                                    id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호를 한번 더 입력해주세요"
+                                    type="password" autocomplete="off" maxlength="20" class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="userSignup"></div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"></div>
@@ -64,9 +65,9 @@
                                 class="css-qq9ke6 e744wfw0">*</span></label></div>
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="name" name="name"
-                                    placeholder="이름을 입력해 주세요" type="text" required="" class="css-u52dqk e1uzxhvi2"
-                                    value=""></div>
+                            <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.name"
+                                    data-testid="input-box" id="name" name="name" placeholder="이름을 입력해 주세요" type="text"
+                                    required="" maxlength="10" class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="userSignup"></div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"></div>
@@ -77,9 +78,10 @@
                                 class="css-qq9ke6 e744wfw0">*</span></label></div>
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="mobileNumber"
-                                    name="mobileNumber" placeholder="-를 포함하여 입력해주세요." type="tel" required=""
-                                    class="css-u52dqk e1uzxhvi2" value=""></div>
+                            <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.phoneNumber"
+                                    data-testid="input-box" id="phoneNumber" name="phoneNumber"
+                                    placeholder="-를 포함하여 입력해주세요." maxlength="13" type="tel" required="" class="css-u52dqk e1uzxhvi2"
+                                    value="" @keydown.enter="userSignup"></div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"></div>
@@ -90,9 +92,10 @@
                                 class="css-qq9ke6 e744wfw0">*</span></label></div>
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="mobileNumber"
-                                    name="mobileNumber" readonly type="text" required=""
-                                    class="css-u52dqk e1uzxhvi2 read-only" value="" v-model="address"></div>
+                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="address"
+                                    name="address" readonly type="text" required=""
+                                    class="css-u52dqk e1uzxhvi2 read-only" value="" v-model="signupRequest.address">
+                            </div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"><button class="css-ufulao e4nu7ef3" type="button"
@@ -106,9 +109,10 @@
                                 class="css-qq9ke6 e744wfw0">*</span></label></div>
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="mobileNumber"
-                                    name="mobileNumber" readonly type="text" required=""
-                                    class="css-u52dqk e1uzxhvi2 read-only" value="" v-model="postNumber"></div>
+                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="postNumber"
+                                    name="postNumber" readonly type="text" required=""
+                                    class="css-u52dqk e1uzxhvi2 read-only" value="" v-model="signupRequest.postNumber">
+                            </div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"></div>
@@ -120,15 +124,17 @@
                                 class="css-qq9ke6 e744wfw0">*</span></label></div>
                     <div class="css-82a6rk e744wfw3">
                         <div class="css-jmalg e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" id="mobileNumber"
-                                    name="mobileNumber" placeholder="상세주소를 입력해주세요." type="tel" required=""
-                                    class="css-u52dqk e1uzxhvi2" value=""></div>
+                            <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.addressDetail"
+                                    data-testid="input-box" id="addressDetail" name="addressDetail"
+                                    placeholder="상세주소를 입력해주세요."  maxlength="30" type="text" required="" class="css-u52dqk e1uzxhvi2"
+                                    value="" @keydown.enter="userSignup"></div>
                         </div>
                     </div>
                     <div class="css-1w0ksfz e744wfw2"></div>
                 </div>
 
                 <div class="css-1w0ksfz e744wfw2"></div>
+            </form>
             </div>
 
             <div class="css-1w0ksfz e744wfw2"></div>
@@ -144,7 +150,8 @@
                         <div class="css-ov2xfu e1sjmfnv6"><label class="css-msja7w e1dcessg3" for="TermsAgreeAll"><input
                                     id="TermsAgreeAll" type="checkbox" class="css-agvwxo e1dcessg2">
                                 <div class="css-79hxr7 e1dcessg1">
-                                    <img :src="radioAllStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')" @click="checkRadio('radioAll')" alt="Icon">
+                                    <img :src="radioAllStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')"
+                                        @click="checkRadio('radioAll')" alt="Icon">
                                 </div><span>전체 동의합니다.</span>
                             </label>
                         </div>
@@ -153,7 +160,8 @@
                                     for="RequiredTermsCondition"><input id="RequiredTermsCondition" type="checkbox"
                                         class="css-agvwxo e1dcessg2">
                                     <div class="css-79hxr7 e1dcessg1">
-                                        <img :src="radioFirstStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')" @click="checkRadio('radioFirst')" alt="Icon">
+                                        <img :src="radioFirstStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')"
+                                            @click="checkRadio('radioFirst')" alt="Icon">
                                     </div><span>이용약관 동의</span>
                                 </label><span class="css-64z8en e1sjmfnv4">(필수)</span></div>
                         </div>
@@ -162,7 +170,8 @@
                                     for="RequiredTermsOfPrivacy"><input id="RequiredTermsOfPrivacy" type="checkbox"
                                         class="css-agvwxo e1dcessg2">
                                     <div class="css-79hxr7 e1dcessg1">
-                                        <img :src="radioSecondStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')" @click="checkRadio('radioSecond')" alt="Icon">
+                                        <img :src="radioSecondStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')"
+                                            @click="checkRadio('radioSecond')" alt="Icon">
                                     </div><span>개인정보 수집∙이용 동의</span>
                                 </label><span class="css-64z8en e1sjmfnv4">(필수)</span></div>
                         </div>
@@ -174,14 +183,15 @@
                                     for="RequiredSignupAge"><input id="RequiredSignupAge" type="checkbox"
                                         class="css-agvwxo e1dcessg2">
                                     <div class="css-79hxr7 e1dcessg1">
-                                        <img :src="radioThirdStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')" @click="checkRadio('radioThird')" alt="Icon">
+                                        <img :src="radioThirdStatus ? require('@/assets/filled-custom-radio.svg') : require('@/assets/outline-custom-radio.svg')"
+                                            @click="checkRadio('radioThird')" alt="Icon">
                                     </div><span>본인은 만 14세 이상입니다.</span>
                                 </label><span class="css-64z8en e1sjmfnv4">(필수)</span></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="css-ud3rkg e1utgeno0"><button class="css-18m884r e4nu7ef3" type="submit" width="240" height="56"
+            <div class="css-ud3rkg e1utgeno0"><button @click="userSignup" class="css-18m884r e4nu7ef3" type="button" width="240" height="56"
                     radius="3"><span class="css-nytqmg e4nu7ef1">가입하기</span></button></div>
         </div>
     </div>
@@ -190,14 +200,31 @@
 </template>
 
 <script>
-
+import { useUserStore } from '@/stores/useUserStore';
+import { mapStores } from 'pinia';
 export default {
     name: 'UserSignupComponent',
     data() {
         return {
-            address: "", postNumber: "", isClickedEmailAuth: false,
-            radioAllStatus: false, radioFirstStatus: false, radioSecondStatus: false, radioThirdStatus: false
+            isClickedEmailAuth: false, confirmPassword: "",
+            radioAllStatus: false, radioFirstStatus: false, radioSecondStatus: false, radioThirdStatus: false,
+            signupRequest: {
+                id: "",
+                password: "",
+                emailCode: "",
+                name: "",
+                phoneNumber: "",
+                address: "",
+                postNumber: "",
+                addressDetail: "",
+                type: ""
+            }
+
+
         }
+    },
+    computed: {
+        ...mapStores(useUserStore)
     },
     methods: {
         openPostcode() {
@@ -211,8 +238,8 @@ export default {
                 width: width,
                 height: height,
                 oncomplete: (data) => {
-                    this.address = data.address;
-                    this.postNumber = data.zonecode;
+                    this.signupRequest.address = data.address;
+                    this.signupRequest.postNumber = data.zonecode;
                 }
             }).open({
                 left: (window.screen.width / 2) - (width / 2),
@@ -220,38 +247,109 @@ export default {
             });
         },
         doEmailAuth() {
-            this.isClickedEmailAuth = true;
+            const idRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            
+            if(!this.signupRequest.id.length > 0){
+                
+                alert("아이디를 입력해주세요.");
+            }else if(!idRegex.test(this.signupRequest.id)){
+                alert("아이디는 이메일 형식이어야 합니다.")
+            }else{
+                this.isClickedEmailAuth = true;
+                this.userStore.sendEmailCode(this.signupRequest.id);
+                alert("이메일이 발송되었습니다.");
+            }
         },
-        checkRadio(target){
-            if(target === "radioAll"){
-                if(!this.radioAllStatus){
+        checkRadio(target) {
+            if (target === "radioAll") {
+                if (!this.radioAllStatus) {
                     this.radioAllStatus = true;
                     this.radioFirstStatus = true;
                     this.radioSecondStatus = true;
                     this.radioThirdStatus = true;
-                }else{
+                } else {
                     this.radioAllStatus = false;
                     this.radioFirstStatus = false;
                     this.radioSecondStatus = false;
                     this.radioThirdStatus = false;
                 }
-                
-            }else if(target === "radioFirst"){
+
+            } else if (target === "radioFirst") {
                 this.radioFirstStatus = !this.radioFirstStatus
-            }else if(target === "radioSecond"){
+            } else if (target === "radioSecond") {
                 this.radioSecondStatus = !this.radioSecondStatus
-            }else{
+            } else {
                 this.radioThirdStatus = !this.radioThirdStatus
             }
-            
             this.checkRadioAll();
         },
-        checkRadioAll(){
-            if(this.radioFirstStatus && this.radioSecondStatus && this.radioThirdStatus){
+        checkRadioAll() {
+            if (this.radioFirstStatus && this.radioSecondStatus && this.radioThirdStatus) {
                 this.radioAllStatus = true;
-            }else{
+            } else {
                 this.radioAllStatus = false;
             }
+        },
+        validateAll() {
+
+            const idRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            const phoneRegex = /^\d{3}-\d{4}-\d{4}$/;
+
+            const fields = [
+                { value: this.signupRequest.id, message: "아이디를 입력해주세요.", regex: idRegex, regexMessage: "아이디는 이메일 형식입니다." }, 
+                { value: this.signupRequest.emailCode, message: "이메일 인증코드를 입력해주세요."},
+                { value: this.signupRequest.password, message: "비밀번호를 입력해주세요.", regex: pwdRegex,
+                regexMessage: "비밀번호는 아래의 규칙을 모두 만족해야 합니다.\n\n- 영문 대문자 1개 이상 포함\n- 영문 소문자 1개 이상 포함\n- 숫자 1개 이상 포함\n- 특수문자 1개 이상 포함\n- 8글자 이상"}, 
+                { value: this.confirmPassword, message: "비밀번호를 한번 더 입력해주세요.",
+                regexMessage: "비밀번호는 아래의 규칙을 모두 만족해야 합니다.\n\n- 영문 대문자 1개 이상 포함\n- 영문 소문자 1개 이상 포함\n- 숫자 1개 이상 포함\n- 특수문자 1개 이상 포함\n- 8글자 이상"}, 
+                { value: this.signupRequest.name, message: "이름을 입력해주세요." },
+                { value: this.signupRequest.phoneNumber, message: "휴대폰 번호를 입력해주세요.", regex: phoneRegex,
+                regexMessage: "-를 포함한 휴대폰번호 11자리를 입력해주세요." }, 
+                { value: this.signupRequest.address, message: "주소를 입력해주세요." },
+                { value: this.signupRequest.postNumber, message: "우편번호를 입력해주세요." },
+                { value: this.signupRequest.addressDetail, message: "상세주소를 입력해주세요." }
+            ];
+
+            // 검증 로직
+
+
+            for (const field of fields) {
+                if (field.value.trim().length === 0) {
+                    alert(field.message);
+                    return false;
+                }
+
+                // 비밀번호 확인
+            if (this.signupRequest.password !== this.confirmPassword) {
+                    alert("비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+                    return false;
+                }
+
+                if (field.regex && !field.regex.test(field.value)) {
+                    alert(field.regexMessage);
+                    return false;
+                }
+            }
+
+
+            if(!this.radioAllStatus){
+                alert("필수 약관에 동의해주세요");
+                return false;
+            }
+            
+
+            return true; // 모든 검증 통과
+        },
+        async userSignup(){
+            if(this.validateAll()){
+              this.signupRequest.type = "inapp";
+              if(await this.userStore.userSignup(this.signupRequest)){
+                alert("회원가입에 성공했습니다. 로그인 후 서비스를 이용해주세요.");
+                this.$router.push('/auth/login');
+              }
+            }
+            
         }
     }
 }
@@ -261,7 +359,7 @@ export default {
     font-family: "Noto Sans KR", "malgun gothic", "AppleGothic", "dotum", "sans-serif";
 }
 
-img{
+img {
     cursor: pointer;
 }
 

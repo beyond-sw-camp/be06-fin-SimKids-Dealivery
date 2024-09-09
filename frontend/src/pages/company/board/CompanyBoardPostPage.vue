@@ -15,7 +15,7 @@
 import CompanyAsideComponent from "@/components/company/CompanyAsideComponent.vue";
 import CompanyBoardPostComponent from "@/components/company/CompanyBoardPostComponent.vue";
 export default {
-  name: "MainPage",
+  name: "BoardListPage",
   components: {
     CompanyAsideComponent,
     CompanyBoardPostComponent,
