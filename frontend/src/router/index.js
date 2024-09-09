@@ -10,6 +10,8 @@ import CompanySignupComponent from "@/components/company/CompanySignupComponent.
 import ResetPasswordComponent from "@/components/user/ResetPasswordComponent.vue";
 import FindIdSuccessComponent from "@/components/user/FindIdSuccessComponent.vue";
 import FindIdComponent from "@/components/user/FindIdComponent.vue";
+import BoardListPage from "@/pages/common/BoardListPage.vue";
+import ProductBoardListComponent from "@/components/mainpage/ProductBoardListComponent.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,6 +41,13 @@ const router = createRouter({
         {path: "id/find", component: FindIdComponent, meta: { requiresAuth: false } },
         {path: "", redirect: "/auth/login", meta: { requiresAuth: false } },
         
+      ]
+    },
+
+    {
+      path: "/board", component: BoardListPage, meta: { requiresAuth: false },
+      children: [
+        {path: "list", component: ProductBoardListComponent, meta: { requiresAuth: false } }
       ]
     }
   ]
