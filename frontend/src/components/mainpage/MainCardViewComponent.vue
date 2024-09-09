@@ -105,12 +105,12 @@ a {
 }
 
 .css-17p5a04 {
-    width: 500px;
+    width: 470px;
     margin: 0px 0px;
     display: flex;
     -webkit-box-pack: justify;
     justify-content: center;
-    padding: 50px 0px;
+    padding: 20px 0px;
 }
 
 .css-n9ehvd {
@@ -231,7 +231,7 @@ rect {
 }
 
 .css-ae5x66.deal-size-2 {
-    width: 290px;
+    width: 220px;
 }
 
 .css-ae5x66 {

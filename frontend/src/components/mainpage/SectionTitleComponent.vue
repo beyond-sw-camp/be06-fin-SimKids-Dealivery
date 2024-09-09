@@ -43,6 +43,7 @@ export default {
     flex-direction: column;
     width: 100%;
     gap: 10px;
+    padding-bottom: 8px
 }
 
 .css-vonb0q {

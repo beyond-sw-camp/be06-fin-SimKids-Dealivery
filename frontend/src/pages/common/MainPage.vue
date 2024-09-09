@@ -3,7 +3,7 @@
   <BannerComponent></BannerComponent>
   <div class="container">
     <SectionTitleComponent :title="notice[0]" :subtitle="notice[1]"></SectionTitleComponent>
-    <div class="card-container">
+    <div class="main-card-container">
       <MainCardViewComponent></MainCardViewComponent>
       <MainCardViewComponent></MainCardViewComponent>
       <MainCardViewComponent></MainCardViewComponent>
@@ -11,6 +11,14 @@
       <!-- 추가 카드들 -->
     </div>
     <SectionTitleComponent :title="notice[2]" :subtitle="notice[3]"></SectionTitleComponent>
+    <br>
+    <div class="board-card-container">
+      <ProductBoardListCardComponent></ProductBoardListCardComponent>
+      <ProductBoardListCardComponent></ProductBoardListCardComponent>
+      <ProductBoardListCardComponent></ProductBoardListCardComponent>
+      <ProductBoardListCardComponent></ProductBoardListCardComponent>
+      <ProductBoardListCardComponent></ProductBoardListCardComponent>
+    </div>
   </div>
   <router-view></router-view>
   <FooterComponent></FooterComponent>
@@ -22,6 +30,7 @@ import FooterComponent from '@/components/common/FooterComponent.vue';
 import BannerComponent from '@/components/mainpage/BannerComponent.vue';
 import SectionTitleComponent from '@/components/mainpage/SectionTitleComponent.vue';
 import MainCardViewComponent from '@/components/mainpage/MainCardViewComponent.vue';
+import ProductBoardListCardComponent from '@/components/mainpage/ProductBoardListCardComponent.vue';
 
 export default {
   name: 'MainPage',
@@ -30,11 +39,12 @@ export default {
     BannerComponent,
     SectionTitleComponent,
     MainCardViewComponent,
+    ProductBoardListCardComponent,
     FooterComponent,
   },
-  data() { 
+  data() {
     return {
-      "notice": ["🎉 특가 가득! 진행 중인 세일 🎉", "놓치지 말고 지금 주문하세요!", "✨ 오픈 예정 이벤트 ✨", "관심 등록 후 찾아보세요!"],
+      "notice": ["🎉 특가 가득! 진행 중인 이벤트 🎉", "놓치지 말고 지금 주문하세요!", "✨ 오픈 예정 이벤트 ✨", "관심 등록 후 찾아보세요!"],
     }
   }
 }
@@ -78,19 +88,32 @@ export default {
   }
 }
 
-.card-container {
+.main-card-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   /* 카드들을 중앙에 정렬 */
-  gap: 15px;
+  gap: 30px;
   /* 카드 간의 간격 조절 */
 }
 
-.card-container>* {
+.main-card-container>* {
   flex: 1 1 calc(50% - 15px);
   /* 카드 너비를 50%로 설정하고, 카드 간의 간격 고려 */
   box-sizing: border-box;
   /* 여백 및 패딩을 포함하여 박스 크기 조정 */
 }
+
+.board-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.board-card-container>* {
+  flex: 1 1 calc(33% - 15px);
+  box-sizing: border-box;
+}
+
 </style>
