@@ -17,22 +17,22 @@
     </h2>
     <span class="css-1e1rd4p e1q8tigr0"><span>20,900원</span></span>
     <ul class="css-iqoq9n e6qx2kx2">
-      <li class="css-e6zlnr epzddad2">
+      <dl class="css-e6zlnr epzddad2">
         <dt class="css-lytdfk epzddad1">판매자</dt>
         <dd class="css-1k8t52o epzddad0">
           <p class="css-c02hqi e6qx2kx1">컬리</p>
         </dd>
-      </li>
-      <li class="css-e6zlnr epzddad2">
+      </dl>
+      <dl class="css-e6zlnr epzddad2">
         <dt class="css-lytdfk epzddad1">카테고리</dt>
         <dd class="css-1k8t52o epzddad0">
           <p class="css-c02hqi e6qx2kx1">식품</p>
         </dd>
-      </li>
+      </dl>
     </ul>
     <!-- 판매 상품 옵션 -->
     <div class="css-2lvxh7 e1qy0s5w0">
-      <li class="css-e6zlnr epzddad2">
+      <dl class="css-e6zlnr epzddad2">
         <dt class="css-159o541 epzddad1">상품 선택</dt>
         <dd class="css-1k8t52o epzddad0">
           <div class="css-183fdlo e1aw4qzr0">
@@ -181,7 +181,7 @@
             </div>
           </div>
         </dd>
-      </li>
+      </dl>
     </div>
 
     <div class="css-9y0nwt e17iylht0">

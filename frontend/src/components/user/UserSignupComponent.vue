@@ -256,7 +256,7 @@ export default {
                 alert("아이디는 이메일 형식이어야 합니다.")
             }else{
                 this.isClickedEmailAuth = true;
-                this.userStore.sendEmailCode(this.signupRequest.id);
+                this.userStore.sendUserEmailCode(this.signupRequest.id);
                 alert("이메일이 발송되었습니다.");
             }
         },
@@ -466,7 +466,7 @@ html {
 }
 
 .css-1y8737n {
-    width: 139px;
+    width: 150px;
     padding-top: 12px;
 }
 
@@ -519,7 +519,7 @@ html {
 }
 
 .css-1y8737n {
-    width: 139px;
+    width: 150px;
     padding-top: 12px;
 }
 
@@ -653,7 +653,7 @@ video {
 }
 
 .css-1y8737n {
-    width: 139px;
+    width: 150px;
     padding-top: 12px;
 }
 
