@@ -17,6 +17,7 @@
     display: flex;
     -webkit-box-pack: justify;
     justify-content: space-between;
+    margin-top: 50px;
 }
 
 .css-1ytvbby {

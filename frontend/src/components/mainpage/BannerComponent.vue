@@ -13,7 +13,6 @@
                 <img :src="slides[0].src" alt="Slide image">
             </div>
         </div>
-
         <a class="prev" @click="prevSlide">&#10094;</a>
         <a class="next" @click="nextSlide">&#10095;</a>
     </div>
@@ -82,7 +81,7 @@ export default {
     max-width: 1440px;
     position: relative;
     margin: auto;
-    margin-top: 120px;
+    margin-top: 10px;
     overflow: hidden;
 }
 
