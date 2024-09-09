@@ -1,99 +1,390 @@
 <template>
-    <div>
-        <div class="css-t79vuj e15sbxqa2">
-            <div v-show="!userStore.isLogined" class="css-1xfyvd1 eo7pjfk4">
-                <router-link to="/auth/login" class="css-oyffzd eo7pjfk2 top-menu-link">로그인</router-link>
-                <div class="css-1qgm48u eo7pjfk0">
-                </div>
-                <RouterLink to="/auth/user/signup" class="css-xygizb eo7pjfk2 top-menu-link">일반회원가입</RouterLink>
-                <div class="css-1qgm48u eo7pjfk0">
-                </div>
-                <RouterLink to="/auth/company/signup" class="css-xygizb eo7pjfk2 top-menu-link">업체회원가입</RouterLink>
-            </div>
-
-            <div v-show="userStore.isLogined" class="css-1xfyvd1 eo7pjfk4">
-                <span class="css-oyffzd eo7pjfk2 top-menu-link" @click="logout">로그아웃</span>
-                <div class="css-1qgm48u eo7pjfk0">
-                </div>
-                <RouterLink to="/mypage" class="css-xygizb eo7pjfk2 top-menu-link">마이페이지</RouterLink>
-                
-                
-            </div>
-
-
-            <div class="css-r7wmjj e15sbxqa3">
-                <div class="css-boc80u ekdqe1a1"><img
-                        src="https://github.com/user-attachments/assets/97e43864-23d5-4f0d-844d-8a8e20aeade2"
-                        alt="딜리버리 로고" class="css-17mnrrx e1s3pt0j0 logo" @click="routeTo('/')"><button
-                        class="active css-mxd3pm ekdqe1a0"><router-link
-                            to="/">Dealivery</router-link></button><button
-                        class=" css-mxd3pm ekdqe1a0">Company</button></div>
-                <div class="css-pqw0uk e1493ofl4">
-                    <div class="css-w444a2 e1493ofl1"><input id="gnb_search" placeholder="검색어를 입력해주세요" required=""
-                            class="css-11ntk83 e1493ofl3" value=""><button id="submit" aria-label="submit"
-                            class="css-ywxmlw e1493ofl0"></button></div>
-                </div>
-                <div class="css-pqw0uk e15sbxqa1">
-                    <div class="css-c4pbxv e15sbxqa0">
-                        <button class="css-231fw3 etxxzpc0" aria-label="찜하기" type="button"></button>
-                        <div class="css-ff2aah e14oy6dx2"><button class="css-g25h97 e14oy6dx1"></button></div>
+    <div class="css-1l2tkkh eug5r8l2">
+        <div class="pc css-3rbu7q epggjnz0">
+            <div class="top-info-section">
+                <div class="pc css-jagjhu e1w7rsa02">
+                    <div class="grade-name">
+                        <div class="user-name">심키즈님</div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div id="header" class="css-17tqugj e17w4cfr1">
-            <div class="css-mlddcv e17w4cfr6">
-                <div class="css-0 e17w4cfr3">
-                    <div class="css-axtlq9 eqn756m2"><span class="css-1k5gn9s eqn756m1"></span><span
-                            class="css-t75x7c eqn756m0">카테고리</span></div>
+                <div class="css-rurvds e5rtjnl2">
+                    <div class="pc css-z53t5q e5rtjnl1">
+                        <div class="item-wrap">
+                            <button class="menu-item">
+                                <div class="name-text">포인트</div>
+                                <div class="amount-text">
+                                    <div class="number-text">0</div>
+                                    원
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <a href="/member/membership" class="pc css-1d9zl68 e5rtjnl0"></a>
                 </div>
-                <ul class="css-1887xqd e17w4cfr5">
-                    <li class="css-59mmhh e17w4cfr4"><span class="css-1xyu7j9 e17w4cfr2">식품</span></li>
-                    <li class="css-59mmhh e17w4cfr4"><span class="css-1xyu7j9 e17w4cfr2">의류</span></li>
-                    <li class="css-59mmhh e17w4cfr4"><span class="css-1xyu7j9 e17w4cfr2">뷰티</span></li>
-                    <li class="css-59mmhh e17w4cfr4"><span class="css-1xyu7j9 e17w4cfr2">라이프</span></li>
-                </ul>
-                <div class="css-s5xdrg e17w4cfr0"></div>
+            </div>
+            <div class="pc css-1ozh7ew e1n1zlz21">
+                <div class="css-1tzlowo e1ifbcqu0">자주찾는 메뉴</div>
+                <div class="menu-wrap">
+                    <button class="menu-link">
+                        <img src="@/assets/cart-icon.svg" width="28" height="28" />
+                        <div class="active css-10aedqr e1n1zlz20">
+                            주문 내역
+                        </div>
+                    </button><button class="menu-link">
+                        <img src="@/assets/heart-icon.svg" width="29" height="28" />
+                        <div class="css-10aedqr e1n1zlz20">
+                            찜한 게시글
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="menu-info-section">
+                <div class="css-bivr1n eoeriki0">
+                    <div class="css-1tzlowo e1ifbcqu0">문의</div>
+                    <a class="css-1qe2c6r e1ytq75h2">
+                        <div class="css-1mq58uz e1ytq75h1">My 문의</div>
+                    </a>
+                </div>
+                <div class="css-bivr1n eoeriki0">
+                    <div class="css-1tzlowo e1ifbcqu0">내 정보관리</div>
+                    <a class="css-1qe2c6r e1ytq75h2">
+                        <div class="css-1mq58uz e1ytq75h1">내 정보</div>
+                    </a><a class="css-1qe2c6r e1ytq75h2">
+                        <div class="css-1mq58uz e1ytq75h1">개인정보 수정</div>
+                    </a><a class="css-1qe2c6r e1ytq75h2">
+                        <div class="css-1mq58uz e1ytq75h1">배송지 관리</div>
+                    </a>
+                </div>
             </div>
         </div>
-        <div hidden="" class="css-1px7x3s e1py5jsz0"></div>
     </div>
 </template>
 
-<script>
-import { useUserStore } from '@/stores/useUserStore';
-import { mapStores } from 'pinia';
-export default {
-    name: 'HeaderComponent',
-    computed: {
-        ...mapStores(useUserStore)
-    },
-    methods:{
-        routeTo(path){
-            this.$router.push(path);
-        },
-        logout(){
-            this.userStore.isLogined = false;
-            this.userStore.roles = [];
-            this.routeTo('/');
-        }
-    }
-}
-</script>
-
-
 <style scoped>
+.css-u71x2d {
+    position: relative;
+    min-width: 1050px;
+    background-color: rgb(242, 245, 248);
+}
+
+.css-72lz6z {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    padding: 50px 0px 80px;
+    margin: 0px auto;
+}
+
+.css-1l2tkkh {
+    overflow: hidden;
+    width: 300px;
+    border-radius: 16px;
+}
+
+.css-3rbu7q.pc {
+    padding-bottom: 0px;
+}
+
+.css-3rbu7q {
+    padding-bottom: 20px;
+    background-color: rgb(242, 245, 248);
+}
+
+.css-3rbu7q.pc .top-info-section {
+    margin-bottom: 8px;
+    padding: 24px 20px 20px;
+}
+
+.css-3rbu7q>div {
+    background-color: rgb(255, 255, 255);
+}
+
+.css-jagjhu {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.css-jagjhu .grade-name {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    min-width: calc(100% - 100px);
+}
+
+.css-jagjhu.pc .user-name {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.css-jagjhu .user-name {
+    overflow: hidden;
+    padding-left: 5px;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.2px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.css-rurvds {
+    margin-top: 12px;
+    border: 1px solid rgb(226, 226, 226);
+    border-radius: 12px;
+}
+
+.css-z53t5q {
+    display: flex;
+}
+
+.css-z53t5q .item-wrap {
+    position: relative;
+    min-width: 50%;
+}
+
+.css-z53t5q .item-wrap .menu-item {
+    display: block;
+    width: 100%;
+    min-height: 81px;
+    padding: 20px 12px 16px 16px;
+    text-align: left;
+}
+
+.css-z53t5q .item-wrap .name-text {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: rgb(102, 102, 102);
+}
+
+.css-z53t5q.pc .amount-text {
+    font-weight: 500;
+}
+
+.css-z53t5q .item-wrap .amount-text {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding-top: 6px;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: -0.4px;
+}
+
+.css-z53t5q.pc .number-text {
+    font-size: 24px;
+}
+
+.css-z53t5q .item-wrap .number-text {
+    padding-right: 2px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -0.8px;
+}
+
+.css-1d9zl68.pc {
+    font-weight: 500;
+}
+
+.css-1d9zl68 {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 100%;
+    padding: 12px 12px 12px 14px;
+    border-radius: 0px 0px 12px 12px;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 18px;
+    word-break: break-all;
+    background-color: rgb(234, 247, 250);
+}
+
+.css-1ozh7ew.pc {
+    margin: 0px;
+    padding: 20px 25px;
+}
+
+.css-3rbu7q>div {
+    background-color: rgb(255, 255, 255);
+}
+
+.css-1tzlowo {
+    width: 100%;
+    padding: 12px 0px 6px;
+    font-weight: 400;
+    line-height: 20px;
+    color: rgb(181, 181, 181);
+}
+
+.css-1ozh7ew.pc .menu-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.css-1ozh7ew .menu-wrap {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+
+.css-1ozh7ew.pc .menu-link {
+    flex-direction: row;
+    min-width: 100%;
+    font-weight: 500;
+    height: 54px;
+    padding: 16px 0px;
+    font-size: 16px;
+}
+
+.css-1ozh7ew .menu-link {
+    display: flex;
+    flex-direction: column;
+    -webkit-box-align: center;
+    align-items: center;
+    position: relative;
+    min-width: 56px;
+    font-weight: 600;
+    line-height: 18px;
+    cursor: pointer;
+}
+
+.css-1ozh7ew.pc .menu-link>img {
+    margin: 0px 8px 0px 0px;
+}
+
+.css-1ozh7ew .menu-link>img {
+    margin: 0px 0px 8px;
+}
+
+.css-10aedqr.active,
+.css-10aedqr.active span {
+    color: rgb(95, 0, 128);
+}
+
+.css-10aedqr {
+    display: flex;
+    gap: 2px;
+}
+
+.css-3rbu7q.pc .menu-info-section {
+    padding: 0px 25px;
+}
+
+.css-3rbu7q>div {
+    background-color: rgb(255, 255, 255);
+}
+
+.css-bivr1n {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 12px 0px 16px;
+    border-top: 1px solid rgb(238, 238, 238);
+}
+
+.css-1qe2c6r {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 100%;
+    padding: 12px 0px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.css-1mq58uz {
+    font-size: 16px;
+    line-height: 22px;
+    color: rgb(51, 51, 51);
+    white-space: nowrap;
+}
+
+/*-------------  마이페이지 주문 내역 부분 ------------------*/
+.css-heioij {
+    overflow: hidden;
+    width: 700px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 16px;
+}
+
+.css-oc8mjz {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    margin: 0px 20px;
+    padding: 25px 0px 20px;
+    border-bottom: 2px solid rgb(51, 51, 51);
+}
+
+.css-eq7f8j {
+    display: flex;
+    align-items: flex-end;
+}
+
+.css-1lmd4kz {
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    line-height: 28px;
+}
+
+.css-10ekv2i {
+    background-color: var(--ldmw176w);
+}
+
+.css-ole4zz {
+    background-color: var(--ldmw176x);
+    border-bottom-right-radius: var(--ldmw171g);
+    border-bottom-left-radius: var(--ldmw171g);
+    height: 20px;
+}
+
+.css-glfjkp {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    justify-content: center;
+    width: 100%;
+    height: 700px;
+    background-color: var(--ldmw176x);
+    margin-top: 16px;
+    border-radius: var(--ldmw171g);
+}
+
+.css-1f8oun9 {
+    margin-top: var(--ldmw17w);
+    color: var(--ldmw176l);
+}
+
+.ldmw177q {
+    line-height: 26px;
+}
+
+.ldmw177j {
+    font-weight: 600;
+}
+
+.ldmw177c {
+    font-size: 18px;
+}
+
 *,
 :after,
 :before {
     box-sizing: border-box;
     margin: 0;
 }
-
-a {
-  text-decoration: none; /* 밑줄 제거 (필요 시) */
-}
-
 
 *,
 :after,
@@ -106,10 +397,6 @@ th {
 
 img {
     border-style: none;
-}
-
-.logo{
-    cursor: pointer;
 }
 
 img,
@@ -175,7 +462,6 @@ textarea {
     cursor: pointer;
 }
 
-
 .css-t79vuj {
     /* 헤더 전체에 적용되는 css */
     position: relative;
@@ -211,7 +497,6 @@ textarea {
     color: rgb(95, 0, 128);
     cursor: pointer;
 }
-
 
 .css-oyffzd {
     /* 헤더 우측 상단에 로그인 글씨 css */

@@ -4,33 +4,34 @@
         <div class="css-1axolzg etkckst0">
             <div class="css-1izr46f e1fu5st01">
                 <button type="button"
-                :class="{'active': userType === 'user', 'inactive': userType !== 'user'}"
+                :class="{'active': type === 'user', 'inactive': type !== 'user'}"
                  class="e1fu5st00" @click="setUserType('user')">일반 회원</button>
                 <button type="button"
-                :class="{'active': userType === 'company', 'inactive': userType !== 'company'}"
+                :class="{'active': type === 'company', 'inactive': type !== 'company'}"
                 class="inactive e1fu5st00" @click="setUserType('company')">업체 회원</button>
             </div>
-            <form class="formbox">
                 <div class="css-46b038 e18ap6t76 formbox">
-                    <div class="css-1accgqb e1uzxhvi6">
-                        <div class="css-176lya2 e1uzxhvi3"><input data-testid="input-box" name="id"
-                                placeholder="아이디를 입력해주세요" type="text" class="css-u52dqk e1uzxhvi2" value=""></div>
-                    </div>
-                    <div class="css-1accgqb e1uzxhvi6">
-                        <div class="css-176lya2 e1uzxhvi3">
-                            <input data-testid="input-box" name="password" placeholder="비밀번호를 입력해주세요" type="password"
-                                autocomplete="off" class="css-u52dqk e1uzxhvi2" value="">
+                    <form class="formbox">
+                        <div class="css-1accgqb e1uzxhvi6">
+                            <div class="css-176lya2 e1uzxhvi3"><input v-model="loginRequest.id" data-testid="input-box" name="id"
+                                    placeholder="아이디를 입력해주세요" type="text" class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="login" maxlength="30"></div>
                         </div>
-                    </div>
+                        <div class="css-1accgqb e1uzxhvi6">
+                            <div class="css-176lya2 e1uzxhvi3">
+                                <input v-model="loginRequest.password" data-testid="input-box" name="password" placeholder="비밀번호를 입력해주세요" type="password"
+                                    autocomplete="off" class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="login" maxlength="30">
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div class="css-1vjdduq e18ap6t75 formbox">
-                    <a class="css-i4t6me e18ap6t74"><router-link to="/auth/id/find">아이디 찾기</router-link></a>
+                    <router-link to="/auth/id/find" class="css-i4t6me e18ap6t74">아이디 찾기</router-link>
                     <span class="css-1cgn39v e18ap6t73"></span>
-                    <a class="css-i4t6me e18ap6t74"><router-link to="/auth/pwd/find">비밀번호 찾기</router-link></a>
+                    <router-link to="/auth/pwd/find" class="css-i4t6me e18ap6t74">비밀번호 찾기</router-link>
                 </div>
                 <div class="css-s4i9n2 e18ap6t71 formbox">
-                    <button class="css-qaxuc4 e4nu7ef3" type="submit" height="54" radius="3">
-                        <span class="css-nytqmg e4nu7ef1">로그인</span>
+                    <button class="css-qaxuc4 e4nu7ef3" type="button" height="54" radius="3" @click="login">
+                        <span class="css-nytqmg e4nu7ef1" >로그인</span>
                     </button>
                     
                     <button class="css-hxorrg e4nu7ef3" id="user" @click="routeToSignup('user')" type="button" height="54" radius="3" style="margin-top: 10px;">
@@ -40,19 +41,26 @@
                         <span class="css-nytqmg e4nu7ef1" >업체회원가입</span>
                     </button>
                 </div>
-            </form>
         </div>
     </div>
 
 </template>
 
 <script>
-
+import { useUserStore } from '@/stores/useUserStore';
+import { mapStores } from 'pinia';
 export default {
   name: 'LoginComponent',
   data(){
-    return {userType:'user'}
+    return {type: "user", loginRequest:{
+        id: "",
+        password: ""
+        }
+    }
   },
+  computed: {
+        ...mapStores(useUserStore)
+    },
   methods:{
     routeToSignup(type){
         if(type === 'user'){
@@ -62,7 +70,37 @@ export default {
         }
     },
     setUserType(type){
-      this.userType = type;
+      this.type = type;
+    },
+    login(){
+        if(this.validateForm()){
+            if(this.userStore.login(this.type, this.loginRequest)){
+                this.$router.push('/');
+            }
+        }
+        
+    },
+    validateForm(){
+        const idRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if(this.loginRequest.id.length === 0){
+            alert("아이디를 입력해주세요");
+            return false;
+        }
+        if(this.loginRequest.password.length === 0){
+            alert("비밀번호를 입력해주세요");
+            return false;
+        }
+        if(!idRegex.test(this.loginRequest.id)){
+            alert("아이디 형식이 올바르지 않습니다.")
+            return false;
+        }
+        if (this.loginRequest.id.length > 30 || this.loginRequest.password.length > 30){
+            alert("아이디또는 비밀번호는 30자를 초과할 수 없습니다.")
+            return false;
+        }
+
+        return true;
     }
   },
 }
