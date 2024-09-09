@@ -54,7 +54,13 @@
               <tr>
                 <th>상품 추가</th>
                 <td colspan="2">
-                  <button id="board-link" @click="displayModal">추가</button>
+                  <button
+                    id="board-link"
+                    class="addProductBtn"
+                    @click="displayModal"
+                  >
+                    추가
+                  </button>
                   <div v-if="isDisplayModal">
                     <CompanyBoardModalComponent
                       @closeModal="displayModal"
@@ -184,7 +190,6 @@ export default {
   data() {
     return {
       isDisplayModal: false,
-      isOccuredDateError: false,
       dateErrorMsg: "",
       startTime: "", // 전송 데이터
       endTime: "", // 전송 데이터
@@ -214,24 +219,22 @@ export default {
 
         const nowTime = `${year}년 ${month}월 ${date}일 ${hours}시 ${minutes}분`;
         this.dateErrorMsg = `시작 시간은 ${nowTime} 이후로 설정해야 합니다.`;
-        this.isOccuredDateError = true;
-        return;
+        return false;
       }
 
       const startHour = startTime.getHours();
       if (startHour < 9 || startHour >= 22) {
         this.dateErrorMsg = "시작 시간은 09:00 ~ 22:00 사이여야 합니다.";
-        this.isOccuredDateError = true;
-        return;
+        return false;
       }
 
       const duration = (endTime - startTime) / (1000 * 60 * 60);
       if (duration < 2 || duration > 48) {
         this.dateErrorMsg =
           "시작 시간 ~ 종료 시간은 2 ~ 48시간 사이여야 합니다.";
-        this.isOccuredDateError = true;
+        return false;
       }
-      this.isOccuredDateError = false;
+      return true;
     },
     validateTitle() {
       this.charCount = this.title.length;
@@ -244,10 +247,8 @@ export default {
     },
     displayModal() {
       this.isDisplayModal = !this.isDisplayModal;
-      console.log(this.isDisplayModal);
     },
     addProduct(product) {
-      console.log("Product added:", product);
       const isDuplicate = this.products.some((p) => p.name === product.name);
       if (isDuplicate) {
         alert("이미 존재하는 상품명입니다.");
@@ -260,18 +261,16 @@ export default {
     },
     updateThumbnailImages(imageData) {
       this.thumbnailImages = imageData.images;
-      console.log("Thumbnail images updated:", this.thumbnailImages);
     },
     updateDetailImage(imageData) {
       this.detailImage = imageData.images;
-      console.log("detail image updated:", this.detailImage);
     },
     validateAllData() {
       if (this.startTime.length < 1 || this.endTime.length < 1) {
         alert("기간 설정을 해주세요.");
         return false;
       }
-      if (this.isOccuredDateError) {
+      if (!this.validateDates()) {
         alert(this.dateErrorMsg);
         return false;
       }
@@ -653,5 +652,15 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .input-container {
   display: flex;
+}
+.addProductBtn {
+  outline: 0;
+  background-color: #4c4c4c;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 3px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 </style>
