@@ -27,14 +27,9 @@ public class GlobalExceptionHandler {
 
     //@Valid 실패시 예외 핸들러
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, Object> error = new HashMap<>();
-        if (!ex.getBindingResult().getAllErrors().isEmpty()) {
-            FieldError errorField = (FieldError) ex.getBindingResult().getAllErrors().get(0);
-            String errorMessage = errorField.getDefaultMessage();
-            error.put("message", errorMessage);
-            error.put("isSuccess", false);
-        }
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<BaseResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        return ResponseEntity
+                .badRequest().body(new BaseResponse("잘못된 요청입니다."));
+
     }
 }

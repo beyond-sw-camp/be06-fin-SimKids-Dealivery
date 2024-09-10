@@ -17,40 +17,38 @@ public class UserDto {
     @Builder
     public static class UserSignupRequest{
         @NotBlank
-        @Size(max = 10, message = "이름은 10자까지 입력 가능합니다.")
+        @Size(max = 10)
         private String name;
 
         @NotBlank
-        @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                message = "아이디는 이메일 형식이어야 합니다.")
-        @Size(max = 40, message = "아이디는 최대 40자까지 입력 가능합니다.")
+        @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+        @Size(max = 40)
         private String email;
 
         @NotBlank
-        @Pattern(regexp = "^[a-zA-Z0-9]{6}$", message = "인증코드의 형식이 올바르지 않습니다.")
+        @Pattern(regexp = "^[a-zA-Z0-9]{6}$")
         private String emailCode;
 
         @NotBlank
-        @Size(max = 20, message = "비밀번호는 최대 20자까지 입력 가능합니다.")
-        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~!@#])[A-Za-z\\d~!@#]{8,}$",
-        message = "비밀번호는 대문자,소문자,숫자,특수문자 (~!@#) 각각 1개 이상 포함하여 8글자 이상이어야 합니다.")
+        @Size(max = 20)
+        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~!@#])[A-Za-z\\d~!@#]{8,}$")
         private String password;
 
         @NotBlank
-        @Pattern(regexp = "^(010)-\\d{4}-\\d{4}$", message = "휴대폰 번호 형식이 올바르지 않습니다. (-를 포함해서 입력해주세요)")
+        @Pattern(regexp = "^(010)-\\d{4}-\\d{4}$")
         private String phoneNumber;
 
         @NotBlank
-        @Size(max = 6, message = "우편번호는 최대 6자까지 입력 가능합니다.")
-        @Pattern(regexp = "^\\d{5,}$", message = "우편번호 형식이 올바르지 않습니다.")
+        @Size(max = 6)
+        @Pattern(regexp = "^\\d{5,}$")
         private String postNumber;
 
         @NotBlank
-        @Size(max = 30, message = "주소는 최대 30자까지 입력 가능합니다.")
+        @Size(max = 30)
         private String address;
 
         @NotBlank
-        @Size(max = 30, message = "상세주소는 최대 30자까지 입력 가능합니다.")
+        @Size(max = 30)
         private String addressDetail;
 
         @NotBlank
