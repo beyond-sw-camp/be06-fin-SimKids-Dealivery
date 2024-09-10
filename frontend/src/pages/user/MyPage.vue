@@ -38,7 +38,7 @@ export default {
         handleMenuClick(menu) {
             if (menu === 'order') {
                 this.currentComponent = 'MypageOrderListComponent';
-            } else if (menu === 'inquiry') {
+            } else if (menu === 'qna') {
                 this.currentComponent = 'MypageQnAComponent';
             }
         }

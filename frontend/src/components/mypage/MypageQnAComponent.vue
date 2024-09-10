@@ -2,7 +2,7 @@
     <div class="css-heioij eug5r8l1">
         <div class="css-oc8mjz ed9qr673">
             <div class="css-eq7f8j ed9qr672">
-                <h2 class="css-1lmd4kz ed9qr671">주문 내역</h2>
+                <h2 class="css-1lmd4kz ed9qr671">My 문의</h2>
             </div>
         </div>
     </div>

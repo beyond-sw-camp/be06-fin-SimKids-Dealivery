@@ -32,9 +32,9 @@
                                 주문 내역
                             </span>
                         </button>
-                        <button class="menu-link" @click="setActiveMenu('inquiry')">
+                        <button class="menu-link" @click="setActiveMenu('likes')">
                             <img src="@/assets/heart-icon.svg" class="icon" width="29" height="28" />
-                            <span class="menu-item" :class="{ active: isActive('inquiry') }">
+                            <span class="menu-item" :class="{ active: isActive('likes') }">
                                 찜한 게시글
                             </span>
                         </button>
@@ -43,20 +43,20 @@
                 <div class="menu-info-section">
                     <div class="css-bivr1n eoeriki0">
                         <div class="css-1tzlowo e1ifbcqu0">문의</div>
-                        <a class="css-1qe2c6r e1ytq75h2" @click="setActiveMenu('inquiry')">
-                            <span class="menu-item" :class="{ active: isActive('inquiry') }">My 문의</span>
+                        <a class="css-1qe2c6r e1ytq75h2" @click="setActiveMenu('qna')">
+                            <span class="menu-item" :class="{ active: isActive('qna') }">My 문의</span>
                         </a>
                     </div>
                     <div class="css-bivr1n eoeriki0">
                         <div class="css-1tzlowo e1ifbcqu0">내 정보관리</div>
-                        <a class="css-1qe2c6r e1ytq75h2">
-                            <span class="menu-item">내 정보</span>
+                        <a class="css-1qe2c6r e1ytq75h2" @click="setActiveMenu('info')">
+                            <span class="menu-item" :class="{ active: isActive('info') }">내 정보</span>
                         </a>
-                        <a class="css-1qe2c6r e1ytq75h2">
-                            <span class="menu-item">개인정보 수정</span>
+                        <a class="css-1qe2c6r e1ytq75h2" @click="setActiveMenu('update-info')">
+                            <span class="menu-item" :class="{ active: isActive('update-info') }">개인정보 수정</span>
                         </a>
-                        <a class="css-1qe2c6r e1ytq75h2">
-                            <span class="menu-item">배송지 관리</span>
+                        <a class="css-1qe2c6r e1ytq75h2" @click="setActiveMenu('address')">
+                            <span class="menu-item" :class="{ active: isActive('address') }">배송지 관리</span>
                         </a>
                     </div>
                 </div>
@@ -81,17 +81,6 @@ export default {
         isActive(menu) {
             return this.activeMenu === menu;
         }
-    },
-    mounted() {
-        // 기존 document.addEventListener 코드
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', () => {
-                // 모든 메뉴 항목에서 active 클래스를 제거
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                // 클릭된 메뉴 항목에 active 클래스를 추가
-                item.classList.add('active');
-            });
-        });
     }
 }
 </script>
