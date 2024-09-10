@@ -3,7 +3,10 @@
         <div class="css-ehagcz eug5r8l0">
             <div class="css-1l3y783 e1a4z271" style="position: relative;">
                 <div class="css-1gp1092 e1a4z270">전체 <strong>{{ totalItems }}</strong>개</div>
-                <div style="overflow: visible; width: 0px;">
+                <div v-if="items.length === 0" class="no-items-message">
+                    찜한 게시글이 없습니다.
+                </div>
+                <div v-else style="overflow: visible; width: 0px;">
                     <div>
                         <div aria-label="grid" aria-readonly="true"
                             class="ReactVirtualized__Grid ReactVirtualized__List" role="grid" tabindex="0"
@@ -95,6 +98,16 @@ export default {
 
 
 <style scoped>
+.no-items-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 274px;
+    /* 내용이 있는 영역과 맞추기 위해 설정 */
+    font-size: 16px;
+    color: #888;
+}
+
 body {
     margin: 0;
 }
