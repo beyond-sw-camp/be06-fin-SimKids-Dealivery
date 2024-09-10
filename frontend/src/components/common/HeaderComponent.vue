@@ -370,7 +370,6 @@ textarea {
     letter-spacing: -0.3px;
     background-color: rgb(255, 255, 255);
     position: relative;
-    box-shadow: rgba(0, 0, 0, 0.07) 0px 3px 4px 0px;
     width: 100%;
     z-index: 300;
 }

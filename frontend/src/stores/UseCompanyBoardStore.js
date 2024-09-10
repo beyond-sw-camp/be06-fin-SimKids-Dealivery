@@ -1,9 +1,16 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 const backend = "http://localhost:8080/product-boards";
+const mockyListURL =
+  "https://run.mocky.io/v3/785219a1-65f2-45ba-875d-46e0019566ae";
+const mockyListOptionURL =
+  "https://run.mocky.io/v3/3801fe56-0faf-4fe0-a765-b7e966f1af6f";
+const mockyDetailURL =
+  "https://run.mocky.io/v3/fa2ac704-87e9-4d42-b2c0-ddda0e9d2861";
 
 export const useCompanyBoardStore = defineStore("companyBoard", {
   state: () => ({
+    boardData: null,
     productBoardReq: {
       title: "",
       products: [],
@@ -13,6 +20,27 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
     },
   }),
   actions: {
+    async getProductBoardList() {
+      const data = await axios.get(mockyListURL);
+      return data.data;
+    },
+    async getProductBoardListByDateRange(option) {
+      console.log(option);
+      // 백엔드 개발 후 구현
+      const data = await axios.get(mockyListOptionURL);
+      return data.data;
+    },
+    async getProductBoardListByOrderStatus(option) {
+      console.log(option);
+      // 백엔드 개발 후 구현
+      const data = await axios.get(mockyListOptionURL);
+      return data.data;
+    },
+    async getProductBoardDetail() {
+      const data = await axios.get(mockyDetailURL);
+      this.boardData = data.data;
+      return data.data;
+    },
     async createProductBoard(req) {
       const formData = new FormData();
 
@@ -53,6 +81,40 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
           console.error("There was an error!", error);
           alert("상품 등록 중 오류가 발생했습니다.");
         });
+    },
+    getThumbnailUrls() {
+      if (this.boardData !== null) {
+        return this.boardData.productThumbnailUrls;
+      }
+      return null;
+    },
+    getThumbnailUrlSize() {
+      if (this.boardData !== null) {
+        return this.boardData.productThumbnailUrls.length;
+      }
+      return 0;
+    },
+    setThumbnailUrls(urls) {
+      if (this.boardData !== null) {
+        this.boardData.productThumbnailUrls = urls;
+      }
+    },
+    getDetailUrl() {
+      if (this.boardData !== null) {
+        return this.boardData.productDetailUrl;
+      }
+      return null;
+    },
+    getDetailUrlSize() {
+      if (this.boardData !== null) {
+        return this.boardData.productDetailUrl.length;
+      }
+      return 0;
+    },
+    resetDetailUrl() {
+      if (this.boardData !== null) {
+        this.boardData.productDetailUrl = [];
+      }
     },
   },
 });

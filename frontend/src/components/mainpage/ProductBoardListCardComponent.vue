@@ -5,8 +5,7 @@
                     <img :src="isLiked ? require('@/assets/board-list-filled-heart.svg') : require('@/assets/board-list-outline-heart.svg')"
                          alt="Icon" class="pointer-events-none w-6 h-6 .svg"  >
                 </label>
-        </div>
-        
+        </div>   
         <a href="https://product.29cm.co.kr/catalog/2499794"
             class="css-3f55di ea4dcdh1"><img
                 src="//img.29cm.co.kr/next-edition/2024/08/22/a5bc747e66474c508e0c8928adbe16b2_20240822161238.jpg"

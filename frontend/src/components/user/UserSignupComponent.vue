@@ -256,7 +256,11 @@ export default {
                 alert("아이디는 이메일 형식이어야 합니다.")
             }else{
                 this.isClickedEmailAuth = true;
+<<<<<<< HEAD
                 this.userStore.sendEmailCode(this.signupRequest.id);
+=======
+                this.userStore.sendUserEmailCode(this.signupRequest.id);
+>>>>>>> 6bc8455b1c24d78137db185ac2b77dd44882d62f
                 alert("이메일이 발송되었습니다.");
             }
         },
@@ -312,13 +316,17 @@ export default {
             ];
 
             // 검증 로직
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 6bc8455b1c24d78137db185ac2b77dd44882d62f
             for (const field of fields) {
                 if (field.value.trim().length === 0) {
                     alert(field.message);
                     return false;
                 }
+<<<<<<< HEAD
 
                 // 비밀번호 확인
             if (this.signupRequest.password !== this.confirmPassword) {
@@ -326,12 +334,22 @@ export default {
                     return false;
                 }
 
+=======
+>>>>>>> 6bc8455b1c24d78137db185ac2b77dd44882d62f
                 if (field.regex && !field.regex.test(field.value)) {
                     alert(field.regexMessage);
                     return false;
                 }
             }
 
+<<<<<<< HEAD
+=======
+            if (this.signupRequest.password !== this.confirmPassword) {
+                    alert("비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+                    return false;
+                }
+
+>>>>>>> 6bc8455b1c24d78137db185ac2b77dd44882d62f
 
             if(!this.radioAllStatus){
                 alert("필수 약관에 동의해주세요");
@@ -466,7 +484,7 @@ html {
 }
 
 .css-1y8737n {
-    width: 139px;
+    width: 150px;
     padding-top: 12px;
 }
 
@@ -519,7 +537,7 @@ html {
 }
 
 .css-1y8737n {
-    width: 139px;
+    width: 150px;
     padding-top: 12px;
 }
 
@@ -653,7 +671,7 @@ video {
 }
 
 .css-1y8737n {
-    width: 139px;
+    width: 150px;
     padding-top: 12px;
 }
 

@@ -1,28 +1,42 @@
 <script setup>
 import { ref, defineEmits, defineProps } from "vue";
+import { useCompanyBoardStore } from "../../stores/UseCompanyBoardStore";
 
 const uploadedImages = ref([]);
 const previewImages = ref([]);
-
 const emit = defineEmits(["updateContent"]);
-
 const props = defineProps({
   maxImages: {
     type: Number,
     default: 1,
   },
+  isActivate: {
+    type: Boolean,
+    default: true,
+  },
 });
 
+const companyBoardStore = useCompanyBoardStore();
+
+// 이미지 업로드 처리 함수
 const handleImageUpload = (event) => {
   const files = event.target.files;
-
-  if (uploadedImages.value.length + files.length > props.maxImages) {
+  // 이미지 개수 제한 체크
+  if (
+    (props.maxImages === 8
+      ? companyBoardStore.getThumbnailUrlSize()
+      : companyBoardStore.getDetailUrlSize()) +
+      uploadedImages.value.length +
+      files.length >
+    props.maxImages
+  ) {
     alert(
-      `등록할 수 있는 이미지의 개수를 초과했습니다. 최대 ${props.maxImages}개 까지만 등록할 수 있습니다.`
+      `등록할 수 있는 이미지의 개수를 초과했습니다. 최대 ${props.maxImages}개까지만 등록할 수 있습니다.`
     );
     return;
   }
 
+  // 새로 업로드된 파일을 처리
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     const id = Date.now() + i;
@@ -34,7 +48,7 @@ const handleImageUpload = (event) => {
       previewImages.value.push({ id: id, src: e.target.result });
     };
 
-    reader.readAsDataURL(files[i]);
+    reader.readAsDataURL(file);
   }
 
   emit("updateContent", {
@@ -42,6 +56,18 @@ const handleImageUpload = (event) => {
   });
 };
 
+const removeImageUrl = (url) => {
+  if (props.maxImages === 8) {
+    const thumbnailArr = companyBoardStore
+      .getThumbnailUrls()
+      .filter((elem) => elem !== url);
+    companyBoardStore.setThumbnailUrls(thumbnailArr);
+  } else if (props.maxImages === 1) {
+    companyBoardStore.resetDetailUrl();
+  }
+};
+
+// 이미지 삭제 처리 함수
 const removeImage = (id) => {
   uploadedImages.value = uploadedImages.value.filter(
     (image) => image.id !== id
@@ -64,19 +90,49 @@ const removeImage = (id) => {
       accept="image/png, image/jpeg, image/jpg"
       class="hidden"
       @change="handleImageUpload"
+      :disabled="!props.isActivate"
     />
-    <label :for="props.maxImages" class="product-image-btn">
+    <label
+      :for="props.maxImages"
+      :class="['product-image-btn', { 'disabled-label': !props.isActivate }]"
+    >
       <div class="flex flex-col">
         <img src="../../assets/image_upload.svg" />
         <p class="image-cnt">
-          {{ uploadedImages.length }} / {{ props.maxImages }}
+          {{
+            (props.maxImages === 8
+              ? companyBoardStore.getThumbnailUrlSize()
+              : companyBoardStore.getDetailUrlSize()) + uploadedImages.length
+          }}
+          /
+          {{ props.maxImages }}
         </p>
       </div>
     </label>
     <div class="image-preview-container">
+      <div
+        v-for="image in props.maxImages === 8
+          ? companyBoardStore.getThumbnailUrls()
+          : companyBoardStore.getDetailUrl()"
+        :key="image"
+        class="image-preview"
+      >
+        <img :src="image" alt="Uploaded Image" />
+        <button
+          :disabled="!props.isActivate"
+          @click="removeImageUrl(image)"
+          class="remove-image-btn"
+        >
+          X
+        </button>
+      </div>
       <div v-for="image in previewImages" :key="image.id" class="image-preview">
         <img :src="image.src" alt="Uploaded Image" />
-        <button @click="removeImage(image.id)" class="remove-image-btn">
+        <button
+          :disabled="!props.isActivate"
+          @click="removeImage(image.id)"
+          class="remove-image-btn"
+        >
           X
         </button>
       </div>
@@ -105,6 +161,11 @@ const removeImage = (id) => {
   background: rgb(241 244 246);
   border: 2px solid rgb(241 244 246);
   border-radius: 0.25rem;
+}
+
+.disabled-label {
+  cursor: not-allowed;
+  opacity: 0.5; /* 비활성화된 것처럼 보이게 추가적으로 흐리게 처리 */
 }
 
 .image-cnt {
@@ -211,5 +272,19 @@ input[type="number"] {
 
 .hidden {
   display: none;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+input:disabled {
+  cursor: not-allowed;
+}
+
+.disabled-label {
+  cursor: not-allowed;
+  opacity: 0.5; /* 선택적: 비활성화된 느낌을 줄 수 있음 */
 }
 </style>

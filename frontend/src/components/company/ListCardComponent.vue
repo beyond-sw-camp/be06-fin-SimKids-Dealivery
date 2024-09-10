@@ -1,26 +1,24 @@
 <template>
   <ul class="list_ul">
     <li v-for="data in dataList" :key="data.id">
-      <div class="date">{{ data.dateRange }} ({{ data.duration }} 진행)</div>
+      <div class="date">
+        {{ getDuration(data.startedAt, data.endedAt) }} ({{
+          getDurationTime(data.startedAt, data.endedAt)
+        }}
+        진행)
+      </div>
       <div class="list_elems">
         <div class="image">
-          <img :src="data.image" alt="상품 이미지" />
+          <img :src="data.productThumbnailUrl" alt="상품 이미지" />
         </div>
         <div class="name">
-          <a href="#none">{{ data.title }}</a>
+          <a @click.prevent="goToBoardPost(data.id)">{{ data.title }}</a>
         </div>
         <div class="elem_info">
           <div class="desc">
-            <dl v-for="(value, key) in data.info" :key="key">
-              <dt>{{ key }}</dt>
-              <dd>
-                <span v-if="Array.isArray(value)">
-                  <ul>
-                    <li v-for="item in value" :key="item">{{ item }}</li>
-                  </ul>
-                </span>
-                <span v-else>{{ value }}</span>
-              </dd>
+            <dl>
+              <dt>카테고리</dt>
+              <dd>{{ data.category }}</dd>
             </dl>
           </div>
         </div>
@@ -28,8 +26,7 @@
           <span class="inner_status">
             <div
               :class="{
-                link: true,
-                ga_tracking_event: true,
+                status: true,
                 complete: data.status === '진행 완료',
               }"
             >
@@ -39,6 +36,7 @@
               <button
                 @click="deleteItem(data.id)"
                 class="link ga_tracking_event"
+                :disabled="data.status === '진행중'"
               >
                 삭제
               </button>
@@ -70,8 +68,37 @@ export default {
     return {};
   },
   methods: {
+    getDuration(stratedAt, endedAt) {
+      const startDate = new Date(stratedAt);
+      const endDate = new Date(endedAt);
+
+      const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const hour = String(date.getHours()).padStart(2, "0");
+        const minute = String(date.getMinutes()).padStart(2, "0");
+        return `${year}-${month}-${day} ${hour}:${minute}`;
+      };
+
+      const formattedStartDate = formatDate(startDate);
+      const formattedEndDate = formatDate(endDate);
+
+      return `${formattedStartDate} ~ ${formattedEndDate}`;
+    },
+    getDurationTime(startedAt, endedAt) {
+      const timeDifference = new Date(endedAt) - new Date(startedAt);
+
+      return parseInt(timeDifference / (1000 * 60 * 60)) + "시간";
+    },
     deleteItem(id) {
       this.$emit("deleteItem", id);
+    },
+    goToBoardPost(idx) {
+      this.$router.push({
+        name: "CompanyBoardPostPage",
+        params: { id: idx },
+      });
     },
   },
 };
@@ -277,7 +304,7 @@ li {
   display: table-cell;
   vertical-align: middle;
 }
-.section_orderlist .list_ul .elem_status_box .link {
+/* .section_orderlist .list_ul .elem_status_box .link {
   display: block;
   width: 90px;
   height: 34px;
@@ -287,8 +314,8 @@ li {
   color: #5f0080;
   line-height: 32px;
   text-align: center;
-  cursor: pointer;
-}
+  cursor: default;
+} */
 .no_order_data {
   border-bottom: 1px solid #dddfe1;
   padding: 90px 0 220px 0;
@@ -310,6 +337,22 @@ li {
   cursor: pointer;
   margin-top: 5px;
 }
+
+.section_orderlist .list_ul .elem_status_box .inner_status .status {
+  display: block;
+  width: 90px;
+  height: 34px;
+  border: 1px solid #5f0080;
+  background-color: #fff;
+  font-size: 12px;
+  color: #5f0080;
+  line-height: 32px;
+  text-align: center;
+  margin-bottom: 5px;
+  cursor: default;
+  margin-top: 5px;
+}
+
 .section_orderlist .list_ul .elem_status_box .complete {
   display: block;
   width: 90px;
@@ -324,6 +367,7 @@ li {
   cursor: default;
   margin-top: 5px;
 }
+
 .list_elems .image {
   margin-right: 20px;
   margin-top: 20px;
@@ -334,5 +378,11 @@ li {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+button:disabled {
+  background-color: #ccc !important;
+  cursor: default !important;
+  color: white !important;
+  border: 1px solid !important;
 }
 </style>

@@ -20,6 +20,7 @@
                       name="startTime"
                       class="datetime-input"
                       @change="validateDates"
+                      :disabled="!isActivate"
                     />
                     <span class="separator">~</span>
                     <input
@@ -29,6 +30,7 @@
                       name="endTime"
                       class="datetime-input"
                       @change="validateDates"
+                      :disabled="!isActivate"
                     />
                   </div>
                 </td>
@@ -44,6 +46,7 @@
                         class="i_text text1"
                         @input="validateTitle"
                         placeholder="제목을 입력하세요"
+                        :disabled="!isActivate"
                       />
                     </span>
                     <p class="char-count">{{ charCount }} / 50</p>
@@ -58,6 +61,7 @@
                     id="board-link"
                     class="addProductBtn"
                     @click="displayModal"
+                    :disabled="!isActivate"
                   >
                     추가
                   </button>
@@ -100,8 +104,12 @@
                             <th class="delete_position">
                               <button
                                 name="delete"
-                                class="product_delete"
+                                :class="[
+                                  'product_delete',
+                                  { 'disabled-btn': !isActivate },
+                                ]"
                                 @click="deleteProduct(index)"
+                                :disabled="!isActivate"
                               >
                                 삭제하기
                               </button>
@@ -122,6 +130,7 @@
                         v-model="category"
                         name="product_category"
                         class="product_category"
+                        :disabled="!isActivate"
                       >
                         <option value="">------- 선택하세요 -------</option>
                         <option>식품</option>
@@ -142,6 +151,7 @@
                         <CompanyBoardPhotoUploadComponent
                           :maxImages="8"
                           @updateContent="updateThumbnailImages"
+                          :isActivate="isActivate"
                         />
                       </div>
                     </div>
@@ -157,6 +167,7 @@
                         <CompanyBoardPhotoUploadComponent
                           :maxImages="1"
                           @updateContent="updateDetailImage"
+                          :isActivate="isActivate"
                         />
                       </div>
                     </div>
@@ -168,7 +179,7 @@
         </div>
 
         <div id="product_submit" class="pd_submit">
-          <button @click="sendData">등록하기</button>
+          <button :disabled="!isActivate" @click="sendData">등록하기</button>
         </div>
       </div>
     </div>
@@ -187,6 +198,12 @@ export default {
     CompanyBoardModalComponent,
     CompanyBoardPhotoUploadComponent,
   },
+  props: {
+    data: {
+      type: Object,
+      default: null,
+    },
+  },
   data() {
     return {
       isDisplayModal: false,
@@ -199,10 +216,31 @@ export default {
       category: "", // 전송 데이터
       thumbnailImages: [], // 전송 데이터
       detailImage: [], // 전송 데이터
+      isActivate: true,
     };
+  },
+  created() {
+    if (this.$route.params.id !== undefined) {
+      this.isActivate = false;
+    }
   },
   computed: {
     ...mapStores(useCompanyBoardStore),
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue) {
+          this.startTime = newValue.startedAt || "";
+          this.endTime = newValue.endedAt || "";
+          this.title = newValue.title || "";
+          this.charCount = this.title.length || 0;
+          this.products = newValue.products || [];
+          this.category = newValue.category || "";
+        }
+      },
+    },
   },
   methods: {
     validateDates() {
@@ -662,5 +700,16 @@ input[type="number"]::-webkit-outer-spin-button {
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: white;
+}
+
+.disabled-btn {
+  border-radius: 3px;
+  padding: 10px 5px;
 }
 </style>
