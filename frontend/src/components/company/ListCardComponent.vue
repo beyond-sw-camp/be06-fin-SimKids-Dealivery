@@ -7,7 +7,7 @@
           <img :src="data.image" alt="상품 이미지" />
         </div>
         <div class="name">
-          <a href="#none">{{ data.title }}</a>
+          <a @click.prevent="goToBoardPost(data)">{{ data.title }}</a>
         </div>
         <div class="elem_info">
           <div class="desc">
@@ -72,6 +72,12 @@ export default {
   methods: {
     deleteItem(id) {
       this.$emit("deleteItem", id);
+    },
+    goToBoardPost(data) {
+      this.$router.push({
+        name: "CompanyBoardPostPage",
+        params: { id: data.id, boardData: JSON.stringify(data) },
+      });
     },
   },
 };

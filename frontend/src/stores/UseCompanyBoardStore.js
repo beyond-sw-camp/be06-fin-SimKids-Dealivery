@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 const backend = "http://localhost:8080/product-boards";
+const mockyURL = "https://run.mocky.io/v3/fa2ac704-87e9-4d42-b2c0-ddda0e9d2861";
 
 export const useCompanyBoardStore = defineStore("companyBoard", {
   state: () => ({
+    boardData: null,
     productBoardReq: {
       title: "",
       products: [],
@@ -13,6 +15,11 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
     },
   }),
   actions: {
+    async getProductBoardDetail() {
+      const data = await axios.get(mockyURL);
+      this.boardData = data.data;
+      return data.data;
+    },
     async createProductBoard(req) {
       const formData = new FormData();
 
@@ -53,6 +60,40 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
           console.error("There was an error!", error);
           alert("상품 등록 중 오류가 발생했습니다.");
         });
+    },
+    getThumbnailUrls() {
+      if (this.boardData !== null) {
+        return this.boardData.productThumbnailUrls;
+      }
+      return null;
+    },
+    getThumbnailUrlSize() {
+      if (this.boardData !== null) {
+        return this.boardData.productThumbnailUrls.length;
+      }
+      return 0;
+    },
+    setThumbnailUrls(urls) {
+      if (this.boardData !== null) {
+        this.boardData.productThumbnailUrls = urls;
+      }
+    },
+    getDetailUrl() {
+      if (this.boardData !== null) {
+        return this.boardData.productDetailUrl;
+      }
+      return null;
+    },
+    getDetailUrlSize() {
+      if (this.boardData !== null) {
+        return this.boardData.productDetailUrl.length;
+      }
+      return 0;
+    },
+    resetDetailUrl() {
+      if (this.boardData !== null) {
+        this.boardData.productDetailUrl = [];
+      }
     },
   },
 });
