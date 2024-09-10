@@ -19,6 +19,7 @@ import BoardListPage from "@/pages/common/BoardListPage.vue";
 import ProductBoardListComponent from "@/components/mainpage/ProductBoardListComponent.vue";
 import MypageOrderListComponent from "@/components/mypage/MypageOrderListComponent.vue";
 import MypageQnAComponent from "@/components/mypage/MypageQnAComponent.vue";
+import MypageLikesEventComponent from "@/components/mypage/MypageLikesEventComponent.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -116,7 +117,8 @@ const router = createRouter({
       redirect: "/mypage/order",  
       children: [
         { path: "order", component: MypageOrderListComponent }, 
-        { path: "qna", component: MypageQnAComponent }
+        { path: "qna", component: MypageQnAComponent },
+        { path: "likes", component: MypageLikesEventComponent }
       ]
     },
   ],

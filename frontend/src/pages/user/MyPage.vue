@@ -40,6 +40,10 @@ export default {
                 this.currentTitle = 'My 문의';
                 this.$router.push('/mypage/qna');
             }
+            else if (menu === 'likes') {
+                this.currentTitle = '찜한 게시글';
+                this.$router.push('/mypage/likes');
+            }
         }
     }
 }
