@@ -26,15 +26,15 @@
                 <div class="pc css-1ozh7ew e1n1zlz21">
                     <div class="css-1tzlowo e1ifbcqu0">자주찾는 메뉴</div>
                     <div class="menu-wrap">
-                        <button class="menu-link">
+                        <button class="menu-link" @click="setActiveMenu('order')">
                             <img src="@/assets/cart-icon.svg" class="icon" width="28" height="28" />
-                            <span class="menu-item active">
+                            <span class="menu-item" :class="{ active: isActive('order') }">
                                 주문 내역
                             </span>
                         </button>
-                        <button class="menu-link">
+                        <button class="menu-link" @click="setActiveMenu('inquiry')">
                             <img src="@/assets/heart-icon.svg" class="icon" width="29" height="28" />
-                            <span class="menu-item">
+                            <span class="menu-item" :class="{ active: isActive('inquiry') }">
                                 찜한 게시글
                             </span>
                         </button>
@@ -43,17 +43,19 @@
                 <div class="menu-info-section">
                     <div class="css-bivr1n eoeriki0">
                         <div class="css-1tzlowo e1ifbcqu0">문의</div>
-                        <a class="css-1qe2c6r e1ytq75h2">
-                            <span class="menu-item">My 문의</span>
+                        <a class="css-1qe2c6r e1ytq75h2" @click="setActiveMenu('inquiry')">
+                            <span class="menu-item" :class="{ active: isActive('inquiry') }">My 문의</span>
                         </a>
                     </div>
                     <div class="css-bivr1n eoeriki0">
                         <div class="css-1tzlowo e1ifbcqu0">내 정보관리</div>
                         <a class="css-1qe2c6r e1ytq75h2">
                             <span class="menu-item">내 정보</span>
-                        </a><a class="css-1qe2c6r e1ytq75h2">
+                        </a>
+                        <a class="css-1qe2c6r e1ytq75h2">
                             <span class="menu-item">개인정보 수정</span>
-                        </a><a class="css-1qe2c6r e1ytq75h2">
+                        </a>
+                        <a class="css-1qe2c6r e1ytq75h2">
                             <span class="menu-item">배송지 관리</span>
                         </a>
                     </div>
@@ -64,17 +66,34 @@
 </template>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', () => {
-            // 모든 메뉴 항목에서 active 클래스를 제거
-            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-            // 클릭된 메뉴 항목에 active 클래스를 추가
-            item.classList.add('active');
+export default {
+    name: 'MypageAsideComponent',
+    data() {
+        return {
+            activeMenu: 'order'  // 기본으로 활성화된 메뉴
+        };
+    },
+    methods: {
+        setActiveMenu(menu) {
+            this.activeMenu = menu;
+            this.$emit('menu-click', menu);  // 클릭된 메뉴를 부모 컴포넌트에 전달
+        },
+        isActive(menu) {
+            return this.activeMenu === menu;
+        }
+    },
+    mounted() {
+        // 기존 document.addEventListener 코드
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                // 모든 메뉴 항목에서 active 클래스를 제거
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                // 클릭된 메뉴 항목에 active 클래스를 추가
+                item.classList.add('active');
+            });
         });
-    });
-});
-
+    }
+}
 </script>
 
 <style scoped>

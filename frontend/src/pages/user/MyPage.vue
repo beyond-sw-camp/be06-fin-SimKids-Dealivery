@@ -2,8 +2,8 @@
     <HeaderComponent></HeaderComponent>
     <div class="css-u71x2d eug5r8l4">
         <div class="css-72lz6z eug5r8l3">
-            <MypageAsideComponent></MypageAsideComponent>
-                <MypageOrderListComponent></MypageOrderListComponent>
+            <MypageAsideComponent @menu-click="handleMenuClick"></MypageAsideComponent>
+            <component :is="currentComponent"></component>
         </div>
     </div>
     <FooterComponent></FooterComponent>
@@ -13,6 +13,7 @@
 import HeaderComponent from '@/components/common/HeaderComponent.vue';
 import MypageAsideComponent from '@/components/mypage/MypageAsideComponent.vue';
 import MypageOrderListComponent from '@/components/mypage/MypageOrderListComponent.vue';
+import MypageQnAComponent from '@/components/mypage/MypageQnAComponent.vue';
 import FooterComponent from '@/components/common/FooterComponent.vue';
 
 export default {
@@ -21,12 +22,25 @@ export default {
         HeaderComponent,
         MypageAsideComponent,
         MypageOrderListComponent,
+        MypageQnAComponent,
         FooterComponent,
+    },
+    data() {
+        return {
+            currentComponent: 'MypageOrderListComponent', // 기본 컴포넌트
+        };
     },
     methods: {
         toggleDetails() {
             this.isDetailsVisible = !this.isDetailsVisible;
-            this.isArrowRotated = !this.isArrowRotated; 
+            this.isArrowRotated = !this.isArrowRotated;
+        },
+        handleMenuClick(menu) {
+            if (menu === 'order') {
+                this.currentComponent = 'MypageOrderListComponent';
+            } else if (menu === 'inquiry') {
+                this.currentComponent = 'MypageQnAComponent';
+            }
         }
     }
 }
