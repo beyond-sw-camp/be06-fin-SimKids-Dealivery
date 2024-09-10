@@ -70,7 +70,7 @@ export default {
     name: 'MypageAsideComponent',
     data() {
         return {
-            activeMenu: 'order'  // 기본으로 활성화된 메뉴
+            activeMenu: '',  // 기본으로 활성화된 메뉴
         };
     },
     methods: {
@@ -80,10 +80,35 @@ export default {
         },
         isActive(menu) {
             return this.activeMenu === menu;
+        },
+        updateActiveMenuBasedOnRoute() {
+            const currentRoute = this.$route.path;
+            if (currentRoute.includes('order')) {
+                this.activeMenu = 'order';
+            } else if (currentRoute.includes('likes')) {
+                this.activeMenu = 'likes';
+            } else if (currentRoute.includes('qna')) {
+                this.activeMenu = 'qna';
+            } else if (currentRoute.includes('info')) {
+                this.activeMenu = 'info';
+            } else if (currentRoute.includes('update-info')) {
+                this.activeMenu = 'update-info';
+            } else if (currentRoute.includes('address')) {
+                this.activeMenu = 'address';
+            }
+        }
+    },
+    mounted() {
+        this.updateActiveMenuBasedOnRoute();  // 페이지 로드 시 현재 경로에 따라 활성화된 메뉴 설정
+    },
+    watch: {
+        '$route'() {  // 라우트가 변경될 때마다 호출
+            this.updateActiveMenuBasedOnRoute();
         }
     }
 }
 </script>
+
 
 <style scoped>
 

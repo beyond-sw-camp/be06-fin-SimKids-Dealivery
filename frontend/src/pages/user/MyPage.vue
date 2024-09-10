@@ -28,7 +28,7 @@ export default {
     },
     data() {
         return {
-            currentTitle: '주문 내역', // 기본 Title로 설정
+            currentTitle: '', // 기본 Title은 빈 값으로 설정
         };
     },
     methods: {
@@ -44,10 +44,29 @@ export default {
                 this.currentTitle = '찜한 게시글';
                 this.$router.push('/mypage/likes');
             }
+        },
+        updateTitleBasedOnRoute() {
+            const currentRoute = this.$route.path;
+            if (currentRoute.includes('order')) {
+                this.currentTitle = '주문 내역';
+            } else if (currentRoute.includes('qna')) {
+                this.currentTitle = 'My 문의';
+            } else if (currentRoute.includes('likes')) {
+                this.currentTitle = '찜한 게시글';
+            }
+        }
+    },
+    mounted() {
+        this.updateTitleBasedOnRoute(); // 페이지 로드 시 현재 경로에 따라 타이틀 설정
+    },
+    watch: {
+        '$route'() { // to 변수 제거
+            this.updateTitleBasedOnRoute(); // 라우트 변경 시 타이틀 업데이트
         }
     }
 }
 </script>
+
 
 <style scoped>
 .page-wrapper {
