@@ -380,6 +380,7 @@ export default {
                 { value: this.signupRequest.phoneNumber, message: "휴대폰 번호를 입력해주세요.", regex: phoneRegex,
                 regexMessage: "-를 포함한 휴대폰번호 11자리를 입력해주세요." }, 
                 { value: this.signupRequest.address, message: "주소를 입력해주세요." },
+                { value: this.signupRequest.addressDetail, message: "상세주소를 입력해주세요." },
                 { value: this.signupRequest.postNumber, message: "우편번호를 입력해주세요." },
                 { value: this.signupRequest.companyName, message: "업체명을 입력해주세요." },
                 { value: this.signupRequest.regNumber, message: "사업자등록번호를 입력해주세요.", regex: regRegex,
