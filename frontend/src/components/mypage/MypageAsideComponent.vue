@@ -22,50 +22,62 @@
                     <a href="/member/membership" class="pc css-1d9zl68 e5rtjnl0"></a>
                 </div>
             </div>
-            <div class="pc css-1ozh7ew e1n1zlz21">
-                <div class="css-1tzlowo e1ifbcqu0">자주찾는 메뉴</div>
-                <div class="menu-wrap">
-                    <button class="menu-link">
-                        <img src="@/assets/cart-icon.svg" width="28" height="28" />
-                        <div class="active css-10aedqr e1n1zlz20">
-                            주문 내역
-                        </div>
-                    </button><button class="menu-link">
-                        <img src="@/assets/heart-icon.svg" width="29" height="28" />
-                        <div class="css-10aedqr e1n1zlz20">
-                            찜한 게시글
-                        </div>
-                    </button>
+            <div id="menu">
+                <div class="pc css-1ozh7ew e1n1zlz21">
+                    <div class="css-1tzlowo e1ifbcqu0">자주찾는 메뉴</div>
+                    <div class="menu-wrap">
+                        <button class="menu-link">
+                            <img src="@/assets/cart-icon.svg" class="icon" width="28" height="28" />
+                            <span class="menu-item active">
+                                주문 내역
+                            </span>
+                        </button>
+                        <button class="menu-link">
+                            <img src="@/assets/heart-icon.svg" class="icon" width="29" height="28" />
+                            <span class="menu-item">
+                                찜한 게시글
+                            </span>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div class="menu-info-section">
-                <div class="css-bivr1n eoeriki0">
-                    <div class="css-1tzlowo e1ifbcqu0">문의</div>
-                    <a class="css-1qe2c6r e1ytq75h2">
-                        <div class="css-1mq58uz e1ytq75h1">My 문의</div>
-                    </a>
-                </div>
-                <div class="css-bivr1n eoeriki0">
-                    <div class="css-1tzlowo e1ifbcqu0">내 정보관리</div>
-                    <a class="css-1qe2c6r e1ytq75h2">
-                        <div class="css-1mq58uz e1ytq75h1">내 정보</div>
-                    </a><a class="css-1qe2c6r e1ytq75h2">
-                        <div class="css-1mq58uz e1ytq75h1">개인정보 수정</div>
-                    </a><a class="css-1qe2c6r e1ytq75h2">
-                        <div class="css-1mq58uz e1ytq75h1">배송지 관리</div>
-                    </a>
+                <div class="menu-info-section">
+                    <div class="css-bivr1n eoeriki0">
+                        <div class="css-1tzlowo e1ifbcqu0">문의</div>
+                        <a class="css-1qe2c6r e1ytq75h2">
+                            <span class="menu-item">My 문의</span>
+                        </a>
+                    </div>
+                    <div class="css-bivr1n eoeriki0">
+                        <div class="css-1tzlowo e1ifbcqu0">내 정보관리</div>
+                        <a class="css-1qe2c6r e1ytq75h2">
+                            <span class="menu-item">내 정보</span>
+                        </a><a class="css-1qe2c6r e1ytq75h2">
+                            <span class="menu-item">개인정보 수정</span>
+                        </a><a class="css-1qe2c6r e1ytq75h2">
+                            <span class="menu-item">배송지 관리</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+            // 모든 메뉴 항목에서 active 클래스를 제거
+            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+            // 클릭된 메뉴 항목에 active 클래스를 추가
+            item.classList.add('active');
+        });
+    });
+});
+
+</script>
+
 <style scoped>
-.css-u71x2d {
-    position: relative;
-    min-width: 1050px;
-    background-color: rgb(242, 245, 248);
-}
 
 .css-72lz6z {
     display: flex;
@@ -263,11 +275,6 @@
 
 .css-1ozh7ew .menu-link>img {
     margin: 0px 0px 8px;
-}
-
-.css-10aedqr.active,
-.css-10aedqr.active span {
-    color: rgb(95, 0, 128);
 }
 
 .css-10aedqr {
@@ -544,12 +551,6 @@ textarea {
     flex: 0 0 82px;
 }
 
-.css-mxd3pm.active,
-.css-mxd3pm:hover {
-    font-weight: 500;
-    color: rgb(95, 0, 128);
-}
-
 .css-mxd3pm {
     flex-shrink: 0;
     margin-left: 20px;
@@ -724,5 +725,28 @@ button {
     background-color: transparent;
     border: none;
     cursor: pointer;
+}
+
+.icon {
+    transition: stroke 0.3s ease;
+    /* 테두리 색상 전환 효과 */
+    stroke: black;
+    /* 기본 테두리 색상 */
+}
+
+.menu-item {
+    color: black;
+    /* 기본 글자 색상 */
+    cursor: pointer;
+}
+
+.menu-item.active {
+    color: rgb(95, 0, 128);
+    /* 선택된 글자 색상 */
+}
+
+.menu-item.active .icon {
+    stroke: rgb(95, 0, 128);
+    /* 선택된 아이콘 테두리 색상 */
 }
 </style>
