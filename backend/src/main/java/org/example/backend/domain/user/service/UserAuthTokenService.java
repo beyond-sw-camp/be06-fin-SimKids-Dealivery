@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 @Service
 @RequiredArgsConstructor
@@ -38,16 +39,16 @@ public class UserAuthTokenService {
     public Boolean doAuth(UserAuthTokenDto.UserEmailAuthRequest request){
         //요청한 이메일로 생성된 토큰 전부 삭제
         userAuthTokenRepository.deleteAllByEmail(request.getEmail());
-        //인증할 토큰 재생성
+        //인증토큰 생성
         String token = generateToken();
         LocalDateTime expiredTime = getTokenExpiry(10);
         UserAuthToken userAuthToken = userAuthTokenRepository.save(request.toEntity(token, expiredTime));
         if (userAuthToken == null) {
-            return false;
+            throw new InvalidCustomException(BaseResponseStatus.EMAIL_VERIFY_FAIL_CAN_NOT_CREATE);
         }
         //DB에 토큰 저장이 잘 되면 메일 전송
         if (!sendEmail(request.getEmail(), token,expiredTime)){
-            return false;
+            throw new InvalidCustomException(BaseResponseStatus.EMAIL_VERIFY_FAIL_CAN_NOT_SEND);
         }
         return true;
     }
@@ -69,8 +70,17 @@ public class UserAuthTokenService {
     }
 
     // 토큰 유효성 검증 메서드
-    public boolean isTokenValid(String token, LocalDateTime expiredTime) {
-        return LocalDateTime.now().isBefore(expiredTime);
+    public Boolean isTokenValid(String token, String email) {
+        UserAuthToken userAuthToken = userAuthTokenRepository.findByEmail(email).orElseThrow(
+                () -> new InvalidCustomException(BaseResponseStatus.USER_SIGNUP_FAIL_INVALID_EMAIL_CODE)
+        );
+        if (!LocalDateTime.now().isBefore(userAuthToken.getExpiredTime())){
+            throw new InvalidCustomException(BaseResponseStatus.EMAIL_VERIFY_FAIL_EXPIRED);
+        }
+        if (!token.equals(userAuthToken.getToken())){
+            throw new InvalidCustomException(BaseResponseStatus.EMAIL_VERIFY_FAIL_INCORRECT);
+        }
+        return true;
     }
 
     public Boolean sendEmail(String email, String token, LocalDateTime expiredTime) throws RuntimeException {
@@ -97,7 +107,7 @@ public class UserAuthTokenService {
             mailSender.send(message);
             return true;
         } catch (Exception e) {
-            throw new InvalidCustomException(BaseResponseStatus.USER_VERIFY_FAIL);
+            throw new InvalidCustomException(BaseResponseStatus.EMAIL_VERIFY_FAIL_CAN_NOT_SEND);
         }
     }
 }

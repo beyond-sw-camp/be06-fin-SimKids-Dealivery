@@ -21,6 +21,7 @@ public enum BaseResponseStatus {
     USER_SIGNUP_FAIL_INVALID_PHONE_NUMBER(false, 2010, "회원가입에 실패했습니다. 유효한 휴대폰 번호를 입력해주세요."),
     USER_SIGNUP_FAIL_INVALID_POST_NUMBER(false, 2011, "회원가입에 실패했습니다. 유효한 우편번호를 입력해주세요."),
     USER_SIGNUP_FAIL_INVALID_ADDRESS_DETAIL(false, 2012, "회원가입에 실패했습니다. 유효한 상세주소를 입력해주세요."),
+    USER_SIGNUP_FAIL_INVALID_EMAIL_CODE(false, 2058, "회원가입에 실패했습니다. 이메일 인증 코드가 만료되었거나 일치하지 않습니다."),
 
     USER_LOGIN_FAIL(false, 2013, "로그인에 실패했습니다. 아이디 또는 비밀번호를 확인해주세요."),
     USER_LOGIN_FAIL_EMPTY_EMAIL(false, 2014, "로그인에 실패했습니다. 아이디를 입력해주세요."),
@@ -68,10 +69,16 @@ public enum BaseResponseStatus {
     USER_SIGNUP_FAIL_UNAUTHORIZED_REG_NUMBER(false, 2049, "사업자등록번호 인증에 실패했습니다."),
     USER_SIGNUP_FAIL_UNAUTHORIZED_MOS_NUMBER(false, 2050, "통신판매업신호번호 인증에 실패했습니다."),
 
-    USER_VERIFY_FAIL(false, 2051, "이메일 인증요청에 실패했습니다."),
+    EMAIL_VERIFY_FAIL(false, 2051, "이메일 인증요청에 실패했습니다."),
     USER_DETAIL_FAIL(false, 2052, "회원정보 조회에 실패했습니다."),
     USER_REMOVE_FAIL(false, 2053, "회원탈퇴에 실패했습니다."),
     USER_SOCIAL_LOGIN_FAIL_NEED_TO_SIGNUP(true, 2057, "추가 회원정보 입력이 필요합니다."),
+    EMAIL_VERIFY_FAIL_EXPIRED(false, 2059, "이메일 인증에 실패했습니다. 인증코드가 만료되었습니다."),
+    EMAIL_VERIFY_FAIL_INCORRECT(false, 2060, "이메일 인증에 실패했습니다. 인증코드가 일치하지 않습니다."),
+    EMAIL_VERIFY_FAIL_CAN_NOT_CREATE(false, 2061, "인증코드를 생성할 수 없습니다. 이메일을 확인해주세요."),
+    EMAIL_VERIFY_FAIL_CAN_NOT_SEND(false, 2061, "인증메일 발송에 실패했습니다."),
+    USER_SIGNUP_FAIL_ALREADY_EXIST(false, 2062, "이미 가입된 이메일입니다."),
+
 
     // 주문 기능 3000
     ORDER_FAIL_LIST(false, 3001, "주문내역 조회에 실패했습니다."),
