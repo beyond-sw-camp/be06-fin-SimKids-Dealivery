@@ -7,7 +7,7 @@
       <MainCardViewComponent></MainCardViewComponent>
       <MainCardViewComponent></MainCardViewComponent>
       <MainCardViewComponent></MainCardViewComponent>
-      <MainCardViewComponent></MainCardViewComponent>
+      
       <!-- 추가 카드들 -->
     </div>
     <SectionTitleComponent :title="notice[2]" :subtitle="notice[3]"></SectionTitleComponent>
@@ -44,8 +44,13 @@ export default {
   },
   data() {
     return {
-      "notice": ["🎉 특가 가득! 진행 중인 이벤트 🎉", "놓치지 말고 지금 주문하세요!", "✨ 오픈 예정 이벤트 ✨", "관심 등록 후 찾아보세요!"],
-    }
+      notice: [
+        "🎉 특가 가득! 진행 중인 이벤트 🎉",
+        "놓치지 말고 지금 주문하세요!",
+        "✨ 오픈 예정 이벤트 ✨",
+        "관심 등록 후 찾아보세요!"
+      ],
+    };
   }
 }
 </script>
@@ -91,29 +96,55 @@ export default {
 .main-card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  /* 카드들을 중앙에 정렬 */
+  justify-content: flex-start;
+  /* 카드들을 왼쪽부터 배치 */
   gap: 30px;
-  /* 카드 간의 간격 조절 */
 }
 
 .main-card-container>* {
-  flex: 1 1 calc(50% - 15px);
-  /* 카드 너비를 50%로 설정하고, 카드 간의 간격 고려 */
+  flex-basis: calc(50% - 30px);
+  /* 카드의 너비를 50%로 설정 */
+  max-width: calc(50% - 30px);
+  /* 너비 최대값 설정 */
   box-sizing: border-box;
-  /* 여백 및 패딩을 포함하여 박스 크기 조정 */
+}
+
+@media(max-width:768px) {
+  .main-card-container>* {
+    flex-basis: 100%;
+    /* 작은 화면에서는 카드가 한 줄에 하나만 나옴 */
+    max-width: 100%;
+  }
 }
 
 .board-card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 20px;
 }
 
 .board-card-container>* {
-  flex: 1 1 calc(33% - 15px);
+  flex: 0 0 calc(33.33% - 20px);
+  /* 카드 너비를 3개로 고정 */
+  max-width: calc(33.33% - 20px);
+  /* 3개로 고정된 너비 */
   box-sizing: border-box;
 }
 
+@media(max-width: 768px) {
+  .board-card-container>* {
+    flex: 0 0 calc(50% - 20px);
+    /* 작은 화면에서는 한 줄에 2개 */
+    max-width: calc(50% - 20px);
+  }
+}
+
+@media(max-width: 576px) {
+  .board-card-container>* {
+    flex: 0 0 100%;
+    /* 더 작은 화면에서는 한 줄에 하나만 */
+    max-width: 100%;
+  }
+}
 </style>
