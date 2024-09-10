@@ -423,7 +423,7 @@ legend {
 canvas,
 img,
 video {
-    max-width: 9%;
+    max-width: 13%;
 }
 
 html,

@@ -17,6 +17,8 @@ import FindIdComponent from "@/components/user/FindIdComponent.vue";
 import BoardDetailPage from "@/pages/user/board/BoardDetailPage.vue";
 import BoardListPage from "@/pages/common/BoardListPage.vue";
 import ProductBoardListComponent from "@/components/mainpage/ProductBoardListComponent.vue";
+import MypageOrderListComponent from "@/components/mypage/MypageOrderListComponent.vue";
+import MypageQnAComponent from "@/components/mypage/MypageQnAComponent.vue";
 
 
 const router = createRouter({
@@ -68,6 +70,11 @@ const router = createRouter({
     {
       path: "/mypage",
       component: MyPage,
+      redirect: "/mypage/order",  
+      children: [
+        { path: "order", component: MypageOrderListComponent }, 
+        { path: "qna", component: MypageQnAComponent }
+      ]
     },
   ]
 });
