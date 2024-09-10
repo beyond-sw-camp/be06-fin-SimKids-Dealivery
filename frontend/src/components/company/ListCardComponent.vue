@@ -28,8 +28,7 @@
           <span class="inner_status">
             <div
               :class="{
-                link: true,
-                ga_tracking_event: true,
+                status: true,
                 complete: data.status === '진행 완료',
               }"
             >
@@ -39,6 +38,7 @@
               <button
                 @click="deleteItem(data.id)"
                 class="link ga_tracking_event"
+                :disabled="data.status === '진행중'"
               >
                 삭제
               </button>
@@ -76,7 +76,7 @@ export default {
     goToBoardPost(data) {
       this.$router.push({
         name: "CompanyBoardPostPage",
-        params: { id: data.id, boardData: JSON.stringify(data) },
+        params: { id: data.id },
       });
     },
   },
@@ -283,7 +283,7 @@ li {
   display: table-cell;
   vertical-align: middle;
 }
-.section_orderlist .list_ul .elem_status_box .link {
+/* .section_orderlist .list_ul .elem_status_box .link {
   display: block;
   width: 90px;
   height: 34px;
@@ -293,8 +293,8 @@ li {
   color: #5f0080;
   line-height: 32px;
   text-align: center;
-  cursor: pointer;
-}
+  cursor: default;
+} */
 .no_order_data {
   border-bottom: 1px solid #dddfe1;
   padding: 90px 0 220px 0;
@@ -316,6 +316,22 @@ li {
   cursor: pointer;
   margin-top: 5px;
 }
+
+.section_orderlist .list_ul .elem_status_box .inner_status .status {
+  display: block;
+  width: 90px;
+  height: 34px;
+  border: 1px solid #5f0080;
+  background-color: #fff;
+  font-size: 12px;
+  color: #5f0080;
+  line-height: 32px;
+  text-align: center;
+  margin-bottom: 5px;
+  cursor: default;
+  margin-top: 5px;
+}
+
 .section_orderlist .list_ul .elem_status_box .complete {
   display: block;
   width: 90px;
@@ -330,6 +346,7 @@ li {
   cursor: default;
   margin-top: 5px;
 }
+
 .list_elems .image {
   margin-right: 20px;
   margin-top: 20px;
@@ -340,5 +357,11 @@ li {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+button:disabled {
+  background-color: #ccc !important;
+  cursor: default !important;
+  color: white !important;
+  border: 1px solid !important;
 }
 </style>
