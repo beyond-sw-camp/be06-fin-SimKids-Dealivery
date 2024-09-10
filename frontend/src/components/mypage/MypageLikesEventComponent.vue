@@ -24,8 +24,10 @@
                                             </div>
                                             <div class="css-13kofxh e19er7v41">
                                                 <span class="css-x4qt93 e1alt0er2">{{ item.discount }}%</span>
-                                                <span class="css-153tu4t e1alt0er1">{{ item.price }}원</span>
-                                                <span class="css-1ufyr2r e1alt0er0">{{ item.originalPrice }}원</span>
+                                                <span class="css-153tu4t e1alt0er1">{{ formatPrice(item.price)
+                                                    }}원</span>
+                                                <span class="css-1ufyr2r e1alt0er0">{{ formatPrice(item.originalPrice)
+                                                    }}원</span>
                                             </div>
                                         </div>
                                         <div class="css-2qdoqn e19er7v40">
@@ -83,9 +85,13 @@ export default {
         removeItem(index) {
             this.items.splice(index, 1);
         },
+        formatPrice(value) {
+            return value.toLocaleString();
+        }
     },
 };
 </script>
+
 
 
 <style scoped>
