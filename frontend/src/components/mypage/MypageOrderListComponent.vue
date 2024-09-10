@@ -105,16 +105,6 @@
                     <div class="css-1aim50k e2upnqp1">
                         <p
                             class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
-                            배송비</p>
-                        <div class="css-8yre18 e2upnqp1">
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                +3,000원</p>
-                        </div>
-                    </div>
-                    <div class="css-1aim50k e2upnqp1">
-                        <p
-                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
                             결제방법</p>
                         <div class="css-8yre18 e2upnqp1">
                             <p
