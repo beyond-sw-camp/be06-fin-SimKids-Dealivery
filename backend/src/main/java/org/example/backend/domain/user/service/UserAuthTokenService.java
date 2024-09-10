@@ -28,7 +28,7 @@ public class UserAuthTokenService {
 
     @Value("${project.mail.url}")
     private String mailUrl;
-
+    private final String TOKEN_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private final UserAuthTokenRepository userAuthTokenRepository;
     private final JavaMailSender mailSender;
     private final FreeMarkerConfigurer freemarkerConfigurer;
@@ -55,11 +55,10 @@ public class UserAuthTokenService {
     //6자리 인증코드 생성
     public String generateToken() {
         int tokenLength = 6;
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder token = new StringBuilder();
         for (int i = 0; i < tokenLength; i++) {
-            token.append(chars.charAt(random.nextInt(chars.length())));
+            token.append(TOKEN_CHARS.charAt(random.nextInt(TOKEN_CHARS.length())));
         }
         return token.toString();
     }

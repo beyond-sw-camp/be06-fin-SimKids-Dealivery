@@ -22,7 +22,6 @@ public class UserController {
     private final UserService userService;
     private final UserAuthTokenService userAuthTokenService;
 
-
     @Operation(summary = "일반회원가입 API", description = "이메일로 인증번호 전송을 먼저 진행하고 받은 6자리 코드를 입력후에 제출해주세요.")
     @PostMapping("/signup")
     public BaseResponse signup(
@@ -41,8 +40,4 @@ public class UserController {
         }
         return new BaseResponse(BaseResponseStatus.FAIL);
     }
-
-
-
-
 }
