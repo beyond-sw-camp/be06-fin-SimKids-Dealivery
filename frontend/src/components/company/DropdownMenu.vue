@@ -68,11 +68,9 @@ export default {
     },
   },
   mounted() {
-    // Add event listener for clicks outside of the dropdown
     document.addEventListener("click", this.handleClickOutside);
   },
   beforeUnmount() {
-    // Clean up event listener
     document.removeEventListener("click", this.handleClickOutside);
   },
 };

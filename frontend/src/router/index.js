@@ -17,6 +17,7 @@ import FindIdComponent from "@/components/user/FindIdComponent.vue";
 import BoardDetailPage from "@/pages/user/board/BoardDetailPage.vue";
 import BoardListPage from "@/pages/common/BoardListPage.vue";
 import ProductBoardListComponent from "@/components/mainpage/ProductBoardListComponent.vue";
+import CompanyOrderListPage from "../pages/company/orders/CompanyOrderListPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -107,6 +108,10 @@ const router = createRouter({
     {
       path: "/product-boards/company/list",
       component: CompanyBoardListPage,
+    },
+    {
+      path: "/orders/company/list",
+      component: CompanyOrderListPage,
     },
     {
       path: "/mypage",
