@@ -1,206 +1,187 @@
 <template>
-    <div>
-        <div class="css-heioij eug5r8l1">
-            <div class="css-oc8mjz ed9qr673">
-                <div class="css-eq7f8j ed9qr672">
-                    <h2 class="css-1lmd4kz ed9qr671">주문 내역</h2>
+    <div class="css-heioij eug5r8l1">
+        <div class="css-1xdhyk6 eug5r8l0">
+            <div class="css-10ekv2i e13vhfr40">
+                <div class="css-1phmj5u e190ng8o0">
+                    <div class="css-2kmie e1g49j8k1">
+                        <div class="css-peeqro e190ng8o1">
+                            <div class="css-jyp95e e1l5ke4x0">
+                                <button @click="toggleDetails" class="css-7sy6n e1rmfz7b0">
+                                    <img src="@/assets/arrow.png" alt="icon" width="40" height="40"
+                                        :style="{ transform: arrowRotate, transition: 'transform 0.3s' }">
+                                </button>
+                                <div class="css-7uztss e1rmfz7b4">
+                                    <div>
+                                        <p
+                                            class="_97oqoup _97oqouv _97oqou5 ldmw177c _97oqou19 _97oqouj ldmw177q _97oqou12 _97oqouc ldmw177j css-wcc2f6 e1rmfz7b3">
+                                            2024.09.05
+                                        </p>
+                                        <div class="css-k7chvl e1rmfz7b1">
+                                            <p
+                                                class="_97oqoup _97oqoux _97oqou7 ldmw177a _97oqou1b _97oqoul ldmw177s _97oqou13 _97oqoud ldmw177i css-1vgapaa e1rmfz7b2">
+                                                주문번호 2307216320130
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div height="1px" width="100%" class="css-yng2ii e1ypu1ln0"></div>
+                                <div class="css-1t4yb7q e1xhbacy2">
+                                    <div class="css-wnosz2 e1xhbacy0">
+                                        <p
+                                            class="_97oqoup _97oqouv _97oqou5 ldmw177c _97oqou19 _97oqouj ldmw177q _97oqou12 _97oqouc ldmw177j css-1n1zmlq e1xhbacy1">
+                                            주문완료
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="css-vts8bc e9fxgjh2">
+                                    <div class="css-1tf2711 e73mjag8">
+                                        <a href="/goods/5054274" class="css-1ll9bqd e73mjag0">
+                                            <img src="https://img-cf.kurly.com/hdims/resize/%5E%3E120x%3E156/cropcenter/120x156/quality/85/src/shop/data/goods/1594097581645l0.jpg"
+                                                alt="[정기배송] 한 끼 보리샐러드" class="css-13pph03 e73mjag7">
+                                        </a>
+                                        <div class="_17g6wc40">
+                                            <a href="/goods/5054274" class="css-1ll9bqd e73mjag0">
+                                                <p
+                                                    class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-1dl78ek e73mjag3">
+                                                    [정기배송] 한 끼 보리샐러드
+                                                </p>
+                                            </a>
+                                            <div class="css-1tf2711 e73mjag8">
+                                                <p
+                                                    class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou11 _97oqoub ldmw177k css-1dl78ek e73mjag4">
+                                                    89,900원
+                                                </p>
+                                                <p class="css-if5wh3 e73mjag1">145,000원</p>
+                                                <div width="1px" height="10px" class="css-9ib26w e1ypu1ln0"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="css-8vtrb0 eus1fbt1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="css-21ijkk e190ng8o3"></div>
                 </div>
             </div>
         </div>
-        <div>
-            <div class="css-1xdhyk6 eug5r8l0">
-                <div class="css-10ekv2i e13vhfr40">
-                    <div class="css-1phmj5u e190ng8o0">
-                        <div class="css-2kmie e1g49j8k1">
-                            <div class="css-peeqro e190ng8o1">
-                                <div class="css-jyp95e e1l5ke4x0">
-                                    <button @click="toggleDetails" class="css-7sy6n e1rmfz7b0">
-                                        <img src="@/assets/arrow.png" alt="icon" width="40" height="40"
-                                            :style="{ transform: arrowRotate, transition: 'transform 0.3s' }">
-                                    </button>
-                                    <div class="css-7uztss e1rmfz7b4">
-                                        <div>
-                                            <p
-                                                class="_97oqoup _97oqouv _97oqou5 ldmw177c _97oqou19 _97oqouj ldmw177q _97oqou12 _97oqouc ldmw177j css-wcc2f6 e1rmfz7b3">
-                                                2024.09.05
-                                            </p>
-                                            <div class="css-k7chvl e1rmfz7b1">
-                                                <p
-                                                    class="_97oqoup _97oqoux _97oqou7 ldmw177a _97oqou1b _97oqoul ldmw177s _97oqou13 _97oqoud ldmw177i css-1vgapaa e1rmfz7b2">
-                                                    주문번호 2307216320130
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div height="1px" width="100%" class="css-yng2ii e1ypu1ln0"></div>
-                                    <div class="css-1t4yb7q e1xhbacy2">
-                                        <div class="css-wnosz2 e1xhbacy0">
-                                            <p
-                                                class="_97oqoup _97oqouv _97oqou5 ldmw177c _97oqou19 _97oqouj ldmw177q _97oqou12 _97oqouc ldmw177j css-1n1zmlq e1xhbacy1">
-                                                주문완료
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="css-vts8bc e9fxgjh2">
-                                        <div class="css-1tf2711 e73mjag8">
-                                            <a href="/goods/5054274" class="css-1ll9bqd e73mjag0">
-                                                <img src="https://img-cf.kurly.com/hdims/resize/%5E%3E120x%3E156/cropcenter/120x156/quality/85/src/shop/data/goods/1594097581645l0.jpg"
-                                                    alt="[정기배송] 한 끼 보리샐러드" class="css-13pph03 e73mjag7">
-                                            </a>
-                                            <div class="_17g6wc40">
-                                                <a href="/goods/5054274" class="css-1ll9bqd e73mjag0">
-                                                    <p
-                                                        class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-1dl78ek e73mjag3">
-                                                        [정기배송] 한 끼 보리샐러드
-                                                    </p>
-                                                </a>
-                                                <div class="css-1tf2711 e73mjag8">
-                                                    <p
-                                                        class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou11 _97oqoub ldmw177k css-1dl78ek e73mjag4">
-                                                        89,900원
-                                                    </p>
-                                                    <p class="css-if5wh3 e73mjag1">145,000원</p>
-                                                    <div width="1px" height="10px" class="css-9ib26w e1ypu1ln0"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="css-8vtrb0 eus1fbt1"></div>
-                                </div>
-                            </div>
+        <div class="css-3dze2x eug5r8l1" v-show="isDetailsVisible" id="details">
+            <button class="css-f848a6 e2jhvp32">
+                <p
+                    class="_97oqoup _97oqouu _97oqou4 ldmw177d _97oqou18 _97oqoui ldmw177p _97oqou12 _97oqouc ldmw177j css-1dl78ek e2jhvp31">
+                    결제정보
+                </p>
+            </button>
+            <div class="css-d3v9zr e14m4ys50" style="opacity: 1; height: auto;">
+                <div class="css-1a0zxau e13968o84">
+                    <div class="css-1aim50k e93c1qv0">
+                        <p
+                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
+                            상품금액</p>
+                        <p
+                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
+                            145,000원</p>
+                    </div>
+                    <div class="css-1aim50k e2upnqp1">
+                        <p
+                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
+                            상품할인금액</p>
+                        <div class="css-8yre18 e2upnqp1">
+                            <p
+                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
+                                -55,100원</p>
                         </div>
-                        <div class="css-21ijkk e190ng8o3"></div>
+                    </div>
+                    <div class="css-1aim50k e2upnqp1">
+                        <p
+                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
+                            포인트</p>
+                        <div class="css-8yre18 e2upnqp1">
+                            <p
+                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
+                                -2,000원</p>
+                        </div>
+                    </div>
+                    <div class="css-1aim50k e2upnqp1">
+                        <p
+                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
+                            결제방법</p>
+                        <div class="css-8yre18 e2upnqp1">
+                            <p
+                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
+                                카카오페이</p>
+                        </div>
+                    </div>
+                    <div class="css-1aim50k e2upnqp1">
+                        <p
+                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
+                            총 결제금액</p>
+                        <div class="css-8yre18 e2upnqp1">
+                            <p
+                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
+                                90,900원</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="css-3dze2x eug5r8l1" v-show="isDetailsVisible" id="details">
-                <button class="css-f848a6 e2jhvp32">
-                    <p
-                        class="_97oqoup _97oqouu _97oqou4 ldmw177d _97oqou18 _97oqoui ldmw177p _97oqou12 _97oqouc ldmw177j css-1dl78ek e2jhvp31">
-                        결제정보
-                    </p>
-                </button>
-                <div class="css-d3v9zr e14m4ys50" style="opacity: 1; height: auto;">
-                    <div class="css-1a0zxau e13968o84">
-                        <div class="css-1aim50k e93c1qv0">
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
-                                상품금액</p>
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
-                                145,000원</p>
-                        </div>
-                        <div class="css-1aim50k e2upnqp1">
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
-                                상품할인금액</p>
-                            <div class="css-8yre18 e2upnqp1">
-                                <p
-                                    class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                    -55,100원</p>
-                            </div>
-                        </div>
-                        <div class="css-1aim50k e2upnqp1">
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
-                                포인트</p>
-                            <div class="css-8yre18 e2upnqp1">
-                                <p
-                                    class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                    -2,000원</p>
-                            </div>
-                        </div>
-                        <div class="css-1aim50k e2upnqp1">
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
-                                배송비</p>
-                            <div class="css-8yre18 e2upnqp1">
-                                <p
-                                    class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                    +3,000원</p>
-                            </div>
-                        </div>
-                        <div class="css-1aim50k e2upnqp1">
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
-                                결제방법</p>
-                            <div class="css-8yre18 e2upnqp1">
-                                <p
-                                    class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                    카카오페이</p>
-                            </div>
-                        </div>
-                        <div class="css-1aim50k e2upnqp1">
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
-                                총 결제금액</p>
-                            <div class="css-8yre18 e2upnqp1">
-                                <p
-                                    class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
-                                    90,900원</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="css-f848a6 e2jhvp32">
-                    <p
-                        class="_97oqoup _97oqouu _97oqou4 ldmw177d _97oqou18 _97oqoui ldmw177p _97oqou12 _97oqouc ldmw177j css-1dl78ek e2jhvp31">
-                        주문정보</p>
-                </button>
-                <div class="css-d3v9zr e14m4ys50" style="opacity: 1; height: auto;">
-                    <div class="css-1a0zxau e1ckt0s50">
-                        <div class="css-1aim50k e93c1qv0">
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
-                                주문번호</p>
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
-                                2307216320130</p>
-                        </div>
-                        <div class="css-1aim50k e2upnqp1">
-                            <p
-                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
-                                결제 일시</p>
-                            <div class="css-8yre18 e2upnqp1">
-                                <p
-                                    class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
-                                    2024.09.05 16:33:45</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="css-f848a6 e2jhvp32">
-                    <p
-                        class="_97oqoup _97oqouu _97oqou4 ldmw177d _97oqou18 _97oqoui ldmw177p _97oqou12 _97oqouc ldmw177j css-1dl78ek e2jhvp31">
-                        배송정보</p>
-                </button>
-                <div class="css-d3v9zr e14m4ys50" style="opacity: 1; height: auto;">
-                    <div class="css-6z4447 e1n2ou003">
-                        <p
-                            class="_97oqoup _97oqouv _97oqou5 ldmw177c _97oqou19 _97oqouj ldmw177q _97oqou12 _97oqouc ldmw177j css-luewyl e1n2ou001">
-                            심키즈</p>
-                        <p
-                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-4qwok1 e1n2ou001">
-                            010-1234-****</p>
-                        <p
-                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-303o8l e1n2ou001">
-                            서울특별시 광진구 군자로0길 50-2</p>
-                    </div>
-                </div>
-                <div class="css-od0sqq ecvmg6w3">
-                    <p
-                        class="_97oqoup _97oqoux _97oqou7 ldmw177a _97oqou1b _97oqoul ldmw177s _97oqou13 _97oqoud ldmw177i css-1fdfbqy ecvmg6w1">
-                        주문취소는 [주문완료] 상태일 경우에만 가능합니다.</p>
-                    <p
-                        class="_97oqoup _97oqoux _97oqou7 ldmw177a _97oqou1b _97oqoul ldmw177s _97oqou13 _97oqoud ldmw177i css-1fdfbqy ecvmg6w1">
-                        단, 일부 상품의 경우 [주문완료] 상태이더라도 상품의 특성상 주문취소가 불가능할 수 있습니다.</p>
-                    <button disabled
-                        class="tew5wjw tew5wj0 ldmw1780 tew5wjy tew5wj19 tew5wj1b tew5wj14 tew5wj3 ldmw1717i ldmw17183 ldmw1715v ldmw177b tew5wj17 tew5wj1c tew5wj5 ldmw177j tew5wj1l tew5wje ldmw17y6 ldmw17ok ldmw178w tew5wjp ldmw171du css-jz9jxv ecvmg6w2">
+            <button class="css-f848a6 e2jhvp32">
+                <p
+                    class="_97oqoup _97oqouu _97oqou4 ldmw177d _97oqou18 _97oqoui ldmw177p _97oqou12 _97oqouc ldmw177j css-1dl78ek e2jhvp31">
+                    주문정보</p>
+            </button>
+            <div class="css-d3v9zr e14m4ys50" style="opacity: 1; height: auto;">
+                <div class="css-1a0zxau e1ckt0s50">
+                    <div class="css-1aim50k e93c1qv0">
                         <p
                             class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
-                            주문 취소</p>
-                    </button>
+                            주문번호</p>
+                        <p
+                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
+                            2307216320130</p>
+                    </div>
+                    <div class="css-1aim50k e2upnqp1">
+                        <p
+                            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0">
+                            결제 일시</p>
+                        <div class="css-8yre18 e2upnqp1">
+                            <p
+                                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0">
+                                2024.09.05 16:33:45</p>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <button class="css-f848a6 e2jhvp32">
+                <p
+                    class="_97oqoup _97oqouu _97oqou4 ldmw177d _97oqou18 _97oqoui ldmw177p _97oqou12 _97oqouc ldmw177j css-1dl78ek e2jhvp31">
+                    배송정보</p>
+            </button>
+            <div class="css-d3v9zr e14m4ys50" style="opacity: 1; height: auto;">
+                <div class="css-6z4447 e1n2ou003">
+                    <p
+                        class="_97oqoup _97oqouv _97oqou5 ldmw177c _97oqou19 _97oqouj ldmw177q _97oqou12 _97oqouc ldmw177j css-luewyl e1n2ou001">
+                        심키즈</p>
+                    <p
+                        class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-4qwok1 e1n2ou001">
+                        010-1234-****</p>
+                    <p
+                        class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-303o8l e1n2ou001">
+                        서울특별시 광진구 군자로0길 50-2</p>
+                </div>
+            </div>
+            <div class="css-od0sqq ecvmg6w3">
+                <p
+                    class="_97oqoup _97oqoux _97oqou7 ldmw177a _97oqou1b _97oqoul ldmw177s _97oqou13 _97oqoud ldmw177i css-1fdfbqy ecvmg6w1">
+                    주문취소는 [주문완료] 상태일 경우에만 가능합니다.</p>
+                <p
+                    class="_97oqoup _97oqoux _97oqou7 ldmw177a _97oqou1b _97oqoul ldmw177s _97oqou13 _97oqoud ldmw177i css-1fdfbqy ecvmg6w1">
+                    단, 일부 상품의 경우 [주문완료] 상태이더라도 상품의 특성상 주문취소가 불가능할 수 있습니다.</p>
+                <button disabled
+                    class="tew5wjw tew5wj0 ldmw1780 tew5wjy tew5wj19 tew5wj1b tew5wj14 tew5wj3 ldmw1717i ldmw17183 ldmw1715v ldmw177b tew5wj17 tew5wj1c tew5wj5 ldmw177j tew5wj1l tew5wje ldmw17y6 ldmw17ok ldmw178w tew5wjp ldmw171du css-jz9jxv ecvmg6w2">
+                    <p
+                        class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j">
+                        주문 취소</p>
+                </button>
             </div>
         </div>
     </div>
@@ -298,7 +279,6 @@ html {
 .css-heioij {
     overflow: hidden;
     width: 650px;
-    background-color: rgb(255, 255, 255);
     border-radius: 16px;
     margin-bottom: 0px;
 }
@@ -337,10 +317,6 @@ html {
     transition: transform, 0.2s ease-out;
     will-change: transform;
     overscroll-behavior-y: contain;
-}
-
-.css-peeqro {
-    padding: 20px 0 0;
 }
 
 .css-jyp95e {
@@ -1004,6 +980,7 @@ video {
     justify-content: space-between;
     -webkit-box-align: center;
     align-items: center;
+    background-color: transparent;
 }
 
 html,
@@ -1176,16 +1153,6 @@ textarea {
     font-size: 100%;
     line-height: 1.15;
     margin: 0;
-}
-
-button {
-    border-radius: 0;
-}
-
-button {
-    overflow: visible;
-    background-color: transparent;
-    border: none;
 }
 
 .tew5wjw {

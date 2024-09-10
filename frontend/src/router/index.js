@@ -18,6 +18,9 @@ import BoardDetailPage from "@/pages/user/board/BoardDetailPage.vue";
 import BoardListPage from "@/pages/common/BoardListPage.vue";
 import ProductBoardListComponent from "@/components/mainpage/ProductBoardListComponent.vue";
 import CompanyOrderListPage from "../pages/company/orders/CompanyOrderListPage.vue";
+import MypageOrderListComponent from "@/components/mypage/MypageOrderListComponent.vue";
+import MypageQnAComponent from "@/components/mypage/MypageQnAComponent.vue";
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -116,6 +119,11 @@ const router = createRouter({
     {
       path: "/mypage",
       component: MyPage,
+      redirect: "/mypage/order",  
+      children: [
+        { path: "order", component: MypageOrderListComponent }, 
+        { path: "qna", component: MypageQnAComponent }
+      ]
     },
   ],
 });
