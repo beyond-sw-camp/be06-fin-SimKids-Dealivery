@@ -1,4 +1,5 @@
 <template>
+  <HeaderComponent></HeaderComponent>
   <div id="container">
     <div id="main">
       <div id="content">
@@ -38,9 +39,12 @@
       </div>
     </div>
   </div>
+  <FooterComponent></FooterComponent>
 </template>
 
 <script>
+import HeaderComponent from "../../../components/common/HeaderComponent.vue";
+import FooterComponent from "../../../components/common/FooterComponent.vue";
 import CompanyAsideComponent from "@/components/company/CompanyAsideComponent.vue";
 import DropdownMenu from "../../../components/company/DropdownMenu.vue";
 import ListCardComponent from "../../../components/company/ListCardComponent.vue";
@@ -53,6 +57,8 @@ export default {
     CompanyAsideComponent,
     DropdownMenu,
     ListCardComponent,
+    HeaderComponent,
+    FooterComponent,
   },
   data() {
     return {

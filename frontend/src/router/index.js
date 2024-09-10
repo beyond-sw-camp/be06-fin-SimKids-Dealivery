@@ -18,7 +18,6 @@ import BoardDetailPage from "@/pages/user/board/BoardDetailPage.vue";
 import BoardListPage from "@/pages/common/BoardListPage.vue";
 import ProductBoardListComponent from "@/components/mainpage/ProductBoardListComponent.vue";
 
-
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -26,57 +25,94 @@ const router = createRouter({
       path: "/",
       component: MainPage,
       children: [
-        {
-          path: "product-boards/company",
-          component: CompanyBoardPostPage,
-          meta: { requiresAuth: false },
-        },
-
         { path: "board/detail/:idx", component: BoardDetailPage },
-        {
-          path: "/product-boards/company/:id",
-          name: "CompanyBoardPostPage",
-          component: () =>
-            import("../pages/company/board/CompanyBoardPostPage.vue"),
-          props: true,
-        },
-        {
-          path: "product-boards/company/list",
-          component: CompanyBoardListPage,
-        },
         { path: "orders", component: OrdersPage },
       ],
     },
-
     {
       path: "/auth",
       component: AuthPage,
       children: [
-        { path: "login", component: LoginComponent, meta: { requiresAuth: false } },
-        { path: "user/signup", component: UserSignupComponent, meta: { requiresAuth: false } },
-        { path: "company/signup", component: CompanySignupComponent, meta: { requiresAuth: false } },
-        { path: "invalid", component: InvalidUrlComponent, meta: { requiresAuth: false } },
-        { path: "pwd/find/wait", component: FindPasswordWaitComponent, meta: { requiresAuth: false } },
-        { path: "pwd/find", component: FindPasswordComponent, meta: { requiresAuth: false } },
-        { path: "pwd/reset", component: ResetPasswordComponent, meta: { requiresAuth: false } },
-        { path: "id/find/success", component: FindIdSuccessComponent, meta: { requiresAuth: false } },
-        { path: "id/find", component: FindIdComponent, meta: { requiresAuth: false } },
+        {
+          path: "login",
+          component: LoginComponent,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: "user/signup",
+          component: UserSignupComponent,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: "company/signup",
+          component: CompanySignupComponent,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: "invalid",
+          component: InvalidUrlComponent,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: "pwd/find/wait",
+          component: FindPasswordWaitComponent,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: "pwd/find",
+          component: FindPasswordComponent,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: "pwd/reset",
+          component: ResetPasswordComponent,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: "id/find/success",
+          component: FindIdSuccessComponent,
+          meta: { requiresAuth: false },
+        },
+        {
+          path: "id/find",
+          component: FindIdComponent,
+          meta: { requiresAuth: false },
+        },
         { path: "", redirect: "/auth/login", meta: { requiresAuth: false } },
-      ]
+      ],
     },
-
     {
-      path: "/board", component: BoardListPage, meta: { requiresAuth: false },
+      path: "/board",
+      component: BoardListPage,
+      meta: { requiresAuth: false },
       children: [
-        {path: "list", component: ProductBoardListComponent, meta: { requiresAuth: false } }
-      ]
+        {
+          path: "list",
+          component: ProductBoardListComponent,
+          meta: { requiresAuth: false },
+        },
+      ],
     },
-  
+    {
+      path: "/product-boards/company",
+      component: CompanyBoardPostPage,
+    },
+    {
+      path: "/product-boards/company/:id",
+      name: "CompanyBoardPostPage",
+      component: () =>
+        import("../pages/company/board/CompanyBoardPostPage.vue"),
+      props: true,
+    },
+    {
+      path: "/product-boards/company/list",
+      component: CompanyBoardListPage,
+    },
     {
       path: "/mypage",
       component: MyPage,
     },
-  ]
+  ],
 });
 
 export default router;

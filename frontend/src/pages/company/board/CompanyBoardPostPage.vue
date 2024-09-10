@@ -1,4 +1,5 @@
 <template>
+  <HeaderComponent></HeaderComponent>
   <div id="container">
     <div id="main">
       <div id="content">
@@ -9,17 +10,22 @@
       </div>
     </div>
   </div>
+  <FooterComponent></FooterComponent>
 </template>
 
 <script>
 import CompanyAsideComponent from "@/components/company/CompanyAsideComponent.vue";
 import CompanyBoardPostComponent from "@/components/company/CompanyBoardPostComponent.vue";
+import HeaderComponent from "../../../components/common/HeaderComponent.vue";
+import FooterComponent from "../../../components/common/FooterComponent.vue";
 import { mapStores } from "pinia";
 import { useCompanyBoardStore } from "../../../stores/UseCompanyBoardStore";
 
 export default {
   name: "CompanyBoardPostPage",
   components: {
+    HeaderComponent,
+    FooterComponent,
     CompanyAsideComponent,
     CompanyBoardPostComponent,
   },
