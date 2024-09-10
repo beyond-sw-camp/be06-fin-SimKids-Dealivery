@@ -44,6 +44,9 @@
 import CompanyAsideComponent from "@/components/company/CompanyAsideComponent.vue";
 import DropdownMenu from "../../../components/company/DropdownMenu.vue";
 import ListCardComponent from "../../../components/company/ListCardComponent.vue";
+import { mapStores } from "pinia";
+import { useCompanyBoardStore } from "../../../stores/UseCompanyBoardStore";
+
 export default {
   name: "CompanyBoardListPage",
   components: {
@@ -57,40 +60,31 @@ export default {
       selectedOrderStatus: "전체보기",
       dateOptions: ["전체기간", "1개월", "3개월", "6개월", "12개월"],
       statusOptions: ["전체보기", "진행 중", "진행 완료"],
-      boards: [
-        {
-          id: 1,
-          dateRange: "2024-09-05 10:00 ~ 2024-09-05 22:00",
-          duration: "12시간",
-          image: "https://i.ytimg.com/vi/TcyKiW73L9Q/maxresdefault.jpg",
-          title: "[9월 픽] 짱 맛있는 샌드위치 더블 기획",
-          info: {
-            카테고리: "식품",
-          },
-          status: "진행중",
-        },
-        {
-          id: 2,
-          dateRange: "2024-08-04 10:00 ~ 2024-08-04 22:00",
-          duration: "12시간",
-          image:
-            "https://raw.githubusercontent.com/beyond-sw-camp/be06-3rd-404x-GreenPlate/develop/img/greenplate.jpg",
-          title: "[9월 픽] 짱 맛있는 샌드위치 더블 기획",
-          info: {
-            카테고리: "식품",
-          },
-          status: "진행 완료",
-        },
-      ],
+      boards: [],
     };
   },
+  computed: {
+    ...mapStores(useCompanyBoardStore),
+  },
+  created() {
+    this.setBoards();
+  },
   methods: {
-    selectDateRange(option) {
+    async setBoards() {
+      this.boards = await this.companyBoardStore.getProductBoardList();
+    },
+    async selectDateRange(option) {
       this.selectedDateRange = option;
+      this.boards = await this.companyBoardStore.getProductBoardListByDateRange(
+        option
+      );
     },
-    selectOrderStatus(option) {
+    async selectOrderStatus(option) {
       this.selectedOrderStatus = option;
+      this.boards =
+        await this.companyBoardStore.getProductBoardListByOrderStatus(option);
     },
+    // delete axios 요청 백엔드 개발 후 구현
     deleteItem(id) {
       this.boards = this.boards.filter((board) => board.id !== id);
     },

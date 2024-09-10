@@ -1,26 +1,24 @@
 <template>
   <ul class="list_ul">
     <li v-for="data in dataList" :key="data.id">
-      <div class="date">{{ data.dateRange }} ({{ data.duration }} 진행)</div>
+      <div class="date">
+        {{ getDuration(data.startedAt, data.endedAt) }} ({{
+          getDurationTime(data.startedAt, data.endedAt)
+        }}
+        진행)
+      </div>
       <div class="list_elems">
         <div class="image">
-          <img :src="data.image" alt="상품 이미지" />
+          <img :src="data.productThumbnailUrl" alt="상품 이미지" />
         </div>
         <div class="name">
-          <a @click.prevent="goToBoardPost(data)">{{ data.title }}</a>
+          <a @click.prevent="goToBoardPost(data.id)">{{ data.title }}</a>
         </div>
         <div class="elem_info">
           <div class="desc">
-            <dl v-for="(value, key) in data.info" :key="key">
-              <dt>{{ key }}</dt>
-              <dd>
-                <span v-if="Array.isArray(value)">
-                  <ul>
-                    <li v-for="item in value" :key="item">{{ item }}</li>
-                  </ul>
-                </span>
-                <span v-else>{{ value }}</span>
-              </dd>
+            <dl>
+              <dt>카테고리</dt>
+              <dd>{{ data.category }}</dd>
             </dl>
           </div>
         </div>
@@ -70,13 +68,36 @@ export default {
     return {};
   },
   methods: {
+    getDuration(stratedAt, endedAt) {
+      const startDate = new Date(stratedAt);
+      const endDate = new Date(endedAt);
+
+      const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const hour = String(date.getHours()).padStart(2, "0");
+        const minute = String(date.getMinutes()).padStart(2, "0");
+        return `${year}-${month}-${day} ${hour}:${minute}`;
+      };
+
+      const formattedStartDate = formatDate(startDate);
+      const formattedEndDate = formatDate(endDate);
+
+      return `${formattedStartDate} ~ ${formattedEndDate}`;
+    },
+    getDurationTime(startedAt, endedAt) {
+      const timeDifference = new Date(endedAt) - new Date(startedAt);
+
+      return parseInt(timeDifference / (1000 * 60 * 60)) + "시간";
+    },
     deleteItem(id) {
       this.$emit("deleteItem", id);
     },
-    goToBoardPost(data) {
+    goToBoardPost(idx) {
       this.$router.push({
         name: "CompanyBoardPostPage",
-        params: { id: data.id },
+        params: { id: idx },
       });
     },
   },
