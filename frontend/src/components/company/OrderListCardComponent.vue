@@ -287,26 +287,6 @@ li {
   vertical-align: middle;
 }
 
-.section_orderlist .list_order .order_status .link_review {
-  margin-bottom: 4px;
-  border: 1px solid #512771;
-  background-color: #5f0080;
-  color: #fff;
-}
-
-.section_orderlist .list_order .order_status .link {
-  display: block;
-  width: 90px;
-  height: 34px;
-  border: 1px solid #5f0080;
-  background-color: #fff;
-  font-size: 12px;
-  color: #5f0080;
-  line-height: 32px;
-  text-align: center;
-  cursor: pointer;
-}
-
 .section_orderlist .list_order .order_status .order_status_box {
   display: block;
   width: 90px;

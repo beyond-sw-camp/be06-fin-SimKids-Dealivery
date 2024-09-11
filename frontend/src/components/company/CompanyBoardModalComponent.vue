@@ -138,7 +138,7 @@ label {
 }
 
 input[type="text"] {
-  width: calc(100% - 20px);
+  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
