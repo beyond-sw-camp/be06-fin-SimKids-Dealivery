@@ -16,18 +16,17 @@
                 <div class="css-1qgm48u eo7pjfk0">
                 </div>
                 <RouterLink to="/mypage" class="css-xygizb eo7pjfk2 top-menu-link">마이페이지</RouterLink>
-                
-                
+
+
             </div>
 
 
             <div class="css-r7wmjj e15sbxqa3">
-                <div class="css-boc80u ekdqe1a1"><img
-                        src="https://github.com/user-attachments/assets/97e43864-23d5-4f0d-844d-8a8e20aeade2"
-                        alt="딜리버리 로고" class="css-17mnrrx e1s3pt0j0 logo" @click="routeTo('/')"><button
-                        class="active css-mxd3pm ekdqe1a0"><router-link
-                            to="/">Dealivery</router-link></button><button
-                        class=" css-mxd3pm ekdqe1a0">Company</button></div>
+                <div class="css-boc80u ekdqe1a1"><img src="@/assets/dealivery-logo.png" alt="딜리버리 로고"
+                        class="css-17mnrrx e1s3pt0j0 logo" @click="routeTo('/')">
+                    <span class="separator">|</span>
+                    <button class=" css-mxd3pm ekdqe1a0">Company</button>
+                </div>
                 <div class="css-pqw0uk e1493ofl4">
                     <div class="css-w444a2 e1493ofl1"><input id="gnb_search" placeholder="검색어를 입력해주세요" required=""
                             class="css-11ntk83 e1493ofl3" value=""><button id="submit" aria-label="submit"
@@ -121,7 +120,7 @@ legend {
 canvas,
 img,
 video {
-    max-width: 9%;
+    max-width: 14%;
 }
 
 html,
@@ -179,7 +178,7 @@ textarea {
 .css-t79vuj {
     /* 헤더 전체에 적용되는 css */
     position: relative;
-    width: 1050px;
+    width: 1290px;
     height: 100px;
     margin: 0px auto;
     letter-spacing: -0.3px;
@@ -277,7 +276,8 @@ textarea {
 }
 
 .css-mxd3pm:last-of-type {
-    margin-left: 22px;
+    margin-left: 0px;
+    margin-top: 6px;
 }
 
 .css-pqw0uk {
@@ -438,5 +438,11 @@ button {
     background-color: transparent;
     border: none;
     cursor: pointer;
+}
+
+.separator {
+    margin: 0 14px; /* 로고와 버튼 사이의 여백 조정 */
+    font-size: 20px; /* 구분자의 크기 조정 */
+    color: rgb(181, 181, 181); /* 구분자의 색상 */
 }
 </style>
