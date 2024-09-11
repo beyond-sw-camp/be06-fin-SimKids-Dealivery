@@ -1,31 +1,40 @@
 <template>
+  <HeaderComponent />
   <div id="top">
     <div class="css-n48rgu">
       <div class="css-16c0d8l">
         <main id="product-atf" class="css-1eoy87d">
           <BoardDetailThumnailComponent :thumbnails="thumbnails" />
-          <BoardDetailProductInfoComponent />
+          <BoardDetailProductInfoComponent @submitOrder="submitOrder" />
         </main>
         <BoardDetailNavComponent :tableData="tableData" />
       </div>
     </div>
   </div>
+  <FooterComponent />
 </template>
 
 <script>
+import HeaderComponent from "@/components/common/HeaderComponent.vue";
+import FooterComponent from "@/components/common/FooterComponent.vue";
 import BoardDetailThumnailComponent from "@/components/board/BoardDetailThumnailComponent.vue";
 import BoardDetailProductInfoComponent from "@/components/board/BoardDetailProductInfoComponent.vue";
 import BoardDetailNavComponent from "@/components/board/BoardDetailNavComponent.vue";
 
+import { useOrderStore } from "@/stores/useOrderStore";
+import { mapStores } from "pinia";
+
 export default {
   name: "OrdersPage",
-  props: {
-    msg: String,
-  },
   components: {
+    HeaderComponent,
+    FooterComponent,
     BoardDetailThumnailComponent,
     BoardDetailProductInfoComponent,
     BoardDetailNavComponent,
+  },
+  computed: {
+    ...mapStores(useOrderStore),
   },
   data() {
     return {
@@ -53,6 +62,18 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    async submitOrder(cartItems) {
+      console.log(cartItems);
+      let result = await this.orderStore.submitOrder(cartItems);
+      if (result) {
+        console.log("[SUCCESS] 주문 생성 성공");
+        this.$router.push("/orders");
+      } else {
+        console.log("[ERROR] 주문 생성 실패");
+      }
+    },
   },
 };
 </script>

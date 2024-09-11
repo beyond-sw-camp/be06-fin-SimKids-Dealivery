@@ -70,3 +70,6 @@ atlassian-ide-plugin.xml
 
 # Antora playbook
 cached-antora-playbook.yml
+
+#vue 설정 파일
+.env

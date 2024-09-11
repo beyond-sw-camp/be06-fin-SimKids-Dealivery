@@ -13,7 +13,7 @@
           </button>
         </div>
         <div class="css-r6muhy">
-          [랑콤] NEW 제니피끄 얼티미트 세럼 115ml 추석 선물세트(지함보포장)
+          {{ boardInfo.title }}
           상품을 주문합니다.
         </div>
         <!--주문한 상품 -->
@@ -22,7 +22,7 @@
           id="toggle-content"
         >
           <ul class="css-10yu6xo">
-            <p class="ldmw177b ldmw177r ldmw177j">샛별배송</p>
+            <p class="ldmw177b ldmw177r ldmw177j">주문 내역</p>
             <ul class="css-wtzqk0">
               <div>
                 <div
@@ -30,150 +30,39 @@
                   height="var(--ldmw1716)"
                   class="css-2rblr6 e1ypu1ln0"
                 ></div>
-                <li class="css-1wqgkv4 e17q5gas10">
-                  <div class="css-fwfvkg e17q5gas9">
-                    <span
-                      style="
-                        box-sizing: border-box;
-                        display: block;
-                        overflow: hidden;
-                        width: initial;
-                        height: initial;
-                        background: none;
-                        opacity: 1;
-                        border: 0px;
-                        margin: 0px;
-                        padding: 0px;
-                        position: absolute;
-                        inset: 0px;
-                      "
-                      ><img
-                        alt="[랑콤] NEW 제니피끄 얼티미트 세럼 115ml 추석 선물세트(지함보포장)"
-                        sizes="100vw"
-                        src="https://product-image.kurly.com/hdims/resize/%5E%3E120x%3E156/cropcenter/120x156/quality/85/src/product/image/1c23c684-4a2b-44bb-a02b-3afe05c89840.jpg"
-                        decoding="async"
-                        data-nimg="fill"
-                        class="css-0"
-                        style="
-                          position: absolute;
-                          inset: 0px;
-                          box-sizing: border-box;
-                          padding: 0px;
-                          border: none;
-                          margin: auto;
-                          display: block;
-                          width: 0px;
-                          height: 0px;
-                          min-width: 100%;
-                          max-width: 100%;
-                          min-height: 100%;
-                          max-height: 100%;
-                          object-fit: cover;
-                        "
-                    /></span>
-                  </div>
+                <li
+                  v-for="(item, index) in orderedProducts"
+                  :key="index"
+                  class="css-1wqgkv4 e17q5gas10"
+                >
                   <div class="css-16mmcnu">
                     <div class="css-d3v9zr">
                       <p class="ldmw177b ldmw177r ldmw177i css-139udnv">
-                        [랑콤] NEW 제니피끄 얼티미트 세럼 115ml 추석
-                        선물세트(지함보포장)
+                        {{ item.name }}
                       </p>
                       <p class="ldmw1779 ldmw177t ldmw177i css-e712oj">
-                        [일일특가][랑콤] NEW 제니피끄 얼티미트 세럼 / 레네르지
-                        광채크림/ 아이크림 추석 선물세트 4종 (택1)
+                        {{ item.description }}
                       </p>
                     </div>
                     <div class="css-1qoq5cy">
                       <p
                         class="ldmw177b ldmw177r ldmw177k css-m5oldq e17q5gas2"
                       >
-                        256,000원
+                        {{ item.price.toLocaleString() }}원
                       </p>
-                      <span class="css-1s0al7f e17q5gas1">320,000원</span>
+                      <span class="css-1s0al7f e17q5gas1"
+                        >{{ item.originalPrice.toLocaleString() }}원</span
+                      >
                       <div
                         width="var(--ldmw1716)"
                         height="var(--ldmw17v)"
                         class="css-7kvzoe e1ypu1ln0"
                       ></div>
+
                       <p
                         class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-nasq0f e17q5gas4"
                       >
-                        1개
-                      </p>
-                    </div>
-                  </div>
-                </li>
-              </div>
-            </ul>
-          </ul>
-          <ul class="css-10yu6xo e13znpj60">
-            <p
-              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j"
-            >
-              증정상품
-            </p>
-            <ul class="css-wtzqk0 ev5u08v1">
-              <div>
-                <div
-                  width="100%"
-                  height="var(--ldmw1716)"
-                  class="css-2rblr6 e1ypu1ln0"
-                ></div>
-                <li class="css-1wqgkv4 e17q5gas10">
-                  <div class="css-fwfvkg e17q5gas9">
-                    <span
-                      style="
-                        box-sizing: border-box;
-                        display: block;
-                        overflow: hidden;
-                        width: initial;
-                        height: initial;
-                        background: none;
-                        opacity: 1;
-                        border: 0px;
-                        margin: 0px;
-                        padding: 0px;
-                        position: absolute;
-                        inset: 0px;
-                      "
-                      ><img
-                        alt="[증정상품] [증정품][랑콤] NEW 클라리피끄 더블 트리트먼트 에센스 10ml"
-                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTQiIGhlaWdodD0iNzAiIHZpZXdCb3g9IjAgMCA1NCA3MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzIyODNfNTk5NjgpIj4KPHJlY3Qgd2lkdGg9IjU0IiBoZWlnaHQ9IjcwIiByeD0iOCIgZmlsbD0iI0VDRUZGMyIvPgo8cGF0aCBkPSJNMTYuNjY2NyAzNS42NjY2VjQ1QzE2LjY2NjcgNDUuNzA3MiAxNi45NDc2IDQ2LjM4NTUgMTcuNDQ3NyA0Ni44ODU2QzE3Ljk0NzggNDcuMzg1NyAxOC42MjYxIDQ3LjY2NjYgMTkuMzMzMyA0Ny42NjY2SDI2VjM1LjY2NjZIMTYuNjY2N1pNMjggMzUuNjY2NlY0Ny42NjY2SDM0LjY2NjdDMzUuMzczOSA0Ny42NjY2IDM2LjA1MjIgNDcuMzg1NyAzNi41NTIzIDQ2Ljg4NTZDMzcuMDUyNCA0Ni4zODU1IDM3LjMzMzMgNDUuNzA3MiAzNy4zMzMzIDQ1VjM1LjY2NjZIMjhaTTM2LjA1NDcgMjlDMzYuMjUwMiAyOC4zNTE3IDM2LjM0NDIgMjcuNjc3IDM2LjMzMzMgMjdDMzYuMzMzMyAyNC40MjY2IDM0LjI0IDIyLjMzMzMgMzEuNjY2NyAyMi4zMzMzQzI5LjUwNCAyMi4zMzMzIDI4LjA2IDI0LjMwOTMgMjcuMTI4IDI2LjQ0NjZDMjYuMjA5MyAyNC40MjY2IDI0LjY5MiAyMi4zMzMzIDIyLjMzMzMgMjIuMzMzM0MxOS43NiAyMi4zMzMzIDE3LjY2NjcgMjQuNDI2NiAxNy42NjY3IDI3QzE3LjY2NjcgMjcuNzk0NiAxNy43NzIgMjguNDUyIDE3Ljk0NTMgMjlIMTYuMzMzM1YzM0gzNy42NjY3VjI5SDM2LjA1NDdaTTIwLjMzMzMgMjdDMjAuMzMzMyAyNS44OTczIDIxLjIzMDcgMjUgMjIuMzMzMyAyNUMyMy41MTczIDI1IDI0LjYxODcgMjcuMDMzMyAyNS4yNjQgMjlIMjEuNjY2N0MyMS4xNjggMjkgMjAuMzMzMyAyOSAyMC4zMzMzIDI3Wk0zMS42NjY3IDI1QzMyLjc2OTMgMjUgMzMuNjY2NyAyNS44OTczIDMzLjY2NjcgMjdDMzMuNjY2NyAyOSAzMi44MzIgMjkgMzIuMzMzMyAyOUgyOS4wMzA3QzI5LjcxMDcgMjYuODk4NiAzMC42OTg3IDI1IDMxLjY2NjcgMjVaIiBmaWxsPSIjQ0JEMUQ3Ii8+CjxwYXRoIGQ9Ik0xNSAzMC4zMzMzQzE1IDI5LjU5NjkgMTUuNTk3IDI5IDE2LjMzMzMgMjlIMzcuNjY2N0MzOC40MDMgMjkgMzkgMjkuNTk2OSAzOSAzMC4zMzMzVjMyLjMzMzNDMzkgMzMuMDY5NyAzOC40MDMgMzMuNjY2NiAzNy42NjY3IDMzLjY2NjZIMTYuMzMzM0MxNS41OTcgMzMuNjY2NiAxNSAzMy4wNjk3IDE1IDMyLjMzMzNWMzAuMzMzM1oiIGZpbGw9IiNDQkQxRDciLz4KPC9nPgo8ZGVmcz4KPGNsaXBQYXRoIGlkPSJjbGlwMF8yMjgzXzU5OTY4Ij4KPHJlY3Qgd2lkdGg9IjU0IiBoZWlnaHQ9IjcwIiBmaWxsPSJ3aGl0ZSIvPgo8L2NsaXBQYXRoPgo8L2RlZnM+Cjwvc3ZnPgo="
-                        decoding="async"
-                        data-nimg="fill"
-                        class="css-0"
-                        style="
-                          position: absolute;
-                          inset: 0px;
-                          box-sizing: border-box;
-                          padding: 0px;
-                          border: none;
-                          margin: auto;
-                          display: block;
-                          width: 0px;
-                          height: 0px;
-                          min-width: 100%;
-                          max-width: 100%;
-                          min-height: 100%;
-                          max-height: 100%;
-                          object-fit: cover;
-                        "
-                    /></span>
-                  </div>
-                  <div class="css-16mmcnu e17q5gas8">
-                    <div class="css-d3v9zr e17q5gas7">
-                      <p
-                        class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-139udnv e17q5gas6"
-                      >
-                        [증정상품] [증정품][랑콤] NEW 클라리피끄 더블 트리트먼트
-                        에센스 10ml
-                      </p>
-                    </div>
-                    <div class="css-1qoq5cy e17q5gas3">
-                      <p
-                        class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-nasq0f e17q5gas4"
-                      >
-                        1개
+                        {{ item.quantity }}개
                       </p>
                     </div>
                   </div>
@@ -190,19 +79,19 @@
           <div class="css-yazyg9 e150alo82">
             <span class="css-ln1csn e150alo81">보내는 분</span>
             <div class="css-82a6rk e150alo80">
-              <div class="css-t6o2y8 e1vfdada2">유송연</div>
+              <div class="css-t6o2y8 e1vfdada2">{{ ordererInfo.name }}</div>
             </div>
           </div>
           <div class="css-yazyg9">
             <span class="css-ln1csn">휴대폰</span>
             <div class="css-82a6rk">
-              <div class="css-t6o2y8">010-1111-1111</div>
+              <div class="css-t6o2y8">{{ ordererInfo.phone }}</div>
             </div>
           </div>
           <div class="css-yazyg9">
             <span class="css-ln1csn">이메일</span>
             <div class="css-82a6rk">
-              simkids@gmail.com
+              {{ ordererInfo.email }}
               <div class="css-1r0yqr6 e1vfdada1">
                 <p class="css-i7dt79 e1vfdada0">
                   정보 변경은 Dealivery &gt; 개인정보 수정 메뉴에서 가능합니다.
@@ -239,8 +128,7 @@
               <div class="css-82a6rk e150alo80">
                 <span class="css-3uygi7 e17yjk9v3">기본배송지</span>
                 <p class="css-36j4vu e17yjk9v2">
-                  서울 동작구 상도로 지하 76 (7호선 신대방삼거리역) Beyond SW
-                  캠프
+                  {{ ordererInfo.defaultAddress }}
                 </p>
                 <div class="css-iqoq9n e17yjk9v0">
                   <button
@@ -290,9 +178,14 @@
                     data-testid="available-total-point"
                     class="css-1az0nid e1gm2j0y8"
                   >
-                    <span class="css-o5boot e1gm2j0y5">사용가능 잔액</span
-                    ><span class="css-cp6cch e1gm2j0y4"
-                      >4,728 <span class="css-o5boot e1gm2j0y5">원</span></span
+                    <span class="css-cp6cch e1gm2j0y4"
+                      >최대 사용 가능 포인트 :
+                      {{ maximumAvailablePoint.toLocaleString() }}
+                      <span class="css-o5boot e1gm2j0y5">p</span></span
+                    >
+                    <span class="css-o5boot e1gm2j0y5"
+                      >보유 포인트 :
+                      {{ ordererInfo.point.toLocaleString() }} p</span
                     >
                   </div>
                 </div>
@@ -306,7 +199,9 @@
                         type="text"
                         height="44"
                         class="css-1quw3ub e1uzxhvi2"
-                        value="0"
+                        :value="usedPoint"
+                        @input="onPointInput"
+                        @keypress="isNumber"
                       />
                     </div>
                   </div>
@@ -316,10 +211,12 @@
                     width="100"
                     height="44"
                     radius="3"
+                    @click="useAllPoints"
                   >
                     <span class="css-nytqmg e4nu7ef1">모두사용</span>
                   </button>
                 </div>
+
                 <div class="css-1waf5ak ezr038b1"></div>
               </div>
             </div>
@@ -332,16 +229,31 @@
                 <div class="css-82a6rk e150alo80">
                   <div class="css-gd125q e4nb37r1">
                     <div>
-                      <div class="css-18dvwsu ef0cmoa0">
+                      <div class="css-18dvwsu">
                         <button
-                          @click="toggleKakaoPayBtn"
+                          @click="selectPaymentMethod('kakao')"
                           type="button"
-                          :class="
-                            !isPayMethodSelected ? 'css-1wlyg0y' : 'css-1fecctx'
-                          "
+                          :class="{
+                            'css-1wlyg0y': selectedPaymentMethod !== 'kakao',
+                            'css-1fecctx': selectedPaymentMethod === 'kakao',
+                          }"
                           color="#f6e500"
                         >
                           <img src="@/assets/kakao-pay-icon.svg" />
+                        </button>
+                      </div>
+                      <div class="css-18dvwsu">
+                        <button
+                          @click="selectPaymentMethod('toss')"
+                          type="button"
+                          :class="{
+                            'css-1wlyg0y': selectedPaymentMethod !== 'toss',
+                            'tosspay-selected':
+                              selectedPaymentMethod === 'toss',
+                          }"
+                          color="#f6e500"
+                        >
+                          <img src="@/assets/logo-toss-pay.svg" />
                         </button>
                       </div>
                     </div>
@@ -371,16 +283,20 @@
 
             <div class="css-1azakc el0c5j40">
               <button
-                :class="
-                  isPayMethodSelected ? 'css-1lha8en' : 'payment-inactive'
-                "
+                @click="makePayment"
+                :class="{
+                  'css-1lha8en': selectedPaymentMethod,
+                  'payment-inactive': !selectedPaymentMethod,
+                }"
                 type="button"
                 width="240"
                 height="56"
                 radius="3"
-                :disabled="!isPayMethodSelected"
+                :disabled="!selectedPaymentMethod"
               >
-                <span class="css-nytqmg e4nu7ef1">256,000원 결제하기</span>
+                <span class="css-nytqmg e4nu7ef1"
+                  >{{ totalAmount.toLocaleString() }}원 결제하기</span
+                >
               </button>
             </div>
           </div>
@@ -394,7 +310,8 @@
                   <div class="css-1rmc3ba eahaaoi11">주문금액</div>
                   <div>
                     <span class="css-2pg1ps eahaaoi10"
-                      ><span class="css-rfpchb eahaaoi3"></span>256,000</span
+                      ><span class="css-rfpchb eahaaoi3"></span
+                      >{{ totalAmount.toLocaleString() }}</span
                     ><span class="css-158icaa eahaaoi8">원</span>
                   </div>
                 </div>
@@ -405,7 +322,8 @@
                   </div>
                   <div>
                     <span class="css-2pg1ps eahaaoi10"
-                      ><span class="css-rfpchb eahaaoi3"></span>320,000</span
+                      ><span class="css-rfpchb eahaaoi3"></span
+                      >{{ originalTotalAmount.toLocaleString() }}</span
                     ><span class="css-158icaa eahaaoi8">원</span>
                   </div>
                 </div>
@@ -416,7 +334,10 @@
                   </div>
                   <div>
                     <span class="css-2pg1ps eahaaoi10"
-                      ><span class="css-rfpchb eahaaoi3">-</span>64,000</span
+                      ><span class="css-rfpchb eahaaoi3">-</span
+                      >{{
+                        (originalTotalAmount - totalAmount).toLocaleString()
+                      }}</span
                     ><span class="css-158icaa eahaaoi8">원</span>
                   </div>
                 </div>
@@ -424,7 +345,8 @@
                   <div class="css-1rmc3ba eahaaoi11">포인트</div>
                   <div>
                     <span class="css-2pg1ps eahaaoi10"
-                      ><span class="css-rfpchb eahaaoi3"></span>0</span
+                      ><span class="css-rfpchb eahaaoi3"></span
+                      >{{ usedPoint }}</span
                     ><span class="css-158icaa eahaaoi8">원</span>
                   </div>
                 </div>
@@ -432,7 +354,8 @@
                   <div class="css-1rmc3ba eahaaoi11">최종결제금액</div>
                   <div>
                     <span class="css-2pg1ps eahaaoi10"
-                      ><span class="css-rfpchb eahaaoi3"></span>256,000</span
+                      ><span class="css-rfpchb eahaaoi3"></span
+                      >{{ totalAmount.toLocaleString() }}</span
                     ><span class="css-158icaa eahaaoi8">원</span>
                   </div>
                 </div>
@@ -446,6 +369,10 @@
 </template>
 
 <script>
+import { useOrderStore } from "@/stores/useOrderStore";
+import { useUserStore } from "@/stores/useUserStore";
+import { mapStores } from "pinia";
+
 export default {
   name: "OrdersPage",
   data() {
@@ -453,9 +380,57 @@ export default {
       isIconRotated: false,
       isToggleContentVisible: false,
       isDeliveryNotiVisible: false,
-      isPayMethodSelected: false,
+      selectedPaymentMethod: null, // 선택된 결제 수단
+      boardInfo: {},
+      ordererInfo: {},
+      orderedProducts: [],
+      usedPoint: 0,
+      maximumAvailablePoint: 0,
     };
   },
+  computed: {
+    ...mapStores(useOrderStore, useUserStore),
+    totalAmount() {
+      return (
+        this.orderStore.orderedProducts.reduce((total, product) => {
+          return total + product.price * product.quantity;
+        }, 0) - this.usedPoint
+      );
+    },
+    originalTotalAmount() {
+      return this.orderStore.orderedProducts.reduce((total, product) => {
+        return total + product.originalPrice * product.quantity;
+      }, 0);
+    },
+  },
+  created() {
+    if (
+      this.orderStore.boardInfo == null ||
+      this.orderStore.orderedProducts == null
+    ) {
+      return this.$router.push("/");
+    }
+
+    this.boardInfo = this.orderStore.boardInfo;
+    this.orderedProducts = this.orderStore.orderedProducts;
+    this.ordererInfo = {
+      // this.ordererInfo = this.userStore.
+      name: "유송연",
+      phone: "010-1111-1111",
+      email: "simkids@gmail.com",
+      point: 24890,
+      defaultAddress:
+        " 서울 동작구 상도로 지하 76 (7호선 신대방삼거리역) Beyond SW 캠프",
+    };
+
+    let tenPercentOfPrice = Math.round(this.totalAmount * (10 / 100));
+
+    this.maximumAvailablePoint =
+      this.ordererInfo.point < tenPercentOfPrice
+        ? this.ordererInfo.point
+        : tenPercentOfPrice;
+  },
+
   methods: {
     toggleContent() {
       this.isIconRotated = !this.isIconRotated;
@@ -464,8 +439,71 @@ export default {
     toggleDeliveryNotiBtn() {
       this.isDeliveryNotiVisible = !this.isDeliveryNotiVisible;
     },
-    toggleKakaoPayBtn() {
-      this.isPayMethodSelected = !this.isPayMethodSelected;
+    selectPaymentMethod(method) {
+      if (method == this.selectedPaymentMethod) {
+        this.selectedPaymentMethod = null;
+        return;
+      }
+
+      this.selectedPaymentMethod = method;
+    },
+    async makePayment() {
+      const paymentData = {
+        paymentMethod: this.selectedPaymentMethod,
+        address: this.ordererInfo.defaultAddress, // 배송지 정보 가져오기
+        usedPoint: this.usedPoint, // 사용한 포인트
+        totalAmount: this.totalAmount, // 전체 결제금액에서 포인트 차감
+      };
+
+      let result = await this.orderStore.makePayment(paymentData);
+      if (result) {
+        this.$router.push("/");
+      } else {
+        this.$router.push("/");
+      }
+    },
+    isNumber(event) {
+      const char = event.key;
+
+      // 한글 입력 차단
+      const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(char);
+      if (isKorean) {
+        event.preventDefault();
+        return;
+      }
+
+      // 숫자가 아닌 문자 차단
+      if (!/[0-9]/.test(char)) {
+        event.preventDefault();
+      }
+    },
+    onPointInput(event) {
+      // 입력값에서 숫자가 아닌 문자를 모두 제거
+      let inputValue = event.target.value.replace(/[^0-9]/g, "");
+
+      // 0으로 시작하는 경우 제거
+      if (inputValue.length > 1 && inputValue[0] === "0") {
+        inputValue = inputValue.replace(/^0+/, "");
+      }
+
+      // 최대 사용 가능 포인트 초과 방지
+      const availableMax = Math.min(
+        this.ordererInfo.point,
+        this.maximumAvailablePoint
+      );
+      this.usedPoint = inputValue
+        ? Math.min(Number(inputValue), availableMax)
+        : 0;
+
+      // 필터링된 값을 다시 input에 반영
+      event.target.value = this.usedPoint;
+    },
+    useAllPoints() {
+      if (this.ordererInfo.point <= this.maximumAvailablePoint) {
+        this.usedPoint = this.ordererInfo.point;
+      } else {
+        this.usedPoint = this.maximumAvailablePoint;
+      }
     },
   },
 };
@@ -879,7 +917,7 @@ svg:not(:root) {
   font-weight: 400;
   font-size: 16px;
   line-height: 42px;
-  color: rgb(51, 51, 51);
+  color: rgb(51, 51, 51) !important;
   outline: none;
   box-sizing: border-box;
 }
@@ -925,6 +963,7 @@ svg:not(:root) {
 
 .css-18dvwsu {
   display: flex;
+  margin-top: 10px;
 }
 
 .css-1wlyg0y {
@@ -955,6 +994,23 @@ svg:not(:root) {
   font-size: 14px;
   color: rgb(255, 255, 255);
   background: rgb(246, 229, 0);
+  font-weight: 500;
+  border-radius: 3px;
+}
+
+.tosspay-selected {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  position: relative;
+  width: 300px;
+  height: 48px;
+  font-size: 14px;
+  border: 1px solid #0f0f0f;
+  color: rgb(255, 255, 255);
+  background: #fff;
   font-weight: 500;
   border-radius: 3px;
 }
@@ -1334,5 +1390,68 @@ ul {
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-word;
+}
+
+.css-1wqgkv4 {
+  margin-bottom: 20px;
+}
+
+.css-1wqgkv4:last-of-type {
+  margin-bottom: 0px;
+}
+
+.point-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.point-input-section {
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper {
+  position: relative;
+  height: 44px;
+  flex: 1;
+}
+
+.point-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+.use-all-button {
+  margin-left: 10px;
+  height: 44px;
+  padding: 0 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.use-all-button:hover {
+  background-color: #0056b3;
+}
+
+.point-info {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #333;
+}
+
+.point-info span {
+  margin-right: 15px;
 }
 </style>

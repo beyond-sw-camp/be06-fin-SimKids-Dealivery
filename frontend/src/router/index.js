@@ -30,8 +30,7 @@ const router = createRouter({
       path: "/",
       component: MainPage,
       children: [
-        { path: "board/detail/:idx", component: BoardDetailPage },
-        { path: "orders", component: OrdersPage },
+
       ],
     },
     {
@@ -98,6 +97,8 @@ const router = createRouter({
         },
       ],
     },
+    { path: "/orders", component: OrdersPage },
+    { path: "/board/detail/:idx", component: BoardDetailPage },
     {
       path: "/product-boards/company",
       component: CompanyBoardPostPage,

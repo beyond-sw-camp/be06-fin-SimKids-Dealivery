@@ -124,8 +124,14 @@
                         </p>
                         <div class="css-t4macj e12wapb62">
                           <div class="css-1fvrsoi e12wapb60">
-                            {{ option.price }}원
+                            {{
+                              option.originalPrice *
+                              (1 - this.discountPercentage / 100)
+                            }}원
                           </div>
+                          <span class="css-1s0al7f e17q5gas1"
+                            >{{ option.originalPrice.toLocaleString() }}원</span
+                          >
                         </div>
                       </div>
                     </div>
@@ -174,7 +180,9 @@
                     ></button>
                   </div>
                   <div class="css-1jzvrpg e1bjklo12">
-                    <span class="css-gqkxk8 e1bjklo10">{{ item.price }}원</span>
+                    <span class="css-gqkxk8 e1bjklo10"
+                      >{{ item.price.toLocaleString() }}원</span
+                    >
                   </div>
                 </div>
               </div>
@@ -188,7 +196,9 @@
       <div class="css-ixlb9s eebc7rx4">
         <div class="css-yhijln eebc7rx3">
           <span class="css-w1is7v eebc7rx2">총 상품금액 :</span
-          ><span class="css-x4cdgl eebc7rx1">{{ totalPrice }}</span
+          ><span class="css-x4cdgl eebc7rx1">{{
+            totalPrice.toLocaleString()
+          }}</span
           ><span class="css-1jb8hmu eebc7rx0">원</span>
         </div>
       </div>
@@ -207,7 +217,12 @@
         </span>
       </button>
 
-      <button class="cart-button css-1qirdbn e4nu7ef3" type="button" radius="3">
+      <button
+        @click="emitSubmitOrder"
+        class="cart-button css-1qirdbn"
+        type="button"
+        radius="3"
+      >
         <span class="css-nytqmg e4nu7ef1">구매하기</span>
       </button>
     </div>
@@ -221,11 +236,15 @@ export default {
     return {
       isDropdownOpen: false,
       productOptions: [
-        { value: "1000758059", label: "[99치킨] 순살 닭강정", price: 19900 },
+        {
+          value: "1000758059",
+          label: "[99치킨] 순살 닭강정",
+          originalPrice: 20900,
+        },
         {
           value: "1000750152",
           label: "[99치킨] 마라 순살 닭강정",
-          price: 9900,
+          originalPrice: 20900,
         },
       ],
       cartItems: [],
@@ -236,6 +255,7 @@ export default {
         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yNS44MDcgNy44NjNhNS43NzcgNS43NzcgMCAwIDAtOC4xNzIgMEwxNiA5LjQ5N2wtMS42MzUtMS42MzRhNS43NzkgNS43NzkgMCAxIDAtOC4xNzMgOC4xNzJsMS42MzQgMS42MzQgNy40NjYgNy40NjdhMSAxIDAgMCAwIDEuNDE1IDBzMCAwIDAgMGw3LjQ2Ni03LjQ2N2gwbDEuNjM0LTEuNjM0YTUuNzc3IDUuNzc3IDAgMCAwIDAtOC4xNzJ6IiBmaWxsPSIjRkY1QTVBIiBzdHJva2U9IiNGRjVBNUEiIHN0cm9rZS13aWR0aD0iMS42IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K",
       emptyHeartImage:
         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yNS44MDcgNy44NjNhNS43NzcgNS43NzcgMCAwIDAtOC4xNzIgMEwxNiA5LjQ5N2wtMS42MzUtMS42MzRhNS43NzkgNS43NzkgMCAxIDAtOC4xNzMgOC4xNzJsMS42MzQgMS42MzQgNy40NjYgNy40NjdhMSAxIDAgMCAwIDEuNDE1IDBzMCAwIDAgMGw3LjQ2Ni03LjQ2N2gwbDEuNjM0LTEuNjM0YTUuNzc3IDUuNzc3IDAgMCAwIDAtOC4xNzJ6IiBzdHJva2U9IiM1RjAwODAiIHN0cm9rZS13aWR0aD0iMS42IiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K",
+      discountPercentage: 23,
     };
   },
   computed: {
@@ -244,6 +264,9 @@ export default {
         (total, item) => total + item.price * item.quantity,
         0
       );
+    },
+    isAnySelected() {
+      return this.cartItems.length > 0;
     },
   },
   methods: {
@@ -262,7 +285,8 @@ export default {
         this.cartItems.push({
           value: option.value,
           name: option.label,
-          price: option.price,
+          price: option.originalPrice * (1 - this.discountPercentage / 100),
+          originalPrice: option.originalPrice,
           quantity: 1,
         });
       }
@@ -289,6 +313,24 @@ export default {
       this.heartImage = this.isHeartFilled
         ? this.filledHeartImage
         : this.emptyHeartImage;
+    },
+
+    emitSubmitOrder() {
+      if (!this.isAnySelected) {
+        alert("상품을 선택하세요.");
+        return;
+      }
+
+      let orderRequest = {
+        boardInfo: {
+          idx: 1,
+          title: "[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로]",
+          discountRate: "23",
+        },
+        cartItems: this.cartItems,
+      };
+
+      this.$emit("submitOrder", orderRequest);
     },
   },
 };
@@ -696,17 +738,8 @@ legend {
   cursor: pointer;
 }
 
-.cart-button {
-  font-weight: 500;
-}
-
-@media (min-width: 1050px) {
-  .css-1qirdbn {
-    height: 56px;
-  }
-}
-
 .css-1qirdbn {
+  font-weight: 500;
   display: block;
   padding: 0 10px;
   text-align: center;
@@ -717,6 +750,22 @@ legend {
   color: #fff;
   background-color: #5f0080;
   border: 0 none;
+}
+
+.order-inactive {
+  display: block;
+  padding: 0px 10px;
+  text-align: center;
+  overflow: hidden;
+  width: 60%;
+  height: 52px;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #6c757d;
+  border: 0 none;
+  font-weight: 500;
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 .css-nytqmg {
@@ -963,5 +1012,14 @@ legend {
 
 .cart-items {
   margin-top: 20px;
+}
+
+.css-1s0al7f {
+  margin-left: 4px;
+  color: #bcc4cc;
+  word-break: break-all;
+  text-decoration: line-through;
+  font-size: 13px;
+  line-height: 18px;
 }
 </style>
