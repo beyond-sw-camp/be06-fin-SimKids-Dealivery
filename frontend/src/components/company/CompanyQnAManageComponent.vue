@@ -278,7 +278,7 @@ div {
   font-size: 0;
   line-height: 0;
   top: 33px;
-  left: 19px;
+  left: 10px;
 }
 
 .no_data {
