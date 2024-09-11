@@ -36,7 +36,10 @@
           </td>
 
           <td>
-            <button type="button" class="ico modify" target="_blank">
+            <div v-if="isDisplayModal">
+              <CompanyQnAModalComponent @closeModal="displayModal" />
+            </div>
+            <button @click="displayModal" class="ico modify" target="_blank">
               등록하기
             </button>
           </td>
@@ -89,12 +92,22 @@
 </template>
 
 <script>
+import CompanyQnAModalComponent from "./CompanyQnAModalComponent.vue";
+
 export default {
   name: "CompanyQnAManageComponent",
+  components: {
+    CompanyQnAModalComponent,
+  },
   data() {
-    return {};
+    return {
+      isDisplayModal: false,
+    };
   },
   methods: {
+    displayModal() {
+      this.isDisplayModal = !this.isDisplayModal;
+    },
     // closeModal() {
     //   this.$emit("closeModal");
     // },
@@ -243,6 +256,7 @@ div {
     no-repeat 50% 50%;
   font-size: 0;
   line-height: 0;
+  cursor: pointer;
 }
 
 #tblParent {
