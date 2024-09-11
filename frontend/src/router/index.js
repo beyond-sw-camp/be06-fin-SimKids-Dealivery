@@ -17,6 +17,11 @@ import FindIdComponent from "@/components/user/FindIdComponent.vue";
 import BoardDetailPage from "@/pages/user/board/BoardDetailPage.vue";
 import BoardListPage from "@/pages/common/BoardListPage.vue";
 import ProductBoardListComponent from "@/components/mainpage/ProductBoardListComponent.vue";
+import CompanyOrderListPage from "../pages/company/orders/CompanyOrderListPage.vue";
+import MypageOrderListComponent from "@/components/mypage/MypageOrderListComponent.vue";
+import MypageQnAComponent from "@/components/mypage/MypageQnAComponent.vue";
+import MypageLikesEventComponent from "@/components/mypage/MypageLikesEventComponent.vue";
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -109,8 +114,18 @@ const router = createRouter({
       component: CompanyBoardListPage,
     },
     {
+      path: "/orders/company/list",
+      component: CompanyOrderListPage,
+    },
+    {
       path: "/mypage",
       component: MyPage,
+      redirect: "/mypage/order",  
+      children: [
+        { path: "order", component: MypageOrderListComponent }, 
+        { path: "qna", component: MypageQnAComponent },
+        { path: "likes", component: MypageLikesEventComponent }
+      ]
     },
   ],
 });
