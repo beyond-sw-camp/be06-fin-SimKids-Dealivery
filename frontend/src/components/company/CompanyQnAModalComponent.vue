@@ -68,9 +68,6 @@
           </div>
 
           <div class="css-f9c7pn e6wys6s0">
-            <button @click="close" class="css-wg85j7 e4nu7ef3" type="button">
-              <span class="css-nytqmg e4nu7ef1">취소</span>
-            </button>
             <button
               :class="{
                 'css-f4f4h7 e4nu7ef3': true,
