@@ -7,11 +7,25 @@
           <div class="css-ixlb9s ecqulhg2">
             <div class="css-0 e11n32x25">
               <strong class="css-1702mcg e11n32x24"
-                >배송지 검색
+                >배송지 추가
                 <p class="css-pwbln2 e11n32x22">
                   상품을 전달받을 배송지를 입력해주세요.
                 </p></strong
               >
+            </div>
+            <div class="css-1hxvx8x e1uzxhvi6">
+              <div height="44" class="css-t7kbxx e1uzxhvi3">
+                <input
+                  v-model="address.name"
+                  data-testid="input-box"
+                  id="addressName"
+                  name="addressName"
+                  placeholder="별칭을 입력해 주세요"
+                  type="text"
+                  height="44"
+                  class="css-1quw3ub e1uzxhvi2"
+                />
+              </div>
             </div>
             <div class="css-19u3hc5 e1n7pxx51">
               <p class="css-ks8pmw e1n7pxx50">
@@ -41,7 +55,7 @@
                   data-testid="input-box"
                   id="addressDetail"
                   name="addressDetail"
-                  placeholder="나머지 주소를 입력해 주세요"
+                  placeholder="상세 주소를 입력해 주세요"
                   type="text"
                   height="44"
                   class="css-1quw3ub e1uzxhvi2"
@@ -71,6 +85,7 @@ export default {
     return {
       address: {
         id: "",
+        name: "",
         zonecode: "",
         area: "",
         detail: "",
@@ -170,7 +185,7 @@ label {
 }
 
 input[type="text"] {
-  width: calc(100% - 20px);
+  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;

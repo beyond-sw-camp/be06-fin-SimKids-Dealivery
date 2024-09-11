@@ -45,7 +45,10 @@
             </label>
           </div>
           <div data-testid="address-area" class="css-upe1zs e77s2kj4">
-            <p class="css-zone-code e77s2kj2">{{ address.zonecode }}</p>
+            <p class="css-zone-name e77s2kj2">
+              {{ address.name }}
+            </p>
+            <p class="css-zone-code e77s2kj2">[{{ address.zonecode }}]</p>
             <p class="css-12stxlh e77s2kj2">
               {{ address.area }} {{ address.detail }}
             </p>
@@ -88,6 +91,7 @@ export default {
       selectedAddress: null,
       currentAddress: {
         id: "1",
+        name: "집",
         zonecode: "우편번호1",
         area: "서울 동작구 신대방동",
         detail: "심키즈 하우스",
@@ -95,12 +99,14 @@ export default {
       addresses: [
         {
           id: "1",
+          name: "집",
           zonecode: "우편번호1",
           area: "서울 동작구 신대방동",
           detail: "심키즈 하우스",
         },
         {
           id: "2",
+          name: "직장",
           zonecode: "우편번호2",
           area: "서울 광진구 자양동 648-28",
           detail: "1004호",
@@ -234,6 +240,7 @@ input[type="radio"] {
 }
 
 .css-79hxr7 img {
+  cursor: pointer;
   vertical-align: middle;
 }
 
@@ -246,6 +253,7 @@ input[type="radio"] {
   line-height: 20px;
   color: rgb(51, 51, 51);
   word-break: break-all;
+  margin-top: 5px;
 }
 
 .css-d1hkno {
@@ -290,6 +298,13 @@ ul {
 
 .css-zone-code {
   font-size: 13px;
-  color: #333;
+  color: #a0a0a0;
+  margin: 5px;
+}
+
+.css-zone-name {
+  font-size: 13px;
+  color: #a0a0a0;
+  margin: 5px;
 }
 </style>

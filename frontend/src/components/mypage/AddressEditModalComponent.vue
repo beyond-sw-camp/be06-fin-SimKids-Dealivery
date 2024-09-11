@@ -8,6 +8,16 @@
           <h2 class="css-3ljxig e1k348233">배송지 수정</h2>
           <div class="css-1holwxw e1k348232">
             <div class="css-1n57dna e1uzxhvi6">
+              <div height="44" class="css-t7kbxx e1uzxhvi3">
+                <input
+                  v-model="newAddress.name"
+                  data-testid="input-box"
+                  placeholder="별칭을 입력해 주세요"
+                  type="text"
+                  height="44"
+                  class="css-1quw3ub e1uzxhvi2"
+                />
+              </div>
               <label for="addressDetail" class="css-c3g9of e1uzxhvi4">{{
                 newAddress.area
               }}</label>
@@ -15,7 +25,7 @@
                 <input
                   v-model="newAddress.detail"
                   data-testid="input-box"
-                  placeholder="나머지 주소를 입력해 주세요"
+                  placeholder="상세 주소를 입력해 주세요"
                   type="text"
                   height="44"
                   class="css-1quw3ub e1uzxhvi2"
@@ -55,6 +65,7 @@ export default {
     return {
       newAddress: {
         id: "",
+        name: "",
         zonecode: "",
         area: "",
         detail: "",
@@ -70,6 +81,7 @@ export default {
   created() {
     if (this.oldAddress) {
       this.newAddress.id = this.oldAddress.id;
+      this.newAddress.name = this.oldAddress.name;
       this.newAddress.zonecode = this.oldAddress.zonecode;
       this.newAddress.area = this.oldAddress.area;
       this.newAddress.detail = this.oldAddress.detail;
@@ -149,7 +161,7 @@ label {
 }
 
 input[type="text"] {
-  width: calc(100% - 20px);
+  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
