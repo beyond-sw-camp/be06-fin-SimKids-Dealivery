@@ -43,10 +43,13 @@
                                             <div class="placeholder css-1ofzfyp e1tjt2bn6" v-if="!content && !focused">
                                                 <div class="css-ylej1f e41kell0">
                                                     <strong>상품문의 작성 전 확인해 주세요</strong>
-                                                    <br>
+                                                    <strong>글자 수 제한</strong>
+                                                    <ul>
+                                                        <li>제목은 공백을 제외하고 최소 2자 이상, 최대 35자까지 입력해야 등록 가능합니다.</li>
+                                                        <li>내용은 공백을 제외하고 최소 5자 이상, 최대 255자까지 입력해야 등록 가능합니다.</li>
+                                                    </ul>
                                                     <strong>주문취소</strong>
                                                     <ul>
-                                                        <li>배송 단계별로 주문취소 방법이 상이합니다.</li>
                                                         <li>[결제대기] 단계 : [마이페이지 > 주문내역 > 주문내역 상세] 에서 직접 취소 가능</li>
                                                         <li>생산이 시작된 [주문완료] 이후에는 취소가 제한되는 점 고객님의 양해 부탁드립니다.</li>
                                                     </ul>
