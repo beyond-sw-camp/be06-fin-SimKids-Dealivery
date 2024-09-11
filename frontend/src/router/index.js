@@ -22,6 +22,7 @@ import MypageOrderListComponent from "@/components/mypage/MypageOrderListCompone
 import MypageQnAComponent from "@/components/mypage/MypageQnAComponent.vue";
 import MypageLikesEventComponent from "@/components/mypage/MypageLikesEventComponent.vue";
 import MyPageAddressComponent from "@/components/mypage/MypageAddressComponent.vue";
+import CompanyQnAListPage from "@/pages/company/qna/CompanyQnAListPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -117,6 +118,10 @@ const router = createRouter({
       component: CompanyOrderListPage,
     },
     {
+      path: "/qna/company/list",
+      component: CompanyQnAListPage,
+    },
+    {
       path: "/mypage",
       component: MyPage,
       redirect: "/mypage/order",
@@ -125,6 +130,7 @@ const router = createRouter({
         { path: "qna", component: MypageQnAComponent },
         { path: "likes", component: MypageLikesEventComponent },
         { path: "address", component: MyPageAddressComponent },
+
       ],
     },
   ],
