@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.company.model.dto.CompanyAuthTokenDto;
 import org.example.backend.domain.company.model.entity.CompanyAuthToken;
 import org.example.backend.domain.company.repository.CompanyAuthTokenRepository;
-import org.example.backend.global.common.BaseResponseStatus;
+import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.exception.InvalidCustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;

@@ -1,4 +1,4 @@
-package org.example.backend.global.common;
+package org.example.backend.global.common.constants;
 
 import lombok.Getter;
 

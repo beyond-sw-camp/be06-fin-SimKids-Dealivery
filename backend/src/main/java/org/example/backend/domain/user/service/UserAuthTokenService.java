@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.user.model.dto.UserAuthTokenDto;
 import org.example.backend.domain.user.model.entity.UserAuthToken;
 import org.example.backend.domain.user.repository.UserAuthTokenRepository;
-import org.example.backend.global.common.BaseResponseStatus;
+import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.exception.InvalidCustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -21,7 +21,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
 @Service
 @RequiredArgsConstructor

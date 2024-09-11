@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.backend.domain.user.model.entity.User;
+import org.example.backend.global.common.constants.Role;
 
 import java.time.LocalDateTime;
 
@@ -63,7 +64,7 @@ public class UserDto {
                     .addressDetail(this.addressDetail)
                     .emailStatus(true)
                     .status(true)
-                    .role("ROLE_USER")
+                    .role(Role.ROLE_USER.getRole())
                     .phoneNumber(this.phoneNumber)
                     .postNumber(this.postNumber)
                     .type(this.type)

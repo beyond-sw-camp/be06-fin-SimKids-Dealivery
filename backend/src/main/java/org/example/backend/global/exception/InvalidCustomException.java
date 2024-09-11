@@ -1,7 +1,7 @@
 package org.example.backend.global.exception;
 
 import lombok.Getter;
-import org.example.backend.global.common.BaseResponseStatus;
+import org.example.backend.global.common.constants.BaseResponseStatus;
 
 
 @Getter
