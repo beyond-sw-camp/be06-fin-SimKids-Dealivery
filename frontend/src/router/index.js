@@ -21,7 +21,7 @@ import CompanyOrderListPage from "../pages/company/orders/CompanyOrderListPage.v
 import MypageOrderListComponent from "@/components/mypage/MypageOrderListComponent.vue";
 import MypageQnAComponent from "@/components/mypage/MypageQnAComponent.vue";
 import MypageLikesEventComponent from "@/components/mypage/MypageLikesEventComponent.vue";
-
+import CompanyQnAListPage from "@/pages/company/qna/CompanyQnAListPage.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -118,14 +118,18 @@ const router = createRouter({
       component: CompanyOrderListPage,
     },
     {
+      path: "/qna/company/list",
+      component: CompanyQnAListPage,
+    },
+    {
       path: "/mypage",
       component: MyPage,
-      redirect: "/mypage/order",  
+      redirect: "/mypage/order",
       children: [
-        { path: "order", component: MypageOrderListComponent }, 
+        { path: "order", component: MypageOrderListComponent },
         { path: "qna", component: MypageQnAComponent },
-        { path: "likes", component: MypageLikesEventComponent }
-      ]
+        { path: "likes", component: MypageLikesEventComponent },
+      ],
     },
   ],
 });

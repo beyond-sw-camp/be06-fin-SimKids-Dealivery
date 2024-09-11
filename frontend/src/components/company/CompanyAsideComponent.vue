@@ -13,7 +13,7 @@
           <a href="/orders/company/list">주문 관리</a>
         </li>
         <li>
-          <a href="#">1:1문의 관리</a>
+          <a href="/qna/company/list">1:1문의 관리</a>
         </li>
       </ul>
     </div>
