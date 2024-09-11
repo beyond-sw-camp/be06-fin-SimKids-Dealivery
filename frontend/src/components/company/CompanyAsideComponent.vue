@@ -4,13 +4,13 @@
     <div class="inner_snb">
       <ul class="list_menu">
         <li>
-          <a href="#">게시글 등록</a>
+          <a href="/product-boards/company">게시글 등록</a>
         </li>
         <li>
-          <a href="#">게시글 조회</a>
+          <a href="/product-boards/company/list">게시글 조회</a>
         </li>
         <li>
-          <a href="#">주문 관리</a>
+          <a href="/orders/company/list">주문 관리</a>
         </li>
         <li>
           <a href="#">1:1문의 관리</a>
