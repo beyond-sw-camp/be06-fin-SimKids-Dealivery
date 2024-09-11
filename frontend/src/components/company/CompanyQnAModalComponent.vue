@@ -376,6 +376,7 @@ img {
   display: flex;
   margin-top: 16px;
   margin-bottom: 16px;
+  text-align: left;
 }
 
 .css-171jy4 {
@@ -436,11 +437,6 @@ img {
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(221, 221, 221);
   border-radius: 4px;
-}
-
-.css-4qu8li {
-  display: flex;
-  margin-top: 16px;
 }
 
 .css-f9c7pn {
@@ -585,4 +581,9 @@ textarea {
 .css-1xbd2py p {
   padding-top: 12px;
 }
+
+/* .tbl_type1 tr:first-child td[data-v-cc43e902],
+.tbl_type1 td[data-v-cc43e902] {
+  text-align: left;
+} */
 </style>
