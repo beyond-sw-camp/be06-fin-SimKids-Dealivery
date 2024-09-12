@@ -30,7 +30,7 @@ public class CompanyRegisterVerifyService {
 
 
     @Transactional
-    public Boolean verifyRegNumber(CompanyDto.CompanySignupRequest request) {
+    public void verifyRegNumber(CompanyDto.CompanySignupRequest request) {
         CompanyDto.RegNumberVerifyRequest regNumberVerifyRequest = new CompanyDto.RegNumberVerifyRequest(
                 request.getRegNumber(), request.getName(), request.getOpenedAt().toString()
         );
@@ -41,8 +41,6 @@ public class CompanyRegisterVerifyService {
         //정상이면 DB에서 값 삭제후 재 생성
         companyRegisterVerifyRepository.deleteByRegNumber(request.getRegNumber());
         companyRegisterVerifyRepository.save(request.toEntity());
-
-        return true;
     }
 
     //url로 사업자등록여부 판단하는 http 요청을 전송하는 메소드

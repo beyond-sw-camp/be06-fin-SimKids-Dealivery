@@ -25,14 +25,15 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public void isExist(String email){
+    public Boolean isExist(String email){
         Optional<Company> optionalCompany = companyRepository.findByEmail(email);
         if (optionalCompany.isPresent()){
             throw new InvalidCustomException(BaseResponseStatus.USER_SIGNUP_FAIL_ALREADY_EXIST);
         }
-    }
-    public boolean signup(CompanyDto.CompanySignupRequest request) {
-        Company newCompany = companyRepository.save(request.toEntity(passwordEncoder.encode(request.getPassword())));
+
         return true;
+    }
+    public void signup(CompanyDto.CompanySignupRequest request) {
+        Company newCompany = companyRepository.save(request.toEntity(passwordEncoder.encode(request.getPassword())));
     }
 }
