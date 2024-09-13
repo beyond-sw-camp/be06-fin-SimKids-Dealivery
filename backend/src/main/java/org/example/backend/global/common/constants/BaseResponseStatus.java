@@ -91,7 +91,11 @@ public enum BaseResponseStatus {
     ORDER_FAIL_NONIMPUID(false, 3008, "주문에 실패했습니다. 결제여부를 확인해 주세요"),
     ORDER_EDIT_FAIL(false, 3009, "주문정보 수정에 실패했습니다."),
     ORDER_FAIL_DETAIL(false, 3010, "주문 상세조회에 실패했습니다."),
-    ORDER_FAIL_NOT_FOUND(false, 3011, "주문에 실패했습니다. 해당하든 게시글을 찾을 수 없습니다."),
+    ORDER_FAIL_ENVENT_NOT_FOUND(false, 3011, "주문에 실패했습니다. 해당하든 게시글을 찾을 수 없습니다."),
+    ORDER_FAIL_NOT_FOUND(false, 3012, "해당하는 주문을 찾을 수 없습니다."),
+    ORDER_FAIL_INVALID_PRODUCT_PRICE(false, 3013, "주문에 실패했습니다. 해당하든 상품의 가격 정보가 유효하지 않습니다."),
+    ORDER_FAIL_EXPIRED_EVENT(false, 3014, "주문에 실패했습니다. 종료된 이벤트입니다."),
+
 
     // 상품게시글 기능 4000
     PRODUCT_BOARD_REGISTER_FAIL_EMPTY_TITLE(false, 4000, "상품게시글 등록에 실패했습니다. 제목을 입력해주세요"),
