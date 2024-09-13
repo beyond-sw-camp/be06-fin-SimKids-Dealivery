@@ -387,7 +387,6 @@ export default {
         thumbnailImages: this.thumbnailImages,
         detailImage: this.detailImage,
       };
-      console.log(req);
       this.companyBoardStore.createProductBoard(req);
     },
   },

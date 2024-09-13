@@ -44,8 +44,6 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
     async createProductBoard(req) {
       const formData = new FormData();
 
-      console.log(req);
-
       const boardCreateRequest = {
         title: req.title,
         discountRate: req.discountRate,
@@ -54,8 +52,6 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
         endedAt: req.endedAt,
         category: req.category,
       };
-
-      console.log(boardCreateRequest);
 
       formData.append(
         "boardCreateRequest",
