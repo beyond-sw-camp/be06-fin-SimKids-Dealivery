@@ -86,8 +86,8 @@
                     <span>{{ row.content }}<br></span>
                   </div>
                 </div>
-                <div class="css-1j49yxi e11ufodi1">
-                  <button type="button" @click="openEditModal(index)">수정</button>
+                <div class="css-1j49yxi e11ufodi1" v-if="row.answer_status !== '답변완료'">
+                  <button type=" button" @click="openEditModal(index)">수정</button>
                   <button type="button" class="css-1ankuif e11ufodi0" @click="deleteInquiry(index)">삭제</button>
                 </div>
               </div>
