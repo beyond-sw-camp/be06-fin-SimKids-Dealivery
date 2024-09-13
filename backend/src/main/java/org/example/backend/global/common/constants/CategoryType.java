@@ -5,6 +5,8 @@ import java.util.Arrays;
 import org.example.backend.global.exception.InvalidCustomException;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.Getter;
 
@@ -24,9 +26,15 @@ public enum CategoryType {
 
 	@JsonCreator
 	public static CategoryType from(String type) {
-		return Arrays.stream(values())
-			.filter(category -> category.type.equals(type))
+		System.out.println("Received category type: " + type);
+		return Arrays.stream(CategoryType.values())
+			.filter(category -> category.getCategoryType().equals(type))
 			.findFirst()
 			.orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_REGISTER_FAIL_INVALID_CATEGORY));
+	}
+
+	@JsonValue
+	public String getCategoryType() {
+		return type;
 	}
 }

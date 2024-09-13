@@ -1,5 +1,7 @@
 package org.example.backend.domain.board.product.model.dto;
 
+import org.example.backend.domain.board.product.model.entity.Product;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,5 +17,13 @@ public class ProductDto {
 		private String name;
 		private Integer price;
 		private Integer stock;
+
+		public Product toEntity() {
+			return Product.builder()
+				.name(this.name)
+				.price(this.price)
+				.stock(this.stock)
+				.build();
+		}
 	}
 }
