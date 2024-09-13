@@ -33,7 +33,6 @@ public class UserService {
     public boolean signup(UserDto.UserSignupRequest request) {
         User newUser = userRepository.save(request.toEntity(passwordEncoder.encode(request.getPassword())));
         //회원가입시 입력한 주소를 기본배송지로 배송지목록에 추가
-
         return true;
     }
 
