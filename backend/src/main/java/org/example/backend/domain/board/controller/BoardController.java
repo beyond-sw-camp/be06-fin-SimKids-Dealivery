@@ -4,6 +4,7 @@ import org.example.backend.domain.board.model.dto.BoardDto;
 import org.example.backend.domain.board.service.ProductBoardService;
 import org.example.backend.global.common.constants.BaseResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/product-boards")
 public class BoardController {
 	private final ProductBoardService productBoardService;
+	private final Integer SIZE = 10;
 
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
 	public BaseResponse create(@RequestPart("boardCreateRequest") BoardDto.BoardCreateRequest boardCreateRequest,
@@ -34,7 +36,8 @@ public class BoardController {
 
 	@Operation(summary = "판매자 회원 게시글 조회 API")
 	@GetMapping(value = "/company/list")
-	public BaseResponse list(@PageableDefault(page = 0, size = 10, sort = "idx", direction = Sort.Direction.DESC) Pageable pageable) {
+	public BaseResponse list(Integer page) {
+		Pageable pageable = PageRequest.of(page, SIZE, Sort.Direction.DESC, "idx");
 		Page<BoardDto.BoardListResponse> boardListResponses = productBoardService.list(pageable);
 		return new BaseResponse(boardListResponses);
 	}
