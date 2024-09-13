@@ -91,7 +91,7 @@
                   <button type="button" class="css-1ankuif e11ufodi0" @click="deleteInquiry(index)">삭제</button>
                 </div>
               </div>
-              <div class=" css-tnubsz e1ptpt003">
+              <div class=" css-tnubsz e1ptpt003" v-if="row.answer_status !== '답변대기'">
                 <div class="css-1n83etr e1ptpt002">
                   <div class="css-m1wgq7 e1ptpt001">
                     <span class="css-1non6l6 ey0f1wv0"></span>
