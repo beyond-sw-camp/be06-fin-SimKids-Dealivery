@@ -92,20 +92,15 @@
                 </div>
               </div>
               <div class=" css-tnubsz e1ptpt003">
-                <!-- <div class="css-1n83etr e1ptpt002">
+                <div class="css-1n83etr e1ptpt002">
                   <div class="css-m1wgq7 e1ptpt001">
                     <span class="css-1non6l6 ey0f1wv0"></span>
                   </div>
                   <div class="css-1bv2zte e1ptpt000">
-                    <div>안녕하세요. 고객님 <br><br>바쁘신 와중에 오늘도 컬리를 찾아주셔서 먼저 감사 인사드립니다.<br><br>
-                      문의하신 [[선물세트] 태우한우 1 + 실속 구이 세트 (냉장)]상품의 경우, 수령일을 포함하여 최소 [ 7 ]일 남은 제품을 보내드리고 있다는 점 안내해 드립니다.
-                      <br><br>다만, 고객님께서 수령하신 날짜를 포함하여 [ 7 ]일이나, 혹시라도 이 기준에 부합하지 못하거나 섭취 할 수 없는 상품을 수령 하셨다면 번거로우시겠지만
-                      컬리 고객행복센터를 통해 이상 여부가 확인 가능한 사진과 함께 접수를 부탁드리며, 담당자를 통하여 신속하게 도움 드릴 수 있도록 최선을 다하겠습니다.<br><br>
-                      감사합니다.<br>Better Life for All. Kurly
-                    </div>
+                    <div>{{ row.answer_content }}</div>
                   </div>
                 </div>
-                <div class="css-17g9jzg e1gk8zam0">2024.02.07</div> -->
+                <div class="css-17g9jzg e1gk8zam0">{{ row.answer_created_at }}</div>
               </div>
             </td>
           </tr>

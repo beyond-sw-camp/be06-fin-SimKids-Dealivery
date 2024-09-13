@@ -9,7 +9,8 @@ export const useQnaStore = defineStore("qna", {
         async fetchInquiries() {
             try {
                 const response = await axios.get(
-                    "https://run.mocky.io/v3/0fe8af94-1b49-48eb-8e57-e443f8d7ad83"
+                    //"https://run.mocky.io/v3/0fe8af94-1b49-48eb-8e57-e443f8d7ad83"
+                    "https://run.mocky.io/v3/b10e6691-dcfd-47e9-9bf1-e694933aae72"
                 );
                 this.inquiries = response.data
             } catch (error) {
