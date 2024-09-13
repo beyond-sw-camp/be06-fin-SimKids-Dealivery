@@ -72,7 +72,7 @@
           <tr @click="toggleInquiry(index)" class="css-atz965 e1l5ky7y9">
             <td class="css-1brd6ns e1l5ky7y8">{{ row.title }}</td>
             <td class="css-1pkqelu e1l5ky7y7">{{ maskAuthorName(row.author) }}</td>
-            <td class="css-1pkqelu e1l5ky7y6">{{ row.created_at }}</td>
+            <td class="css-1pkqelu e1l5ky7y6">{{ row.modified_at || row.created_at }}</td>
             <td class="css-bhr3cq e1l5ky7y5">{{ row.answer_status }}</td>
           </tr>
           <tr v-show="expandedInquiryIndex === index" class="css-1mvq381 e61d7mt0">
@@ -100,7 +100,7 @@
                     <div>{{ row.answer_content }}</div>
                   </div>
                 </div>
-                <div class="css-17g9jzg e1gk8zam0">{{ row.answer_created_at }}</div>
+                <div class="css-17g9jzg e1gk8zam0">{{ row.answer_modified_at || row.answer_created_at }}</div>
               </div>
             </td>
           </tr>
