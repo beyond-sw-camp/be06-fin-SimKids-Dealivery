@@ -92,7 +92,7 @@
                 </div>
               </div>
               <div class=" css-tnubsz e1ptpt003">
-                <div class="css-1n83etr e1ptpt002">
+                <!-- <div class="css-1n83etr e1ptpt002">
                   <div class="css-m1wgq7 e1ptpt001">
                     <span class="css-1non6l6 ey0f1wv0"></span>
                   </div>
@@ -105,7 +105,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="css-17g9jzg e1gk8zam0">2024.02.07</div>
+                <div class="css-17g9jzg e1gk8zam0">2024.02.07</div> -->
               </div>
             </td>
           </tr>
@@ -209,10 +209,14 @@ export default {
   },
   watch: {
     tableData(newData) {
-      this.localTableData = newData.map(item => ({
-        ...item,
-        content: item.content || '내용이 없습니다.',
-      }));
+      if (Array.isArray(newData)) {
+        this.localTableData = newData.map(item => ({
+          ...item,
+          content: item.content || '내용이 없습니다.',
+        }));
+      } else {
+        console.error("tableData is not an array:", newData);
+      }
     },
   },
   components: {

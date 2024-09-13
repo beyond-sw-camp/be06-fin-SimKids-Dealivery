@@ -7,7 +7,7 @@
           <BoardDetailThumnailComponent :thumbnails="thumbnails" />
           <BoardDetailProductInfoComponent @submitOrder="submitOrder" />
         </main>
-        <BoardDetailNavComponent :tableData="tableData" />
+        <BoardDetailNavComponent :tableData="qnaStore.inquiries" />
       </div>
     </div>
   </div>
@@ -22,10 +22,11 @@ import BoardDetailProductInfoComponent from "@/components/board/BoardDetailProdu
 import BoardDetailNavComponent from "@/components/board/BoardDetailNavComponent.vue";
 
 import { useOrderStore } from "@/stores/useOrderStore";
+import { useQnaStore } from "@/stores/useQnaStore";
 import { mapStores } from "pinia";
 
 export default {
-  name: "OrdersPage",
+  name: "BoardDetailPage",
   components: {
     HeaderComponent,
     FooterComponent,
@@ -34,11 +35,15 @@ export default {
     BoardDetailNavComponent,
   },
   computed: {
-    ...mapStores(useOrderStore),
+    ...mapStores(useOrderStore, useQnaStore),
+  },
+  async mounted() {
+    // 페이지가 로드될 때 fetchInquiries를 호출
+    await this.qnaStore.fetchInquiries();
   },
   data() {
     return {
-      activeTab: "description", // 초기에는 '상품설명' 탭이 활성화됨
+      activeTab: "description",
       thumbnails: [
         {
           src: "https://product-image.kurly.com/hdims/resize/%5E%3E720x%3E936/cropcenter/720x936/quality/85/src/product/image/c0599d4f-d892-4d43-a22d-277459e929bd.jpg",
@@ -47,22 +52,7 @@ export default {
           src: "https://pbs.twimg.com/media/EE0R8XcU0AAlbth.jpg",
         },
       ],
-      tableData: [
-        {
-          title: "배송문의드립니다",
-          content: "지금 주문하면 배송 며칠 정도 걸리나요?",
-          author: "송나경",
-          created_at: "2024.09.03",
-          answer_status: "답변완료",
-        },
-        {
-          title: "상품보관 문의드려요.",
-          content: "냉장보관해야되나요?",
-          author: "심키즈",
-          created_at: "2024.09.04",
-          answer_status: "답변완료",
-        },
-      ],
+
     };
   },
   methods: {
@@ -76,9 +66,11 @@ export default {
         console.log("[ERROR] 주문 생성 실패");
       }
     },
+
   },
 };
 </script>
+
 
 <style scoped>
 /*공통 부분*/
