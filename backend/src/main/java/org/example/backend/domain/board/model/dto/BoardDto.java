@@ -34,10 +34,6 @@ public class BoardDto {
 		private CategoryType category;
 
 		public ProductBoard toEntity(String thumbnailUrl, String detailUrl, Category category) {
-			List<Product> products = this.products.stream()
-				.map(ProductDto.Request::toEntity)
-				.collect(Collectors.toList());
-
 			Integer minimumPrice = this.products.stream()
 				.map(ProductDto.Request::getPrice)
 				.min(Integer::compareTo)
@@ -46,7 +42,6 @@ public class BoardDto {
 			return ProductBoard.builder()
 				.title(this.title)
 				.discountRate(this.discountRate)
-				.products(products)
 				.startedAt(this.startedAt)
 				.endedAt(this.endedAt)
 				.category(category)

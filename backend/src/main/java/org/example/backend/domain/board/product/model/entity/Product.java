@@ -28,6 +28,6 @@ public class Product {
 	private Integer price;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name ="productBoard_idx")
+	@JoinColumn(name ="product_board_idx")
 	private ProductBoard productBoard;
 }

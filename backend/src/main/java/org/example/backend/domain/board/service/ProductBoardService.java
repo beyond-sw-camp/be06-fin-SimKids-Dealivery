@@ -13,8 +13,12 @@ import org.example.backend.domain.board.category.repository.CategoryRepository;
 import org.example.backend.domain.board.model.dto.BoardDto;
 import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.board.model.entity.ProductThumbnailImage;
+import org.example.backend.domain.board.product.model.entity.Product;
+import org.example.backend.domain.board.product.repository.ProductRepository;
 import org.example.backend.domain.board.repository.ProductBoardRepository;
 import org.example.backend.domain.board.repository.ProductThumbnailImageRepository;
+import org.example.backend.global.common.constants.BaseResponseStatus;
+import org.example.backend.global.exception.InvalidCustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProductBoardService {
 	private final ProductBoardRepository productBoardRepository;
+	private final ProductRepository productRepository;
 	private final ProductThumbnailImageRepository productThumbnailImageRepository;
 	private final CategoryRepository categoryRepository;
 	private final AmazonS3 s3;
@@ -39,15 +44,29 @@ public class ProductBoardService {
 	public void create(BoardDto.BoardCreateRequest boardCreateRequest, MultipartFile[] productThumbnails, MultipartFile productDetail) {
 		List<String> thumbnailUrls = uploadImage(productThumbnails);
 		String productDetailUrl = uploadImage(productDetail);
+
+		ProductBoard savedProductBoard = saveProductBoard(boardCreateRequest, thumbnailUrls.get(0), productDetailUrl);
+		List<Product> savedProducts = saveProduct(boardCreateRequest);
+		List<ProductThumbnailImage> productThumbnailImages = saveProductThumbnailImage(boardCreateRequest, thumbnailUrls,savedProductBoard);
+	}
+
+	private ProductBoard saveProductBoard(BoardDto.BoardCreateRequest boardCreateRequest, String productThumbnailUrl, String productDetailUrl) {
 		Category category = categoryRepository.findByName(boardCreateRequest.getCategory().getType());
+		ProductBoard productBoard = boardCreateRequest.toEntity(productThumbnailUrl, productDetailUrl, category);
+		return productBoardRepository.save(productBoard);
+	}
 
-		ProductBoard productBoard = boardCreateRequest.toEntity(thumbnailUrls.get(0), productDetailUrl, category);
-		productBoardRepository.save(productBoard);
+	private List<Product> saveProduct(BoardDto.BoardCreateRequest boardCreateRequest) {
+		return boardCreateRequest.getProducts().stream()
+			.map(productDto -> productRepository.save(productDto.toEntity()))
+			.collect(Collectors.toList());
+	}
 
-		thumbnailUrls.forEach((url) -> {
-			ProductThumbnailImage productThumbnailImage =  boardCreateRequest.toEntity(url, productBoard);
-			productThumbnailImageRepository.save(productThumbnailImage);
-		});
+	private List<ProductThumbnailImage> saveProductThumbnailImage(BoardDto.BoardCreateRequest boardCreateRequest, List<String> thumbnailUrls, ProductBoard productBoard) {
+
+		return thumbnailUrls.stream()
+			.map(url -> productThumbnailImageRepository.save(boardCreateRequest.toEntity(url, productBoard)))
+			.collect(Collectors.toList());
 	}
 
 
@@ -86,7 +105,7 @@ public class ProductBoardService {
 		try {
 			s3.putObject(bucket, fileName, file.getInputStream(), objectMetadata);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_REGISTER_FAIL_UPLOAD_IMAGE);
 		}
 	}
 }

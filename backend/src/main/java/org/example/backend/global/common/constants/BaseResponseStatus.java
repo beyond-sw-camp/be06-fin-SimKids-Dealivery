@@ -100,8 +100,8 @@ public enum BaseResponseStatus {
     // 상품게시글 기능 4000
     PRODUCT_BOARD_REGISTER_FAIL_EMPTY_TITLE(false, 4000, "상품게시글 등록에 실패했습니다. 제목을 입력해주세요"),
     PRODUCT_BOARD_REGISTER_FAIL_INVALID_TITLE(false, 4001, "상품게시글 등록에 실패했습니다. 유효한 제목을 입력해주세요"),
-    PRODUCT_BOARD_REGISTER_FAIL_EMPTY_THUMBNAIL(false, 4002, "상품게시글 등록에 실패했습니다. 상품 이미지를 1장이상 등록해주세요"),
-    PRODUCT_BOARD_REGISTER_FAIL_EMPTY_DETAIL_IMAGE(false, 4003, "상품게시글 등록에 실패했습니다. 상품 상세 이미지를 등록해주세요"),
+    PRODUCT_BOARD_REGISTER_FAIL_EMPTY_IMAGE(false, 4002, "상품게시글 등록에 실패했습니다. 상품 이미지를 1장이상 등록해주세요"),
+    PRODUCT_BOARD_REGISTER_FAIL_UPLOAD_IMAGE(false, 4003, "상품 이미지 파일 업로드를 실패했습니다"),
     PRODUCT_BOARD_REGISTER_FAIL_EMPTY_START_TIME(false, 4010, "상품게시글 등록에 실패했습니다. 상품 판매 시작 시간을 입력해주세요"),
     PRODUCT_BOARD_REGISTER_FAIL_EMPTY_END_TIME(false, 4011, "상품게시글 등록에 실패했습니다. 상품 판매 종료 시간을 입력해주세요"),
     PRODUCT_BOARD_REGISTER_FAIL_INVALID_START_TIME(false, 4012, "상품게시글 등록에 실패했습니다. 유효한 시작 시간이 아닙니다."),
