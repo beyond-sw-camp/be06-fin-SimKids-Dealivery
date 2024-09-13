@@ -164,8 +164,6 @@ export default {
       this.showEditInquiryModal = false;
     },
     toggleInquiry(index) {
-      console.log("Current Inquiry Data:", this.localTableData[index]);
-      console.log("Expanded Inquiry Index:", this.expandedInquiryIndex);
       this.expandedInquiryIndex = this.expandedInquiryIndex === index ? null : index;
     },
     maskAuthorName(name) {
@@ -198,8 +196,15 @@ export default {
       }
     },
     deleteInquiry(index) {
-      // 문의를 삭제하는 메소드
+      // 문의를 삭제할 때, 현재 토글된 인덱스를 초기화
       this.localTableData.splice(index, 1); // 해당 인덱스의 문의 삭제
+      if (this.expandedInquiryIndex === index) {
+        // 삭제된 인덱스가 현재 토글된 인덱스라면 초기화
+        this.expandedInquiryIndex = null;
+      } else if (this.expandedInquiryIndex > index) {
+        // 삭제된 인덱스가 현재 토글된 인덱스보다 앞에 있을 경우, 인덱스 보정
+        this.expandedInquiryIndex -= 1;
+      }
     },
   },
   watch: {
