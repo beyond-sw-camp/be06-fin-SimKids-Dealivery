@@ -47,9 +47,7 @@ public class CompanyAuthTokenService {
             throw new InvalidCustomException(BaseResponseStatus.EMAIL_VERIFY_FAIL_CAN_NOT_CREATE);
         }
         //DB에 토큰 저장이 잘 되면 메일 전송
-        if (!sendEmail(request.getEmail(), token,expiredAt)){
-            throw new InvalidCustomException(BaseResponseStatus.EMAIL_VERIFY_FAIL_CAN_NOT_SEND);
-        }
+        sendEmail(request.getEmail(), token,expiredAt);
         return true;
     }
 
@@ -72,7 +70,7 @@ public class CompanyAuthTokenService {
     // 토큰 유효성 검증 메서드
     public Boolean isTokenValid(String token, String email) {
         CompanyAuthToken companyAuthToken = companyAuthTokenRepository.findByEmail(email).orElseThrow(
-                () -> new InvalidCustomException(BaseResponseStatus.USER_SIGNUP_FAIL_INVALID_EMAIL_CODE)
+            () -> new InvalidCustomException(BaseResponseStatus.USER_SIGNUP_FAIL_INVALID_EMAIL_CODE)
         );
         if (!LocalDateTime.now().isBefore(companyAuthToken.getExpiredAt())){
             throw new InvalidCustomException(BaseResponseStatus.EMAIL_VERIFY_FAIL_EXPIRED);
@@ -83,7 +81,7 @@ public class CompanyAuthTokenService {
         return true;
     }
 
-    public Boolean sendEmail(String email, String token, LocalDateTime expiredTime) throws RuntimeException {
+    public void sendEmail(String email, String token, LocalDateTime expiredTime) throws RuntimeException {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
             String formattedExpiredTime = expiredTime.format(formatter);
@@ -105,7 +103,6 @@ public class CompanyAuthTokenService {
             helper.setText(html, true); // Set HTML content
 
             mailSender.send(message);
-            return true;
         } catch (Exception e) {
             throw new InvalidCustomException(BaseResponseStatus.EMAIL_VERIFY_FAIL_CAN_NOT_SEND);
         }

@@ -77,7 +77,7 @@ public class CompanyDto {
                     .addressDetail(this.addressDetail)
                     .emailStatus(true)
                     .status(true)
-                    .reg_status(true)
+                    .regStatus(true)
                     .role(Role.ROLE_COMPANY.getRole())
                     .phoneNumber(this.phoneNumber)
                     .postNumber(this.postNumber)

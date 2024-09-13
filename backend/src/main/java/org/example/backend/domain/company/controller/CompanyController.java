@@ -30,46 +30,44 @@ public class CompanyController {
     private final CompanyRegisterVerifyService companyRegisterVerifyService;
     private final CompanyService companyService;
 
-
     @Operation(summary = "업체회원가입 API", description = SwaggerDescription.COMPANY_SIGNUP_REQUEST,
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = {
-                                    @ExampleObject(value = SwaggerExamples.COMPANY_SIGNUP_REQUEST)}
-                    )
-            ))
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @Content(
+                mediaType = "application/json",
+                examples = {
+                    @ExampleObject(value = SwaggerExamples.COMPANY_SIGNUP_REQUEST)}
+            )
+        ))
     @PostMapping("/signup")
     public BaseResponse signup(
-            @Valid @RequestBody CompanyDto.CompanySignupRequest request
-            ){
+        @Valid @RequestBody CompanyDto.CompanySignupRequest request
+    ){
         //이미 가입됐는지 체크
-        companyService.isExist(request.getEmail());
+        if (!companyService.isExist(request.getEmail())){
+            throw new InvalidCustomException(BaseResponseStatus.USER_SIGNUP_FAIL_ALREADY_EXIST);
+        }
         //이메일 인증 코드 검증
         if (!companyAuthTokenService.isTokenValid(request.getEmailCode(), request.getEmail())){
             return new BaseResponse(BaseResponseStatus.USER_SIGNUP_FAIL_INVALID_EMAIL_CODE);
         }
-        if(!companyRegisterVerifyService.verifyRegNumber(request)){
-            throw new InvalidCustomException(BaseResponseStatus.USER_SIGNUP_FAIL_UNAUTHORIZED_REG_NUMBER);
-        }
-        if (!companyService.signup(request)){
-            return new BaseResponse(BaseResponseStatus.USER_SIGNUP_FAIL);
-        }
+        companyRegisterVerifyService.verifyRegNumber(request);
+        companyService.signup(request);
+
         return new BaseResponse();
     }
 
     @Operation(summary = "업체 이메일 인증 API", description = SwaggerDescription.EMAIL_AUTH_REQUEST,
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = {
-                                    @ExampleObject(value = SwaggerExamples.EMAIL_AUTH_REQUEST)}
-                    )
-            ))
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @Content(
+                mediaType = "application/json",
+                examples = {
+                    @ExampleObject(value = SwaggerExamples.EMAIL_AUTH_REQUEST)}
+            )
+        ))
     @PostMapping("/email/verify")
     public BaseResponse emailVerify(
-            @Valid @RequestBody CompanyAuthTokenDto.CompanyEmailAuthRequest request
-            ){
+        @Valid @RequestBody CompanyAuthTokenDto.CompanyEmailAuthRequest request
+    ){
         if (!companyAuthTokenService.doAuth(request)){
             return new BaseResponse(BaseResponseStatus.FAIL);
         }

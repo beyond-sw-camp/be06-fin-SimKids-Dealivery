@@ -1,7 +1,6 @@
 package org.example.backend.domain.board.model.dto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +12,8 @@ import org.example.backend.domain.board.product.model.entity.Product;
 import org.example.backend.global.common.constants.BoardStatus;
 import org.example.backend.global.common.constants.CategoryType;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
