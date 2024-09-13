@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -31,6 +32,7 @@ public class BoardController {
 		return new BaseResponse();
 	}
 
+	@Operation(summary = "판매자 회원 게시글 조회 API")
 	@GetMapping(value = "/company/list")
 	public BaseResponse list(@PageableDefault(page = 0, size = 10, sort = "idx", direction = Sort.Direction.DESC) Pageable pageable) {
 		Page<BoardDto.BoardListResponse> boardListResponses = productBoardService.list(pageable);
