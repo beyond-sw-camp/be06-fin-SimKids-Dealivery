@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.example.backend.domain.board.category.model.entity.Category;
+import org.example.backend.domain.board.model.dto.BoardDto;
 import org.example.backend.domain.board.product.model.entity.Product;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -60,4 +61,21 @@ public class ProductBoard {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_idx")
 	private Category category;
+
+	// 판매자 게시글 목록 조회 DTO
+	public BoardDto.BoardListResponse toBoardListResponse() {
+		/* TODO
+		status 상태를 startedAt과 endedAt을 통해 자동으로 DB에 업데이트 해야함
+		추후 현재는 게시글 조회해올때마다 새로 값 세팅 해줌 -> Quartz 와 같은 스케줄링 라이브러리로 개선 예정
+		* */
+		return BoardDto.BoardListResponse.builder()
+			.idx(this.idx)
+			.productThumbnailUrl(this.productThumbnailUrl)
+			.title(this.title)
+			.category(this.category.getName())
+			.status(this.status)
+			.startedAt(this.startedAt)
+			.endedAt(this.endedAt)
+			.build();
+	}
 }

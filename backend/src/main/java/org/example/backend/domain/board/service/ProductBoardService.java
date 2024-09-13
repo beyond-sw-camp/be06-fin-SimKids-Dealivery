@@ -20,6 +20,8 @@ import org.example.backend.domain.board.repository.ProductThumbnailImageReposito
 import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.exception.InvalidCustomException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,6 +50,11 @@ public class ProductBoardService {
 		ProductBoard savedProductBoard = saveProductBoard(boardCreateRequest, thumbnailUrls.get(0), productDetailUrl);
 		List<Product> savedProducts = saveProduct(boardCreateRequest);
 		List<ProductThumbnailImage> productThumbnailImages = saveProductThumbnailImage(boardCreateRequest, thumbnailUrls,savedProductBoard);
+	}
+
+	public Page<BoardDto.BoardListResponse> list(Pageable pageable) {
+		Page<ProductBoard> productBoards = productBoardRepository.findAllWithCategory(pageable);
+		return productBoards.map(ProductBoard::toBoardListResponse);
 	}
 
 	private ProductBoard saveProductBoard(BoardDto.BoardCreateRequest boardCreateRequest, String productThumbnailUrl, String productDetailUrl) {

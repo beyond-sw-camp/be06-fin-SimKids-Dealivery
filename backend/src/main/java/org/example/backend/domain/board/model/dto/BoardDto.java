@@ -58,4 +58,18 @@ public class BoardDto {
 				.build();
 		}
 	}
+
+	@Builder
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class BoardListResponse{
+		private Long idx;
+		private String productThumbnailUrl;
+		private String title;
+		private String category;
+		private String status;
+		private LocalDateTime startedAt;
+		private LocalDateTime endedAt;
+	}
 }
