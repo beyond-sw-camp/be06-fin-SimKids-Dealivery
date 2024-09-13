@@ -1,4 +1,4 @@
-package org.example.backend.global.security.jwt.model.dto;
+package org.example.backend.global.security.custom.model.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

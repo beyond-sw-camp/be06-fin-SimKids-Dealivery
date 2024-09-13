@@ -22,10 +22,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final DeliveryRepository deliveryRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     //등록된 계정이 있는지 검사
     public void isExist(String email) {

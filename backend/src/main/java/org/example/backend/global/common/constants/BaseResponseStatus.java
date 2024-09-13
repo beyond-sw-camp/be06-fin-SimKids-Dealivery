@@ -78,6 +78,7 @@ public enum BaseResponseStatus {
     EMAIL_VERIFY_FAIL_CAN_NOT_CREATE(false, 2061, "인증코드를 생성할 수 없습니다. 이메일을 확인해주세요."),
     EMAIL_VERIFY_FAIL_CAN_NOT_SEND(false, 2061, "인증메일 발송에 실패했습니다."),
     USER_SIGNUP_FAIL_ALREADY_EXIST(false, 2062, "이미 가입된 이메일입니다."),
+    USER_LOGIN_FAIL_UNAUTHORIZED_REG_NUMBER(false, 2063, "로그인에 실패했습니다. 사업자등록번호 인증 정보가 없는 회원입니다."),
 
 
     // 주문 기능 3000

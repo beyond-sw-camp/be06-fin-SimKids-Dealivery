@@ -73,4 +73,13 @@ public class UserDto {
                     .build();
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class UserLoginRequest{
+        private String email;
+        private String password;
+    }
 }
