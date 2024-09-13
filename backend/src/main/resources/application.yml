@@ -36,7 +36,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -47,6 +47,11 @@ spring:
       enabled: true
       max-file-size: 30MB
       max-request-size: 30MB
+
+imp:
+  imp_key: ${IMP_KEY}
+  imp_secret: ${IMP_SECRET}
+
 
 cloud:
   aws:
@@ -65,5 +70,3 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
-
-
