@@ -42,7 +42,9 @@
                     <span>
                       <input
                         type="text"
+                        v-model="title"
                         class="i_text text1"
+                        @input="validateTitle"
                         placeholder="제목을 입력하세요"
                         :disabled="!isActivate"
                       />
