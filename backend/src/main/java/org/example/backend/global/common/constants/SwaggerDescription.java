@@ -12,4 +12,7 @@ public class SwaggerDescription {
     public static final String USER_SIGNUP_REQUEST = "먼저 이메일 인증 요청 후 회원가입 요청을 진행해주세요";
     //이메일 인증 설명 틀
     public static final String EMAIL_AUTH_REQUEST = "이메일을 입력하면 인증코드를 생성하여 이메일로 발송합니다. 만료기한은 10분입니다.";
+
+    //문의 등록 설명 틀
+    public static final String QNA_QUESTION_REQUEST = "문의 제목과 내용을 입력해주세요.";
 }
