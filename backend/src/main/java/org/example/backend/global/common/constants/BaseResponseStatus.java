@@ -151,6 +151,9 @@ public enum BaseResponseStatus {
     QNA_QUESTION_LIST_FAIL(false, 6018, "문의 목록 조회에 실패했습니다."),
     QNA_QUESTION_LIST_FAIL_INVALID_PRODUCT_BOARD_IDX(false, 6019, "문의 목록 조회에 실패했습니다. 잘못된 상품 게시글 ID입니다."),
 
+    QNA_USER_NOT_FOUND(false, 6020, "사용자를 찾을 수 없습니다."),
+    QNA_PRODUCT_BOARD_NOT_FOUND(false, 6021, "상품 게시글을 찾을 수 없습니다."),
+
 
     // 모든 요청 실패 9000
     FAIL(false, 9000, "요청에 실패했습니다. 관리자에게 문의해주세요."),
