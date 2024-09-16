@@ -4,6 +4,15 @@ package org.example.backend.global.security.config;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.example.backend.global.security.custom.auth.CustomAuthenticationProvider;
+import org.example.backend.global.security.custom.service.CustomUserDetailService;
+import org.example.backend.global.security.filter.JwtFilter;
+import org.example.backend.global.security.filter.LoginFilter;
+import org.example.backend.global.security.handler.AccessDeniedHandler;
+import org.example.backend.global.security.handler.LoginFailureHandler;
+import org.example.backend.global.security.jwt.JwtUtil;
+import org.example.backend.global.security.jwt.repository.CompanyRefreshTokenRepository;
+import org.example.backend.global.security.jwt.repository.UserRefreshTokenRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,9 +31,15 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final JwtUtil jwtUtil;
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private final UserRefreshTokenRepository userRefreshTokenRepository;
+    private final CompanyRefreshTokenRepository companyRefreshTokenRepository;
+    private final AccessDeniedHandler accessDeniedHandler;
+    private final LoginFailureHandler loginFailureHandler;
 
     @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -59,8 +74,20 @@ public class SecurityConfig {
                         .requestMatchers("/user/**").permitAll() // 모든 사람 접속 가능
                         .requestMatchers("/v2/api-dosc", "/swagger-resources/**", "/swagger-ui.html","/webjars/**","/swagger-ui/**" ).permitAll()
                         .anyRequest().permitAll()
+
         );
 
+
+
+        //필터추가
+        LoginFilter loginFilter = new LoginFilter(jwtUtil, authenticationManager(authenticationConfiguration)
+                ,companyRefreshTokenRepository,userRefreshTokenRepository);
+        loginFilter.setFilterProcessesUrl("/login");
+        loginFilter.setAuthenticationFailureHandler(loginFailureHandler);
+        http.exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedHandler(accessDeniedHandler));
+
+        http.addFilterBefore(new JwtFilter(jwtUtil, companyRefreshTokenRepository, userRefreshTokenRepository), LoginFilter.class);
+        http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

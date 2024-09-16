@@ -78,6 +78,7 @@ public enum BaseResponseStatus {
     EMAIL_VERIFY_FAIL_CAN_NOT_CREATE(false, 2061, "인증코드를 생성할 수 없습니다. 이메일을 확인해주세요."),
     EMAIL_VERIFY_FAIL_CAN_NOT_SEND(false, 2061, "인증메일 발송에 실패했습니다."),
     USER_SIGNUP_FAIL_ALREADY_EXIST(false, 2062, "이미 가입된 이메일입니다."),
+    USER_LOGIN_FAIL_UNAUTHORIZED_REG_NUMBER(false, 2063, "로그인에 실패했습니다. 사업자등록번호 인증 정보가 없는 회원입니다."),
 
 
     // 주문 기능 3000
@@ -91,10 +92,11 @@ public enum BaseResponseStatus {
     ORDER_FAIL_NONIMPUID(false, 3008, "주문에 실패했습니다. 결제여부를 확인해 주세요"),
     ORDER_EDIT_FAIL(false, 3009, "주문정보 수정에 실패했습니다."),
     ORDER_FAIL_DETAIL(false, 3010, "주문 상세조회에 실패했습니다."),
-    ORDER_FAIL_ENVENT_NOT_FOUND(false, 3011, "주문에 실패했습니다. 해당하든 게시글을 찾을 수 없습니다."),
+    ORDER_FAIL_EVENT_NOT_FOUND(false, 3011, "주문에 실패했습니다. 해당하든 게시글을 찾을 수 없습니다."),
     ORDER_FAIL_NOT_FOUND(false, 3012, "해당하는 주문을 찾을 수 없습니다."),
-    ORDER_FAIL_INVALID_PRODUCT_PRICE(false, 3013, "주문에 실패했습니다. 해당하든 상품의 가격 정보가 유효하지 않습니다."),
+    ORDER_FAIL_INVALID_PRODUCT_PRICE(false, 3013, "주문에 실패했습니다. 해당하는 상품의 가격 정보가 유효하지 않습니다."),
     ORDER_FAIL_EXPIRED_EVENT(false, 3014, "주문에 실패했습니다. 종료된 이벤트입니다."),
+    ORDER_FAIL_PRODUCT_NOT_FOUND(false, 3015, "주문에 실패했습니다. 해당하는 상품을 찾을 수 없습니다."),
 
 
     // 상품게시글 기능 4000
