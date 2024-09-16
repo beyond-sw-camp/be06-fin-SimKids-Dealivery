@@ -19,7 +19,7 @@ import CompanyBoardPostComponent from "@/components/company/CompanyBoardPostComp
 import HeaderComponent from "../../../components/common/HeaderComponent.vue";
 import FooterComponent from "../../../components/common/FooterComponent.vue";
 import { mapStores } from "pinia";
-import { useCompanyBoardStore } from "../../../stores/UseCompanyBoardStore";
+import { useCompanyBoardStore } from "../../../stores/useCompanyBoardStore";
 
 export default {
   name: "CompanyBoardPostPage",
@@ -54,7 +54,6 @@ export default {
 
 <style scoped>
 #content {
-  min-height: 1800px;
   min-width: 1050px;
 }
 

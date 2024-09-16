@@ -122,6 +122,24 @@
                 </td>
               </tr>
               <tr>
+                <th>할인율</th>
+                <td>
+                  <div class="discountRate">
+                    <input
+                      class="discountRate_input"
+                      :vale="discountRate"
+                      type="text"
+                      name="discountRate"
+                      min="0"
+                      max="100"
+                      placeholder="0 ~ 100"
+                      @input="onDiscountRateInput"
+                    />
+                    <p>%</p>
+                  </div>
+                </td>
+              </tr>
+              <tr>
                 <th>카테고리</th>
                 <td>
                   <div>
@@ -190,7 +208,7 @@
 import CompanyBoardModalComponent from "./CompanyBoardModalComponent.vue";
 import CompanyBoardPhotoUploadComponent from "./CompanyBoardPhotoUploadComponent.vue";
 import { mapStores } from "pinia";
-import { useCompanyBoardStore } from "../../stores/UseCompanyBoardStore";
+import { useCompanyBoardStore } from "../../stores/useCompanyBoardStore";
 
 export default {
   name: "CompanyBoardPostComponent",
@@ -211,6 +229,7 @@ export default {
       startTime: "", // 전송 데이터
       endTime: "", // 전송 데이터
       title: "", // 전송 데이터
+      discountRate: 0, // 전송 데이터
       charCount: 0,
       products: [], // 전송 데이터
       category: "", // 전송 데이터
@@ -338,12 +357,29 @@ export default {
       }
       return true;
     },
+    onDiscountRateInput(event) {
+      // 입력값에서 숫자가 아닌 문자를 모두 제거
+      let inputValue = event.target.value.replace(/[^0-9]/g, "");
+
+      // 0으로 시작하는 경우 제거
+      if (inputValue.length > 1 && inputValue[0] == "0") {
+        inputValue = inputValue.replace(/^0+/, "");
+      }
+
+      if (parseInt(inputValue) > 100) {
+        inputValue = 100;
+      }
+
+      event.target.value = inputValue;
+      this.discountRate = inputValue;
+    },
     sendData() {
       if (!this.validateAllData()) {
         return;
       }
       const req = {
         title: this.title,
+        discountRate: parseInt(this.discountRate),
         products: this.products,
         startedAt: this.startTime,
         endedAt: this.endTime,
@@ -711,5 +747,20 @@ button:disabled {
 .disabled-btn {
   border-radius: 3px;
   padding: 10px 5px;
+}
+
+.discountRate {
+  display: flex;
+  align-items: center;
+}
+
+.discountRate_input {
+  width: 100px;
+  height: 32px;
+}
+
+.discountRate p {
+  margin-left: 5px;
+  text-align: center;
 }
 </style>

@@ -455,12 +455,7 @@ export default {
         totalAmount: this.totalAmount, // 전체 결제금액에서 포인트 차감
       };
 
-      let result = await this.orderStore.makePayment(paymentData);
-      if (result) {
-        this.$router.push("/");
-      } else {
-        this.$router.push("/");
-      }
+      this.orderStore.makePayment(paymentData);
     },
     isNumber(event) {
       const char = event.key;

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, defineEmits, defineProps } from "vue";
-import { useCompanyBoardStore } from "../../stores/UseCompanyBoardStore";
+import { useCompanyBoardStore } from "../../stores/useCompanyBoardStore";
 
 const uploadedImages = ref([]);
 const previewImages = ref([]);

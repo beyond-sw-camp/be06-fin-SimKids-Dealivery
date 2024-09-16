@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-const backend = "http://localhost:8080/product-boards";
-const mockyListURL =
-  "https://run.mocky.io/v3/785219a1-65f2-45ba-875d-46e0019566ae";
+const backend = "/api/product-boards";
+// const mockyListURL =
+//   "https://run.mocky.io/v3/785219a1-65f2-45ba-875d-46e0019566ae";
 const mockyListOptionURL =
   "https://run.mocky.io/v3/3801fe56-0faf-4fe0-a765-b7e966f1af6f";
 const mockyDetailURL =
@@ -18,11 +18,17 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
       endedAt: "",
       category: "",
     },
+    currentPage: 0,
+    totalPages: 0,
   }),
   actions: {
-    async getProductBoardList() {
-      const data = await axios.get(mockyListURL);
-      return data.data;
+    async getProductBoardList(page) {
+      const response = await axios.get(backend + "/company/list", {
+        params: {
+          page: page,
+        },
+      });
+      return response.data.result;
     },
     async getProductBoardListByDateRange(option) {
       console.log(option);
@@ -44,17 +50,18 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
     async createProductBoard(req) {
       const formData = new FormData();
 
-      const productBoardRequest = {
+      const boardCreateRequest = {
         title: req.title,
+        discountRate: req.discountRate,
         products: req.products,
-        startedAt: req.startTime,
-        endedAt: req.endTime,
+        startedAt: req.startedAt,
+        endedAt: req.endedAt,
         category: req.category,
       };
 
       formData.append(
-        "productBoardRequest",
-        new Blob([JSON.stringify(productBoardRequest)], {
+        "boardCreateRequest",
+        new Blob([JSON.stringify(boardCreateRequest)], {
           type: "application/json",
         })
       );

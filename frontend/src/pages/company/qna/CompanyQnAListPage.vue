@@ -69,7 +69,6 @@ export default {
 
 <style scoped>
 #content {
-  min-height: 1800px;
   min-width: 1050px;
 }
 

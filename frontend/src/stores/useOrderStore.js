@@ -1,65 +1,89 @@
+/* global IMP */
+
 import { defineStore } from "pinia";
 import axios from "axios";
-import * as PortOne from "@portone/browser-sdk/v2";
+import router from '@/router';
 
-// const backend = "http://localhost:8080/api/orders";
+const backend = "/api/orders";
 
 export const useOrderStore = defineStore('order', {
     state: () => ({
-        orderedProducts: [], orderIdx: null, paymentId: "", boardInfo: null, orderInfo: null, paymentInfo: null
+        orderedProducts: [], orderIdx: null, paymentId: "", boardInfo: null, orderInfo: null, paymentInfo: null, customData: null
     }),
     actions: {
-        async submitOrder(orderRequest) { // 주문 생성 : 백엔드에 주문 가능하면 200 Ok, 재고 부족 or 이미 끝난 이벤트 : 400 error
-            this.boardInfo = orderRequest.boardInfo
+        async submitOrder(orderRequest) {
+            this.boardInfo = orderRequest.boardInfo;
+            this.orderedProducts = orderRequest.cartItems;
+
+            let customData = orderRequest.cartItems.map((product) => {
+                return { idx: product.value, quantity: product.quantity };
+            });
+
+            let req = {
+                boardIdx: orderRequest.boardInfo.idx,
+                orderedProducts: customData
+            };
 
             try {
-                let response = await axios.post("https://run.mocky.io/v3/bba611fe-6871-4be8-9e5d-c9251ba9090a", orderRequest, { withCredentials: true });
-                console.log("Response : " + response);
+                let response = await axios.post(backend + "/register", req, { withCredentials: true });
+                console.log("Response : " + response.data);
 
                 if (response.data.code !== 1000) {
                     return false;
                 }
 
-                this.orderedProducts = orderRequest.cartItems
-                this.orderIdx = response.data.data.orderIdx
-
+                this.orderIdx = response.data.result.orderIdx;
+                this.customData = customData
                 return true;
 
             } catch (error) {
                 alert("주문에 실패했습니다\n\n반복적인 문제 발생시 고객센터로 문의바랍니다.");
+                return false;
             }
         },
 
         async makePayment(paymentRequest) {
-            let channelKey = paymentRequest.paymentMethod === 'kakao' ? process.env.VUE_APP_KAKAOPAY_CHANNEL : process.env.VUE_APP_TOSSPAY_CHANNEL
+            let pg = paymentRequest.paymentMethod === 'kakao' ? process.env.VUE_APP_KAKAOPAY_CID : process.env.VUE_APP_TOSSPAY_MID
+            let payMethod = paymentRequest.paymentMethod === 'kakao' ? 'card' : 'tosspay'
+            let paymentId = "order_no_000" + new Date().getMilliseconds();
 
-            let paymentId = "order_no_000" + new Date().getMilliseconds()
+            IMP.init(process.env.VUE_APP_PORTONE_STORE_ID); // 상점 식별코드
+            IMP.request_pay({
+                pg: pg,
+                pay_method: payMethod,
+                merchant_uid: paymentId,
+                name: this.boardInfo.title,
+                amount: paymentRequest.totalAmount,
+                custom_data: this.customData
+            }, (rsp) => {
 
-            const response = await PortOne.requestPayment({
-                customData: this.orderRequest,
-                storeId: process.env.VUE_APP_PORTONE_STORE_ID,
-                paymentId: paymentId,
-                orderName: this.boardInfo.title,
-                totalAmount: paymentRequest.totalAmount,
-                currency: "KRW",
-                channelKey: channelKey,
-                payMethod: "EASY_PAY"
+                console.log(rsp)
+                if (paymentRequest.paymentMethod === 'kakao') {
+                    if (rsp.success) {
+                        this.paymentInfo = paymentRequest;
+                        alert("결제가 성공적으로 완료되었습니다.");
+                        router.push('/');
+
+                    } else {
+                        alert("결제 실패: " + rsp.error_msg);
+                        router.push('/');
+                    }
+
+                }
+
+                if (paymentRequest.paymentMethod === 'toss') {
+                    if (rsp.error_msg == null) {
+                        this.paymentInfo = paymentRequest;
+                        alert("결제가 성공적으로 완료되었습니다.");
+                        router.push('/');
+
+                    } else {
+                        alert("결제 실패: " + rsp.error_msg);
+                        router.push('/');
+                    }
+
+                }
             });
-
-
-            this.paymentInfo = paymentRequest
-
-            if (response.code != null) { // 결제 오류 발생
-                //TODO: backend에 refund하는 함수 호출
-                alert(response.message);
-                return false;
-            }
-
-            //TODO: backend에 결제 검증하는 함수 호출 -> paymentId 넘기고, Orderid 넘김
-            alert("주문 완료되었습니다");
-            return true;
-
-        },
+        }
     }
-
 });

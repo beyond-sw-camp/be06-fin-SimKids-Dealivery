@@ -2,7 +2,7 @@
   <HeaderComponent></HeaderComponent>
   <div id="container">
     <div id="main">
-      <div id="content">
+      <div id="content" class="content-box">
         <div class="page_aticle aticle_type2">
           <CompanyAsideComponent></CompanyAsideComponent>
           <div id="viewOrderList" class="page_section section_orderlist">
@@ -34,6 +34,41 @@
               :noDataMsg="'작성한 게시글이 없습니다.'"
               @deleteItem="deleteItem"
             />
+
+            <div class="css-rdz8z7 e82lnfz1">
+              <a class="page-unselected e82lnfz0" @click="goToPage(1)"
+                ><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
+                  alt="처음 페이지로 이동하기 아이콘" /></a
+              ><a class="page-unselected e82lnfz0" @click="prevPageGroup"
+                ><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
+                  alt="이전 페이지로 이동하기 아이콘"
+              /></a>
+
+              <a
+                v-for="pageNumber in visiblePages"
+                :key="pageNumber"
+                :class="
+                  pageNumber === currentPage
+                    ? 'page-selected e82lnfz0'
+                    : 'page-unselected e82lnfz0'
+                "
+                @click="goToPage(pageNumber)"
+              >
+                {{ pageNumber }}
+              </a>
+
+              <a class="page-unselected e82lnfz0" @click="nextPageGroup"
+                ><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
+                  alt="다음 페이지로 이동하기 아이콘" /></a
+              ><a class="page-unselected e82lnfz0" @click="goToPage(totalPages)"
+                ><img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
+                  alt="마지막 페이지로 이동하기 아이콘"
+              /></a>
+            </div>
           </div>
         </div>
       </div>
@@ -49,7 +84,7 @@ import CompanyAsideComponent from "@/components/company/CompanyAsideComponent.vu
 import DropdownMenu from "../../../components/company/DropdownMenu.vue";
 import ListCardComponent from "../../../components/company/ListCardComponent.vue";
 import { mapStores } from "pinia";
-import { useCompanyBoardStore } from "../../../stores/UseCompanyBoardStore";
+import { useCompanyBoardStore } from "../../../stores/useCompanyBoardStore";
 
 export default {
   name: "CompanyBoardListPage",
@@ -67,32 +102,66 @@ export default {
       dateOptions: ["전체기간", "1개월", "3개월", "6개월", "12개월"],
       statusOptions: ["전체보기", "진행 중", "진행 완료"],
       boards: [],
+      pagesPerGroup: 5,
+      totalPages: 1,
     };
   },
   computed: {
     ...mapStores(useCompanyBoardStore),
+    currentPage() {
+      return Number(this.$route.query.page) || 1;
+    },
+    // 시작 페이지 번호 계산
+    startPage() {
+      return (
+        Math.floor((this.currentPage - 1) / this.pagesPerGroup) *
+          this.pagesPerGroup +
+        1
+      );
+    },
+    // 끝 페이지 번호 계산
+    endPage() {
+      return Math.min(this.startPage + this.pagesPerGroup - 1, this.totalPages);
+    },
+    // 현재 보여질 페이지 번호 목록
+    visiblePages() {
+      const pageNumbers = [];
+      for (let i = this.startPage; i <= this.endPage; i++) {
+        pageNumbers.push(i);
+      }
+      return pageNumbers;
+    },
+  },
+  watch: {
+    "$route.query.page": "setBoards",
   },
   created() {
     this.setBoards();
   },
   methods: {
     async setBoards() {
-      this.boards = await this.companyBoardStore.getProductBoardList();
-    },
-    async selectDateRange(option) {
-      this.selectedDateRange = option;
-      this.boards = await this.companyBoardStore.getProductBoardListByDateRange(
-        option
+      const response = await this.companyBoardStore.getProductBoardList(
+        this.currentPage
       );
+      this.boards = response.content;
+      this.totalPages = response.totalPages;
     },
-    async selectOrderStatus(option) {
-      this.selectedOrderStatus = option;
-      this.boards =
-        await this.companyBoardStore.getProductBoardListByOrderStatus(option);
+    goToPage(pageNumber) {
+      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+        this.$router.push({ query: { page: pageNumber } });
+      } else if (pageNumber < 1) {
+        alert("첫 번째 페이지입니다.");
+      } else {
+        alert("마지막 페이지입니다.");
+      }
     },
-    // delete axios 요청 백엔드 개발 후 구현
-    deleteItem(id) {
-      this.boards = this.boards.filter((board) => board.id !== id);
+    prevPageGroup() {
+      const newPage = this.startPage - 1;
+      this.goToPage(newPage);
+    },
+    nextPageGroup() {
+      const newPage = this.endPage + 1;
+      this.goToPage(newPage);
     },
   },
 };
@@ -100,8 +169,11 @@ export default {
 
 <style scoped>
 #content {
-  min-height: 1800px;
   min-width: 1050px;
+}
+
+.content_box {
+  height: auto;
 }
 
 .page_aticle {
@@ -161,5 +233,53 @@ span {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.css-rdz8z7 {
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  margin-left: 646px;
+  margin-right: 420px;
+}
+
+.page-unselected:first-of-type {
+  border-left: 1px solid rgb(221, 221, 221);
+}
+
+.page-unselected {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-top: 1px solid rgb(221, 221, 221);
+  border-right: 1px solid rgb(221, 221, 221);
+  border-bottom: 1px solid rgb(221, 221, 221);
+  border-image: initial;
+  border-left: none;
+  cursor: pointer;
+}
+
+.page-selected {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-top: 1px solid rgb(221, 221, 221);
+  border-right: 1px solid rgb(221, 221, 221);
+  border-bottom: 1px solid rgb(221, 221, 221);
+  border-image: initial;
+  border-left: none;
+  cursor: pointer;
+  background-color: rgb(247, 247, 247);
+  color: rgb(95, 0, 128);
 }
 </style>
