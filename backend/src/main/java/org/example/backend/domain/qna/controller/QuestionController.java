@@ -35,12 +35,18 @@ public class QuestionController {
             ))
 
     @PostMapping("/create")
-    public BaseResponse create(@Valid @RequestBody QuestionDto.QuestionCreateRequest request){
+    public BaseResponse create(@RequestBody QuestionDto.QuestionCreateRequest request){
         try{
+            if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
+                throw new InvalidCustomException(BaseResponseStatus.QNA_QUESTION_FAIL_EMPTY_TITLE);
+            }
+            if (request.getContent() == null || request.getContent().trim().isEmpty()) {
+                throw new InvalidCustomException(BaseResponseStatus.QNA_QUESTION_FAIL_EMPTY_CONTENT);
+            }
             questionService.createQuestion(request);
             return new BaseResponse(BaseResponseStatus.SUCCESS);
         } catch (InvalidCustomException e){
-            return new BaseResponse(e.getStatus());
+            return new  BaseResponse(e.getStatus());
         } catch (Exception e){
             return new BaseResponse(BaseResponseStatus.FAIL);
         }
