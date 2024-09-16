@@ -7,6 +7,7 @@ import java.util.List;
 import org.example.backend.domain.board.category.model.entity.Category;
 import org.example.backend.domain.board.model.dto.BoardDto;
 import org.example.backend.domain.board.product.model.entity.Product;
+import org.example.backend.domain.qna.model.entity.Question;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -61,6 +62,9 @@ public class ProductBoard {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_idx")
 	private Category category;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productBoard")
+	private List<Question> questions = new ArrayList<>();
 
 	// 판매자 게시글 목록 조회 DTO
 	public BoardDto.BoardListResponse toBoardListResponse() {
