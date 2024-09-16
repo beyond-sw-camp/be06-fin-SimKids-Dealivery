@@ -66,9 +66,9 @@ public class CompanyController {
         ))
     @PostMapping("/email/verify")
     public BaseResponse emailVerify(
-            @Valid @RequestBody CompanyAuthTokenDto.CompanyEmailAuthRequest request
+            @Valid @RequestBody CompanyAuthTokenDto.CompanyEmailAuthRequest companyEmailAuthRequest
             ){
-        if (!companyAuthTokenService.doAuth(request)){
+        if (!companyAuthTokenService.doAuth(companyEmailAuthRequest)){
             return new BaseResponse(BaseResponseStatus.FAIL);
         }
         return new BaseResponse();

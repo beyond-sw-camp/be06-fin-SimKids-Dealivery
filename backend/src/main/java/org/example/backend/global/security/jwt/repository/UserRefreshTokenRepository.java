@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface UserRefreshTokenRepository extends JpaRepository<UserRefreshToken,Long> {
     Optional<UserRefreshToken> findByEmail(String email);
+
+    void deleteByEmail(String email);
 }
