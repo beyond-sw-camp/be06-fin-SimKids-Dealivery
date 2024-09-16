@@ -13,4 +13,8 @@ public class SwaggerDescription {
     public static final String ORDERS_REGISTER_REQUEST = "주문을 등록하는 API 입니다. 먼저 게시글과 상품을 만들고 진행해주세요.";
     //이메일 인증 설명 틀
     public static final String EMAIL_AUTH_REQUEST = "이메일을 입력하면 인증코드를 생성하여 이메일로 발송합니다. 만료기한은 10분입니다.";
+    public static final String COMPANY_PRO_BRD_LIST = "page는 1부터 입력해주세요<br>" +
+        "staus/month에 아무 값도 넣지 않으면 전체 조회입니다<br>\n" +
+        "- status: [진행 전, 진행 중, 진행 완료]<br>\n" +
+        "- month: [1, 3, 6, 12]";
 }

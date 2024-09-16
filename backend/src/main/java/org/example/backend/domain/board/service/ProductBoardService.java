@@ -52,8 +52,8 @@ public class ProductBoardService {
 		List<ProductThumbnailImage> productThumbnailImages = saveProductThumbnailImage(boardCreateRequest, thumbnailUrls,savedProductBoard);
 	}
 
-	public Page<BoardDto.BoardListResponse> list(Pageable pageable) {
-		Page<ProductBoard> productBoards = productBoardRepository.findAllWithCategory(pageable);
+	public Page<BoardDto.BoardListResponse> list(String status, Integer month, Pageable pageable) {
+		Page<ProductBoard> productBoards = productBoardRepository.search(status, month, pageable);
 		return productBoards.map(ProductBoard::toBoardListResponse);
 	}
 
