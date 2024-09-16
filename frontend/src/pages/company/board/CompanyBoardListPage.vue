@@ -241,8 +241,6 @@ span {
   justify-content: center;
   -webkit-box-align: center;
   align-items: center;
-  margin-left: 646px;
-  margin-right: 420px;
 }
 
 .page-unselected:first-of-type {
