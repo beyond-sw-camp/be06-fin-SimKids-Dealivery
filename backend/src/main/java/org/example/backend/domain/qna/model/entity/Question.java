@@ -44,12 +44,11 @@ public class Question {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "answer_status")
-    private AnswerStatus answerStatus = AnswerStatus.ANSWER_WAITING;
+    private String answerStatus = AnswerStatus.ANSWER_WAITING.getStatus();
 
     // 답변이 등록 되면 문의 상태를 "답변완료"로 변경하는 메서드
 //    public void markAsAnswered(){
-//        this.answerStatus = AnswerStatus.ANSWER_COMPLETED;
+//        this.answerStatus = AnswerStatus.ANSWER_COMPLETED.getStatus();
 //    }
 }

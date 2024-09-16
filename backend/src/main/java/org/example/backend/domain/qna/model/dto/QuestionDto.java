@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.qna.model.entity.Question;
 import org.example.backend.domain.user.model.entity.User;
+import org.example.backend.global.common.constants.AnswerStatus;
 
 import java.time.LocalDateTime;
 
@@ -35,6 +36,7 @@ public class QuestionDto {
                     .user(user)
                     .productBoard(productBoard)
                     .createdAt(LocalDateTime.now())
+                    .answerStatus(AnswerStatus.ANSWER_WAITING.getStatus())
                     .build();
         }
     }
