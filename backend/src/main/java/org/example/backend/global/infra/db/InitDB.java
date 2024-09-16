@@ -49,18 +49,47 @@ public class InitDB {
         }
 
         productBoards = new ArrayList<>();
+
         for (int i = 0; i < 10; i++) {
             productBoards.add(ProductBoard.builder()
-                    .title("[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로] " + i)
+                .title("[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로] " + i)
+                .discountRate(23)
+                .startedAt(LocalDateTime.now().plusDays(1))
+                .endedAt(LocalDateTime.now().plusDays(2))
+                .category(categories.get(i % 4))
+                .productThumbnailUrl("sample-thumnail-url")
+                .productDetailUrl("sample-detail-url")
+                .status(BoardStatus.READY.getStatus())
+                .minimumPrice(15900)
+                .build());
+        }
+
+        for (int i = 0; i < 10; i++) {
+            productBoards.add(ProductBoard.builder()
+                    .title("[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로] " + (10 + i))
                     .discountRate(23)
                     .startedAt(LocalDateTime.now())
                     .endedAt(LocalDateTime.now().plusDays(1))
-                    .category(categories.get(0))
+                    .category(categories.get(i % 4))
                     .productThumbnailUrl("sample-thumnail-url")
                     .productDetailUrl("sample-detail-url")
-                    .status(BoardStatus.READY.getStatus())
+                    .status(BoardStatus.OPEN.getStatus())
                     .minimumPrice(15900)
                     .build());
+        }
+
+        for (int i = 0; i < 10; i++) {
+            productBoards.add(ProductBoard.builder()
+                .title("[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로] " + (20 + i))
+                .discountRate(23)
+                .startedAt(LocalDateTime.now().minusMonths(i+1).plusDays(1))
+                .endedAt(LocalDateTime.now().minusMonths(i+1).plusDays(3))
+                .category(categories.get(i % 4))
+                .productThumbnailUrl("sample-thumnail-url")
+                .productDetailUrl("sample-detail-url")
+                .status(BoardStatus.DONE.getStatus())
+                .minimumPrice(15900)
+                .build());
         }
 
         productBoardRepository.saveAll(productBoards);
