@@ -100,7 +100,7 @@ export default {
       selectedDateRange: "전체기간",
       selectedOrderStatus: "전체보기",
       dateOptions: ["전체기간", "1개월", "3개월", "6개월", "12개월"],
-      statusOptions: ["전체보기", "진행 중", "진행 완료"],
+      statusOptions: ["전체보기", "진행 전", "진행 중", "진행 완료"],
       boards: [],
       pagesPerGroup: 5,
       totalPages: 1,
@@ -134,21 +134,36 @@ export default {
   },
   watch: {
     "$route.query.page": "setBoards",
+    "$route.query.dateRange": "setBoards",
+    "$route.query.orderStatus": "setBoards",
   },
   created() {
     this.setBoards();
   },
   methods: {
     async setBoards() {
-      const response = await this.companyBoardStore.getProductBoardList(
-        this.currentPage
-      );
+      // URL 쿼리 파라미터에서 값을 초기화
+      this.selectedDateRange = this.$route.query.dateRange || "전체기간";
+      this.selectedOrderStatus = this.$route.query.orderStatus || "전체보기";
+
+      const response =
+        await this.companyBoardStore.getProductBoardListWithOption(
+          this.currentPage,
+          this.selectedOrderStatus,
+          this.extractNumber(this.selectedDateRange)
+        );
       this.boards = response.content;
       this.totalPages = response.totalPages;
     },
     goToPage(pageNumber) {
       if (pageNumber >= 1 && pageNumber <= this.totalPages) {
-        this.$router.push({ query: { page: pageNumber } });
+        this.$router.push({
+          query: {
+            page: pageNumber,
+            dateRange: this.selectedDateRange,
+            orderStatus: this.selectedOrderStatus,
+          },
+        });
       } else if (pageNumber < 1) {
         alert("첫 번째 페이지입니다.");
       } else {
@@ -162,6 +177,48 @@ export default {
     nextPageGroup() {
       const newPage = this.endPage + 1;
       this.goToPage(newPage);
+    },
+    async selectDateRange(option) {
+      console.log(option);
+      this.selectedDateRange = option;
+      this.$router.push({
+        query: {
+          page: this.currentPage,
+          dateRange: this.selectedDateRange,
+          orderStatus: this.selectedOrderStatus,
+        },
+      });
+      await this.fetchBoards();
+    },
+    async selectOrderStatus(option) {
+      console.log(option);
+      this.selectedOrderStatus = option;
+      this.$router.push({
+        query: {
+          page: this.currentPage,
+          dateRange: this.selectedDateRange,
+          orderStatus: this.selectedOrderStatus,
+        },
+      });
+      await this.fetchBoards();
+    },
+    async fetchBoards() {
+      const response =
+        await this.companyBoardStore.getProductBoardListWithOption(
+          this.currentPage,
+          this.selectedOrderStatus,
+          this.extractNumber(this.selectedDateRange)
+        );
+      this.boards = response.content;
+      this.totalPages = response.totalPages;
+    },
+    extractNumber(str) {
+      if (typeof str !== "string") {
+        str = String(str);
+      }
+
+      const number = str.match(/\d+/);
+      return number ? parseInt(number[0], 10) : null;
     },
   },
 };

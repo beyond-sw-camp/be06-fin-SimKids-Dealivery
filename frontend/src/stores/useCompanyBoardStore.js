@@ -30,6 +30,18 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
       });
       return response.data.result;
     },
+    async getProductBoardListWithOption(page, status, month) {
+      status = String(status);
+      status = status.includes("전체") ? null : status;
+      const response = await axios.get(backend + "/company/list", {
+        params: {
+          page: page,
+          status: status,
+          month: month,
+        },
+      });
+      return response.data.result;
+    },
     async getProductBoardListByDateRange(option) {
       console.log(option);
       // 백엔드 개발 후 구현
