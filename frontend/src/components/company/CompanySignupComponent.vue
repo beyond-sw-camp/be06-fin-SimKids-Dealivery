@@ -10,7 +10,7 @@
                   class="css-qq9ke6 e744wfw0">*</span></label></div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
-                <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.id" data-testid="input-box"
+                <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.email" data-testid="input-box"
                     id="memberId" name="memberId" placeholder="아이디를 입력해주세요 (이메일 형식)" type="text" required=""
                     class="css-u52dqk e1uzxhvi2" maxlength="40" value="" @keydown.enter="companySignup"></div>
               </div>
@@ -175,7 +175,7 @@
             <div class="css-82a6rk e744wfw3">
               <div class="css-18n8lnws e1ke3ehm1">
                 <div class="css-1dkwuq4 e1uzxhvi6">
-                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input v-model="signupRequest.openedAt" :max="today" @keydown.enter="companySignup" data-testid="input-box" name="openedAt"
+                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input v-model="openedAt" :max="today" @keydown.enter="companySignup" data-testid="input-box" name="openedAt"
                        type="date" height="40" class="css-151eme7 e1uzxhvi2" value="">
                   </div>
                 </div>
@@ -274,7 +274,7 @@ export default {
         return {
             isClickedEmailAuth: false, confirmPassword: "",
             radioAllStatus: false, radioFirstStatus: false, radioSecondStatus: false, radioThirdStatus: false,
-            regNumberFirst: "", regNumberSecond: "", regNumberThird: "", today: "",
+            regNumberFirst: "", regNumberSecond: "", regNumberThird: "", today: "", openedAt: "",
             signupRequest: {
                 id: "",
                 password: "",
@@ -289,6 +289,9 @@ export default {
                 openedAt: "",
                 mosNumber: "",
                 type: ""
+            },
+            companyEmailAuthRequest: {
+              email: "",
             }
         }
     },
@@ -319,15 +322,19 @@ export default {
         doEmailAuth() {
             const idRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
             
-            if(!this.signupRequest.id.length > 0){
-                
+            if(!this.signupRequest.email.length > 0){
                 alert("아이디를 입력해주세요.");
-            }else if(!idRegex.test(this.signupRequest.id)){
+            }else if(!idRegex.test(this.signupRequest.email)){
                 alert("아이디는 이메일 형식이어야 합니다.")
             }else{
-                this.isClickedEmailAuth = true;
-                this.userStore.sendCompanyEmailCode(this.signupRequest.id);
+              this.companyEmailAuthRequest.email = this.signupRequest.email;
+              if(this.userStore.sendCompanyEmailCode(this.companyEmailAuthRequest)){
                 alert("이메일이 발송되었습니다.");
+                this.isClickedEmailAuth = true;
+              }else{
+                alert("이메일 발송에 실패했습니다.");
+              }
+                
             }
         },
         checkRadio(target) {
@@ -369,7 +376,7 @@ export default {
             const dateRegex = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
             const mosRegex = /^\d{4}-[가-힣]{4}-\d{4}$/;
             const fields = [
-                { value: this.signupRequest.id, message: "아이디를 입력해주세요.", regex: idRegex, regexMessage: "아이디는 이메일 형식입니다." }, 
+                { value: this.signupRequest.email, message: "아이디를 입력해주세요.", regex: idRegex, regexMessage: "아이디는 이메일 형식입니다." }, 
                 { value: this.signupRequest.emailCode, message: "이메일 인증코드를 입력해주세요.", regex: codeRegex,
                   regexMessage:"인증코드가 6자 미만이거나, 부적합한 문자(특수문자)가 포함되어 있습니다."
                 },
@@ -386,7 +393,7 @@ export default {
                 { value: this.signupRequest.regNumber, message: "사업자등록번호를 입력해주세요.", regex: regRegex,
                   regexMessage: "사업자등록번호는 -를 제외한 숫자 10자리를 입력해주세요."
                 },
-                { value: this.signupRequest.openedAt, message: "개업일자를 입력해주세요.", regex: dateRegex,
+                { value: this.openedAt, message: "개업일자를 입력해주세요.", regex: dateRegex,
                   regexMessage: "개업일자의 날짜 형식이 올바르지 않습니다. 다시 입력해주세요."
                  },
                 { value: this.signupRequest.mosNumber, message: "통신판매업신고번호를 입력해주세요.", regex: mosRegex,
@@ -421,9 +428,12 @@ export default {
             this.signupRequest.regNumber = this.regNumberFirst + this.regNumberSecond + this.regNumberThird;
             if(this.validateAll()){
               this.signupRequest.type = "inapp";
+              this.signupRequest.openedAt = this.openedAt.replace(/-/g, "");
               if(await this.userStore.companySignup(this.signupRequest)){
                 alert("회원가입에 성공했습니다. 로그인 후 서비스를 이용해주세요.");
                 this.$router.push('/auth/login');
+              }else{
+                alert("회원가입에 실패했습니다. 입력한 정보를 다시 확인해주세요");
               }
             }
             
