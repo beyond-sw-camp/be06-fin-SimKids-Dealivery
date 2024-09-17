@@ -71,9 +71,9 @@
         <tbody v-for="(row, index) in localTableData" :key="index">
           <tr @click="toggleInquiry(index)" class="css-atz965 e1l5ky7y9">
             <td class="css-1brd6ns e1l5ky7y8">{{ row.title }}</td>
-            <td class="css-1pkqelu e1l5ky7y7">{{ maskAuthorName(row.author) }}</td>
+            <td class="css-1pkqelu e1l5ky7y7">{{ maskAuthorName(row.userName) }}</td>
             <td class="css-1pkqelu e1l5ky7y6">{{ row.modified_at || row.created_at }}</td>
-            <td class="css-bhr3cq e1l5ky7y5">{{ row.answer_status }}</td>
+            <td class="css-bhr3cq e1l5ky7y5">{{ row.answerStatus }}</td>
           </tr>
           <tr v-show="expandedInquiryIndex === index" class="css-1mvq381 e61d7mt0">
             <td colspan="4">
@@ -86,12 +86,12 @@
                     <span>{{ row.content }}<br></span>
                   </div>
                 </div>
-                <div class="css-1j49yxi e11ufodi1" v-if="row.answer_status !== '답변완료'">
+                <div class="css-1j49yxi e11ufodi1" v-if="row.answerStatus !== '답변완료'">
                   <button type=" button" @click="openEditModal(index)">수정</button>
                   <button type="button" class="css-1ankuif e11ufodi0" @click="deleteInquiry(index)">삭제</button>
                 </div>
               </div>
-              <div class=" css-tnubsz e1ptpt003" v-if="row.answer_status !== '답변대기'">
+              <div class=" css-tnubsz e1ptpt003" v-if="row.answerStatus !== '답변대기'">
                 <div class="css-1n83etr e1ptpt002">
                   <div class="css-m1wgq7 e1ptpt001">
                     <span class="css-1non6l6 ey0f1wv0"></span>
@@ -162,6 +162,9 @@ export default {
       this.expandedInquiryIndex = this.expandedInquiryIndex === index ? null : index;
     },
     maskAuthorName(name) {
+      if (!name) {
+        return "익명";  // name이 undefined나 null일 경우 기본값을 반환
+      }
       if (name.length <= 2) {
         return name[0] + "*";
       }

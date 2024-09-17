@@ -66,7 +66,9 @@ export default {
         console.log("[ERROR] 주문 생성 실패");
       }
     },
-
+    addNewInquiry(registeredInquiry) {
+      this.qnaStore.addNewInquiry(registeredInquiry);
+    }
   },
 };
 </script>

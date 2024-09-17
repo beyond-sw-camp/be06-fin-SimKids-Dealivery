@@ -89,6 +89,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     name: "QnaRegisterModalComponent",
     props: {
@@ -126,18 +128,29 @@ export default {
         closeModal() {
             this.$emit("close");
         },
-        submitForm() {
+        async submitForm() {
             const newInquiry = {
                 title: this.subject,
                 content: this.content,
-                author: "익명", // 실제로는 로그인된 사용자의 이름을 사용
-                created_at: new Date().toISOString().split("T")[0],
-                answer_status: "답변대기",
+                userIdx: 1, // 추후 로그인된 사용자 IDX 사용
+                productBoardIdx: 1, // 추후 해당 게시글 IDX 사용
             };
 
-            // 부모 컴포넌트에 데이터 전달
-            this.$emit("submit", newInquiry);
-            this.closeModal();
+            try {
+                const response = await axios.post('/api/qna/question/create', newInquiry);
+
+                if (response.data.isSuccess) {
+                    const registeredInquiry = response.data.result; // 응답으로 받은 데이터를 registeredInquiry에 저장
+
+                    // 부모 컴포넌트에 데이터 전달
+                    this.$emit("submit", registeredInquiry);
+                    this.closeModal();
+                } else {
+                    console.error("문의 등록 실패:", response.data.message);
+                }
+            } catch (error) {
+                console.error("문의 등록 중 오류 발생:", error);
+            }
         },
         limitContentLength() {
             if (this.content.length > 255) {
