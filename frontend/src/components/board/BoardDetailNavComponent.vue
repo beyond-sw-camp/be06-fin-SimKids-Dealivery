@@ -56,7 +56,13 @@
     <!-- 문의 하기 리스트 section -->
     <div class="css-30tvht eewa3w91" v-show="activeTab === 'inquiries'">
       <div class="css-17juoyc eewa3w90">
-        <button class="css-mhrz8m e4nu7ef3" type="button" width="120" height="40" @click="openNewInquiryModal">
+        <button
+          class="css-mhrz8m e4nu7ef3"
+          type="button"
+          width="120"
+          height="40"
+          @click="openNewInquiryModal"
+        >
           <span class="css-nytqmg e4nu7ef1">문의하기</span>
         </button>
       </div>
@@ -64,7 +70,8 @@
         <strong class="css-83ihkd eu9pqlw3">상품 문의</strong>
         <ul class="css-8sw7yu eu9pqlw2">
           <li class="css-owypta eu9pqlw1">
-            상품에 대한 문의를 남기는 공간입니다. 해당 게시판의 성격과 다른 글은 사전동의 없이 담당 게시판으로 이동될 수 있습니다.
+            상품에 대한 문의를 남기는 공간입니다. 해당 게시판의 성격과 다른 글은
+            사전동의 없이 담당 게시판으로 이동될 수 있습니다.
           </li>
         </ul>
       </div>
@@ -78,20 +85,21 @@
           </tr>
         </thead>
 
-
-
         <tbody v-for="(row, index) in localTableData" :key="index">
           <tr @click="toggleInquiry(index)" class="css-atz965 e1l5ky7y9">
             <td class="css-1brd6ns e1l5ky7y8">{{ row.title }}</td>
-            <td class="css-1pkqelu e1l5ky7y7">{{ maskAuthorName(row.author) }}</td>
-<<<<<<< HEAD
-            <td class="css-1pkqelu e1l5ky7y6">{{ row.created_at }}</td>
-=======
-            <td class="css-1pkqelu e1l5ky7y6">{{ row.modified_at || row.created_at }}</td>
->>>>>>> 91d9b35893d19ca95ff1f6a5b529803c7cc8e9b0
+            <td class="css-1pkqelu e1l5ky7y7">
+              {{ maskAuthorName(row.author) }}
+            </td>
+            <td class="css-1pkqelu e1l5ky7y6">
+              {{ row.modified_at || row.created_at }}
+            </td>
             <td class="css-bhr3cq e1l5ky7y5">{{ row.answer_status }}</td>
           </tr>
-          <tr v-show="expandedInquiryIndex === index" class="css-1mvq381 e61d7mt0">
+          <tr
+            v-show="expandedInquiryIndex === index"
+            class="css-1mvq381 e61d7mt0"
+          >
             <td colspan="4">
               <div class="css-tnubsz e1ptpt003">
                 <div class="css-1n83etr e1ptpt002">
@@ -99,45 +107,40 @@
                     <span class="css-z93ubq e1kayg9i0"></span>
                   </div>
                   <div class="css-1bv2zte e1ptpt000">
-                    <span>{{ row.content }}<br></span>
+                    <span>{{ row.content }}<br /></span>
                   </div>
                 </div>
-<<<<<<< HEAD
-                <div class="css-1j49yxi e11ufodi1">
-                  <button type="button" @click="openEditModal(index)">수정</button>
-                  <button type="button" class="css-1ankuif e11ufodi0" @click="deleteInquiry(index)">삭제</button>
+                <div
+                  class="css-1j49yxi e11ufodi1"
+                  v-if="row.answer_status !== '답변완료'"
+                >
+                  <button type=" button" @click="openEditModal(index)">
+                    수정
+                  </button>
+                  <button
+                    type="button"
+                    class="css-1ankuif e11ufodi0"
+                    @click="deleteInquiry(index)"
+                  >
+                    삭제
+                  </button>
                 </div>
               </div>
-              <div class=" css-tnubsz e1ptpt003">
-=======
-                <div class="css-1j49yxi e11ufodi1" v-if="row.answer_status !== '답변완료'">
-                  <button type=" button" @click="openEditModal(index)">수정</button>
-                  <button type="button" class="css-1ankuif e11ufodi0" @click="deleteInquiry(index)">삭제</button>
-                </div>
-              </div>
-              <div class=" css-tnubsz e1ptpt003" v-if="row.answer_status !== '답변대기'">
->>>>>>> 91d9b35893d19ca95ff1f6a5b529803c7cc8e9b0
+              <div
+                class="css-tnubsz e1ptpt003"
+                v-if="row.answer_status !== '답변대기'"
+              >
                 <div class="css-1n83etr e1ptpt002">
                   <div class="css-m1wgq7 e1ptpt001">
                     <span class="css-1non6l6 ey0f1wv0"></span>
                   </div>
                   <div class="css-1bv2zte e1ptpt000">
-<<<<<<< HEAD
-                    <div>안녕하세요. 고객님 <br><br>바쁘신 와중에 오늘도 컬리를 찾아주셔서 먼저 감사 인사드립니다.<br><br>
-                      문의하신 [[선물세트] 태우한우 1 + 실속 구이 세트 (냉장)]상품의 경우, 수령일을 포함하여 최소 [ 7 ]일 남은 제품을 보내드리고 있다는 점 안내해 드립니다.
-                      <br><br>다만, 고객님께서 수령하신 날짜를 포함하여 [ 7 ]일이나, 혹시라도 이 기준에 부합하지 못하거나 섭취 할 수 없는 상품을 수령 하셨다면 번거로우시겠지만
-                      컬리 고객행복센터를 통해 이상 여부가 확인 가능한 사진과 함께 접수를 부탁드리며, 담당자를 통하여 신속하게 도움 드릴 수 있도록 최선을 다하겠습니다.<br><br>
-                      감사합니다.<br>Better Life for All. Kurly
-                    </div>
-                  </div>
-                </div>
-                <div class="css-17g9jzg e1gk8zam0">2024.02.07</div>
-=======
                     <div>{{ row.answer_content }}</div>
                   </div>
                 </div>
-                <div class="css-17g9jzg e1gk8zam0">{{ row.answer_modified_at || row.answer_created_at }}</div>
->>>>>>> 91d9b35893d19ca95ff1f6a5b529803c7cc8e9b0
+                <div class="css-17g9jzg e1gk8zam0">
+                  {{ row.answer_modified_at || row.answer_created_at }}
+                </div>
               </div>
             </td>
           </tr>
@@ -146,11 +149,20 @@
     </div>
 
     <!-- 새 문의 작성 모달 -->
-    <QnaRegisterModalComponent v-if="showNewInquiryModal" @close="closeModal" @submit="addNewInquiry" />
+    <QnaRegisterModalComponent
+      v-if="showNewInquiryModal"
+      @close="closeModal"
+      @submit="addNewInquiry"
+    />
 
     <!-- 수정 모달 -->
-    <QnaRegisterModalComponent v-if="showEditInquiryModal" :initialSubject="selectedInquiry.title"
-      :initialContent="selectedInquiry.content" @close="closeModal" @submit="updateInquiry" />
+    <QnaRegisterModalComponent
+      v-if="showEditInquiryModal"
+      :initialSubject="selectedInquiry.title"
+      :initialContent="selectedInquiry.content"
+      @close="closeModal"
+      @submit="updateInquiry"
+    />
   </div>
 </template>
 
@@ -196,12 +208,8 @@ export default {
       this.showEditInquiryModal = false;
     },
     toggleInquiry(index) {
-<<<<<<< HEAD
-      console.log("Current Inquiry Data:", this.localTableData[index]);
-      console.log("Expanded Inquiry Index:", this.expandedInquiryIndex);
-=======
->>>>>>> 91d9b35893d19ca95ff1f6a5b529803c7cc8e9b0
-      this.expandedInquiryIndex = this.expandedInquiryIndex === index ? null : index;
+      this.expandedInquiryIndex =
+        this.expandedInquiryIndex === index ? null : index;
     },
     maskAuthorName(name) {
       if (name.length <= 2) {
@@ -210,10 +218,10 @@ export default {
       return name[0] + "*".repeat(name.length - 2) + name[name.length - 1];
     },
     afterEnter(el) {
-      el.style.maxHeight = 'none';
+      el.style.maxHeight = "none";
     },
     afterLeave(el) {
-      el.style.maxHeight = '0px';
+      el.style.maxHeight = "0px";
     },
     addNewInquiry(newInquiry) {
       newInquiry.created_at = new Date().toISOString().split("T")[0];
@@ -232,15 +240,6 @@ export default {
         this.closeModal();
       }
     },
-<<<<<<< HEAD
-  },
-  watch: {
-    tableData(newData) {
-      this.localTableData = newData.map(item => ({
-        ...item,
-        content: item.content || '내용이 없습니다.',
-      }));
-=======
     deleteInquiry(index) {
       // 문의를 삭제할 때, 현재 토글된 인덱스를 초기화
       this.localTableData.splice(index, 1); // 해당 인덱스의 문의 삭제
@@ -256,14 +255,13 @@ export default {
   watch: {
     tableData(newData) {
       if (Array.isArray(newData)) {
-        this.localTableData = newData.map(item => ({
+        this.localTableData = newData.map((item) => ({
           ...item,
-          content: item.content || '내용이 없습니다.',
+          content: item.content || "내용이 없습니다.",
         }));
       } else {
         console.error("tableData is not an array:", newData);
       }
->>>>>>> 91d9b35893d19ca95ff1f6a5b529803c7cc8e9b0
     },
   },
   components: {
@@ -271,7 +269,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 button {

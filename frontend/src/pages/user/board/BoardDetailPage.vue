@@ -52,26 +52,6 @@ export default {
           src: "https://pbs.twimg.com/media/EE0R8XcU0AAlbth.jpg",
         },
       ],
-<<<<<<< HEAD
-      tableData: [
-        {
-          title: "배송문의드립니다",
-          content: "지금 주문하면 배송 며칠 정도 걸리나요?",
-          author: "송나경",
-          created_at: "2024.09.03",
-          answer_status: "답변완료",
-        },
-        {
-          title: "상품보관 문의드려요.",
-          content: "냉장보관해야되나요?",
-          author: "심키즈",
-          created_at: "2024.09.04",
-          answer_status: "답변완료",
-        },
-      ],
-=======
-
->>>>>>> 91d9b35893d19ca95ff1f6a5b529803c7cc8e9b0
     };
   },
   methods: {
@@ -85,15 +65,10 @@ export default {
         console.log("[ERROR] 주문 생성 실패");
       }
     },
-
   },
 };
 </script>
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 91d9b35893d19ca95ff1f6a5b529803c7cc8e9b0
 <style scoped>
 /*공통 부분*/
 * {

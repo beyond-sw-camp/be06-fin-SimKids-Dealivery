@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      id: null,
+      idx: null,
       data: null,
     };
   },
@@ -39,14 +39,14 @@ export default {
     ...mapStores(useCompanyBoardStore),
   },
   created() {
-    if (this.$route.params.id) {
-      this.id = this.$route.params.id;
+    if (this.$route.params.idx) {
+      this.idx = this.$route.params.idx;
       this.data = this.getBoardDetail();
     }
   },
   methods: {
     async getBoardDetail() {
-      this.data = await this.companyBoardStore.getProductBoardDetail();
+      this.data = await this.companyBoardStore.getProductBoardDetail(this.idx);
     },
   },
 };

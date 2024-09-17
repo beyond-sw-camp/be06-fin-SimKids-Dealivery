@@ -134,6 +134,7 @@
                       max="100"
                       placeholder="0 ~ 100"
                       @input="onDiscountRateInput"
+                      :disabled="!isActivate"
                     />
                     <p>%</p>
                   </div>
@@ -239,7 +240,7 @@ export default {
     };
   },
   created() {
-    if (this.$route.params.id !== undefined) {
+    if (this.$route.params.idx !== undefined) {
       this.isActivate = false;
     }
   },
