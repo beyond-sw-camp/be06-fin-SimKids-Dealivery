@@ -1,7 +1,7 @@
 <template>
   <div class="css-18tunez ei8jk451">
     <div class="css-1i60c0e extobua1">
-      <h3 class="css-i804ml extobua0">{{ selectedCategory }}</h3>
+      <h3 class="css-i804ml extobua0">{{ currentCategory }}</h3>
       <!-- <ul class="css-raoddi erzdokb2">
                 <li v-for="(category, index) in categories" :key="index" class="css-1h52dri erzdokb1"
                     @click="handleClick(index)">
@@ -82,6 +82,7 @@ export default {
   },
   watch: {
     "$route.query.page": "getList",
+    "$route.query.category": "getList",
   },
   created() {
     this.getList();
@@ -91,6 +92,9 @@ export default {
     ...mapStores(useBoardStore),
     currentPage() {
       return Number(this.$route.query.page) || 1;
+    },
+    currentCategory() {
+      return String(this.$route.query.category);
     },
     // 시작 페이지 번호 계산
     startPage() {
@@ -115,7 +119,11 @@ export default {
   },
   methods: {
     async getList() {
-      this.dataList = await this.boardStore.getList(this.currentPage, null);
+      this.dataList = await this.boardStore.getList(
+        this.currentPage,
+        this.currentCategory,
+        null
+      );
       this.totalPages = this.dataList.totalPages;
       this.dataList = this.dataList.content;
     },

@@ -22,9 +22,11 @@ export const useBoardStore = defineStore("board", {
     totalPages: 0,
   }),
   actions: {
-    async getList(page, search) {
+    async getList(page, category, search) {
       const params = { page: page };
-      if (search) {
+      if (category && category != "전체") {
+        params.search = category;
+      } else if (search) {
         params.search = search;
       }
       const response = await axios.get(backend + "/list", {
