@@ -21,12 +21,14 @@
         alt=""
       />
       <div class="css-wjc4eh ea4dcdh2">
-        <p class="css-11z2gb8 ea4dcdh4">[심키즈 컴퍼니]</p>
-        <h2 class="css-sdq6iq ea4dcdh3">클래식 분위기의 아우터</h2>
-        <p class="origin-price">10,000원</p>
+        <p class="css-11z2gb8 ea4dcdh4">[{{ data.companyName }}]</p>
+        <h2 class="css-sdq6iq ea4dcdh3">{{ data.title }}</h2>
+        <p class="origin-price">{{ data.price.toLocaleString() }}원</p>
         <div class="discount">
-          <span class="discount-rate">50%</span>
-          <span class="discount-price">5,000원</span>
+          <span class="discount-rate">{{ data.discountRate }}%</span>
+          <span class="discount-price"
+            >{{ discountPrice.toLocaleString() }}원</span
+          >
         </div>
         <div class="css-1712oqi e1lvum6h0">
           <div class="css-1d3r7u5 e1lvum6h3" style="left: 93.4524%">
@@ -38,8 +40,9 @@
           <div class="css-e335q6 e1lvum6h1" style="width: 93.4524%"></div>
         </div>
         <span class="css-islv3w etq0wqf0"
-          ><span class="css-12f2xxd etq0wqf1">D-1</span>2024.08.23. ~
-          09.06.</span
+          ><span class="css-12f2xxd etq0wqf1">D-1</span
+          >{{ getStartDate(data.startedAt) }} ~
+          {{ getEndDate(data.endedAt) }}</span
         >
       </div>
     </a>
@@ -50,10 +53,40 @@ export default {
   name: "ProductBoardListCardComponent",
   data() {
     return {
+      discountPrice: 0,
       isLiked: false,
     };
   },
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+  },
+  created() {
+    this.discountPrice = this.getDiscountPrice();
+  },
   methods: {
+    getDiscountPrice() {
+      return this.data.price * (1 - this.data.discountRate / 100);
+    },
+    getStartDate(dateTime) {
+      dateTime = new Date(dateTime);
+      const year = dateTime.getFullYear();
+      const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+      const day = String(dateTime.getDate()).padStart(2, "0");
+      const hours = String(dateTime.getHours()).padStart(2, "0");
+      const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+      return `${year}.${month}.${day}. ${hours}:${minutes}`;
+    },
+    getEndDate(dateTime) {
+      dateTime = new Date(dateTime);
+      const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+      const day = String(dateTime.getDate()).padStart(2, "0");
+      const hours = String(dateTime.getHours()).padStart(2, "0");
+      const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+      return `${month}.${day}. ${hours}:${minutes}`;
+    },
     like() {
       console.log(this.isLiked);
       this.isLiked = !this.isLiked;

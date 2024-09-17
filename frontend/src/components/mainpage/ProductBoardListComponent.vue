@@ -16,8 +16,9 @@
     <div class="css-uh04a1 e19n19480">
       <ul class="css-6q2h7w e19n19481">
         <ProductBoardListCardComponent
-          v-for="n in num"
-          :key="n"
+          v-for="data in dataList"
+          :key="data.idx"
+          :data="data"
         ></ProductBoardListCardComponent>
       </ul>
       <div class="css-rdz8z7 e82lnfz1">
@@ -60,6 +61,8 @@
 
 <script>
 import ProductBoardListCardComponent from "./ProductBoardListCardComponent.vue";
+import { useBoardStore } from "@/stores/useBoardStore";
+import { mapStores } from "pinia";
 export default {
   name: "ProductBoardListComponent",
   data() {
@@ -72,15 +75,18 @@ export default {
       totalPages: 100,
       pages: [],
       pagesPerGroup: 5,
+      dataList: null,
     };
   },
   components: {
     ProductBoardListCardComponent,
   },
   created() {
+    this.getList();
     this.selectedCategory = this.categories[0];
   },
   computed: {
+    ...mapStores(useBoardStore),
     // 시작 페이지 번호 계산
     startPage() {
       return (
@@ -103,6 +109,10 @@ export default {
     },
   },
   methods: {
+    async getList() {
+      this.dataList = await this.boardStore.getList(1, null);
+      console.log(this.dataList);
+    },
     handleClick(index) {
       this.selectedIndex = index;
       this.selectedCategory = this.categories[index];

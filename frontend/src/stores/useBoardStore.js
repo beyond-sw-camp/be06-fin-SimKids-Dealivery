@@ -22,6 +22,18 @@ export const useBoardStore = defineStore("board", {
     totalPages: 0,
   }),
   actions: {
+    async getList(page, search) {
+      const params = { page: page };
+      if (search) {
+        params.search = search;
+      }
+      const response = await axios.get(backend + "/list", {
+        params: params,
+      });
+      return response.data.result.content;
+    },
+
+    // --------- 판매자 ---------
     async getProductBoardList(page) {
       const response = await axios.get(backend + "/company/list", {
         params: {

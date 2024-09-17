@@ -5,18 +5,15 @@
 </template>
 
 <script>
-import HeaderComponent from '@/components/common/HeaderComponent.vue';
-import FooterComponent from '@/components/common/FooterComponent.vue';
+import HeaderComponent from "@/components/common/HeaderComponent.vue";
+import FooterComponent from "@/components/common/FooterComponent.vue";
 
 export default {
-  name: 'BoardListPage',
-  components:{
+  name: "BoardListPage",
+  components: {
     HeaderComponent,
-    FooterComponent
-  }
-
-}
+    FooterComponent,
+  },
+};
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>
