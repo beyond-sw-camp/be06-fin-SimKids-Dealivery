@@ -1,6 +1,6 @@
 <script setup>
 import { ref, defineEmits, defineProps } from "vue";
-import { useCompanyBoardStore } from "../../stores/useCompanyBoardStore";
+import { useBoardStore } from "../../stores/useBoardStore";
 
 const uploadedImages = ref([]);
 const previewImages = ref([]);
@@ -16,7 +16,7 @@ const props = defineProps({
   },
 });
 
-const companyBoardStore = useCompanyBoardStore();
+const boardStore = useBoardStore();
 
 // 이미지 업로드 처리 함수
 const handleImageUpload = (event) => {
@@ -24,8 +24,8 @@ const handleImageUpload = (event) => {
   // 이미지 개수 제한 체크
   if (
     (props.maxImages === 8
-      ? companyBoardStore.getThumbnailUrlSize()
-      : companyBoardStore.getDetailUrlSize()) +
+      ? boardStore.getThumbnailUrlSize()
+      : boardStore.getDetailUrlSize()) +
       uploadedImages.value.length +
       files.length >
     props.maxImages
@@ -58,12 +58,12 @@ const handleImageUpload = (event) => {
 
 const removeImageUrl = (url) => {
   if (props.maxImages === 8) {
-    const thumbnailArr = companyBoardStore
+    const thumbnailArr = boardStore
       .getThumbnailUrls()
       .filter((elem) => elem !== url);
-    companyBoardStore.setThumbnailUrls(thumbnailArr);
+    boardStore.setThumbnailUrls(thumbnailArr);
   } else if (props.maxImages === 1) {
-    companyBoardStore.resetDetailUrl();
+    boardStore.resetDetailUrl();
   }
 };
 
@@ -101,8 +101,8 @@ const removeImage = (id) => {
         <p class="image-cnt">
           {{
             (props.maxImages === 8
-              ? companyBoardStore.getThumbnailUrlSize()
-              : companyBoardStore.getDetailUrlSize()) + uploadedImages.length
+              ? boardStore.getThumbnailUrlSize()
+              : boardStore.getDetailUrlSize()) + uploadedImages.length
           }}
           /
           {{ props.maxImages }}
@@ -112,8 +112,8 @@ const removeImage = (id) => {
     <div class="image-preview-container">
       <div
         v-for="image in props.maxImages === 8
-          ? companyBoardStore.getThumbnailUrls()
-          : companyBoardStore.getDetailUrl()"
+          ? boardStore.getThumbnailUrls()
+          : boardStore.getDetailUrl()"
         :key="image"
         class="image-preview"
       >

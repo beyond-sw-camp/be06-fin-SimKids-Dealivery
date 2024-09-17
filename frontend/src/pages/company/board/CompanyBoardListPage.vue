@@ -84,7 +84,7 @@ import CompanyAsideComponent from "@/components/company/CompanyAsideComponent.vu
 import DropdownMenu from "../../../components/company/DropdownMenu.vue";
 import ListCardComponent from "../../../components/company/ListCardComponent.vue";
 import { mapStores } from "pinia";
-import { useCompanyBoardStore } from "../../../stores/useCompanyBoardStore";
+import { useBoardStore } from "../../../stores/useBoardStore";
 
 export default {
   name: "CompanyBoardListPage",
@@ -107,7 +107,7 @@ export default {
     };
   },
   computed: {
-    ...mapStores(useCompanyBoardStore),
+    ...mapStores(useBoardStore),
     currentPage() {
       return Number(this.$route.query.page) || 1;
     },
@@ -146,12 +146,11 @@ export default {
       this.selectedDateRange = this.$route.query.dateRange || "전체기간";
       this.selectedOrderStatus = this.$route.query.orderStatus || "전체보기";
 
-      const response =
-        await this.companyBoardStore.getProductBoardListWithOption(
-          this.currentPage,
-          this.selectedOrderStatus,
-          this.extractNumber(this.selectedDateRange)
-        );
+      const response = await this.boardStore.getProductBoardListWithOption(
+        this.currentPage,
+        this.selectedOrderStatus,
+        this.extractNumber(this.selectedDateRange)
+      );
       this.boards = response.content;
       this.totalPages = response.totalPages;
     },
@@ -203,12 +202,11 @@ export default {
       await this.fetchBoards();
     },
     async fetchBoards() {
-      const response =
-        await this.companyBoardStore.getProductBoardListWithOption(
-          this.currentPage,
-          this.selectedOrderStatus,
-          this.extractNumber(this.selectedDateRange)
-        );
+      const response = await this.boardStore.getProductBoardListWithOption(
+        this.currentPage,
+        this.selectedOrderStatus,
+        this.extractNumber(this.selectedDateRange)
+      );
       this.boards = response.content;
       this.totalPages = response.totalPages;
     },

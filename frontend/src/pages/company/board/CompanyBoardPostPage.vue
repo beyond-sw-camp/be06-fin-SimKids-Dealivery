@@ -19,7 +19,7 @@ import CompanyBoardPostComponent from "@/components/company/CompanyBoardPostComp
 import HeaderComponent from "../../../components/common/HeaderComponent.vue";
 import FooterComponent from "../../../components/common/FooterComponent.vue";
 import { mapStores } from "pinia";
-import { useCompanyBoardStore } from "../../../stores/useCompanyBoardStore";
+import { useBoardStore } from "../../../stores/useBoardStore";
 
 export default {
   name: "CompanyBoardPostPage",
@@ -36,7 +36,7 @@ export default {
     };
   },
   computed: {
-    ...mapStores(useCompanyBoardStore),
+    ...mapStores(useBoardStore),
   },
   created() {
     if (this.$route.params.id) {
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     async getBoardDetail() {
-      this.data = await this.companyBoardStore.getProductBoardDetail();
+      this.data = await this.boardStore.getProductBoardDetail();
     },
   },
 };

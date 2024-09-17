@@ -208,7 +208,7 @@
 import CompanyBoardModalComponent from "./CompanyBoardModalComponent.vue";
 import CompanyBoardPhotoUploadComponent from "./CompanyBoardPhotoUploadComponent.vue";
 import { mapStores } from "pinia";
-import { useCompanyBoardStore } from "../../stores/useCompanyBoardStore";
+import { useBoardStore } from "../../stores/useBoardStore";
 
 export default {
   name: "CompanyBoardPostComponent",
@@ -244,7 +244,7 @@ export default {
     }
   },
   computed: {
-    ...mapStores(useCompanyBoardStore),
+    ...mapStores(useBoardStore),
   },
   watch: {
     data: {
@@ -387,7 +387,7 @@ export default {
         thumbnailImages: this.thumbnailImages,
         detailImage: this.detailImage,
       };
-      this.companyBoardStore.createProductBoard(req);
+      this.boardStore.createProductBoard(req);
     },
   },
 };

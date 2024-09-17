@@ -8,7 +8,7 @@ const mockyListOptionURL =
 const mockyDetailURL =
   "https://run.mocky.io/v3/fa2ac704-87e9-4d42-b2c0-ddda0e9d2861";
 
-export const useCompanyBoardStore = defineStore("companyBoard", {
+export const useBoardStore = defineStore("board", {
   state: () => ({
     boardData: null,
     productBoardReq: {
