@@ -71,7 +71,6 @@ export default {
       categories: ["의류", "가전제품", "가구", "식품", "스포츠", "악기"],
       selectedIndex: 0,
       selectedCategory: null,
-      currentPage: 1,
       totalPages: 100,
       pages: [],
       pagesPerGroup: 5,
@@ -81,12 +80,18 @@ export default {
   components: {
     ProductBoardListCardComponent,
   },
+  watch: {
+    "$route.query.page": "getList",
+  },
   created() {
     this.getList();
     this.selectedCategory = this.categories[0];
   },
   computed: {
     ...mapStores(useBoardStore),
+    currentPage() {
+      return Number(this.$route.query.page) || 1;
+    },
     // 시작 페이지 번호 계산
     startPage() {
       return (
@@ -110,8 +115,9 @@ export default {
   },
   methods: {
     async getList() {
-      this.dataList = await this.boardStore.getList(1, null);
-      console.log(this.dataList);
+      this.dataList = await this.boardStore.getList(this.currentPage, null);
+      this.totalPages = this.dataList.totalPages;
+      this.dataList = this.dataList.content;
     },
     handleClick(index) {
       this.selectedIndex = index;
@@ -119,27 +125,27 @@ export default {
     },
     // 특정 페이지로 이동
     goToPage(pageNumber) {
-      if (pageNumber >= 1) {
-        this.currentPage = pageNumber;
-      } else {
+      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+        this.$router.push({
+          query: {
+            page: pageNumber,
+          },
+        });
+      } else if (pageNumber < 1) {
         alert("첫 번째 페이지입니다.");
+      } else {
+        alert("마지막 페이지입니다.");
       }
     },
     // 이전 페이지 그룹으로 이동
     prevPageGroup() {
-      if (this.startPage > 1) {
-        this.currentPage = this.startPage - 1;
-      } else {
-        alert("첫번째 페이지입니다.");
-      }
+      const newPage = this.startPage - 1;
+      this.goToPage(newPage);
     },
     // 다음 페이지 그룹으로 이동
     nextPageGroup() {
-      if (this.endPage < this.totalPages) {
-        this.currentPage = this.endPage + 1;
-      } else {
-        alert("마지막 페이지입니다.");
-      }
+      const newPage = this.endPage + 1;
+      this.goToPage(newPage);
     },
   },
 };

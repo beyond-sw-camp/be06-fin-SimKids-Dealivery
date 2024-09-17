@@ -30,7 +30,7 @@ export const useBoardStore = defineStore("board", {
       const response = await axios.get(backend + "/list", {
         params: params,
       });
-      return response.data.result.content;
+      return response.data.result;
     },
 
     // --------- 판매자 ---------
