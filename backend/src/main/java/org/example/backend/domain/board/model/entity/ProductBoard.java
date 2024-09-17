@@ -88,8 +88,8 @@ public class ProductBoard {
 			.title(this.title)
 			.discountRate(this.discountRate)
 			.products(products)
-			.startedAt(this.startedAt)
-			.endedAt(this.endedAt)
+			.startedAt(this.startedAt.withSecond(0).withNano(0))
+			.endedAt(this.endedAt.withSecond(0).withNano(0))
 			.category(this.category.getName())
 			.build();
 	}
