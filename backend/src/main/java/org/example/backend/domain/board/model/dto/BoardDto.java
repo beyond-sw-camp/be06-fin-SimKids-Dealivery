@@ -72,4 +72,19 @@ public class BoardDto {
 		private LocalDateTime startedAt;
 		private LocalDateTime endedAt;
 	}
+
+	@Builder
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class BoardDetailResponse{
+		private List<String> productThumbnailUrls;
+		private String productDetailUrl;
+		private String title;
+		private Integer discountRate;
+		private List<ProductDto.Request> products;
+		private LocalDateTime startedAt;
+		private LocalDateTime endedAt;
+		private String category;
+	}
 }

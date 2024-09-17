@@ -1,6 +1,7 @@
 package org.example.backend.domain.board.product.model.entity;
 
 import org.example.backend.domain.board.model.entity.ProductBoard;
+import org.example.backend.domain.board.product.model.dto.ProductDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,4 +35,12 @@ public class Product {
     public void decreaseStock(Integer quantity) {
 		this.stock -= quantity;
     }
+
+	public ProductDto.Request toDto() {
+		return ProductDto.Request.builder()
+			.name(this.name)
+			.stock(this.stock)
+			.price(this.price)
+			.build();
+	}
 }

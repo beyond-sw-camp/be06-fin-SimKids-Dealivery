@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import org.example.backend.domain.board.category.repository.CategoryRepository;
 import org.example.backend.domain.board.model.dto.BoardDto;
 import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.board.model.entity.ProductThumbnailImage;
+import org.example.backend.domain.board.product.model.dto.ProductDto;
 import org.example.backend.domain.board.product.model.entity.Product;
 import org.example.backend.domain.board.product.repository.ProductRepository;
 import org.example.backend.domain.board.repository.ProductBoardRepository;
@@ -48,13 +50,31 @@ public class ProductBoardService {
 		String productDetailUrl = uploadImage(productDetail);
 
 		ProductBoard savedProductBoard = saveProductBoard(boardCreateRequest, thumbnailUrls.get(0), productDetailUrl);
-		List<Product> savedProducts = saveProduct(boardCreateRequest);
-		List<ProductThumbnailImage> productThumbnailImages = saveProductThumbnailImage(boardCreateRequest, thumbnailUrls,savedProductBoard);
+		List<Product> savedProducts = saveProduct(boardCreateRequest, savedProductBoard);
+		List<ProductThumbnailImage> productThumbnailImages = saveProductThumbnailImage(boardCreateRequest, thumbnailUrls, savedProductBoard);
 	}
 
 	public Page<BoardDto.BoardListResponse> list(String status, Integer month, Pageable pageable) {
 		Page<ProductBoard> productBoards = productBoardRepository.search(status, month, pageable);
 		return productBoards.map(ProductBoard::toBoardListResponse);
+	}
+
+	public BoardDto.BoardDetailResponse getDetail(Long idx) {
+		Optional<ProductBoard> optionalProductBoard = productBoardRepository.findByIdx(idx);
+		Optional<List<ProductThumbnailImage>> optionalProductThumbnailImages = productThumbnailImageRepository.findAllByProductBoardIdx(idx);
+		Optional<List<Product>> optionalProducts = productRepository.findAllByProductBoardIdx(idx);
+
+		if (optionalProductBoard.isPresent() && optionalProductThumbnailImages.isPresent() && optionalProducts.isPresent()) {
+			ProductBoard productBoard = optionalProductBoard.get();
+			List<String> productThumbnailUrls = optionalProductThumbnailImages.get().stream()
+				.map(ProductThumbnailImage::getProductThumbnailUrl)
+				.toList();
+			List<ProductDto.Request> products = optionalProducts.get().stream()
+				.map(Product::toDto)
+				.toList();
+			return productBoard.toBoardDetailResponse(productThumbnailUrls, products);
+		}
+		return null;
 	}
 
 	private ProductBoard saveProductBoard(BoardDto.BoardCreateRequest boardCreateRequest, String productThumbnailUrl, String productDetailUrl) {
@@ -63,9 +83,9 @@ public class ProductBoardService {
 		return productBoardRepository.save(productBoard);
 	}
 
-	private List<Product> saveProduct(BoardDto.BoardCreateRequest boardCreateRequest) {
+	private List<Product> saveProduct(BoardDto.BoardCreateRequest boardCreateRequest, ProductBoard productBoard) {
 		return boardCreateRequest.getProducts().stream()
-			.map(productDto -> productRepository.save(productDto.toEntity()))
+			.map(productDto -> productRepository.save(productDto.toEntity(productBoard)))
 			.collect(Collectors.toList());
 	}
 
