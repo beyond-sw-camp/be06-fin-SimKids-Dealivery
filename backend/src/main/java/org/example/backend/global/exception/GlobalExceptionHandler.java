@@ -2,6 +2,7 @@ package org.example.backend.global.exception;
 
 
 import org.example.backend.global.common.constants.BaseResponse;
+import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -25,13 +26,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<BaseResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST).body(new BaseResponse("잘못된 요청입니다."));
+                .status(HttpStatus.BAD_REQUEST).body(new BaseResponse(BaseResponseStatus.FAIL));
     }
 
     //DB작업 실패시 (제약조건 위반) 예외 핸들러
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<BaseResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         return ResponseEntity
-                .status(HttpStatus.CONFLICT).body(new BaseResponse("이미 존재하는 값이 포함되어있습니다."));
+                .status(HttpStatus.CONFLICT).body(new BaseResponse(BaseResponseStatus.FAIL));
     }
 }

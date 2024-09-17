@@ -1,25 +1,26 @@
-package org.example.backend.global.security.jwt.model.dto;
+package org.example.backend.global.security.custom.model.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.domain.user.model.entity.User;
+import org.example.backend.domain.company.model.entity.Company;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
 @RequiredArgsConstructor
-public class CustomUserDetails implements UserDetails {
-    private final User user;
+public class CustomCompanyDetails implements UserDetails {
+    private final Company company;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
         collection.add(new GrantedAuthority(){
             @Override
             public String getAuthority() {
-                return user.getRole();
+                return company.getRole();
             }
         });
         return collection;
@@ -27,14 +28,15 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return company.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return company.getEmail();
     }
     public Long getIdx() {
-        return user.getIdx();
+        return company.getIdx();
     }
+
 }
