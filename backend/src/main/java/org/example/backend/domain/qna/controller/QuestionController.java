@@ -43,12 +43,14 @@ public class QuestionController {
             if (request.getContent() == null || request.getContent().trim().isEmpty()) {
                 throw new InvalidCustomException(BaseResponseStatus.QNA_QUESTION_FAIL_EMPTY_CONTENT);
             }
-            questionService.createQuestion(request);
-            return new BaseResponse(BaseResponseStatus.SUCCESS);
+            // 문의 등록 후 사용자 이름, 날짜, 답변 상태를 함께 응답
+            QuestionDto.QuestionCreateResponse response = questionService.createQuestion(request);
+            return new BaseResponse<>(response);
+
         } catch (InvalidCustomException e){
-            return new  BaseResponse(e.getStatus());
+            return new  BaseResponse<>(e.getStatus());
         } catch (Exception e){
-            return new BaseResponse(BaseResponseStatus.FAIL);
+            return new BaseResponse<>(BaseResponseStatus.FAIL);
         }
     }
 }

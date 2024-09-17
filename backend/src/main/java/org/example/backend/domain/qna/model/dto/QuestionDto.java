@@ -45,7 +45,7 @@ public class QuestionDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class QuestionListResponse{
+    public static class QuestionCreateResponse{
         private Long idx;
         private String title;
         private String content;
