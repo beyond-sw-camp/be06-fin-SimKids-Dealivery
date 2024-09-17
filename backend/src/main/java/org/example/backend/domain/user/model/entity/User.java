@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.example.backend.domain.likes.model.entity.Likes;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -48,6 +50,6 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Delivery> deliveryList;
 
-
-
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Likes> likes;
 }

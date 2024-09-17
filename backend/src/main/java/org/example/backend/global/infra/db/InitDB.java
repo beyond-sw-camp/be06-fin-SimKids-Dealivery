@@ -14,6 +14,8 @@ import org.example.backend.domain.board.product.model.entity.Product;
 import org.example.backend.domain.board.product.repository.ProductRepository;
 import org.example.backend.domain.board.repository.ProductBoardRepository;
 import org.example.backend.domain.board.repository.ProductThumbnailImageRepository;
+import org.example.backend.domain.company.model.entity.Company;
+import org.example.backend.domain.company.repository.CompanyRepository;
 import org.example.backend.global.common.constants.BoardStatus;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +27,7 @@ public class InitDB {
     private final ProductBoardRepository productBoardRepository;
     private final ProductRepository productRepository;
     private final ProductThumbnailImageRepository productThumbnailImageRepository;
+    private final CompanyRepository companyRepository;
 
     private List<Category> categories;
     private List<ProductBoard> productBoards;
@@ -52,6 +55,17 @@ public class InitDB {
             return;
         }
 
+        Company company = companyRepository.save(Company.builder()
+            .idx(1L)
+            .email("company@gmail.com")
+            .address("address1")
+            .addressDetail("addressDetail1")
+            .emailStatus(true)
+            .mosNumber("mosNumber")
+            .companyName("심키즈 업체")
+            .regStatus(true)
+            .build());
+
         productBoards = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
@@ -65,21 +79,23 @@ public class InitDB {
                 .productDetailUrl("sample-detail-url")
                 .status(BoardStatus.READY.getStatus())
                 .minimumPrice(15900)
+                .company(company)
                 .build());
         }
 
         for (int i = 0; i < 10; i++) {
             productBoards.add(ProductBoard.builder()
-                    .title("[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로] " + (10 + i))
-                    .discountRate(23)
-                    .startedAt(LocalDateTime.now())
-                    .endedAt(LocalDateTime.now().plusDays(1))
-                    .category(categories.get(i % 4))
-                    .productThumbnailUrl("sample-thumnail-url")
-                    .productDetailUrl("sample-detail-url")
-                    .status(BoardStatus.OPEN.getStatus())
-                    .minimumPrice(15900)
-                    .build());
+                .title("[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로] " + (10 + i))
+                .discountRate(23)
+                .startedAt(LocalDateTime.now())
+                .endedAt(LocalDateTime.now().plusDays(1))
+                .category(categories.get(i % 4))
+                .productThumbnailUrl("sample-thumnail-url")
+                .productDetailUrl("sample-detail-url")
+                .status(BoardStatus.OPEN.getStatus())
+                .minimumPrice(15900)
+                .company(company)
+                .build());
         }
 
         for (int i = 0; i < 10; i++) {
@@ -93,6 +109,7 @@ public class InitDB {
                 .productDetailUrl("sample-detail-url")
                 .status(BoardStatus.DONE.getStatus())
                 .minimumPrice(15900)
+                .company(company)
                 .build());
         }
 

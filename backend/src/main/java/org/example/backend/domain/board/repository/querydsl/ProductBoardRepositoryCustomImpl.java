@@ -6,12 +6,14 @@ import java.util.List;
 import org.example.backend.domain.board.category.model.entity.QCategory;
 import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.board.model.entity.QProductBoard;
+import org.example.backend.domain.company.model.entity.QCompany;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
@@ -21,15 +23,34 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 	private final JPAQueryFactory queryFactory;
 	private final QProductBoard qProductBoard;
 	private final QCategory qCategory;
+	private final QCompany qCompany;
+
 	public ProductBoardRepositoryCustomImpl(EntityManager em) {
 		this.queryFactory = new JPAQueryFactory(em);
 		this.qProductBoard = QProductBoard.productBoard;
 		this.qCategory = QCategory.category;
+		this.qCompany = QCompany.company;
 	}
 
+	@Override
+	public Page<ProductBoard> search(String search, Pageable pageable) {
+		JPQLQuery<ProductBoard> query = queryFactory
+			.selectFrom(qProductBoard)
+			.leftJoin(qProductBoard.category, qCategory).fetchJoin()
+			.leftJoin(qProductBoard.company, qCompany).fetchJoin()
+			.where(containsCategory(search).or(containsCompanyName(search)).or(containsTitle(search)));
+		int count = query.fetch().size();
+
+		List<ProductBoard> result = query
+			.orderBy(qProductBoard.idx.desc())
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+		return new PageImpl<>(result, pageable, count);
+	}
 
 	@Override
-	public Page<ProductBoard> search(String status, Integer month, Pageable pageable) {
+	public Page<ProductBoard> companySearch(String status, Integer month, Pageable pageable) {
 		BooleanExpression whereQuery = getQuery(status, month);
 		List<ProductBoard> result = queryFactory
 			.selectFrom(qProductBoard)
@@ -40,11 +61,23 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		Long total = queryFactory.selectFrom(qProductBoard)
+		int total = queryFactory.selectFrom(qProductBoard)
 			.where(whereQuery)
-			.fetchCount();
+			.fetch().size();
 
 		return new PageImpl<>(result, pageable, total);
+	}
+
+	private BooleanExpression containsCategory(String search) {
+		return search == null ? null : qProductBoard.category.name.containsIgnoreCase(search);
+	}
+
+	private BooleanExpression containsCompanyName(String search) {
+		return search == null ? null : qProductBoard.company.companyName.containsIgnoreCase(search);
+	}
+
+	private BooleanExpression containsTitle(String search) {
+		return search == null ? null : qProductBoard.title.containsIgnoreCase(search);
 	}
 
 	private BooleanExpression getQuery(String status, Integer month) {

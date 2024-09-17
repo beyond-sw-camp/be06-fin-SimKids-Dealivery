@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.user.model.entity.Delivery;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -54,5 +57,8 @@ public class Company {
     private String mosNumber;
 
     private Boolean regStatus;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "company")
+    private List<ProductBoard> productBoards = new ArrayList<>();
 
 }

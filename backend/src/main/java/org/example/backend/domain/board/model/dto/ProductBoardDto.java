@@ -2,24 +2,20 @@ package org.example.backend.domain.board.model.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.example.backend.domain.board.category.model.entity.Category;
 import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.board.model.entity.ProductThumbnailImage;
 import org.example.backend.domain.board.product.model.dto.ProductDto;
-import org.example.backend.domain.board.product.model.entity.Product;
 import org.example.backend.global.common.constants.BoardStatus;
 import org.example.backend.global.common.constants.CategoryType;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class BoardDto {
+public class ProductBoardDto {
 
 	@Builder
 	@Getter
@@ -63,7 +59,7 @@ public class BoardDto {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class BoardListResponse{
+	public static class CompanyBoardListResponse {
 		private Long idx;
 		private String productThumbnailUrl;
 		private String title;
@@ -71,6 +67,23 @@ public class BoardDto {
 		private String status;
 		private LocalDateTime startedAt;
 		private LocalDateTime endedAt;
+	}
+
+	@Builder
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class BoardListResponse {
+		private Long idx;
+		private String productThumbnailUrl;
+		private String title;
+		private String companyName;
+		private String status;
+		private LocalDateTime startedAt;
+		private LocalDateTime endedAt;
+		private Boolean likes;
+		private Integer price;
+		private Integer discountRate;
 	}
 
 	@Builder
