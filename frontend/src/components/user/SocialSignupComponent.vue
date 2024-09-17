@@ -27,7 +27,7 @@
                     required=""
                     class="css-u52dqk e1uzxhvi2"
                     value=""
-                    @keydown.enter="userSignup"
+                    @keydown.enter="socialSignup"
                   />
                 </div>
               </div>
@@ -122,7 +122,7 @@
                     required=""
                     class="css-u52dqk e1uzxhvi2"
                     value=""
-                    @keydown.enter="userSignup"
+                    @keydown.enter="socialSignup"
                   />
                 </div>
               </div>
@@ -263,6 +263,7 @@
 <script>
 import { useUserStore } from "@/stores/useUserStore";
 import { mapStores } from "pinia";
+import { Validator } from "@/util/validator";
 export default {
   name: "SocialSignupComponent",
   data() {
@@ -344,57 +345,40 @@ export default {
       }
     },
     validateAll() {
-      const idRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      const phoneRegex = /^\d{3}-\d{4}-\d{4}$/;
+       try {
+          // 이메일 검증
+          new Validator(this.socialSignupRequest.email, "아이디를 입력해주세요.")
+            .isNotEmpty()
+            .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "아이디는 이메일 형식입니다.");
 
-      const fields = [
-        {
-          value: this.socialSignupRequest.email,
-          message: "아이디를 입력해주세요.",
-          regex: idRegex,
-          regexMessage: "아이디는 이메일 형식입니다.",
-        },
-        { value: this.socialSignupRequest.name, message: "이름을 입력해주세요." },
-        {
-          value: this.socialSignupRequest.phoneNumber,
-          message: "휴대폰 번호를 입력해주세요.",
-          regex: phoneRegex,
-          regexMessage: "-를 포함한 휴대폰번호 11자리를 입력해주세요.",
-        },
-        { value: this.socialSignupRequest.address, message: "주소를 입력해주세요." },
-        {
-          value: this.socialSignupRequest.postNumber,
-          message: "우편번호를 입력해주세요.",
-        },
-        {
-          value: this.socialSignupRequest.addressDetail,
-          message: "상세주소를 입력해주세요.",
-        },
-      ];
+          // 이름 검증
+          new Validator(this.socialSignupRequest.name, "이름을 입력해주세요.").isNotEmpty();
 
-      // 검증 로직
-      for (const field of fields) {
-        if (field.value.trim().length === 0) {
-          alert(field.message);
+          // 휴대폰 번호 검증
+          new Validator(this.socialSignupRequest.phoneNumber, "휴대폰 번호를 입력해주세요.")
+            .isNotEmpty()
+            .matches(/^\d{3}-\d{4}-\d{4}$/, "-를 포함한 휴대폰번호 11자리를 입력해주세요.");
+
+          // 주소 검증
+          new Validator(this.socialSignupRequest.address, "주소를 입력해주세요.").isNotEmpty();
+
+          // 우편번호 검증
+          new Validator(this.socialSignupRequest.postNumber, "우편번호를 입력해주세요.").isNotEmpty();
+
+          // 상세주소 검증
+          new Validator(this.socialSignupRequest.addressDetail, "상세주소를 입력해주세요.").isNotEmpty();
+
+          // 약관 동의 확인
+          if (!this.radioAllStatus) {
+            alert("필수 약관에 동의해주세요");
+            return false;
+          }
+
+          return true; // 모든 검증 통과
+        } catch (error) {
+          alert(error.message);
           return false;
         }
-        if (field.regex && !field.regex.test(field.value)) {
-          alert(field.regexMessage);
-          return false;
-        }
-      }
-
-      if (this.socialSignupRequest.password !== this.confirmPassword) {
-        alert("비밀번호와 확인 비밀번호가 일치하지 않습니다.");
-        return false;
-      }
-
-      if (!this.radioAllStatus) {
-        alert("필수 약관에 동의해주세요");
-        return false;
-      }
-
-      return true; // 모든 검증 통과
     },
     async socialSignup() {
       if (this.validateAll()) {

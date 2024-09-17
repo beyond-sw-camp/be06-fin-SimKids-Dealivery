@@ -47,14 +47,28 @@ export const useUserStore = defineStore("user", {
           request,
           { withCredentials: true }
         );
-        if (response.data.code !== 1000 || response.status !== 200) {
+        if (response.data.code === 2062){
+          alert("이미 가입된 이메일입니다.");
           return false;
-        } else {
-          return true;
         }
+        if (response.data.code === 2058) {
+          alert("이메일 인증 코드가 일치하지 않거나 유효하지 않습니다.")
+          return false;
+        }
+        if (response.data.code === 2059){
+          alert("이메일 인증 코드가 만료되었습니다. 다시 인증 메일을 발송해주세요");
+          return false;
+        }
+        if(response.data.code === 2060){
+          alert("이메일 인증 코드가 일치하지 않습니다.");
+          return false;
+        }
+
+        return true;
+      
       } catch (error) {
         alert(
-          "회원가입에 실패했습니다. 입력한 정보를 다시 한 번 확인해주세요.\n\n반복적인 문제 발생시 고객센터로 문의바랍니다."
+          "회원가입 요청에 실패했습니다. 입력한 정보를 다시 한 번 확인해주세요.\n\n반복적인 문제 발생시 고객센터로 문의바랍니다."
         );
         return false;
       }
@@ -67,14 +81,30 @@ export const useUserStore = defineStore("user", {
           request,
           { withCredentials: true }
         );
-        if (response.data.code !== 1000 || response.status !== 200) {
+        if (response.data.code === 2062){
+          alert("이미 가입된 이메일입니다.");
           return false;
-        } else {
-          return true;
         }
+        if (response.data.code === 2058) {
+          alert("이메일 인증 코드가 일치하지 않거나 유효하지 않습니다.")
+          return false;
+        }
+        if (response.data.code === 2059){
+          alert("이메일 인증 코드가 만료되었습니다. 다시 인증 메일을 발송해주세요");
+          return false;
+        }
+        if(response.data.code === 2060){
+          alert("이메일 인증 코드가 일치하지 않습니다.");
+          return false;
+        }
+        if(response.data.code === 2049){
+          alert("사업자등록번호 인증에 실패했습니다.");
+          return false;
+        }
+        return true;
       } catch (error) {
         alert(
-          "회원가입 요청에 실패했습니다. 입력한 정보를 다시 한 번 확인해주세요.\n\n반복적인 문제 발생시 고객센터로 문의바랍니다."
+          "이미 등록된 사업자 정보입니다."
         );
         return false;
       }
