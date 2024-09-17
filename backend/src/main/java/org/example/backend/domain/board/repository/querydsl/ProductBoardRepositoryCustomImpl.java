@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -38,7 +39,7 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 			.selectFrom(qProductBoard)
 			.leftJoin(qProductBoard.category, qCategory).fetchJoin()
 			.leftJoin(qProductBoard.company, qCompany).fetchJoin()
-			.where(containsCategory(search).or(containsCompanyName(search)).or(containsTitle(search)));
+			.where(getCondition(search));
 		int count = query.fetch().size();
 
 		List<ProductBoard> result = query
@@ -51,21 +52,42 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 
 	@Override
 	public Page<ProductBoard> companySearch(String status, Integer month, Pageable pageable) {
-		BooleanExpression whereQuery = getQuery(status, month);
+		BooleanExpression condition = getCondition(status, month);
 		List<ProductBoard> result = queryFactory
 			.selectFrom(qProductBoard)
 			.leftJoin(qProductBoard.category, qCategory).fetchJoin()
-			.where(whereQuery)
+			.where(condition)
 			.orderBy(qProductBoard.idx.desc())
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
 
 		int total = queryFactory.selectFrom(qProductBoard)
-			.where(whereQuery)
+			.where(condition)
 			.fetch().size();
 
 		return new PageImpl<>(result, pageable, total);
+	}
+
+	// ---- 전체 사용자 ----
+	private BooleanBuilder getCondition(String search) {
+		BooleanBuilder booleanBuilder = new BooleanBuilder();
+		BooleanExpression categoryCondition = containsCategory(search);
+		BooleanExpression companyCondition = containsCompanyName(search);
+		BooleanExpression titleCondition = containsTitle(search);
+		if (categoryCondition == null && companyCondition == null && titleCondition == null) {
+			return null;
+		}
+		if (categoryCondition != null) {
+			booleanBuilder.or(categoryCondition);
+		}
+		if (companyCondition != null) {
+			booleanBuilder.or(companyCondition);
+		}
+		if (titleCondition != null) {
+			booleanBuilder.or(titleCondition);
+		}
+		return booleanBuilder;
 	}
 
 	private BooleanExpression containsCategory(String search) {
@@ -80,7 +102,9 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 		return search == null ? null : qProductBoard.title.containsIgnoreCase(search);
 	}
 
-	private BooleanExpression getQuery(String status, Integer month) {
+
+	// ---- 판매자 사용자 ----
+	private BooleanExpression getCondition(String status, Integer month) {
 		BooleanExpression statusExpression = statusEquals(status);
 		BooleanExpression monthExpression = monthEquals(month);
 
