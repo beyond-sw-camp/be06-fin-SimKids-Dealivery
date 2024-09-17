@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.board.category.model.entity.Category;
 import org.example.backend.domain.board.category.repository.CategoryRepository;
 import org.example.backend.domain.board.model.entity.ProductBoard;
+import org.example.backend.domain.board.model.entity.ProductThumbnailImage;
 import org.example.backend.domain.board.product.model.entity.Product;
 import org.example.backend.domain.board.product.repository.ProductRepository;
 import org.example.backend.domain.board.repository.ProductBoardRepository;
+import org.example.backend.domain.board.repository.ProductThumbnailImageRepository;
 import org.example.backend.global.common.constants.BoardStatus;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +24,7 @@ public class InitDB {
     private final CategoryRepository categoryRepository;
     private final ProductBoardRepository productBoardRepository;
     private final ProductRepository productRepository;
+    private final ProductThumbnailImageRepository productThumbnailImageRepository;
 
     private List<Category> categories;
     private List<ProductBoard> productBoards;
@@ -32,6 +35,7 @@ public class InitDB {
         insertCategory();
         insertBoard();
         insertProduct();
+        insertProductThumbnailImage();
     }
     private void insertCategory(){
         List<String> categoryNames = List.of("식품", "의류", "뷰티", "라이프");
@@ -113,5 +117,21 @@ public class InitDB {
         }
 
         productRepository.saveAll(products);
+    }
+
+    private void insertProductThumbnailImage() {
+        if (productBoards.size() == 0) {
+            return;
+        }
+        List<ProductThumbnailImage> productThumbnailImages = new ArrayList<>();
+        for (int i=0; i < productBoards.size(); i++) {
+            for (int j = 0; j < 2; j++) {
+                productThumbnailImages.add(ProductThumbnailImage.builder()
+                    .productThumbnailUrl("sample-thumnail-url" + i)
+                    .productBoard(productBoards.get(i))
+                    .build());
+            }
+        }
+        productThumbnailImageRepository.saveAll(productThumbnailImages);
     }
 }
