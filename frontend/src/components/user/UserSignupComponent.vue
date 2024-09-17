@@ -353,18 +353,19 @@ export default {
         // 이메일 검증
         new Validator(this.signupRequest.email, "아이디를 입력해주세요.")
           .isNotEmpty()
+          .matches(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/, "아이디는 이메일 형식입니다.");          
+
+        // 이메일 인증 코드 검증
+        new Validator(this.signupRequest.emailCode, "이메일 인증코드를 입력해주세요.").isNotEmpty();
+        
+        console.log(this.signupRequest.password);
+        // 비밀번호 검증
+        new Validator(this.signupRequest.password, "비밀번호를 입력해주세요.")
+          .isNotEmpty()
           .matches(
             /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
             "비밀번호는 다음의 조건을 모두 만족해야 합니다:\n\n- 최소 하나의 대문자(A-Z)를 포함해야 합니다.\n- 최소 하나의 소문자(a-z)를 포함해야 합니다.\n- 최소 하나의 숫자(0-9)를 포함해야 합니다.\n- 최소 하나의 특수문자(@$!%*?&)를 포함해야 합니다.\n- 최소 8자 이상이어야 합니다."
           );
-
-        // 이메일 인증 코드 검증
-        new Validator(this.signupRequest.emailCode, "이메일 인증코드를 입력해주세요.").isNotEmpty();
-
-        // 비밀번호 검증
-        new Validator(this.signupRequest.password, "비밀번호를 입력해주세요.")
-          .isNotEmpty()
-          .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, "비밀번호는 규칙을 만족해야 합니다.");
 
         // 비밀번호 확인
         new Validator(this.confirmPassword, "비밀번호를 한번 더 입력해주세요.")
