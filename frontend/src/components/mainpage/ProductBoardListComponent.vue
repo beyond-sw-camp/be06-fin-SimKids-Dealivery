@@ -2,7 +2,13 @@
   <div class="css-18tunez ei8jk451">
     <div class="css-1i60c0e extobua1">
       <h3 class="css-i804ml extobua0">
-        {{ currentCategory == "undefined" ? currentSearch : currentCategory }}
+        {{
+          currentCategory == "undefined"
+            ? currentSearch == "undefined"
+              ? "전체"
+              : `"${currentSearch}"에 대한 검색 결과`
+            : currentCategory
+        }}
       </h3>
       <!-- <ul class="css-raoddi erzdokb2">
                 <li v-for="(category, index) in categories" :key="index" class="css-1h52dri erzdokb1"
