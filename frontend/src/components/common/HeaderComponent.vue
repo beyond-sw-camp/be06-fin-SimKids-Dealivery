@@ -44,6 +44,7 @@
           <div class="css-w444a2 e1493ofl1">
             <input
               id="gnb_search"
+              v-model="search"
               placeholder="검색어를 입력해주세요"
               required=""
               class="css-11ntk83 e1493ofl3"
@@ -52,6 +53,7 @@
               id="submit"
               aria-label="submit"
               class="css-ywxmlw e1493ofl0"
+              @click="handleNavigation('search', this.search)"
             ></button>
           </div>
         </div>
@@ -83,7 +85,7 @@
               v-for="category in categories"
               :key="category"
               class="css-59mmhh e17w4cfr4"
-              @click="handleCategoryClick(category)"
+              @click="handleNavigation('category', category)"
             >
               <span class="css-1xyu7j9 e17w4cfr2">{{ category }}</span>
             </li>
@@ -105,16 +107,26 @@ export default {
     ...mapStores(useUserStore),
   },
   data() {
-    return { categories: ["전체", "식품", "의류", "뷰티", "라이프"] };
+    return {
+      categories: ["전체", "식품", "의류", "뷰티", "라이프"],
+      search: null,
+    };
   },
   methods: {
-    handleCategoryClick(category) {
+    handleNavigation(type, value) {
+      let query = {
+        page: 1,
+      };
+
+      if (type === "category") {
+        query.category = value;
+      } else if (type === "search") {
+        query.search = value;
+      }
+
       this.$router.push({
         path: "/board/list",
-        query: {
-          category: category,
-          page: 1,
-        },
+        query: query,
       });
     },
     routeTo(path) {
