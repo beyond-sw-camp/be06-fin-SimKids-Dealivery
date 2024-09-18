@@ -53,6 +53,6 @@ public class Company {
 
     private String mosNumber;
 
-    private Boolean regStatus;
+    private Boolean reg_status;
 
 }

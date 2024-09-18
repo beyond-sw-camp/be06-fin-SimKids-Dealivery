@@ -30,9 +30,9 @@ public class CompanyRegisterVerifyService {
 
 
     @Transactional
-    public void verifyRegNumber(CompanyDto.CompanySignupRequest request) {
+    public Boolean verifyRegNumber(CompanyDto.CompanySignupRequest request) {
         CompanyDto.RegNumberVerifyRequest regNumberVerifyRequest = new CompanyDto.RegNumberVerifyRequest(
-                request.getRegNumber(), request.getName(), request.getOpenedAt().toString()
+            request.getRegNumber(), request.getName(), request.getOpenedAt().toString()
         );
         //요청에서 받아온 값을 통해 공공API로 요청 전송
         ResponseEntity<String> responseEntity = sendPostRequest(regNumberVerifyRequest);
@@ -41,6 +41,8 @@ public class CompanyRegisterVerifyService {
         //정상이면 DB에서 값 삭제후 재 생성
         companyRegisterVerifyRepository.deleteByRegNumber(request.getRegNumber());
         companyRegisterVerifyRepository.save(request.toEntity());
+
+        return true;
     }
 
     //url로 사업자등록여부 판단하는 http 요청을 전송하는 메소드
@@ -64,9 +66,9 @@ public class CompanyRegisterVerifyService {
         // POST 요청 전송
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(
-                    apiUrl,
-                    request,
-                    String.class);
+                apiUrl,
+                request,
+                String.class);
             //응답 반환
             return response;
         }catch (RuntimeException e){

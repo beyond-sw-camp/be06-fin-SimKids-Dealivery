@@ -103,7 +103,13 @@ public class SecurityConfig {
             config.userInfoEndpoint((endPoint) -> endPoint.userService(oAuth2Service));
         });
 
-        //필터 적용
+        //필터추가
+        LoginFilter loginFilter = new LoginFilter(jwtUtil, authenticationManager(authenticationConfiguration)
+                ,companyRefreshTokenRepository,userRefreshTokenRepository);
+        loginFilter.setFilterProcessesUrl("/login");
+        loginFilter.setAuthenticationFailureHandler(loginFailureHandler);
+        http.exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedHandler(accessDeniedHandler));
+
         http.addFilterBefore(new JwtFilter(jwtUtil, companyRefreshTokenRepository, userRefreshTokenRepository), LoginFilter.class);
         http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

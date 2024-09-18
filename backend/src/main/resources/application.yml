@@ -85,11 +85,35 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
     database-platform: org.hibernate.dialect.MariaDBDialect
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+imp:
+  imp_key: ${IMP_KEY}
+  imp_secret: ${IMP_SECRET}
+
+
+cloud:
+  aws:
+    s3:
+      bucket: ${AWS_BUCKET_NAME}
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ${AWS_REGION}
+      auto: false
+    stack:
+      auto: false
 
 logging:
   level:
@@ -103,4 +127,3 @@ server:
     encoding:
       charset: UTF-8
       force: true
-

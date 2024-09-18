@@ -34,14 +34,14 @@ public class CompanyController {
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = @Content(
                 mediaType = "application/json",
-                    examples = {
-                        @ExampleObject(value = SwaggerExamples.COMPANY_SIGNUP_REQUEST)}
-                )
-            ))
+                examples = {
+                    @ExampleObject(value = SwaggerExamples.COMPANY_SIGNUP_REQUEST)}
+            )
+        ))
     @PostMapping("/signup")
     public BaseResponse signup(
-            @Valid @RequestBody CompanyDto.CompanySignupRequest request
-            ){
+        @Valid @RequestBody CompanyDto.CompanySignupRequest request
+    ){
         //이미 가입됐는지 체크
         if (!companyService.isExist(request.getEmail())){
             throw new InvalidCustomException(BaseResponseStatus.USER_SIGNUP_FAIL_ALREADY_EXIST);
@@ -60,9 +60,9 @@ public class CompanyController {
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = @Content(
                 mediaType = "application/json",
-                    examples = {
-                        @ExampleObject(value = SwaggerExamples.EMAIL_AUTH_REQUEST)}
-                )
+                examples = {
+                    @ExampleObject(value = SwaggerExamples.EMAIL_AUTH_REQUEST)}
+            )
         ))
     @PostMapping("/email/verify")
     public BaseResponse emailVerify(
