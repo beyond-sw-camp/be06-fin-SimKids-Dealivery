@@ -12,7 +12,7 @@
           <img :src="data.productThumbnailUrl" alt="상품 이미지" />
         </div>
         <div class="name">
-          <a @click.prevent="goToBoardPost(data.id)">{{ data.title }}</a>
+          <a @click.prevent="goToBoardPost(data.idx)">{{ data.title }}</a>
         </div>
         <div class="elem_info">
           <div class="desc">
@@ -34,7 +34,7 @@
             </div>
             <form action="#">
               <button
-                @click="deleteItem(data.id)"
+                @click="deleteItem(data.idx)"
                 class="link ga_tracking_event"
                 :disabled="data.status === '진행중'"
               >
@@ -91,13 +91,13 @@ export default {
 
       return parseInt(timeDifference / (1000 * 60 * 60)) + "시간";
     },
-    deleteItem(id) {
-      this.$emit("deleteItem", id);
+    deleteItem(idx) {
+      this.$emit("deleteItem", idx);
     },
     goToBoardPost(idx) {
       this.$router.push({
         name: "CompanyBoardPostPage",
-        params: { id: idx },
+        params: { idx: idx },
       });
     },
   },
