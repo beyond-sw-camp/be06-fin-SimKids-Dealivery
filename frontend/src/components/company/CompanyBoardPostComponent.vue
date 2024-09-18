@@ -132,7 +132,9 @@
                       name="discountRate"
                       min="0"
                       max="100"
-                      placeholder="0 ~ 100"
+                      :placeholder="
+                        data != null ? data.discountRate : '0 ~ 100'
+                      "
                       @input="onDiscountRateInput"
                       :disabled="!isActivate"
                     />
