@@ -52,9 +52,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             }else {
                 String refreshToken = jwtUtil.createRefreshToken(user.getIdx(), user.getEmail(), user.getRole());
                 String accessToken = jwtUtil.createAccessToken(user.getIdx(), user.getEmail(), user.getRole());
+                UserRefreshToken existingRefreshToken = userRefreshTokenRepository.findByEmail(user.getEmail()).orElse(null);
                 UserRefreshToken reissuedUserRefreshToken = UserRefreshToken.builder()
+                        .idx(existingRefreshToken != null ? existingRefreshToken.getIdx() : null)
                         .refreshToken(refreshToken)
-                        .email(email)
+                        .email(user.getEmail())
                         .build();
                 userRefreshTokenRepository.save(reissuedUserRefreshToken);
                 createTokenCookies(response, accessToken, refreshToken, "user");
