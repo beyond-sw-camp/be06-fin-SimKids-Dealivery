@@ -8,10 +8,12 @@ export const useQnaStore = defineStore("qna", {
     actions: {
         async fetchInquiries() {
             try {
-                const response = await axios.get(
-                    //"https://run.mocky.io/v3/21785523-9c59-48aa-81e2-b23c209841e6"
-                );
-                this.inquiries = response.data
+                const response = await axios.get('/api/qna/question/list'); // 실제 API URL
+                if (response.data.isSuccess) {
+                    this.inquiries = response.data.result; // result에 접근하여 문의 목록 저장
+                } else {
+                    console.error('문의 목록을 불러오는 중 오류 발생:', response.data.message);
+                }
             } catch (error) {
                 console.error("문의 목록을 불러오는 중 오류 발생:", error);
             }
