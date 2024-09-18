@@ -10,7 +10,7 @@
                   class="css-qq9ke6 e744wfw0">*</span></label></div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
-                <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.id" data-testid="input-box"
+                <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.email" data-testid="input-box"
                     id="memberId" name="memberId" placeholder="아이디를 입력해주세요 (이메일 형식)" type="text" required=""
                     class="css-u52dqk e1uzxhvi2" maxlength="40" value="" @keydown.enter="companySignup"></div>
               </div>
@@ -55,7 +55,8 @@
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3"><input v-model="confirmPassword" data-testid="input-box"
                     id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호를 한번 더 입력해주세요" type="password"
-                    autocomplete="off" maxlength="20" class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="companySignup">
+                    autocomplete="off" maxlength="20" class="css-u52dqk e1uzxhvi2" value=""
+                    @keydown.enter="companySignup">
                 </div>
               </div>
             </div>
@@ -137,7 +138,8 @@
                   class="css-qq9ke6 e744wfw0">*</span></label></div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
-                <div class="css-176lya2 e1uzxhvi3"><input @keydown.enter="companySignup" v-model="signupRequest.companyName" data-testid="input-box" id="mobileNumber" name="mobileNumber"
+                <div class="css-176lya2 e1uzxhvi3"><input @keydown.enter="companySignup"
+                    v-model="signupRequest.companyName" data-testid="input-box" id="mobileNumber" name="mobileNumber"
                     placeholder="업체이름을 입력해주세요." type="text" required="" class="css-u52dqk e1uzxhvi2" value=""></div>
               </div>
             </div>
@@ -150,18 +152,21 @@
             <div class="css-82a6rk e744wfw3">
               <div class="css-18n8lnw e1ke3ehm1">
                 <div class="css-1dkwuq4 e1uzxhvi6">
-                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input @keydown.enter="companySignup" v-model="regNumberFirst" data-testid="input-box" name="regNumber"
-                      placeholder="NNN" type="text" height="40" class="css-151eme7 e1uzxhvi2" maxlength="3" value="">
+                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input @keydown.enter="companySignup"
+                      v-model="regNumberFirst" data-testid="input-box" name="regNumber" placeholder="NNN" type="text"
+                      height="40" class="css-151eme7 e1uzxhvi2" maxlength="3" value="">
                   </div>
                 </div><span class="css-5lnvt6 e1ke3ehm0"></span>
                 <div class="css-1dkwuq4 e1uzxhvi6">
-                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input @keydown.enter="companySignup" v-model="regNumberSecond" data-testid="input-box" name="regNumber"
-                      placeholder="NN" type="text" height="40" class="css-151eme7 e1uzxhvi2" maxlength="2" value="">
+                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input @keydown.enter="companySignup"
+                      v-model="regNumberSecond" data-testid="input-box" name="regNumber" placeholder="NN" type="text"
+                      height="40" class="css-151eme7 e1uzxhvi2" maxlength="2" value="">
                   </div>
                 </div><span class="css-5lnvt6 e1ke3ehm0"></span>
                 <div class="css-1dkwuq4 e1uzxhvi6">
-                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input @keydown.enter="companySignup" v-model="regNumberThird" data-testid="input-box" name="regNumber"
-                      placeholder="NNNNN" type="text" height="40" class="css-151eme7 e1uzxhvi2" maxlength="5" value="">
+                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input @keydown.enter="companySignup"
+                      v-model="regNumberThird" data-testid="input-box" name="regNumber" placeholder="NNNNN" type="text"
+                      height="40" class="css-151eme7 e1uzxhvi2" maxlength="5" value="">
                   </div>
                 </div>
               </div>
@@ -175,8 +180,9 @@
             <div class="css-82a6rk e744wfw3">
               <div class="css-18n8lnws e1ke3ehm1">
                 <div class="css-1dkwuq4 e1uzxhvi6">
-                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input v-model="signupRequest.openedAt" :max="today" @keydown.enter="companySignup" data-testid="input-box" name="openedAt"
-                       type="date" height="40" class="css-151eme7 e1uzxhvi2" value="">
+                  <div height="40" class="css-xsmgyi e1uzxhvi3"><input v-model="openedAt" :max="today"
+                      @keydown.enter="companySignup" data-testid="input-box" name="openedAt" type="date" height="40"
+                      class="css-151eme7 e1uzxhvi2" value="">
                   </div>
                 </div>
               </div>
@@ -189,7 +195,8 @@
                   class="css-qq9ke6 e744wfw0">*</span></label></div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
-                <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.mosNumber" @keydown.enter="companySignup" data-testid="input-box" id="mosNumber" name="mosNumber"
+                <div class="css-176lya2 e1uzxhvi3"><input v-model="signupRequest.mosNumber"
+                    @keydown.enter="companySignup" data-testid="input-box" id="mosNumber" name="mosNumber"
                     placeholder="ex) 1999-서울마포-0000 (-포함)" type="text" required="" class="css-u52dqk e1uzxhvi2"
                     value="">
                 </div>
@@ -199,8 +206,8 @@
           </div>
           <div class="css-1w0ksfz e744wfw2"></div>
         </form>
-        </div>
-      
+      </div>
+
 
       <div class="css-1w0ksfz e744wfw2"></div>
 
@@ -258,8 +265,8 @@
           </div>
         </div>
       </div>
-      <div class="css-ud3rkg e1utgeno0"><button @click="companySignup" class="css-18m884r e4nu7ef3" type="button" width="240" height="56"
-          radius="3"><span class="css-nytqmg e4nu7ef1">가입하기</span></button></div>
+      <div class="css-ud3rkg e1utgeno0"><button @click="companySignup" class="css-18m884r e4nu7ef3" type="button"
+          width="240" height="56" radius="3"><span class="css-nytqmg e4nu7ef1">가입하기</span></button></div>
     </div>
   </div>
 
@@ -268,174 +275,188 @@
 <script>
 import { useUserStore } from '@/stores/useUserStore';
 import { mapStores } from 'pinia';
+import { Validator } from '@/util/validator';
 export default {
   name: 'CompanySignupComponent',
   data() {
-        return {
-            isClickedEmailAuth: false, confirmPassword: "",
-            radioAllStatus: false, radioFirstStatus: false, radioSecondStatus: false, radioThirdStatus: false,
-            regNumberFirst: "", regNumberSecond: "", regNumberThird: "", today: "",
-            signupRequest: {
-                id: "",
-                password: "",
-                emailCode: "",
-                name: "",
-                phoneNumber: "",
-                address: "",
-                postNumber: "",
-                addressDetail: "",
-                companyName: "",
-                regNumber: "",
-                openedAt: "",
-                mosNumber: "",
-                type: ""
-            }
-        }
-    },
-    computed: {
-        ...mapStores(useUserStore)
-    },
-    mounted() {
-        this.getToday();
-    },
-    methods: {
-        openPostcode() {
-            let width = 500;
-            let height = 600;
-
-            // eslint-disable-next-line no-undef
-            new daum.Postcode({
-                width: width,
-                height: height,
-                oncomplete: (data) => {
-                    this.signupRequest.address = data.address;
-                    this.signupRequest.postNumber = data.zonecode;
-                }
-            }).open({
-                left: (window.screen.width / 2) - (width / 2),
-                top: (window.screen.height / 2) - (height / 2)
-            });
-        },
-        doEmailAuth() {
-            const idRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            
-            if(!this.signupRequest.id.length > 0){
-                
-                alert("아이디를 입력해주세요.");
-            }else if(!idRegex.test(this.signupRequest.id)){
-                alert("아이디는 이메일 형식이어야 합니다.")
-            }else{
-                this.isClickedEmailAuth = true;
-                this.userStore.sendCompanyEmailCode(this.signupRequest.id);
-                alert("이메일이 발송되었습니다.");
-            }
-        },
-        checkRadio(target) {
-            if (target === "radioAll") {
-                if (!this.radioAllStatus) {
-                    this.radioAllStatus = true;
-                    this.radioFirstStatus = true;
-                    this.radioSecondStatus = true;
-                    this.radioThirdStatus = true;
-                } else {
-                    this.radioAllStatus = false;
-                    this.radioFirstStatus = false;
-                    this.radioSecondStatus = false;
-                    this.radioThirdStatus = false;
-                }
-
-            } else if (target === "radioFirst") {
-                this.radioFirstStatus = !this.radioFirstStatus
-            } else if (target === "radioSecond") {
-                this.radioSecondStatus = !this.radioSecondStatus
-            } else {
-                this.radioThirdStatus = !this.radioThirdStatus
-            }
-            this.checkRadioAll();
-        },
-        checkRadioAll() {
-            if (this.radioFirstStatus && this.radioSecondStatus && this.radioThirdStatus) {
-                this.radioAllStatus = true;
-            } else {
-                this.radioAllStatus = false;
-            }
-        },
-        validateAll() {
-            const idRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
-            const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#~])[A-Za-z\d!@#~]{8,}$/;
-            const phoneRegex = /^\d{3}-\d{4}-\d{4}$/;
-            const codeRegex = /^[A-Za-z0-9]{6}$/;
-            const regRegex = /^\d{10}$/;
-            const dateRegex = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
-            const mosRegex = /^\d{4}-[가-힣]{4}-\d{4}$/;
-            const fields = [
-                { value: this.signupRequest.id, message: "아이디를 입력해주세요.", regex: idRegex, regexMessage: "아이디는 이메일 형식입니다." }, 
-                { value: this.signupRequest.emailCode, message: "이메일 인증코드를 입력해주세요.", regex: codeRegex,
-                  regexMessage:"인증코드가 6자 미만이거나, 부적합한 문자(특수문자)가 포함되어 있습니다."
-                },
-                { value: this.signupRequest.password, message: "비밀번호를 입력해주세요.", regex: pwdRegex,
-                regexMessage: "비밀번호는 아래의 규칙을 모두 만족해야 합니다.\n\n- 영문 대문자 1개 이상 포함\n- 영문 소문자 1개 이상 포함\n- 숫자 1개 이상 포함\n- 특수문자(~!@#) 1개 이상 포함\n- 8글자 이상"}, 
-                { value: this.confirmPassword, message: "비밀번호를 한번 더 입력해주세요."},
-                { value: this.signupRequest.name, message: "이름을 입력해주세요." },
-                { value: this.signupRequest.phoneNumber, message: "휴대폰 번호를 입력해주세요.", regex: phoneRegex,
-                regexMessage: "-를 포함한 휴대폰번호 11자리를 입력해주세요." }, 
-                { value: this.signupRequest.address, message: "주소를 입력해주세요." },
-                { value: this.signupRequest.addressDetail, message: "상세주소를 입력해주세요." },
-                { value: this.signupRequest.postNumber, message: "우편번호를 입력해주세요." },
-                { value: this.signupRequest.companyName, message: "업체명을 입력해주세요." },
-                { value: this.signupRequest.regNumber, message: "사업자등록번호를 입력해주세요.", regex: regRegex,
-                  regexMessage: "사업자등록번호는 -를 제외한 숫자 10자리를 입력해주세요."
-                },
-                { value: this.signupRequest.openedAt, message: "개업일자를 입력해주세요.", regex: dateRegex,
-                  regexMessage: "개업일자의 날짜 형식이 올바르지 않습니다. 다시 입력해주세요."
-                 },
-                { value: this.signupRequest.mosNumber, message: "통신판매업신고번호를 입력해주세요.", regex: mosRegex,
-                  regexMessage: "통신판매업신고번호 양식이 올바르지 않습니다."
-                 }
-            ];
-
-            // 검증 로직
-            for (const field of fields) {
-                if (field.value.trim().length === 0) {
-                    alert(field.message);
-                    return false;
-                }
-                if (field.regex && !field.regex.test(field.value)) {
-                    alert(field.regexMessage);
-                    return false;
-                }
-            }
-
-            if (this.signupRequest.password !== this.confirmPassword) {
-                    alert("비밀번호와 확인 비밀번호가 일치하지 않습니다.");
-                    return false;
-                }
-
-            if(!this.radioAllStatus){
-                alert("필수 약관에 동의해주세요");
-                return false;
-            }
-            return true; // 모든 검증 통과
-        },
-        async companySignup(){
-            this.signupRequest.regNumber = this.regNumberFirst + this.regNumberSecond + this.regNumberThird;
-            if(this.validateAll()){
-              this.signupRequest.type = "inapp";
-              if(await this.userStore.companySignup(this.signupRequest)){
-                alert("회원가입에 성공했습니다. 로그인 후 서비스를 이용해주세요.");
-                this.$router.push('/auth/login');
-              }
-            }
-            
-        },
-        getToday() {
-          const today = new Date();
-          const year = today.getFullYear();
-          const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
-          const day = String(today.getDate()).padStart(2, '0');
-          this.today = `${year}-${month}-${day}`;
-        }
+    return {
+      isClickedEmailAuth: false, confirmPassword: "",
+      radioAllStatus: false, radioFirstStatus: false, radioSecondStatus: false, radioThirdStatus: false,
+      regNumberFirst: "", regNumberSecond: "", regNumberThird: "", today: "", openedAt: "",
+      signupRequest: {
+        id: "",
+        password: "",
+        emailCode: "",
+        name: "",
+        phoneNumber: "",
+        address: "",
+        postNumber: "",
+        addressDetail: "",
+        companyName: "",
+        regNumber: "",
+        openedAt: "",
+        mosNumber: "",
+        type: ""
+      },
+      companyEmailAuthRequest: {
+        email: "",
+      }
     }
+  },
+  computed: {
+    ...mapStores(useUserStore)
+  },
+  mounted() {
+    this.getToday();
+  },
+  methods: {
+    openPostcode() {
+      let width = 500;
+      let height = 600;
+
+      // eslint-disable-next-line no-undef
+      new daum.Postcode({
+        width: width,
+        height: height,
+        oncomplete: (data) => {
+          this.signupRequest.address = data.address;
+          this.signupRequest.postNumber = data.zonecode;
+        }
+      }).open({
+        left: (window.screen.width / 2) - (width / 2),
+        top: (window.screen.height / 2) - (height / 2)
+      });
+    },
+    doEmailAuth() {
+      const idRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      if (!this.signupRequest.email.length > 0) {
+        alert("아이디를 입력해주세요.");
+      } else if (!idRegex.test(this.signupRequest.email)) {
+        alert("아이디는 이메일 형식이어야 합니다.")
+      } else {
+        this.companyEmailAuthRequest.email = this.signupRequest.email;
+        if (this.userStore.sendCompanyEmailCode(this.companyEmailAuthRequest)) {
+          alert("이메일이 발송되었습니다.");
+          this.isClickedEmailAuth = true;
+        } else {
+          alert("이메일 발송에 실패했습니다.");
+        }
+
+      }
+    },
+    checkRadio(target) {
+      if (target === "radioAll") {
+        if (!this.radioAllStatus) {
+          this.radioAllStatus = true;
+          this.radioFirstStatus = true;
+          this.radioSecondStatus = true;
+          this.radioThirdStatus = true;
+        } else {
+          this.radioAllStatus = false;
+          this.radioFirstStatus = false;
+          this.radioSecondStatus = false;
+          this.radioThirdStatus = false;
+        }
+
+      } else if (target === "radioFirst") {
+        this.radioFirstStatus = !this.radioFirstStatus
+      } else if (target === "radioSecond") {
+        this.radioSecondStatus = !this.radioSecondStatus
+      } else {
+        this.radioThirdStatus = !this.radioThirdStatus
+      }
+      this.checkRadioAll();
+    },
+    checkRadioAll() {
+      if (this.radioFirstStatus && this.radioSecondStatus && this.radioThirdStatus) {
+        this.radioAllStatus = true;
+      } else {
+        this.radioAllStatus = false;
+      }
+    },
+    validateAll() {
+      try {
+        new Validator(this.signupRequest.email, "아이디를 입력해주세요.")
+          .isNotEmpty()
+          .matches(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/, "아이디는 이메일 형식입니다.");
+
+        new Validator(this.signupRequest.emailCode, "이메일 인증코드를 입력해주세요.")
+          .isNotEmpty()
+          .matches(/^[A-Za-z0-9]{6}$/, "인증코드가 6자 미만이거나 부적합한 문자(특수문자)가 포함되어 있습니다.");
+
+        new Validator(this.signupRequest.password, "비밀번호를 입력해주세요.")
+          .isNotEmpty()
+          .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            "비밀번호는 다음의 조건을 모두 만족해야 합니다:\n\n- 최소 하나의 대문자(A-Z)를 포함해야 합니다.\n- 최소 하나의 소문자(a-z)를 포함해야 합니다.\n- 최소 하나의 숫자(0-9)를 포함해야 합니다.\n- 최소 하나의 특수문자(@$!%*?&)를 포함해야 합니다.\n- 최소 8자 이상이어야 합니다."
+          );
+
+        new Validator(this.confirmPassword, "비밀번호를 한번 더 입력해주세요.")
+          .isNotEmpty()
+          .isEqualTo(this.signupRequest.password, "비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+
+        new Validator(this.signupRequest.name, "이름을 입력해주세요.")
+          .isNotEmpty();
+
+        new Validator(this.signupRequest.phoneNumber, "휴대폰 번호를 입력해주세요.")
+          .isNotEmpty()
+          .matches(/^\d{3}-\d{4}-\d{4}$/, "-를 포함한 휴대폰번호 11자리를 입력해주세요.");
+
+        new Validator(this.signupRequest.address, "주소를 입력해주세요.")
+          .isNotEmpty();
+
+        new Validator(this.signupRequest.postNumber, "우편번호를 입력해주세요.")
+          .isNotEmpty();
+
+        new Validator(this.signupRequest.addressDetail, "상세주소를 입력해주세요.")
+          .isNotEmpty();
+
+        new Validator(this.signupRequest.companyName, "업체명을 입력해주세요.")
+          .isNotEmpty();
+
+        new Validator(this.signupRequest.regNumber, "사업자 등록번호를 입력해주세요.")
+          .isNotEmpty()
+          .matches(/^\d{10}$/, "사업자등록번호는 숫자 10자리를 입력해주세요.");
+
+        new Validator(this.openedAt, "개업일자를 입력해주세요.")
+          .isNotEmpty()
+          .matches(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, "개업일자의 날짜 형식이 올바르지 않습니다.");
+
+        new Validator(this.signupRequest.mosNumber, "통신판매업신고번호를 입력해주세요.")
+          .isNotEmpty()
+          .matches(/^\d{4}-[가-힣]{4}-\d{4}$/, "통신판매업신고번호 양식이 올바르지 않습니다.");
+
+        if (!this.radioAllStatus) {
+          throw new Error("필수 약관에 동의해주세요");
+        }
+
+        return true; // 모든 검증 통과
+      } catch (error) {
+        alert(error.message);
+        return false;
+      }
+    },
+    async companySignup() {
+      this.signupRequest.regNumber = this.regNumberFirst + this.regNumberSecond + this.regNumberThird;
+      if (this.validateAll()) {
+        this.signupRequest.type = "inapp";
+        this.signupRequest.openedAt = this.openedAt.replace(/-/g, "");
+        if (await this.userStore.companySignup(this.signupRequest)) {
+          alert("회원가입에 성공했습니다. 로그인 후 서비스를 이용해주세요.");
+          this.$router.push('/auth/login');
+        }
+      }
+
+    },
+    getToday() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+      const day = String(today.getDate()).padStart(2, '0');
+      this.today = `${year}-${month}-${day}`;
+    }
+  }
 
 }
 </script>

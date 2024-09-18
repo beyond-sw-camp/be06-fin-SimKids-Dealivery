@@ -132,10 +132,12 @@ export default {
     routeTo(path) {
       this.$router.push(path);
     },
-    logout() {
-      this.userStore.isLogined = false;
-      this.userStore.roles = [];
-      this.routeTo("/");
+    async logout() {
+      if (await this.userStore.logout()) {
+        this.routeTo("/");
+      } else {
+        alert("로그아웃에 실패했습니다.");
+      }
     },
   },
 };
