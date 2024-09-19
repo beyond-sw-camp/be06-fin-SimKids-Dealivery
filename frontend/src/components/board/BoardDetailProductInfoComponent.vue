@@ -108,7 +108,7 @@
                 >
                   <li
                     v-for="option in productOptions"
-                    :key="option.value"
+                    :key="option.idx"
                     @click="selectOption(option)"
                     class="MuiMenuItem-root MuiMenuItem-gutters MuiButtonBase-root css-1p79lf5"
                     tabindex="-1"
@@ -125,8 +125,10 @@
                         <div class="css-t4macj e12wapb62">
                           <div class="css-1fvrsoi e12wapb60">
                             {{
-                              option.originalPrice *
-                              (1 - this.discountPercentage / 100)
+                              Math.round(
+                                option.originalPrice *
+                                  (1 - this.discountPercentage / 100)
+                              )
                             }}원
                           </div>
                           <span class="css-1s0al7f e17q5gas1"
@@ -237,12 +239,12 @@ export default {
       isDropdownOpen: false,
       productOptions: [
         {
-          value: "1000758059",
+          idx: "1",
           label: "[99치킨] 순살 닭강정",
           originalPrice: 20900,
         },
         {
-          value: "1000750152",
+          idx: "2",
           label: "[99치킨] 마라 순살 닭강정",
           originalPrice: 20900,
         },
@@ -276,16 +278,18 @@ export default {
 
     selectOption(option) {
       const existingItem = this.cartItems.find(
-        (item) => item.value === option.value
+        (item) => item.idx === option.idx
       );
 
       if (existingItem) {
         existingItem.quantity++;
       } else {
         this.cartItems.push({
-          value: option.value,
+          idx: option.idx,
           name: option.label,
-          price: option.originalPrice * (1 - this.discountPercentage / 100),
+          price: Math.round(
+            option.originalPrice * (1 - this.discountPercentage / 100)
+          ),
           originalPrice: option.originalPrice,
           quantity: 1,
         });

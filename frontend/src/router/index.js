@@ -110,7 +110,7 @@ const router = createRouter({
       component: CompanyBoardPostPage,
     },
     {
-      path: "/product-boards/company/:id",
+      path: "/product-boards/company/:idx",
       name: "CompanyBoardPostPage",
       component: () =>
         import("../pages/company/board/CompanyBoardPostPage.vue"),
@@ -137,7 +137,6 @@ const router = createRouter({
         { path: "qna", component: MypageQnAComponent },
         { path: "likes", component: MypageLikesEventComponent },
         { path: "address", component: MyPageAddressComponent },
-
       ],
     },
   ],

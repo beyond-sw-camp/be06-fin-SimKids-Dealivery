@@ -132,8 +132,11 @@
                       name="discountRate"
                       min="0"
                       max="100"
-                      placeholder="0 ~ 100"
+                      :placeholder="
+                        data != null ? data.discountRate : '0 ~ 100'
+                      "
                       @input="onDiscountRateInput"
+                      :disabled="!isActivate"
                     />
                     <p>%</p>
                   </div>
@@ -208,7 +211,7 @@
 import CompanyBoardModalComponent from "./CompanyBoardModalComponent.vue";
 import CompanyBoardPhotoUploadComponent from "./CompanyBoardPhotoUploadComponent.vue";
 import { mapStores } from "pinia";
-import { useCompanyBoardStore } from "../../stores/useCompanyBoardStore";
+import { useBoardStore } from "../../stores/useBoardStore";
 
 export default {
   name: "CompanyBoardPostComponent",
@@ -239,12 +242,12 @@ export default {
     };
   },
   created() {
-    if (this.$route.params.id !== undefined) {
+    if (this.$route.params.idx !== undefined) {
       this.isActivate = false;
     }
   },
   computed: {
-    ...mapStores(useCompanyBoardStore),
+    ...mapStores(useBoardStore),
   },
   watch: {
     data: {
@@ -387,7 +390,7 @@ export default {
         thumbnailImages: this.thumbnailImages,
         detailImage: this.detailImage,
       };
-      this.companyBoardStore.createProductBoard(req);
+      this.boardStore.createProductBoard(req);
     },
   },
 };

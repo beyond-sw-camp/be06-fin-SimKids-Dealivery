@@ -1,14 +1,8 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 const backend = "/api/product-boards";
-// const mockyListURL =
-//   "https://run.mocky.io/v3/785219a1-65f2-45ba-875d-46e0019566ae";
-const mockyListOptionURL =
-  "https://run.mocky.io/v3/3801fe56-0faf-4fe0-a765-b7e966f1af6f";
-const mockyDetailURL =
-  "https://run.mocky.io/v3/fa2ac704-87e9-4d42-b2c0-ddda0e9d2861";
 
-export const useCompanyBoardStore = defineStore("companyBoard", {
+export const useBoardStore = defineStore("board", {
   state: () => ({
     boardData: null,
     productBoardReq: {
@@ -22,6 +16,20 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
     totalPages: 0,
   }),
   actions: {
+    async getList(page, category, search) {
+      const params = { page: page };
+      if (category != "undefined" && category != null && category != "전체") {
+        params.search = category;
+      } else if (search != "undefined" && search != null) {
+        params.search = search;
+      }
+      const response = await axios.get(backend + "/list", {
+        params: params,
+      });
+      return response.data.result;
+    },
+
+    // --------- 판매자 ---------
     async getProductBoardList(page) {
       const response = await axios.get(backend + "/company/list", {
         params: {
@@ -42,22 +50,10 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
       });
       return response.data.result;
     },
-    async getProductBoardListByDateRange(option) {
-      console.log(option);
-      // 백엔드 개발 후 구현
-      const data = await axios.get(mockyListOptionURL);
-      return data.data;
-    },
-    async getProductBoardListByOrderStatus(option) {
-      console.log(option);
-      // 백엔드 개발 후 구현
-      const data = await axios.get(mockyListOptionURL);
-      return data.data;
-    },
-    async getProductBoardDetail() {
-      const data = await axios.get(mockyDetailURL);
-      this.boardData = data.data;
-      return data.data;
+    async getProductBoardDetail(idx) {
+      const data = await axios.get(backend + `/company/${idx}/detail`);
+      this.boardData = data.data.result;
+      return data.data.result;
     },
     async createProductBoard(req) {
       const formData = new FormData();
@@ -120,13 +116,13 @@ export const useCompanyBoardStore = defineStore("companyBoard", {
     },
     getDetailUrl() {
       if (this.boardData !== null) {
-        return this.boardData.productDetailUrl;
+        return [this.boardData.productDetailUrl];
       }
       return null;
     },
     getDetailUrlSize() {
-      if (this.boardData !== null) {
-        return this.boardData.productDetailUrl.length;
+      if (this.boardData !== null && this.boardData.productDetailUrl) {
+        return 1;
       }
       return 0;
     },
