@@ -44,6 +44,7 @@
             </label>
           </div>
           <div data-testid="address-area" class="css-upe1zs e77s2kj4">
+            <div v-if="delivery.isDefault" class="css-2n86z e77s2kj1">기본 배송지</div>
             <p class="css-zone-name e77s2kj2">
               {{ delivery.name }}
             </p>
@@ -288,7 +289,18 @@ ul {
 
 .css-zone-name {
   font-size: 13px;
-  color: #a0a0a0;
+  color: rgb(95, 0, 128);
   margin: 5px;
+}
+
+.css-2n86z {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 11px;
+    background-color: rgb(247, 247, 247);
+    color: rgb(95, 0, 128);
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
 }
 </style>
