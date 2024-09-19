@@ -72,7 +72,7 @@
           <tr @click="toggleInquiry(index)" class="css-atz965 e1l5ky7y9">
             <td class="css-1brd6ns e1l5ky7y8">{{ row.title }}</td>
             <td class="css-1pkqelu e1l5ky7y7">{{ maskAuthorName(row.userName) }}</td>
-            <td class="css-1pkqelu e1l5ky7y6">{{ row.modified_at || row.created_at }}</td>
+            <td class="css-1pkqelu e1l5ky7y6">{{ row.modifiedAt ? formatDate(row.modifiedAt) : formatDate(row.createdAt) }}</td>
             <td class="css-bhr3cq e1l5ky7y5">{{ row.answerStatus }}</td>
           </tr>
           <tr v-show="expandedInquiryIndex === index" class="css-1mvq381 e61d7mt0">
@@ -146,6 +146,14 @@ export default {
     };
   },
   methods: {
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("ko-KR", {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+    },
     openNewInquiryModal() {
       this.showNewInquiryModal = true;
     },
