@@ -43,7 +43,8 @@
               <span class="css-nytqmg e4nu7ef1">저장</span>
             </button>
             <button
-              class="css-d85pyu e4nu7ef3"
+              :disabled="oldAddress.isDefault" 
+              class="css-d85pyu e4nu7ef3 button"
               type="button"
               height="44"
               radius="3"
@@ -349,5 +350,15 @@ input[type="radio"] {
 .css-d85pyu > span {
   font-size: 14px;
   font-weight: 500;
+}
+
+.button{
+  position: relative;
+}
+
+.button:disabled {
+  background-color: #d6d6d6; /* 회색 배경색 */
+  color: #a1a1a1; /* 회색 글자색 */
+  cursor: not-allowed; /* 금지 커서 */
 }
 </style>
