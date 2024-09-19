@@ -89,6 +89,9 @@ export default {
   computed: {
     ...mapStores(useUserStore)
   },
+  mounted(){
+    this.setInitialSelectedAddress();
+  },
   data() {
     return {
       isDisplayModal: false,
@@ -117,6 +120,7 @@ export default {
     async saveDelivery(data) {
       if(await this.userStore.createDelivery(data)){
         await this.userStore.getDeliveryList();
+        this.setInitialSelectedAddress();
       }
       
     },
@@ -124,6 +128,15 @@ export default {
       console.log(data);
       alert("추가될 기능")
     },
+    setInitialSelectedAddress() {
+      const defaultDeliveryIndex = this.userStore.userDetail.deliveries.findIndex(
+        (delivery) => delivery.isDefault === true
+      );
+      
+      if (defaultDeliveryIndex !== -1) {
+        this.selectedAddress = defaultDeliveryIndex;
+      }
+    }
   },
 };
 </script>
