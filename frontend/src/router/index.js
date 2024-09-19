@@ -23,6 +23,8 @@ import MypageQnAComponent from "@/components/mypage/MypageQnAComponent.vue";
 import MypageLikesEventComponent from "@/components/mypage/MypageLikesEventComponent.vue";
 import MyPageAddressComponent from "@/components/mypage/MypageAddressComponent.vue";
 import CompanyQnAListPage from "@/pages/company/qna/CompanyQnAListPage.vue";
+import LoginRedirectPage from "@/pages/common/LoginRedirectPage.vue";
+import SocialSignupComponent from "@/components/user/SocialSignupComponent.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -81,9 +83,14 @@ const router = createRouter({
           component: FindIdComponent,
           meta: { requiresAuth: false },
         },
+        { path: "social/signup",
+          component: SocialSignupComponent,
+          meta: {requiresAuth: false}
+        },
         { path: "", redirect: "/auth/login", meta: { requiresAuth: false } },
       ],
     },
+    { path: "/login/redirect", component: LoginRedirectPage},
     {
       path: "/board",
       component: BoardListPage,
@@ -103,7 +110,7 @@ const router = createRouter({
       component: CompanyBoardPostPage,
     },
     {
-      path: "/product-boards/company/:id",
+      path: "/product-boards/company/:idx",
       name: "CompanyBoardPostPage",
       component: () =>
         import("../pages/company/board/CompanyBoardPostPage.vue"),
@@ -130,7 +137,6 @@ const router = createRouter({
         { path: "qna", component: MypageQnAComponent },
         { path: "likes", component: MypageLikesEventComponent },
         { path: "address", component: MyPageAddressComponent },
-
       ],
     },
   ],

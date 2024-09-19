@@ -8,24 +8,23 @@
           <h2 class="css-3ljxig e1k348233">배송지 수정</h2>
           <div class="css-1holwxw e1k348232">
             <div class="css-1n57dna e1uzxhvi6">
+              <label for="name" class="css-c3g9of e1uzxhvi4">배송지명</label>
               <div height="44" class="css-t7kbxx e1uzxhvi3">
                 <input
-                  v-model="newAddress.name"
+                  v-model="editedAddress.name"
                   data-testid="input-box"
-                  placeholder="별칭을 입력해 주세요"
+                  placeholder="배송지명을 입력해 주세요"
                   type="text"
                   height="44"
                   class="css-1quw3ub e1uzxhvi2"
                 />
               </div>
-              <label for="addressDetail" class="css-c3g9of e1uzxhvi4">{{
-                newAddress.area
-              }}</label>
+              <label for="addressDetail" class="css-c3g9of e1uzxhvi4">상세주소</label>
               <div height="44" class="css-t7kbxx e1uzxhvi3">
                 <input
-                  v-model="newAddress.detail"
+                  v-model="editedAddress.addressDetail"
                   data-testid="input-box"
-                  placeholder="상세 주소를 입력해 주세요"
+                  placeholder="상세주소를 입력해 주세요"
                   type="text"
                   height="44"
                   class="css-1quw3ub e1uzxhvi2"
@@ -35,7 +34,7 @@
           </div>
           <div type="recent" class="css-1y14kop e1k348230">
             <button
-              @click="saveNewAddress"
+              @click="saveEditedAddress"
               class="css-10voksq e4nu7ef3"
               type="button"
               height="44"
@@ -63,12 +62,13 @@ export default {
   name: "AddressEditModalComponent",
   data() {
     return {
-      newAddress: {
-        id: "",
+      editedAddress: {
+        idx: null,
         name: "",
-        zonecode: "",
-        area: "",
-        detail: "",
+        postNumber: "",
+        address: "",
+        addressDetail: "",
+        isDefault: false
       },
     };
   },
@@ -80,22 +80,36 @@ export default {
   },
   created() {
     if (this.oldAddress) {
-      this.newAddress.id = this.oldAddress.id;
-      this.newAddress.name = this.oldAddress.name;
-      this.newAddress.zonecode = this.oldAddress.zonecode;
-      this.newAddress.area = this.oldAddress.area;
-      this.newAddress.detail = this.oldAddress.detail;
+      this.editedAddress.idx = this.oldAddress.idx;
+      this.editedAddress.name = this.oldAddress.name;
+      this.editedAddress.postNumber = this.oldAddress.postNumber;
+      this.editedAddress.address = this.oldAddress.address;
+      this.editedAddress.addressDetail = this.oldAddress.addressDetail;
+      this.editedAddress.isDefault = this.oldAddress.isDefault;
+      
     }
   },
   methods: {
     closeModal() {
       this.$emit("closeModal");
     },
-    saveNewAddress() {
-      console.log(this.newAddress);
-      this.$emit("saveNewAddress", this.newAddress);
+    saveEditedAddress() {
+      if(!this.areAddressesEqual()){
+        this.$emit("saveEditedAddress", this.editedAddress);
+      }
       this.closeModal();
     },
+    areAddressesEqual() {
+      // 모든 속성이 일치하는지 확인하는 함수
+      return (
+        this.editedAddress.idx === this.oldAddress.idx &&
+        this.editedAddress.name === this.oldAddress.name &&
+        this.editedAddress.postNumber === this.oldAddress.postNumber &&
+        this.editedAddress.address === this.oldAddress.address &&
+        this.editedAddress.addressDetail === this.oldAddress.addressDetail &&
+        this.editedAddress.isDefault === this.oldAddress.isDefault
+      );
+    }
   },
 };
 </script>
@@ -185,9 +199,6 @@ h2 {
   line-height: 36px;
 }
 
-.css-1holwxw {
-  padding-top: 24px;
-}
 
 .css-1holwxw > div {
   padding-bottom: 24px;

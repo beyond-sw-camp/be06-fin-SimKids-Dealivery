@@ -124,6 +124,40 @@
           </div>
           <div class="css-5d6nlw e17yjk9v4">
             <div class="css-1gshg9u e150alo82">
+              <span class="css-qq9ke6 e744wfw0">*</span>
+              <span class="css-ln1csn e150alo81">받는 사람</span>
+              <div class="css-82a6rk e150alo80">
+                <div class="css-input-container">
+                  <input
+                    type="text"
+                    v-model="receiverName"
+                    class="css-input"
+                    placeholder="받는 사람 이름을 입력하세요"
+                    maxlength="10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!--츄가아ㅏㅏㅏㅏ-->
+            <div class="css-1gshg9u e150alo82">
+              <span class="css-qq9ke6 e744wfw0">*</span>
+              <span class="css-ln1csn e150alo81">전화번호</span>
+              <div class="css-82a6rk e150alo80">
+                <div class="css-input-container">
+                  <input
+                    type="text"
+                    v-model="receiverPhoneNumber"
+                    class="css-input"
+                    placeholder="전화번호를 입력하세요"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="css-5d6nlw e17yjk9v4">
+            <div class="css-1gshg9u e150alo82">
+              <span class="css-qq9ke6 e744wfw0">*</span>
               <span class="css-ln1csn e150alo81">배송지</span>
               <div class="css-82a6rk e150alo80">
                 <span class="css-3uygi7 e17yjk9v3">기본배송지</span>
@@ -139,25 +173,6 @@
                     radius="3"
                   >
                     <span class="css-nytqmg e4nu7ef1">변경</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="checkout-shipping-details" class="css-1y0xj4c e1pxan881">
-            <div class="css-1gshg9u e150alo82">
-              <span class="css-ln1csn e150alo81">배송 요청사항</span>
-              <div class="css-82a6rk e150alo80">
-                <p class="css-f170u1 erv3izt0">배송 요청사항을 입력해주세요</p>
-                <div class="css-iqoq9n e1pxan880">
-                  <button
-                    class="css-q8bpgr e4nu7ef3"
-                    type="button"
-                    width="60"
-                    height="30"
-                    radius="3"
-                  >
-                    <span class="css-nytqmg e4nu7ef1">입력</span>
                   </button>
                 </div>
               </div>
@@ -225,17 +240,18 @@
                 <h3 class="css-1ddzp0m edbbr7c1">결제 수단</h3>
               </div>
               <div class="css-1gshg9u e150alo82">
+                <span class="css-qq9ke6 e744wfw0">*</span>
                 <span class="css-ln1csn e150alo81">결제수단 선택</span>
                 <div class="css-82a6rk e150alo80">
                   <div class="css-gd125q e4nb37r1">
                     <div>
                       <div class="css-18dvwsu">
                         <button
-                          @click="selectPaymentMethod('kakao')"
+                          @click="selectPaymentMethod('kakaopay')"
                           type="button"
                           :class="{
-                            'css-1wlyg0y': selectedPaymentMethod !== 'kakao',
-                            'css-1fecctx': selectedPaymentMethod === 'kakao',
+                            'css-1wlyg0y': selectedPaymentMethod !== 'kakaopay',
+                            'css-1fecctx': selectedPaymentMethod === 'kakaopay',
                           }"
                           color="#f6e500"
                         >
@@ -244,12 +260,12 @@
                       </div>
                       <div class="css-18dvwsu">
                         <button
-                          @click="selectPaymentMethod('toss')"
+                          @click="selectPaymentMethod('tosspay')"
                           type="button"
                           :class="{
-                            'css-1wlyg0y': selectedPaymentMethod !== 'toss',
+                            'css-1wlyg0y': selectedPaymentMethod !== 'tosspay',
                             'tosspay-selected':
-                              selectedPaymentMethod === 'toss',
+                              selectedPaymentMethod === 'tosspay',
                           }"
                           color="#f6e500"
                         >
@@ -286,13 +302,13 @@
                 @click="makePayment"
                 :class="{
                   'css-1lha8en': selectedPaymentMethod,
-                  'payment-inactive': !selectedPaymentMethod,
+                  'payment-inactive': !selectedPaymentMethod || !isFormValid,
                 }"
                 type="button"
                 width="240"
                 height="56"
                 radius="3"
-                :disabled="!selectedPaymentMethod"
+                :disabled="!selectedPaymentMethod || !isFormValid"
               >
                 <span class="css-nytqmg e4nu7ef1"
                   >{{ totalAmount.toLocaleString() }}원 결제하기</span
@@ -386,33 +402,44 @@ export default {
       orderedProducts: [],
       usedPoint: 0,
       maximumAvailablePoint: 0,
+      receiverName: "",
+      receiverPhoneNumber: "",
     };
   },
   computed: {
     ...mapStores(useOrderStore, useUserStore),
     totalAmount() {
       return (
-        this.orderStore.orderedProducts.reduce((total, product) => {
+        this.orderStore.orderInfo.orderedProducts.reduce((total, product) => {
           return total + product.price * product.quantity;
         }, 0) - this.usedPoint
       );
     },
     originalTotalAmount() {
-      return this.orderStore.orderedProducts.reduce((total, product) => {
-        return total + product.originalPrice * product.quantity;
-      }, 0);
+      return this.orderStore.orderInfo.orderedProducts.reduce(
+        (total, product) => {
+          return total + product.originalPrice * product.quantity;
+        },
+        0
+      );
+    },
+    isFormValid() {
+      // 받는 사람 이름과 전화번호가 모두 입력되어야 유효한 상태로 설정
+      return this.receiverName !== "" && this.receiverPhoneNumber !== "";
     },
   },
   created() {
     if (
       this.orderStore.boardInfo == null ||
-      this.orderStore.orderedProducts == null
+      /*this.orderStore.orderedProducts == null*/
+      this.orderStore.orderInfo.orderedProducts == null
     ) {
       return this.$router.push("/");
     }
 
     this.boardInfo = this.orderStore.boardInfo;
-    this.orderedProducts = this.orderStore.orderedProducts;
+    this.orderedProducts = this.orderStore.orderInfo.orderedProducts; //this.orderStore.orderedProducts;
+
     this.ordererInfo = {
       // this.ordererInfo = this.userStore.
       name: "유송연",
@@ -429,9 +456,23 @@ export default {
       this.ordererInfo.point < tenPercentOfPrice
         ? this.ordererInfo.point
         : tenPercentOfPrice;
+
+    history.pushState(null, null, location.href);
+    window.addEventListener("popstate", this.handlePopState);
+  },
+  beforeUnmount() {
+    window.removeEventListener("popstate", this.handlePopState);
   },
 
   methods: {
+    async handlePopState() {
+      this.orderStore.cancelOrder(
+        this.orderStore.orderInfo.orderIdx,
+        "/",
+        "주문이 취소되었습니다."
+      );
+    },
+
     toggleContent() {
       this.isIconRotated = !this.isIconRotated;
       this.isToggleContentVisible = !this.isToggleContentVisible;
@@ -447,15 +488,49 @@ export default {
 
       this.selectedPaymentMethod = method;
     },
-    async makePayment() {
-      const paymentData = {
-        paymentMethod: this.selectedPaymentMethod,
-        address: this.ordererInfo.defaultAddress, // 배송지 정보 가져오기
-        usedPoint: this.usedPoint, // 사용한 포인트
-        totalAmount: this.totalAmount, // 전체 결제금액에서 포인트 차감
-      };
 
-      this.orderStore.makePayment(paymentData);
+    validateAll() {
+      const phoneRegex = /^\d{3}-\d{4}-\d{4}$/;
+      const fields = [
+        {
+          value: this.receiverPhoneNumber,
+          message: "휴대폰 번호를 입력해주세요.",
+          regex: phoneRegex,
+          regexMessage: "-를 포함한 휴대폰번호 11자리를 입력해주세요.",
+        },
+        {
+          value: this.receiverName,
+          message: "받는 사람의 이름을 입력해주세요.",
+        },
+      ];
+
+      for (const field of fields) {
+        if (field.value.trim().length === 0) {
+          alert(field.message);
+          return false;
+        }
+        if (field.regex && !field.regex.test(field.value)) {
+          alert(field.regexMessage);
+          return false;
+        }
+      }
+
+      return true;
+    },
+
+    async makePayment() {
+      if (this.validateAll()) {
+        const paymentData = {
+          paymentMethod: this.selectedPaymentMethod,
+          address: this.ordererInfo.defaultAddress, // 배송지 정보 가져오기
+          usedPoint: this.usedPoint, // 사용한 포인트
+          totalAmount: this.totalAmount, // 전체 결제금액에서 포인트 차감
+          receiverName: this.receiverName, // 사용자가 입력한 받는 사람 이름
+          receiverPhoneNumber: this.receiverPhoneNumber, // 사용자가 입력한 전화번호
+        };
+
+        await this.orderStore.makePayment(paymentData);
+      }
     },
     isNumber(event) {
       const char = event.key;
@@ -1448,5 +1523,30 @@ ul {
 
 .point-info span {
   margin-right: 15px;
+}
+
+.css-input-container {
+  display: flex;
+  align-items: center;
+  height: 44px;
+}
+
+.css-input {
+  width: 30%;
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.css-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.css-qq9ke6 {
+  color: rgb(238, 106, 123);
 }
 </style>

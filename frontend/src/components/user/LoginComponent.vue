@@ -13,7 +13,7 @@
                 <div class="css-46b038 e18ap6t76 formbox">
                     <form class="formbox">
                         <div class="css-1accgqb e1uzxhvi6">
-                            <div class="css-176lya2 e1uzxhvi3"><input v-model="loginRequest.id" data-testid="input-box" name="id"
+                            <div class="css-176lya2 e1uzxhvi3"><input v-model="loginRequest.email" data-testid="input-box" name="email"
                                     placeholder="아이디를 입력해주세요" type="text" class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="login" maxlength="30"></div>
                         </div>
                         <div class="css-1accgqb e1uzxhvi6">
@@ -30,6 +30,20 @@
                     <router-link to="/auth/pwd/find" class="css-i4t6me e18ap6t74">비밀번호 찾기</router-link>
                 </div>
                 <div class="css-s4i9n2 e18ap6t71 formbox">
+                    <div class="sns-login" v-show="type === 'user'">
+                    <ul class="sns-login-list">
+                        <li>
+                                <a @click="socialLogin('kakao')"><i class="ico-sns-loin-kakao kakao"></i><span class="blind">카카오 로그인</span></a>
+                            </li>
+                        <li>
+                            <a @click="socialLogin('naver')"><i class="ico-sns-loin-naver naver"></i><span class="blind">네이버 로그인</span></a>
+                            </li>
+                        <li>
+                            <a @click="socialLogin('google')"><i class="ico-sns-loin-google google"></i><span class="blind">구글 로그인</span></a>
+                            </li>
+                        
+                        </ul>
+                </div>
                     <button class="css-qaxuc4 e4nu7ef3" type="button" height="54" radius="3" @click="login">
                         <span class="css-nytqmg e4nu7ef1" >로그인</span>
                     </button>
@@ -53,7 +67,7 @@ export default {
   name: 'LoginComponent',
   data(){
     return {type: "user", loginRequest:{
-        id: "",
+        email: "",
         password: ""
         }
     }
@@ -72,10 +86,13 @@ export default {
     setUserType(type){
       this.type = type;
     },
-    login(){
+    async login(){
         if(this.validateForm()){
-            if(this.userStore.login(this.type, this.loginRequest)){
+            const isSuccess = await this.userStore.login(this.type, this.loginRequest);
+            if(isSuccess){
                 this.$router.push('/');
+            }else{
+                alert("로그인에 실패했습니다. 아이디, 비밀번호 또는 이메일 인증상태를 확인해주세요");
             }
         }
         
@@ -83,7 +100,7 @@ export default {
     validateForm(){
         const idRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        if(this.loginRequest.id.length === 0){
+        if(this.loginRequest.email.length === 0){
             alert("아이디를 입력해주세요");
             return false;
         }
@@ -91,16 +108,25 @@ export default {
             alert("비밀번호를 입력해주세요");
             return false;
         }
-        if(!idRegex.test(this.loginRequest.id)){
+        if(!idRegex.test(this.loginRequest.email)){
             alert("아이디 형식이 올바르지 않습니다.")
             return false;
         }
-        if (this.loginRequest.id.length > 30 || this.loginRequest.password.length > 30){
+        if (this.loginRequest.email.length > 30 || this.loginRequest.password.length > 30){
             alert("아이디또는 비밀번호는 30자를 초과할 수 없습니다.")
             return false;
         }
 
         return true;
+    },
+    socialLogin(loginType){
+        const response = this.userStore.socialLogin(loginType);
+        if(response === "fail"){
+            alert("로그인에 실패했습니다.");
+        }else {
+            this.$router.push(response);
+        }
+        
     }
   },
 }
@@ -371,4 +397,75 @@ button {
     padding-left: 7px;
     padding-right: 7px;
 }
+
+.sns-login-list {
+    text-align: center;
+}
+ol, ul {
+    list-style: none;
+}
+.sns-login-list > li {
+    display: inline-block;
+    margin: 0 9px;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+    cursor: pointer;
+}
+a {
+    background: transparent;
+    text-decoration: none;
+    color: inherit;
+}
+
+.sns-login-list{
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.sns-login-list .ico-sns-loin .naver {
+    background-position: left top;
+}
+
+.sns-login-list .ico-sns-loin-kakao {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    overflow: hidden;
+    background: url(./../../assets/kakao_login.png) no-repeat;
+    background-size: auto 46px;
+}
+
+.sns-login-list .ico-sns-loin-google {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    overflow: hidden;
+    background: url(./../../assets/google_login.png) no-repeat;
+    background-size: auto 46px;
+}
+
+.sns-login-list .ico-sns-loin-naver {
+    display: inline-block;
+    width: 46px;
+    height: 46px;
+    overflow: hidden;
+    background: url(./../../assets/naver_login.png) no-repeat;
+    background-size: auto 46px;
+}
+
+.blind {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
 </style>
