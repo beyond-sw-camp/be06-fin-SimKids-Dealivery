@@ -12,6 +12,9 @@ import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.exception.InvalidCustomException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
@@ -42,5 +45,17 @@ public class QuestionService {
                 .answerStatus(question.getAnswerStatus())  // 답변 상태 반환
                 .createdAt(question.getCreatedAt())  // 생성 날짜 반환
                 .build();
+    }
+    public List<QuestionDto.QuestionListResponse> getQuestions() {
+        return questionRepository.findAll().stream()
+                .map(question -> QuestionDto.QuestionListResponse.builder()
+                        .idx(question.getIdx())
+                        .title(question.getTitle())
+                        .content(question.getContent())
+                        .userName(question.getUser().getName())  // 사용자 이름
+                        .answerStatus(question.getAnswerStatus())  // 답변 상태
+                        .createdAt(question.getCreatedAt())  // 생성일
+                        .build())
+                .collect(Collectors.toList());
     }
 }
