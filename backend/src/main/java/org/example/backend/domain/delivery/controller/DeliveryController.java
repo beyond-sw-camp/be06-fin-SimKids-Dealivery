@@ -6,9 +6,7 @@ import org.example.backend.domain.delivery.service.DeliveryService;
 import org.example.backend.global.common.constants.BaseResponse;
 import org.example.backend.global.security.custom.model.dto.CustomUserDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,6 +22,15 @@ public class DeliveryController {
             ){
         List<DeliveryDto.DeliveryResponse> deliveryResponses = deliveryService.getList(userDetails.getIdx());
         return new BaseResponse(deliveryResponses);
+    }
+
+    @PostMapping("")
+    public BaseResponse createDelivery(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody DeliveryDto.CreateDeliveryRequest request
+    ){
+        deliveryService.createDelivery(userDetails.getIdx(),request);
+        return new BaseResponse();
     }
 
 }

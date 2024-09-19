@@ -44,4 +44,8 @@ public class Delivery {
                 .name(this.name)
                 .build();
     }
+
+    public void setIsDefault(Boolean aDefault) {
+        isDefault = aDefault;
+    }
 }
