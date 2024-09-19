@@ -90,6 +90,8 @@
 
 <script>
 import axios from 'axios';
+import { useQnaStore } from "@/stores/useQnaStore";
+import { mapStores } from "pinia";
 
 export default {
     name: "QnaRegisterModalComponent",
@@ -122,7 +124,11 @@ export default {
     computed: {
         isFormValid() {
             return this.subject.trim().length >= 2 && this.content.trim().length >= 5;
-        }
+        },
+        ...mapStores(useQnaStore),
+        localTableData() {
+            return this.qnaStore.inquiries;
+        },
     },
     methods: {
         closeModal() {

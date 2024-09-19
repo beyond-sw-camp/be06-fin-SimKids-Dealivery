@@ -20,7 +20,7 @@
             'tab',
             { active: activeTab === 'inquiries' },
           ]"
-          @click.prevent="activeTab = 'inquiries'"
+          @click.prevent="loadInquiries"
         >
           <a class="css-1t0ft7s efe6b6j0"><span class="name">문의</span></a>
         </li>
@@ -149,17 +149,15 @@
 </template>
 
 <script>
+import { useQnaStore } from "@/stores/useQnaStore";
 import QnaRegisterModalComponent from "../qna/QnaRegisterModalComponent.vue";
+import { mapStores } from "pinia";
 
 export default {
   name: "BoardDetailNavComponent",
-  props: {
-    tableData: {
-      type: Array,
-      required: true,
-    },
+  computed: {
+    ...mapStores(useQnaStore),
   },
-
   data() {
     return {
       activeTab: "description",
@@ -171,12 +169,18 @@ export default {
         title: "",
         content: "",
       },
-      localTableData: [...this.tableData],
+      localTableData: [],
       expandedInquiryIndex: null,
       editingIndex: null, // 수정할 문의 인덱스
     };
   },
   methods: {
+    loadInquiries() {
+      this.activeTab = "inquiries"; // 문의 탭 활성화
+      this.qnaStore.fetchInquiries().then(() => {
+        this.localTableData = this.qnaStore.inquiries;
+      });
+    },
     formatDate(dateString) {
       const date = new Date(dateString);
       return date.toLocaleDateString("ko-KR", {

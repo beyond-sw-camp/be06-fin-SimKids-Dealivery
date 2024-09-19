@@ -7,7 +7,7 @@
           <BoardDetailThumnailComponent :thumbnails="thumbnails" />
           <BoardDetailProductInfoComponent @submitOrder="submitOrder" />
         </main>
-        <BoardDetailNavComponent :tableData="tableData" />
+        <BoardDetailNavComponent />
       </div>
     </div>
   </div>
@@ -20,12 +20,11 @@ import FooterComponent from "@/components/common/FooterComponent.vue";
 import BoardDetailThumnailComponent from "@/components/board/BoardDetailThumnailComponent.vue";
 import BoardDetailProductInfoComponent from "@/components/board/BoardDetailProductInfoComponent.vue";
 import BoardDetailNavComponent from "@/components/board/BoardDetailNavComponent.vue";
-
 import { useOrderStore } from "@/stores/useOrderStore";
 import { mapStores } from "pinia";
 
 export default {
-  name: "OrdersPage",
+  name: "BoardDetailPage",
   components: {
     HeaderComponent,
     FooterComponent,
