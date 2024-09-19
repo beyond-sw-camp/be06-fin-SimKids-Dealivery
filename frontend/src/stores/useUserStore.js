@@ -253,6 +253,19 @@ export const useUserStore = defineStore("user", {
         );
         return false;
       }
+    },
+    async deleteDelivery(idx){
+      try{
+        let response = await axios.delete(backend+"/delivery/"+idx, null, {withCredentials:true});
+        if(response.data.code !== 1000){
+          return false;
+        }
+        return true;
+      }catch{
+        alert("배송지 삭제에 실패했습니다.");
+        return false;
+      }
+      
     }
   },
 

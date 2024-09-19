@@ -47,6 +47,7 @@
               type="button"
               height="44"
               radius="3"
+              @click="deleteOne"
             >
               <span class="css-nytqmg e4nu7ef1">삭제</span>
             </button>
@@ -58,6 +59,8 @@
 </template>
 
 <script>
+import { useUserStore } from "@/stores/useUserStore";
+import { mapStores } from "pinia";
 export default {
   name: "AddressEditModalComponent",
   data() {
@@ -78,7 +81,10 @@ export default {
       default: null,
     },
   },
-  created() {
+  computed: {
+    ...mapStores(useUserStore),
+  },
+  mounted() {
     if (this.oldAddress) {
       this.editedAddress.idx = this.oldAddress.idx;
       this.editedAddress.name = this.oldAddress.name;
@@ -109,6 +115,17 @@ export default {
         this.editedAddress.addressDetail === this.oldAddress.addressDetail &&
         this.editedAddress.isDefault === this.oldAddress.isDefault
       );
+    },
+    async deleteOne(){
+      if(this.editedAddress.idx === null){
+        alert("유효하지 않은 배송지입니다.");
+        this.closeModal();
+      }else{
+        if(await this.userStore.deleteDelivery(this.editedAddress.idx)){
+         this.userStore.getDeliveryList();
+        }
+        this.closeModal();
+      }
     }
   },
 };
