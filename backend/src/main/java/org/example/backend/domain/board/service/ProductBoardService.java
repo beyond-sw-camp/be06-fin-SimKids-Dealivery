@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -33,6 +32,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+
 @Service
 @RequiredArgsConstructor
 public class ProductBoardService {
@@ -44,9 +44,25 @@ public class ProductBoardService {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
+
 	public Page<ProductBoardDto.BoardListResponse> list(String search, Pageable pageable) {
 		Page<ProductBoard> productBoards = productBoardRepository.search(search, pageable);
 		return productBoards.map(ProductBoard::toBoardListResponse);
+	}
+
+	public ProductBoardDto.BoardDetailResponse detail(Long idx) {
+		ProductBoard productBoard = productBoardRepository.findById(idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
+		List<ProductThumbnailImage> productThumbnailImages = productThumbnailImageRepository.findAllByProductBoardIdx(idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
+		List<Product> products = productRepository.findAllByProductBoardIdx(idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
+
+
+		List<String> productThumbnailUrls = productThumbnailImages.stream()
+			.map(ProductThumbnailImage::getProductThumbnailUrl)
+			.toList();
+		List<ProductDto.Response> productResponse = products.stream()
+			.map(Product::toResponse)
+			.toList();
+		return productBoard.toBoardDetailResponse(productThumbnailUrls, productResponse);
 	}
 
 	@Transactional
@@ -66,21 +82,17 @@ public class ProductBoardService {
 	}
 
 	public ProductBoardDto.CompanyBoardDetailResponse getCompanyDetail(Long idx) {
-		Optional<ProductBoard> optionalProductBoard = productBoardRepository.findByIdx(idx);
-		Optional<List<ProductThumbnailImage>> optionalProductThumbnailImages = productThumbnailImageRepository.findAllByProductBoardIdx(idx);
-		Optional<List<Product>> optionalProducts = productRepository.findAllByProductBoardIdx(idx);
+		ProductBoard productBoard = productBoardRepository.findByIdx(idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
+		List<ProductThumbnailImage> productThumbnailImages = productThumbnailImageRepository.findAllByProductBoardIdx(idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
+		List<Product> products = productRepository.findAllByProductBoardIdx(idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
 
-		if (optionalProductBoard.isPresent() && optionalProductThumbnailImages.isPresent() && optionalProducts.isPresent()) {
-			ProductBoard productBoard = optionalProductBoard.get();
-			List<String> productThumbnailUrls = optionalProductThumbnailImages.get().stream()
-				.map(ProductThumbnailImage::getProductThumbnailUrl)
-				.toList();
-			List<ProductDto.CompanyResponse> products = optionalProducts.get().stream()
-				.map(Product::toDto)
-				.toList();
-			return productBoard.toBoardDetailResponse(productThumbnailUrls, products);
-		}
-		return null;
+		List<String> productThumbnailUrls = productThumbnailImages.stream()
+			.map(ProductThumbnailImage::getProductThumbnailUrl)
+			.toList();
+		List<ProductDto.CompanyResponse> productCompanyResponse = products.stream()
+			.map(Product::toCompanyResponse)
+			.toList();
+		return productBoard.toCompanyBoardDetailResponse(productThumbnailUrls, productCompanyResponse);
 	}
 
 	private ProductBoard saveProductBoard(ProductBoardDto.BoardCreateRequest boardCreateRequest, String productThumbnailUrl, String productDetailUrl) {
