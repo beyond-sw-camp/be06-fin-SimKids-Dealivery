@@ -65,7 +65,7 @@ public class ProductBoardService {
 		return productBoards.map(ProductBoard::toCompanyBoardListResponse);
 	}
 
-	public ProductBoardDto.BoardDetailResponse getCompanyDetail(Long idx) {
+	public ProductBoardDto.CompanyBoardDetailResponse getCompanyDetail(Long idx) {
 		Optional<ProductBoard> optionalProductBoard = productBoardRepository.findByIdx(idx);
 		Optional<List<ProductThumbnailImage>> optionalProductThumbnailImages = productThumbnailImageRepository.findAllByProductBoardIdx(idx);
 		Optional<List<Product>> optionalProducts = productRepository.findAllByProductBoardIdx(idx);
@@ -75,7 +75,7 @@ public class ProductBoardService {
 			List<String> productThumbnailUrls = optionalProductThumbnailImages.get().stream()
 				.map(ProductThumbnailImage::getProductThumbnailUrl)
 				.toList();
-			List<ProductDto.Request> products = optionalProducts.get().stream()
+			List<ProductDto.CompanyResponse> products = optionalProducts.get().stream()
 				.map(Product::toDto)
 				.toList();
 			return productBoard.toBoardDetailResponse(productThumbnailUrls, products);

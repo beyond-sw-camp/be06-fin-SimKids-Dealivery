@@ -108,8 +108,8 @@ public class ProductBoard {
 			.build();
 	}
 
-	public ProductBoardDto.BoardDetailResponse toBoardDetailResponse(List<String> productDetailUrls, List<ProductDto.Request> products) {
-		return ProductBoardDto.BoardDetailResponse.builder()
+	public ProductBoardDto.CompanyBoardDetailResponse toBoardDetailResponse(List<String> productDetailUrls, List<ProductDto.CompanyResponse> products) {
+		return ProductBoardDto.CompanyBoardDetailResponse.builder()
 			.productThumbnailUrls(productDetailUrls)
 			.productDetailUrl(this.productDetailUrl)
 			.title(this.title)

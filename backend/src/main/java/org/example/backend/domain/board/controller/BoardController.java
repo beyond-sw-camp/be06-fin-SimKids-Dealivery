@@ -60,7 +60,7 @@ public class BoardController {
 	@Operation(summary = "판매자 회원 게시글 상세 조회 API")
 	@GetMapping(value = "/company/{idx}/detail")
 	public BaseResponse getDetail(@PathVariable Long idx) {
-		ProductBoardDto.BoardDetailResponse response =  productBoardService.getCompanyDetail(idx);
+		ProductBoardDto.CompanyBoardDetailResponse response =  productBoardService.getCompanyDetail(idx);
 		return response == null ? new BaseResponse(BaseResponseStatus.FAIL) : new BaseResponse(response);
 	}
 }

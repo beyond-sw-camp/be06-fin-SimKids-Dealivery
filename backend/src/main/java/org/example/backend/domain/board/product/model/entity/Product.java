@@ -36,8 +36,8 @@ public class Product {
 		this.stock -= quantity;
     }
 
-	public ProductDto.Request toDto() {
-		return ProductDto.Request.builder()
+	public ProductDto.CompanyResponse toDto() {
+		return ProductDto.CompanyResponse.builder()
 			.name(this.name)
 			.stock(this.stock)
 			.price(this.price)

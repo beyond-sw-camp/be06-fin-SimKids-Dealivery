@@ -90,12 +90,12 @@ public class ProductBoardDto {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class BoardDetailResponse{
+	public static class CompanyBoardDetailResponse {
 		private List<String> productThumbnailUrls;
 		private String productDetailUrl;
 		private String title;
 		private Integer discountRate;
-		private List<ProductDto.Request> products;
+		private List<ProductDto.CompanyResponse> products;
 		private LocalDateTime startedAt;
 		private LocalDateTime endedAt;
 		private String category;
