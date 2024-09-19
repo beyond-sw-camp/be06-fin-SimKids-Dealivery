@@ -84,7 +84,7 @@ public enum BaseResponseStatus {
     // 주문 기능 3000
     ORDER_FAIL_LIST(false, 3001, "주문내역 조회에 실패했습니다."),
     ORDER_CANCEL_FAIL(false, 3002, "주문취소에 실패했습니다."),
-    ORDER_PAYMENT_FAIL(false, 3003, "결제에 실패했습니다.주문 실패 처리됩니다."),
+    ORDER_PAYMENT_FAIL(false, 3003, "결제에 실패했습니다. 주문 실패 처리됩니다."),
     ORDER_CREATE_FAIL_LACK_STOCK(false, 3004, "주문에 실패했습니다. 상품재고가 부족합니다."),
     ORDER_CANCEL_FAIL_KAKAO_PAY(false, 3005, "주문에 실패했습니다. 카카오페이 결제 실패했습니다."),
     ORDER_VALIDATION_FAIL_PRICE_MISMATCH(false, 3006, "주문에 실패했습니다. 주문 정보와 결제금액이 일치하지 않아 결제취소됩니다"),
@@ -97,7 +97,8 @@ public enum BaseResponseStatus {
     ORDER_FAIL_INVALID_PRODUCT_PRICE(false, 3013, "주문에 실패했습니다. 해당하는 상품의 가격 정보가 유효하지 않습니다."),
     ORDER_FAIL_EXPIRED_EVENT(false, 3014, "주문에 실패했습니다. 종료된 이벤트입니다."),
     ORDER_FAIL_PRODUCT_NOT_FOUND(false, 3015, "주문에 실패했습니다. 해당하는 상품을 찾을 수 없습니다."),
-
+    ORDER_FAIL_PAYMENT_NOT_FOUND(false, 3016, "주문에 실패했습니다. 결제 정보를 찾을 수 없습니다."),
+    ORDER_PAYMENT_CANCEL_FAILED(false, 3017,"결제 취소 요청 중 오류가 발생했습니다. 관리자에게 문의해주세요."),
 
     // 상품게시글 기능 4000
     PRODUCT_BOARD_REGISTER_FAIL_EMPTY_TITLE(false, 4000, "상품게시글 등록에 실패했습니다. 제목을 입력해주세요"),
@@ -118,6 +119,8 @@ public enum BaseResponseStatus {
     PRODUCT_BOARD_REGISTER_FAIL_INVALID_CATEGORY(false, 4031, "상품게시글 등록에 실패했습니다. 유효한 카테고리가 아닙니다. 다시 입력해주세요"),
     PRODUCT_BOARD_REGISTER_FAIL_START_TIME_PASSED(false, 4040, "상품게시글 등록에 실패했습니다. 시작 시간이 이미 지나 게시글을 수정할 수 없습니다."),
     PRODUCT_BOARD_REMOVE_FAIL_START_TIME_PASSED(false, 4050, "상품게시글 삭제에 실패했습니다. 시작 시간이 이미 지나 게시글을 삭제할 수 없습니다."),
+    PRODUCT_BOARD_LIST_FAIL(false, 4100, "상품게시글 조회에 실패했습니다."),
+    PRODUCT_BOARD_DETAIL_FAIL(false, 4200, "상품 상세 조회에 실패했습니다."),
 
     // 관심 기능 5000
     LIKES_REGISTER_FAIL(false, 5000, "관심게시글 등록에 실패했습니다."),
@@ -152,6 +155,9 @@ public enum BaseResponseStatus {
 
     QNA_QUESTION_LIST_FAIL(false, 6018, "문의 목록 조회에 실패했습니다."),
     QNA_QUESTION_LIST_FAIL_INVALID_PRODUCT_BOARD_IDX(false, 6019, "문의 목록 조회에 실패했습니다. 잘못된 상품 게시글 ID입니다."),
+
+    QNA_USER_NOT_FOUND(false, 6020, "사용자를 찾을 수 없습니다."),
+    QNA_PRODUCT_BOARD_NOT_FOUND(false, 6021, "상품 게시글을 찾을 수 없습니다."),
 
 
     // 모든 요청 실패 9000

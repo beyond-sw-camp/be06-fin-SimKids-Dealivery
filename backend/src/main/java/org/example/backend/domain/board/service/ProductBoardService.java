@@ -5,14 +5,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.example.backend.domain.board.category.model.entity.Category;
 import org.example.backend.domain.board.category.repository.CategoryRepository;
-import org.example.backend.domain.board.model.dto.BoardDto;
+import org.example.backend.domain.board.model.dto.ProductBoardDto;
 import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.board.model.entity.ProductThumbnailImage;
+import org.example.backend.domain.board.product.model.dto.ProductDto;
 import org.example.backend.domain.board.product.model.entity.Product;
 import org.example.backend.domain.board.product.repository.ProductRepository;
 import org.example.backend.domain.board.repository.ProductBoardRepository;
@@ -42,34 +44,58 @@ public class ProductBoardService {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
+	public Page<ProductBoardDto.BoardListResponse> list(String search, Pageable pageable) {
+		Page<ProductBoard> productBoards = productBoardRepository.search(search, pageable);
+		return productBoards.map(ProductBoard::toBoardListResponse);
+	}
+
 	@Transactional
-	public void create(BoardDto.BoardCreateRequest boardCreateRequest, MultipartFile[] productThumbnails, MultipartFile productDetail) {
+	public void create(ProductBoardDto.BoardCreateRequest boardCreateRequest, MultipartFile[] productThumbnails, MultipartFile productDetail) {
 		List<String> thumbnailUrls = uploadImage(productThumbnails);
 		String productDetailUrl = uploadImage(productDetail);
 
 		ProductBoard savedProductBoard = saveProductBoard(boardCreateRequest, thumbnailUrls.get(0), productDetailUrl);
-		List<Product> savedProducts = saveProduct(boardCreateRequest);
-		List<ProductThumbnailImage> productThumbnailImages = saveProductThumbnailImage(boardCreateRequest, thumbnailUrls,savedProductBoard);
+		List<Product> savedProducts = saveProduct(boardCreateRequest, savedProductBoard);
+		List<ProductThumbnailImage> productThumbnailImages = saveProductThumbnailImage(boardCreateRequest, thumbnailUrls, savedProductBoard);
 	}
 
-	public Page<BoardDto.BoardListResponse> list(Pageable pageable) {
-		Page<ProductBoard> productBoards = productBoardRepository.findAllWithCategory(pageable);
-		return productBoards.map(ProductBoard::toBoardListResponse);
+	// 판매자 게시글 조회
+	public Page<ProductBoardDto.CompanyBoardListResponse> companyList(String status, Integer month, Pageable pageable) {
+		Page<ProductBoard> productBoards = productBoardRepository.companySearch(status, month, pageable);
+		return productBoards.map(ProductBoard::toCompanyBoardListResponse);
 	}
 
-	private ProductBoard saveProductBoard(BoardDto.BoardCreateRequest boardCreateRequest, String productThumbnailUrl, String productDetailUrl) {
+	public ProductBoardDto.BoardDetailResponse getCompanyDetail(Long idx) {
+		Optional<ProductBoard> optionalProductBoard = productBoardRepository.findByIdx(idx);
+		Optional<List<ProductThumbnailImage>> optionalProductThumbnailImages = productThumbnailImageRepository.findAllByProductBoardIdx(idx);
+		Optional<List<Product>> optionalProducts = productRepository.findAllByProductBoardIdx(idx);
+
+		if (optionalProductBoard.isPresent() && optionalProductThumbnailImages.isPresent() && optionalProducts.isPresent()) {
+			ProductBoard productBoard = optionalProductBoard.get();
+			List<String> productThumbnailUrls = optionalProductThumbnailImages.get().stream()
+				.map(ProductThumbnailImage::getProductThumbnailUrl)
+				.toList();
+			List<ProductDto.Request> products = optionalProducts.get().stream()
+				.map(Product::toDto)
+				.toList();
+			return productBoard.toBoardDetailResponse(productThumbnailUrls, products);
+		}
+		return null;
+	}
+
+	private ProductBoard saveProductBoard(ProductBoardDto.BoardCreateRequest boardCreateRequest, String productThumbnailUrl, String productDetailUrl) {
 		Category category = categoryRepository.findByName(boardCreateRequest.getCategory().getType());
 		ProductBoard productBoard = boardCreateRequest.toEntity(productThumbnailUrl, productDetailUrl, category);
 		return productBoardRepository.save(productBoard);
 	}
 
-	private List<Product> saveProduct(BoardDto.BoardCreateRequest boardCreateRequest) {
+	private List<Product> saveProduct(ProductBoardDto.BoardCreateRequest boardCreateRequest, ProductBoard productBoard) {
 		return boardCreateRequest.getProducts().stream()
-			.map(productDto -> productRepository.save(productDto.toEntity()))
+			.map(productDto -> productRepository.save(productDto.toEntity(productBoard)))
 			.collect(Collectors.toList());
 	}
 
-	private List<ProductThumbnailImage> saveProductThumbnailImage(BoardDto.BoardCreateRequest boardCreateRequest, List<String> thumbnailUrls, ProductBoard productBoard) {
+	private List<ProductThumbnailImage> saveProductThumbnailImage(ProductBoardDto.BoardCreateRequest boardCreateRequest, List<String> thumbnailUrls, ProductBoard productBoard) {
 
 		return thumbnailUrls.stream()
 			.map(url -> productThumbnailImageRepository.save(boardCreateRequest.toEntity(url, productBoard)))
