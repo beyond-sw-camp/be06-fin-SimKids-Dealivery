@@ -62,11 +62,24 @@ public class UserController {
             ))
     @PostMapping("/email/verify")
     public BaseResponse emailVerify(
-            @RequestBody UserAuthTokenDto.UserEmailAuthRequest request
+            @RequestBody UserAuthTokenDto.UserEmailAuthRequest userEmailAuthRequest
             ){
-        if (userAuthTokenService.doAuth(request)){
+        if (userAuthTokenService.doAuth(userEmailAuthRequest)){
             return new BaseResponse();
         }
         return new BaseResponse(BaseResponseStatus.FAIL);
+    }
+
+    @PostMapping("/social/signup")
+    public BaseResponse socialSignup(
+            @Valid @RequestBody UserDto.SocialSignupRequest socialSignupRequest
+    ){
+        //이미 가입됐는지 체크
+        userService.isExist(socialSignupRequest.getEmail());
+        if (!userService.socialSignup(socialSignupRequest)){
+            return new BaseResponse(BaseResponseStatus.USER_SIGNUP_FAIL);
+        }
+
+        return new BaseResponse();
     }
 }

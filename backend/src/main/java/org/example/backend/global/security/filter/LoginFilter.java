@@ -23,6 +23,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
@@ -88,8 +89,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String refreshToken = jwtUtil.createRefreshToken(idx, email, role);
 
         // RefreshToken 엔티티 저장
-        UserRefreshToken refreshTokenEntity = createUserRefreshTokenEntity(email, refreshToken);
-        userRefreshTokenRepository.save(refreshTokenEntity);
+        UserRefreshToken userRefreshToken = createUserRefreshTokenEntity(email, refreshToken);
+        userRefreshTokenRepository.save(userRefreshToken);
 
         // 쿠키 설정
         createTokenCookies(response, accessToken, refreshToken, "user");
@@ -109,8 +110,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String refreshToken = jwtUtil.createRefreshToken(idx, email, role);
 
         // RefreshToken 엔티티 저장
-        CompanyRefreshToken refreshTokenEntity = createCompanyRefreshTokenEntity(email, refreshToken);
-        companyRefreshTokenRepository.save(refreshTokenEntity);
+        CompanyRefreshToken companyRefreshToken = createCompanyRefreshTokenEntity(email, refreshToken);
+        companyRefreshTokenRepository.save(companyRefreshToken);
 
         // 쿠키 설정
         createTokenCookies(response, accessToken, refreshToken, "company");

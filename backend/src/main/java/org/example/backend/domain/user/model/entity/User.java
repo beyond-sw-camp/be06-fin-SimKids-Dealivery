@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.backend.domain.qna.model.entity.Question;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -48,6 +50,7 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Delivery> deliveryList;
 
-
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Question> questions = new ArrayList<>();
 
 }

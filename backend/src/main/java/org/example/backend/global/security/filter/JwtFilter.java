@@ -72,7 +72,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
             // refresh token을 가지고 있는 경우 (타입에 맞게 만료 확인 후 재발급 진행)
-            if (!isExpiredRefreshToken(refreshTokenCookie, typeCookie)){
+
+            if (!isExpiredRefreshToken(refreshTokenCookie)){
                 return;
             }
             String reissuedAccessToken = reissueAccessToken(refreshTokenCookie.getValue(), typeCookie.getValue());
@@ -150,7 +151,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     //refresh token 만료여부 확인
-    private Boolean isExpiredRefreshToken(Cookie refreshTokenCookie, Cookie typeCookie){
+    private Boolean isExpiredRefreshToken(Cookie refreshTokenCookie){
         String refreshToken = refreshTokenCookie.getValue();
         if (jwtUtil.isExpired(refreshToken)) {
             log.info("RefreshToken 만료");
