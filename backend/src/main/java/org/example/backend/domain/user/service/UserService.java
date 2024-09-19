@@ -37,4 +37,8 @@ public class UserService {
     }
 
 
+    public boolean socialSignup(UserDto.SocialSignupRequest socialSignupRequest) {
+        User newUser = userRepository.save(socialSignupRequest.toEntity());
+        return true;
+    }
 }

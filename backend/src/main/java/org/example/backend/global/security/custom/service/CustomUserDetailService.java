@@ -34,6 +34,9 @@ public class CustomUserDetailService implements UserDetailsService {
             if (!user.getEmailStatus()){
                 throw new UsernameNotFoundException(email);
             }
+            if (!user.getType().equals("inapp")){
+                throw new UsernameNotFoundException(email);
+            }
             return new CustomUserDetails(user);
         }
         if (type.equals("company")){
