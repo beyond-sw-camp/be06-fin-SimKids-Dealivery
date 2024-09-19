@@ -10,4 +10,8 @@ import java.util.Optional;
 @Repository
 public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
     Optional<List<Delivery>> findAllByUserIdx(Long idx);
+
+    void deleteByIdx(Long idx);
+
+    Optional<Delivery> findByIdx(Long idx);
 }

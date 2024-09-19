@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -65,5 +66,17 @@ public class DeliveryService {
                     return delivery;
                 })
                 .orElse(null);
+    }
+
+    public void deleteDelivery(Long idx) {
+        deliveryRepository.deleteById(idx);
+    }
+
+    public boolean isExist(Long idx) {
+        Optional<Delivery> optionalDelivery = deliveryRepository.findByIdx(idx);
+        if (optionalDelivery.isEmpty()){
+            return false;
+        }
+        return true;
     }
 }
