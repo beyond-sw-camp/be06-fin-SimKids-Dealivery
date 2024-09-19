@@ -1,87 +1,122 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-// const backend = "http://localhost:8080/api/login";
-//로그인 성공 요청 mocky url: https://run.mocky.io/v3/cd7370a5-b1be-41a1-b680-4f93dd1a67bc
-//일반회원가입 성공 요청 mocky url: https://run.mocky.io/v3/86385646-d65e-40fc-9173-b609a688da25
-//이메일 인증 전송 요청 mocky url: https://run.mocky.io/v3/01cc84e7-5bef-41c8-8931-964f4b43fcbd
+const backend = "/api"
 
 export const useUserStore = defineStore("user", {
   state: () => ({
     isLogined: false,
     roles: [],
+    socialLoginResponse: {
+      name: "",
+      email: "",
+      type: "",
+    },
+    userLoginRequest: {
+      email: "",
+      password: "",
+    }
+
   }),
   actions: {
     async login(type, loginRequest) {
       try {
-        loginRequest.id = loginRequest.id + ";" + type;
+        this.userLoginRequest.email = loginRequest.email + ";" + type;
+        this.userLoginRequest.password = loginRequest.password;
         let response = await axios.post(
-          "https://run.mocky.io/v3/cd7370a5-b1be-41a1-b680-4f93dd1a67bc",
-          loginRequest,
+          backend+"/login",
+          this.userLoginRequest,
           { withCredentials: true }
         );
-        if (response.status === 200 && response.data.data.isLogin) {
-          this.roles = [response.data.data.role];
+        if (response.status === 200) {
+          this.roles = [response.data.result.role];
           this.isLogined = true;
           return true;
-        } else {
-          alert("로그인에 실패했습니다. 아이디 비밀번호를 확인해주세요.");
+        }else{
+          return false;
         }
       } catch (error) {
-        alert("로그인에 실패했습니다. 아이디 비밀번호를 확인해주세요.");
+        return false;
       }
     },
 
-    async userSignup(sigunupRequest) {
+    async userSignup(request) {
       try {
         let response = await axios.post(
-          "https://run.mocky.io/v3/86385646-d65e-40fc-9173-b609a688da25",
-          sigunupRequest,
+          backend+"/user/signup",
+          request,
           { withCredentials: true }
         );
-        console.log(sigunupRequest);
-        console.log(response);
-        if (response.data.code !== 1000) {
+        if (response.data.code === 2062){
+          alert("이미 가입된 이메일입니다.");
           return false;
-        } else {
-          return true;
         }
+        if (response.data.code === 2058) {
+          alert("이메일 인증 코드가 일치하지 않거나 유효하지 않습니다.")
+          return false;
+        }
+        if (response.data.code === 2059){
+          alert("이메일 인증 코드가 만료되었습니다. 다시 인증 메일을 발송해주세요");
+          return false;
+        }
+        if(response.data.code === 2060){
+          alert("이메일 인증 코드가 일치하지 않습니다.");
+          return false;
+        }
+
+        return true;
+      
       } catch (error) {
         alert(
-          "회원가입에 실패했습니다. 입력한 정보를 다시 한 번 확인해주세요.\n\n반복적인 문제 발생시 고객센터로 문의바랍니다."
+          "회원가입 요청에 실패했습니다. 입력한 정보를 다시 한 번 확인해주세요.\n\n반복적인 문제 발생시 고객센터로 문의바랍니다."
         );
+        return false;
       }
     },
 
-    async companySignup(sigunupRequest) {
+    async companySignup(request) {
       try {
         let response = await axios.post(
-          "https://run.mocky.io/v3/86385646-d65e-40fc-9173-b609a688da25",
-          sigunupRequest,
+          backend+"/company/signup",
+          request,
           { withCredentials: true }
         );
-        console.log(sigunupRequest);
-        console.log(response);
-        if (response.data.code !== 1000) {
+        if (response.data.code === 2062){
+          alert("이미 가입된 이메일입니다.");
           return false;
-        } else {
-          return true;
         }
+        if (response.data.code === 2058) {
+          alert("이메일 인증 코드가 일치하지 않거나 유효하지 않습니다.")
+          return false;
+        }
+        if (response.data.code === 2059){
+          alert("이메일 인증 코드가 만료되었습니다. 다시 인증 메일을 발송해주세요");
+          return false;
+        }
+        if(response.data.code === 2060){
+          alert("이메일 인증 코드가 일치하지 않습니다.");
+          return false;
+        }
+        if(response.data.code === 2049){
+          alert("사업자등록번호 인증에 실패했습니다.");
+          return false;
+        }
+        return true;
       } catch (error) {
         alert(
-          "회원가입에 실패했습니다. 입력한 정보를 다시 한 번 확인해주세요.\n\n반복적인 문제 발생시 고객센터로 문의바랍니다."
+          "이미 등록된 사업자 정보입니다."
         );
+        return false;
       }
     },
 
-    async sendUserEmailCode(id) {
+    async sendUserEmailCode(userEmailAuthRequest) {
       try {
         let response = await axios.post(
-          "https://run.mocky.io/v3/01cc84e7-5bef-41c8-8931-964f4b43fcbd",
-          id,
+          backend+"/user/email/verify",
+          userEmailAuthRequest,
           { withCredentials: true }
         );
-        console.log(response);
         if (response.data.code !== 1000) {
           return false;
         } else {
@@ -94,14 +129,13 @@ export const useUserStore = defineStore("user", {
       }
     },
 
-    async sendCompanyEmailCode(id) {
+    async sendCompanyEmailCode(companyEmailAuthRequest) {
       try {
         let response = await axios.post(
-          "https://run.mocky.io/v3/01cc84e7-5bef-41c8-8931-964f4b43fcbd",
-          id,
+          backend+"/company/email/verify",
+          companyEmailAuthRequest,
           { withCredentials: true }
         );
-        console.log(response);
         if (response.data.code !== 1000) {
           return false;
         } else {
@@ -113,5 +147,49 @@ export const useUserStore = defineStore("user", {
         );
       }
     },
+    
+    async socialLogin(loginType){
+      try{
+        window.location.href = backend + "/oauth2/authorization/"+loginType;
+      }catch{
+        alert("소셜 로그인 요청 수행중 문제가 발생했습니다.");
+      }
+      
+    },
+
+    async socialSignup(socialSignupRequest){
+      try {
+        let response = await axios.post(
+          backend+"/user/social/signup",
+          socialSignupRequest,
+          { withCredentials: true }
+        );
+        if (response.data.code !== 1000 || response.status !== 200) {
+          return false;
+        } else {
+          return true;
+        }
+      } catch (error) {
+        alert(
+          "회원가입에 실패했습니다. 입력한 정보를 다시 한 번 확인해주세요.\n\n반복적인 문제 발생시 고객센터로 문의바랍니다."
+        );
+        return false;
+      }
+    },
+
+    async logout(){
+      try{
+        let response = await axios.post(backend+"/logout", null, {withCredentials: true});
+        if (response.status !== 200){
+          return false;
+        }else{
+          this.isLogined = false;
+          this.roles = [];
+          return true;
+        }
+      }catch{
+        alert("로그아웃 요청 수행중 문제가 발생했습니다.");
+      }
+    }
   },
 });

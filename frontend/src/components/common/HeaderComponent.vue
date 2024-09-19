@@ -101,6 +101,7 @@
 <script>
 import { useUserStore } from "@/stores/useUserStore";
 import { mapStores } from "pinia";
+
 export default {
   name: "HeaderComponent",
   computed: {
@@ -117,7 +118,6 @@ export default {
       let query = {
         page: 1,
       };
-
       if (type === "category") {
         query.category = value;
       } else if (type === "search") {
