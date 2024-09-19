@@ -48,7 +48,7 @@ public class CompanyController {
         }
         //이메일 인증 코드 검증
         if (!companyAuthTokenService.isTokenValid(request.getEmailCode(), request.getEmail())){
-            return new BaseResponse(BaseResponseStatus.USER_SIGNUP_FAIL_INVALID_EMAIL_CODE);
+            throw new InvalidCustomException(BaseResponseStatus.USER_SIGNUP_FAIL_INVALID_EMAIL_CODE);
         }
         companyRegisterVerifyService.verifyRegNumber(request);
         companyService.signup(request);
@@ -66,9 +66,9 @@ public class CompanyController {
         ))
     @PostMapping("/email/verify")
     public BaseResponse emailVerify(
-        @Valid @RequestBody CompanyAuthTokenDto.CompanyEmailAuthRequest request
-    ){
-        if (!companyAuthTokenService.doAuth(request)){
+            @Valid @RequestBody CompanyAuthTokenDto.CompanyEmailAuthRequest companyEmailAuthRequest
+            ){
+        if (!companyAuthTokenService.doAuth(companyEmailAuthRequest)){
             return new BaseResponse(BaseResponseStatus.FAIL);
         }
         return new BaseResponse();

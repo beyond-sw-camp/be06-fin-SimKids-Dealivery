@@ -17,4 +17,6 @@ public class SwaggerDescription {
         "staus/month에 아무 값도 넣지 않으면 전체 조회입니다<br>\n" +
         "- status: [진행 전, 진행 중, 진행 완료]<br>\n" +
         "- month: [1, 3, 6, 12]";
+    //문의 등록 설명 틀
+    public static final String QNA_QUESTION_REQUEST = "문의 제목과 내용을 입력해주세요.";
 }

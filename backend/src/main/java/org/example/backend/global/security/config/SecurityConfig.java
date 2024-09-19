@@ -1,15 +1,14 @@
 package org.example.backend.global.security.config;
 
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.example.backend.global.security.custom.auth.CustomAuthenticationProvider;
-import org.example.backend.global.security.custom.service.CustomUserDetailService;
+import org.example.backend.global.security.custom.service.OAuth2Service;
 import org.example.backend.global.security.filter.JwtFilter;
 import org.example.backend.global.security.filter.LoginFilter;
 import org.example.backend.global.security.handler.AccessDeniedHandler;
+import org.example.backend.global.security.handler.CustomLogoutSuccessHandler;
 import org.example.backend.global.security.handler.LoginFailureHandler;
+import org.example.backend.global.security.handler.OAuth2AuthenticationSuccessHandler;
 import org.example.backend.global.security.jwt.JwtUtil;
 import org.example.backend.global.security.jwt.repository.CompanyRefreshTokenRepository;
 import org.example.backend.global.security.jwt.repository.UserRefreshTokenRepository;
@@ -37,6 +36,9 @@ public class SecurityConfig {
     private final CompanyRefreshTokenRepository companyRefreshTokenRepository;
     private final AccessDeniedHandler accessDeniedHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+    private final OAuth2Service oAuth2Service;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -47,6 +49,7 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:8081"); // 허용할 출처
+        config.addAllowedOrigin("http://localhost:3000"); // 허용할 출처
         config.addAllowedOriginPattern("*"); // 허용할 출처
         config.addAllowedMethod("*"); // 허용할 메서드 (GET, POST, PUT 등)
         config.addAllowedHeader("*"); // 허용할 헤더
@@ -76,15 +79,29 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
 
         );
+        //로그아웃 처리
+        http.logout(logout -> {
+            logout.logoutUrl("/logout");
+            logout.logoutSuccessHandler(customLogoutSuccessHandler);
+            logout.deleteCookies("JSESSIONID","AToken","RToken","type");
+            logout.invalidateHttpSession(true);
+            logout.permitAll();
+        });
 
-
-
-        //필터추가
+        //필터생성 및 설정추가
         LoginFilter loginFilter = new LoginFilter(jwtUtil, authenticationManager(authenticationConfiguration)
                 ,companyRefreshTokenRepository,userRefreshTokenRepository);
         loginFilter.setFilterProcessesUrl("/login");
         loginFilter.setAuthenticationFailureHandler(loginFailureHandler);
+
+        //예외처리 핸들러 추가
         http.exceptionHandling(exceptionHandling -> exceptionHandling.accessDeniedHandler(accessDeniedHandler));
+
+        //OAuth관련 설정 추가
+        http.oauth2Login((config) -> {
+            config.successHandler(oAuth2AuthenticationSuccessHandler);
+            config.userInfoEndpoint((endPoint) -> endPoint.userService(oAuth2Service));
+        });
 
         http.addFilterBefore(new JwtFilter(jwtUtil, companyRefreshTokenRepository, userRefreshTokenRepository), LoginFilter.class);
         http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);

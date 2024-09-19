@@ -17,14 +17,15 @@ public class UserDto {
     @NoArgsConstructor
     @Builder
     public static class UserSignupRequest{
-        @NotBlank
-        @Size(max = 10)
-        private String name;
 
         @NotBlank
         @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
         @Size(max = 40)
         private String email;
+
+        @NotBlank
+        @Size(max = 10)
+        private String name;
 
         @NotBlank
         @Pattern(regexp = "^[a-zA-Z0-9]{6}$")
@@ -82,4 +83,57 @@ public class UserDto {
         private String email;
         private String password;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class SocialSignupRequest{
+        @NotBlank
+        @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+        @Size(max = 40)
+        private String email;
+
+        @NotBlank
+        @Size(max = 10)
+        private String name;
+
+        @NotBlank
+        @Pattern(regexp = "^(010)-\\d{4}-\\d{4}$")
+        private String phoneNumber;
+
+        @NotBlank
+        @Size(max = 6)
+        @Pattern(regexp = "^\\d{5,}$")
+        private String postNumber;
+
+        @NotBlank
+        @Size(max = 30)
+        private String address;
+
+        @NotBlank
+        @Size(max = 30)
+        private String addressDetail;
+
+        @NotBlank
+        private String type;
+
+        public User toEntity(){
+            return User.builder()
+                    .name(this.name)
+                    .email(this.email)
+                    .address(this.address)
+                    .addressDetail(this.addressDetail)
+                    .emailStatus(true)
+                    .status(true)
+                    .role(Role.ROLE_USER.getRole())
+                    .phoneNumber(this.phoneNumber)
+                    .postNumber(this.postNumber)
+                    .type(this.type)
+                    .registeredAt(LocalDateTime.now())
+                    .point(0L)
+                    .build();
+        }
+    }
+
 }
