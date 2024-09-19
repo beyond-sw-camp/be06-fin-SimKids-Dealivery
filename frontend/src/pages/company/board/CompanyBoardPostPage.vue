@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     async getBoardDetail() {
-      this.data = await this.boardStore.getProductBoardDetail();
+      this.data = await this.boardStore.getProductBoardDetail(this.idx);
     },
   },
 };
