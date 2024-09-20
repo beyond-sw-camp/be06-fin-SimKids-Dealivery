@@ -6,7 +6,6 @@
       :title="notice[0]"
       :subtitle="notice[1]"
     ></SectionTitleComponent>
-    <ObserverComponent @show="getOpenList"></ObserverComponent>
     <div class="main-card-container">
       <MainCardViewComponent
         v-for="data in openDataList"
@@ -14,6 +13,8 @@
         :data="data"
       ></MainCardViewComponent>
     </div>
+    <ObserverComponent @show="getOpenList"></ObserverComponent>
+
     <SectionTitleComponent
       :title="notice[2]"
       :subtitle="notice[3]"
@@ -26,6 +27,7 @@
         :data="data"
       ></ProductBoardListCardComponent>
     </div>
+    <ObserverComponent @show="getReadyList"></ObserverComponent>
   </div>
   <router-view></router-view>
   <FooterComponent></FooterComponent>
@@ -70,20 +72,24 @@ export default {
       ],
     };
   },
-  created() {
-    this.getReadyList();
-    this.getOpenList();
-  },
+  // created() {
+  //   this.getReadyList();
+  // },
   methods: {
     async getReadyList() {
-      this.readyDataList = await this.boardStore.getMainList(1, "진행 전");
-      this.readyDataList = this.readyDataList.content;
+      const newData = await this.boardStore.getMainList(
+        this.readyPage,
+        "진행 전"
+      );
+      this.readyDataList = [...this.readyDataList, ...newData.content];
+      this.readyPage += 1;
     },
     async getOpenList() {
       const newData = await this.boardStore.getMainList(
         this.openPage,
         "진행 중"
       );
+      console.log(newData);
       this.openDataList = [...this.openDataList, ...newData.content];
       this.openPage += 1;
     },
