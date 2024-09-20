@@ -8,6 +8,8 @@ import org.example.backend.global.common.constants.BoardStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +28,26 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/product-boards")
 public class BoardController {
 	private final ProductBoardService productBoardService;
+	private final Integer MAIN_OPEN = 8;
+	private final Integer MAIN_READY = 12;
 	private final Integer USER_LIST_SIZE = 21;
 	private final Integer COMPANY_LIST_SIZE = 10;
+
+	@Operation(summary = "상품 메인 목록 조회 API")
+	@GetMapping(value = "/main/list")
+	public BaseResponse mainList(@RequestParam(value = "page", defaultValue = "1") Integer page,
+		@RequestParam(value = "status", defaultValue = "진행 전") String status) {
+		Slice<ProductBoardDto.BoardListResponse> responses;
+		if (status.equals(BoardStatus.READY.getStatus())) {
+			responses = productBoardService.mainList(BoardStatus.READY.getStatus(), PageRequest.of(page - 1, MAIN_READY, Sort.by(Sort.Direction.DESC, "idx")));
+			return new BaseResponse(responses);
+		} else if (status.equals(BoardStatus.OPEN.getStatus())) {
+			responses = productBoardService.mainList(BoardStatus.OPEN.getStatus(), PageRequest.of(page - 1, MAIN_OPEN, Sort.by(Sort.Direction.DESC, "idx")));
+			return new BaseResponse(responses);
+		} else {
+			return new BaseResponse(BaseResponseStatus.FAIL);
+		}
+	}
 
 	@Operation(summary = "상품 게시글 목록 조회 API")
 	@GetMapping(value = "/list")

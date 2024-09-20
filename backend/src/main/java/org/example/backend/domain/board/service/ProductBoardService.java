@@ -19,10 +19,12 @@ import org.example.backend.domain.board.product.repository.ProductRepository;
 import org.example.backend.domain.board.repository.ProductBoardRepository;
 import org.example.backend.domain.board.repository.ProductThumbnailImageRepository;
 import org.example.backend.global.common.constants.BaseResponseStatus;
+import org.example.backend.global.common.constants.BoardStatus;
 import org.example.backend.global.exception.InvalidCustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,6 +46,10 @@ public class ProductBoardService {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
+	public Slice<ProductBoardDto.BoardListResponse> mainList(String status, Pageable pageable) {
+		Slice<ProductBoard> productBoards = productBoardRepository.findByStatus(BoardStatus.from(status).getStatus(), pageable);
+		return productBoards.map(ProductBoard::toBoardListResponse);
+	}
 
 	public Page<ProductBoardDto.BoardListResponse> list(String search, Pageable pageable) {
 		Page<ProductBoard> productBoards = productBoardRepository.search(search, pageable);
