@@ -116,7 +116,10 @@ export default {
     },
     displayEditModal(data) {
       this.isDisplayEditModal = !this.isDisplayEditModal;
-      this.selectedDelivery = data;
+      if(data != null){
+        this.selectedDelivery = data;  
+      }
+      
     },
     checkRadio(delivery,index) {
       this.selectedAddress = index;

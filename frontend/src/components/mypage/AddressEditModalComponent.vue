@@ -1,5 +1,5 @@
 <template>
-  <div id="productModal" class="modal" @click.self="closeModal">
+  <div id="productModal" class="modal" >
     <div class="modal-content">
       <span class="close" @click="closeModal">&times;</span>
       <div data-reactroot="">
@@ -96,6 +96,7 @@ export default {
       this.editedAddress.address = this.oldAddress.address;
       this.editedAddress.addressDetail = this.oldAddress.addressDetail;
       this.editedAddress.isDefault = this.oldAddress.isDefault;
+      console.log(this.editedAddress.isDefault);
       
     }
   },

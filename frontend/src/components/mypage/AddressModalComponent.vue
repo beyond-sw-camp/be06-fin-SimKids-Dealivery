@@ -1,5 +1,5 @@
 <template>
-  <div id="productModal" class="modal" @click.self="closeModal">
+  <div id="productModal" class="modal" >
     <div class="modal-content">
       <span class="close" @click="closeModal">&times;</span>
       <div id="__next" data-reactroot="">
