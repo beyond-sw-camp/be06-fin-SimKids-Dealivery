@@ -97,6 +97,7 @@ public class DeliveryService {
     //기존 기본배송지 여부를 확인
     //있으면 false처리 후 넘겨받은 idx의 배송지를 true로 변경
     //저장
+    @Transactional
     public void setDefault(Long idx,Long userIdx) {
         List<Delivery> deliveries = deliveryRepository.findAllByUserIdx(userIdx).orElseThrow(
                 () -> new InvalidCustomException(BaseResponseStatus.USER_DELIVERY_EDIT_FAIL)
