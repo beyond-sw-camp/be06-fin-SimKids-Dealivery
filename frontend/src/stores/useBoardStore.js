@@ -16,6 +16,16 @@ export const useBoardStore = defineStore("board", {
     totalPages: 0,
   }),
   actions: {
+    async getMainList(page, status) {
+      const response = await axios.get(backend + "/main/list", {
+        params: {
+          page: page,
+          status: status,
+        },
+      });
+      console.log(response);
+      return response.data.result;
+    },
     async getList(page, category, search) {
       const params = { page: page };
       if (category != "undefined" && category != null && category != "전체") {
