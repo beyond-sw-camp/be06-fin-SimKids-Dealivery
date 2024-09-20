@@ -1,5 +1,6 @@
 package org.example.backend.domain.delivery.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.delivery.model.dto.DeliveryDto;
 import org.example.backend.domain.delivery.service.DeliveryService;
@@ -29,7 +30,7 @@ public class DeliveryController {
     @PostMapping("")
     public BaseResponse createDelivery(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody DeliveryDto.CreateDeliveryRequest request
+            @Valid @RequestBody DeliveryDto.CreateDeliveryRequest request
     ){
         deliveryService.createDelivery(userDetails.getIdx(),request);
         return new BaseResponse();
@@ -51,7 +52,7 @@ public class DeliveryController {
 
     @PatchMapping("")
     public BaseResponse setDefault(
-            @RequestBody DeliveryDto.SetDefaultRequest request,
+            @Valid @RequestBody DeliveryDto.SetDefaultRequest request,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ){
         if (request.getIdx() == null || request.getIdx() <= 0){
@@ -59,6 +60,15 @@ public class DeliveryController {
         }
         deliveryService.setDefault(request.getIdx(), userDetails.getIdx());
 
+        return new BaseResponse();
+    }
+
+    @PutMapping("")
+    public BaseResponse editDelivery(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @Valid @RequestBody DeliveryDto.EditDeliveryRequest request
+    ){
+        deliveryService.editDelivery(userDetails.getIdx(),request);
         return new BaseResponse();
     }
 

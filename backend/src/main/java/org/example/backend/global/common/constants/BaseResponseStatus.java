@@ -80,6 +80,8 @@ public enum BaseResponseStatus {
     USER_SIGNUP_FAIL_ALREADY_EXIST(false, 2062, "이미 가입된 이메일입니다."),
     USER_LOGIN_FAIL_UNAUTHORIZED_REG_NUMBER(false, 2063, "로그인에 실패했습니다. 사업자등록번호 인증 정보가 없는 회원입니다."),
     USER_DETAIL_FAIL_USER_NOT_FOUND(false, 2064, "회원정보 조회에 실패했습니다. 해당 정보로 가입된 회원정보가 없습니다."),
+    USER_DELIVERY_EDIT_FAIL_USER_NOT_MATCH(false, 2065, "배송지 정보수정에 실패했습니다. 회원 정보가 올바르지 않습니다."),
+
 
     // 주문 기능 3000
     ORDER_FAIL_LIST(false, 3001, "주문내역 조회에 실패했습니다."),

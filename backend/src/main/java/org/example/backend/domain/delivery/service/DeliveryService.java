@@ -112,4 +112,15 @@ public class DeliveryService {
         newDefaultDelivery.setIsDefault(true);
         deliveryRepository.save(newDefaultDelivery);
     }
+
+    public void editDelivery(Long idx, DeliveryDto.EditDeliveryRequest request) {
+        Delivery beforeDelivery = deliveryRepository.findByIdx(request.getIdx()).orElseThrow(
+                () -> new InvalidCustomException(BaseResponseStatus.USER_DELIVERY_EDIT_FAIL)
+        );
+        if (beforeDelivery.getUser().getIdx() != idx){
+            throw new InvalidCustomException(BaseResponseStatus.USER_DELIVERY_EDIT_FAIL_USER_NOT_MATCH);
+        }
+        beforeDelivery.updateEntity(request);
+        deliveryRepository.save(beforeDelivery);
+    }
 }
