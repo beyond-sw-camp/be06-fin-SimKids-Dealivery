@@ -2,37 +2,27 @@
   <div class="css-16c0d8l">
     <nav class="css-1le17tz en4zazl1">
       <ul class="css-tse2s2 en4zazl0">
-        <li
-          :class="[
+        <li :class="[
             'css-1tzhzcg',
             'efe6b6j1',
             'tab',
             { active: activeTab === 'description' },
-          ]"
-          @click.prevent="activeTab = 'description'"
-        >
+          ]" @click.prevent="activeTab = 'description'">
           <a class="css-1t0ft7s efe6b6j0"><span class="name">상품설명</span></a>
         </li>
-        <li
-          :class="[
+        <li :class="[
             'css-1tzhzcg',
             'efe6b6j1',
             'tab',
             { active: activeTab === 'inquiries' },
-          ]"
-          @click.prevent="activeTab = 'inquiries'"
-        >
+          ]" @click.prevent="loadInquiries">
           <a class="css-1t0ft7s efe6b6j0"><span class="name">문의</span></a>
         </li>
       </ul>
     </nav>
     <!-- 상품 상세 설명 section -->
     <div class="css-0 el27cq1">
-      <div
-        id="description"
-        class="css-18eozqj el27cq0"
-        v-show="activeTab === 'description'"
-      >
+      <div id="description" class="css-18eozqj el27cq0" v-show="activeTab === 'description'">
         <div class="css-1d3w5wq e1d86arr0">
           <div class="css-1lyi66c">
             <div class="goods_wrap">
@@ -40,8 +30,7 @@
                 <div class="context">
                   <div class="pic">
                     <img
-                      src="https://img-cf.kurly.com/hdims/resize/%3E1010x/quality/90/src/shop/data/goodsview/20240829/gv10001551896_1.jpg"
-                    />
+                      src="https://img-cf.kurly.com/hdims/resize/%3E1010x/quality/90/src/shop/data/goodsview/20240829/gv10001551896_1.jpg" />
                   </div>
                   <p class="words"></p>
                 </div>
@@ -56,13 +45,7 @@
     <!-- 문의 하기 리스트 section -->
     <div class="css-30tvht eewa3w91" v-show="activeTab === 'inquiries'">
       <div class="css-17juoyc eewa3w90">
-        <button
-          class="css-mhrz8m e4nu7ef3"
-          type="button"
-          width="120"
-          height="40"
-          @click="openNewInquiryModal"
-        >
+        <button class="css-mhrz8m e4nu7ef3" type="button" width="120" height="40" @click="openNewInquiryModal">
           <span class="css-nytqmg e4nu7ef1">문의하기</span>
         </button>
       </div>
@@ -89,13 +72,11 @@
           <tr @click="toggleInquiry(index)" class="css-atz965 e1l5ky7y9">
             <td class="css-1brd6ns e1l5ky7y8">{{ row.title }}</td>
             <td class="css-1pkqelu e1l5ky7y7">{{ maskAuthorName(row.userName) }}</td>
-            <td class="css-1pkqelu e1l5ky7y6">{{ row.modifiedAt ? formatDate(row.modifiedAt) : formatDate(row.createdAt) }}</td>
+            <td class="css-1pkqelu e1l5ky7y6">{{ row.modifiedAt ? formatDate(row.modifiedAt) : formatDate(row.createdAt)
+              }}</td>
             <td class="css-bhr3cq e1l5ky7y5">{{ row.answerStatus }}</td>
           </tr>
-          <tr
-            v-show="expandedInquiryIndex === index"
-            class="css-1mvq381 e61d7mt0"
-          >
+          <tr v-show="expandedInquiryIndex === index" class="css-1mvq381 e61d7mt0">
             <td colspan="4">
               <div class="css-tnubsz e1ptpt003">
                 <div class="css-1n83etr e1ptpt002">
@@ -131,35 +112,39 @@
     </div>
 
     <!-- 새 문의 작성 모달 -->
-    <QnaRegisterModalComponent
-      v-if="showNewInquiryModal"
-      @close="closeModal"
-      @submit="addNewInquiry"
-    />
+    <QnaRegisterModalComponent v-if="showNewInquiryModal" @close="closeModal" @submit="addNewInquiry"
+      :productBoardIdx="productBoardIdx" :thumbnail="thumbnails[0].src" :title="productTitle" />
 
     <!-- 수정 모달 -->
-    <QnaRegisterModalComponent
-      v-if="showEditInquiryModal"
-      :initialSubject="selectedInquiry.title"
-      :initialContent="selectedInquiry.content"
-      @close="closeModal"
-      @submit="updateInquiry"
-    />
+    <QnaRegisterModalComponent v-if="showEditInquiryModal" :initialSubject="selectedInquiry.title"
+      :initialContent="selectedInquiry.content" @close="closeModal" @submit="updateInquiry" />
   </div>
 </template>
 
 <script>
+import { useQnaStore } from "@/stores/useQnaStore";
 import QnaRegisterModalComponent from "../qna/QnaRegisterModalComponent.vue";
+import { mapStores } from "pinia";
 
 export default {
   name: "BoardDetailNavComponent",
+  computed: {
+    ...mapStores(useQnaStore),
+  },
   props: {
-    tableData: {
+    thumbnails: {
       type: Array,
       required: true,
     },
+    productBoardIdx: {
+      type: Number,
+      required: true,
+    },
+    productTitle: {
+      type: String,
+      required: true,
+    },
   },
-
   data() {
     return {
       activeTab: "description",
@@ -171,12 +156,18 @@ export default {
         title: "",
         content: "",
       },
-      localTableData: [...this.tableData],
+      localTableData: [],
       expandedInquiryIndex: null,
       editingIndex: null, // 수정할 문의 인덱스
     };
   },
   methods: {
+    loadInquiries() {
+      this.activeTab = "inquiries"; // 문의 탭 활성화
+      this.qnaStore.fetchInquiries().then(() => {
+        this.localTableData = this.qnaStore.inquiries;
+      });
+    },
     formatDate(dateString) {
       const date = new Date(dateString);
       return date.toLocaleDateString("ko-KR", {
