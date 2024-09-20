@@ -322,7 +322,7 @@ ul {
 
 .css-zone-name {
   font-size: 13px;
-  color: rgb(95, 0, 128);
+  color: #505050;
   margin: 5px;
 }
 
