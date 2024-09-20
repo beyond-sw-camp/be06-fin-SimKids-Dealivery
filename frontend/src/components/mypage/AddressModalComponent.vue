@@ -1,74 +1,53 @@
 <template>
-  <div id="productModal" class="modal" @click.self="closeModal">
+  <div id="productModal" class="modal" >
     <div class="modal-content">
       <span class="close" @click="closeModal">&times;</span>
       <div id="__next" data-reactroot="">
         <div class="css-sv3mbe e1u1sq1y0">
           <div class="css-ixlb9s ecqulhg2">
             <div class="css-0 e11n32x25">
-              <strong class="css-1702mcg e11n32x24"
-                >배송지 추가
+              <strong class="css-1702mcg e11n32x24">배송지 추가
                 <p class="css-pwbln2 e11n32x22">
                   상품을 전달받을 배송지를 입력해주세요.
-                </p></strong
-              >
+                </p>
+              </strong>
             </div>
             <div class="css-1hxvx8x e1uzxhvi6">
               <div height="44" class="css-t7kbxx e1uzxhvi3">
-                <input
-                  v-model="address.name"
-                  data-testid="input-box"
-                  id="addressName"
-                  name="addressName"
-                  placeholder="별칭을 입력해 주세요"
-                  type="text"
-                  height="44"
-                  class="css-1quw3ub e1uzxhvi2"
-                />
+                <input maxlength="30"
+                v-model="delivery.name" data-testid="input-box" id="addressName" name="addressName"
+                  placeholder="배송지명을 입력해 주세요" type="text" height="44" class="css-1quw3ub e1uzxhvi2" />
               </div>
             </div>
             <div class="css-19u3hc5 e1n7pxx51">
               <p class="css-ks8pmw e1n7pxx50">
-                {{ address.area === "" ? "주소를 검색해주세요" : address.area }}
+                {{ delivery.address === "" ? "주소를 검색해주세요" : delivery.address }}
               </p>
-              <button
-                @click="openPostcode"
-                class="css-1w63xsn e4nu7ef3"
-                type="button"
-                width="120"
-                height="44"
-                radius="3"
-              >
-                <span class="css-nytqmg e4nu7ef1"
-                  ><img
-                    src="https://res.kurly.com/pc/service/common/2006/ico_search.svg"
-                    alt=""
-                    class="css-1m3kac1 e4nu7ef0"
-                  />검색</span
-                >
+              <button @click="openPostcode" class="css-1w63xsn e4nu7ef3" type="button" width="120" height="44"
+                radius="3">
+                <span class="css-nytqmg e4nu7ef1"><img src="https://res.kurly.com/pc/service/common/2006/ico_search.svg"
+                    alt="" class="css-1m3kac1 e4nu7ef0" />검색</span>
               </button>
             </div>
             <div class="css-1hxvx8x e1uzxhvi6">
               <div height="44" class="css-t7kbxx e1uzxhvi3">
-                <input
-                  v-model="address.detail"
-                  data-testid="input-box"
-                  id="addressDetail"
-                  name="addressDetail"
-                  placeholder="상세 주소를 입력해 주세요"
-                  type="text"
-                  height="44"
-                  class="css-1quw3ub e1uzxhvi2"
-                />
+                <input maxlength="30"
+                v-model="delivery.addressDetail" data-testid="input-box" id="addressDetail" name="addressDetail"
+                  placeholder="상세 주소를 입력해 주세요" type="text" height="44" class="css-1quw3ub e1uzxhvi2" />
               </div>
+
+              <div class="css-a0w530 ecqulhg1"><label class="css-1wkyvs2 e1dcessg3"><input type="checkbox"
+                    class="css-agvwxo e1dcessg2">
+                  <div class="css-79hxr7 e1dcessg1">
+                    <img :src="delivery.isDefault
+                      ? require('@/assets/filled-custom-radio.svg')
+                      : require('@/assets/outline-custom-radio.svg')
+                    " @click="setDefault" alt="Icon" />
+
+                  </div><span>기본 배송지로 저장</span>
+                </label></div>
             </div>
-            <button
-              @click="saveAddress"
-              class="css-10voksq e4nu7ef3"
-              type="button"
-              height="44"
-              radius="3"
-            >
+            <button @click="validateAndSave" class="css-10voksq e4nu7ef3" type="button" height="44" radius="3">
               <span class="css-nytqmg e4nu7ef1">저장</span>
             </button>
           </div>
@@ -79,18 +58,24 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/useUserStore';
+import { mapStores } from 'pinia';
+import { Validator } from '@/util/validator';
 export default {
   name: "AddressModalComponent",
   data() {
     return {
-      address: {
-        id: "",
+      delivery: {
         name: "",
-        zonecode: "",
-        area: "",
-        detail: "",
+        postNumber: "",
+        address: "",
+        addressDetail: "",
+        isDefault: false
       },
     };
+  },
+  computed: {
+    ...mapStores(useUserStore)
   },
   methods: {
     closeModal() {
@@ -105,21 +90,46 @@ export default {
         width: width,
         height: height,
         oncomplete: (data) => {
-          this.address.id = Math.random().toString(36).substr(2, 9);
-          this.address.area = data.address;
-          this.address.zonecode = data.zonecode;
-          //   this.addresses.push(this.address);
+          this.delivery.address = data.address;
+          this.delivery.postNumber = data.zonecode;
         },
       }).open({
         left: window.screen.width / 2 - width / 2,
         top: window.screen.height / 2 - height / 2,
       });
     },
-    saveAddress() {
-      console.log(this.address);
-      this.$emit("saveAddress", this.address);
+    validateAndSave() {
+      try {
+        const validInputRegex = /^(?!.*[!@#$%^&*()_+={}:;"'<>,.?/~`|\\-])(?=.*[^\n])[^\nㄱ-ㅎ]*$/;
+
+        // 검증 로직
+        new Validator(this.delivery.name, "배송지명을 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+
+        new Validator(this.delivery.postNumber, "우편번호를 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+
+        new Validator(this.delivery.address, "주소를 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+
+        new Validator(this.delivery.addressDetail, "상세주소를 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+        this.saveDelivery();
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+    saveDelivery() {
+      this.$emit("saveDelivery", this.delivery);
       this.closeModal();
     },
+    setDefault(){
+      this.delivery.isDefault = !this.delivery.isDefault;
+    }
   },
 };
 </script>
@@ -187,7 +197,6 @@ label {
 input[type="text"] {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
@@ -254,7 +263,7 @@ h2 {
   padding: 0px 10px;
   text-align: center;
   overflow: hidden;
-  width: 120px;
+  width: 95px;
   height: 44px;
   border-radius: 3px;
   color: rgb(95, 0, 128);
@@ -262,11 +271,11 @@ h2 {
   border: 1px solid rgb(95, 0, 128);
 }
 
-.css-19u3hc5 button > span {
+.css-19u3hc5 button>span {
   line-height: 24px;
 }
 
-.css-1w63xsn > span {
+.css-1w63xsn>span {
   font-size: 14px;
   font-weight: 500;
 }
@@ -277,14 +286,14 @@ h2 {
   font-weight: 500;
 }
 
-.css-19u3hc5 button > span > img {
+.css-19u3hc5 button>span>img {
   display: inline-block;
   width: 24px;
   height: 24px;
   vertical-align: top;
 }
 
-.css-1w63xsn > span img {
+.css-1w63xsn>span img {
   margin: 0px;
 }
 
@@ -315,9 +324,6 @@ h2 {
   box-sizing: border-box;
 }
 
-.css-a0w530 {
-  padding-bottom: 20px;
-}
 
 .css-1wkyvs2 {
   position: relative;
@@ -361,8 +367,12 @@ h2 {
   border: 0px none;
 }
 
-.css-10voksq > span {
+.css-10voksq>span {
   font-size: 14px;
   font-weight: 500;
+}
+
+img {
+  cursor: pointer;
 }
 </style>

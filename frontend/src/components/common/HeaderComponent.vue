@@ -24,8 +24,8 @@
           >로그아웃</span
         >
         <div class="css-1qgm48u eo7pjfk0"></div>
-        <RouterLink to="/mypage" class="css-xygizb eo7pjfk2 top-menu-link"
-          >마이페이지</RouterLink
+        <a to="#" class="css-xygizb eo7pjfk2 top-menu-link" @click="toMypage"
+          >마이페이지</a
         >
       </div>
 
@@ -75,8 +75,8 @@
       <div class="css-mlddcv e17w4cfr6">
         <div class="css-0 e17w4cfr3">
           <div class="css-axtlq9 eqn756m2">
-            <span class="css-1k5gn9s eqn756m1"></span
-            ><span class="css-t75x7c eqn756m0">카테고리</span>
+            <span class="css-1k5gn9s eqn756m1"></span>
+            <span class="css-t75x7c eqn756m0">카테고리</span>
           </div>
         </div>
         <div>
@@ -117,7 +117,6 @@ export default {
       let query = {
         page: 1,
       };
-
       if (type === "category") {
         query.category = value;
       } else if (type === "search") {
@@ -129,6 +128,7 @@ export default {
         query: query,
       });
     },
+
     routeTo(path) {
       this.$router.push(path);
     },
@@ -137,6 +137,11 @@ export default {
         this.routeTo("/");
       } else {
         alert("로그아웃에 실패했습니다.");
+      }
+    },
+    async toMypage() {
+      if (await this.userStore.getDetail()) {
+        this.routeTo("/mypage");
       }
     },
   },
@@ -152,7 +157,8 @@ export default {
 }
 
 a {
-  text-decoration: none; /* 밑줄 제거 (필요 시) */
+  text-decoration: none;
+  /* 밑줄 제거 (필요 시) */
 }
 
 *,
@@ -503,8 +509,11 @@ button {
 }
 
 .separator {
-  margin: 0 14px; /* 로고와 버튼 사이의 여백 조정 */
-  font-size: 20px; /* 구분자의 크기 조정 */
-  color: rgb(181, 181, 181); /* 구분자의 색상 */
+  margin: 0 14px;
+  /* 로고와 버튼 사이의 여백 조정 */
+  font-size: 20px;
+  /* 구분자의 크기 조정 */
+  color: rgb(181, 181, 181);
+  /* 구분자의 색상 */
 }
 </style>

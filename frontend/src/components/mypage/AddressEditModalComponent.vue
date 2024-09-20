@@ -1,5 +1,5 @@
 <template>
-  <div id="productModal" class="modal" @click.self="closeModal">
+  <div id="productModal" class="modal" >
     <div class="modal-content">
       <span class="close" @click="closeModal">&times;</span>
       <div data-reactroot="">
@@ -8,24 +8,25 @@
           <h2 class="css-3ljxig e1k348233">배송지 수정</h2>
           <div class="css-1holwxw e1k348232">
             <div class="css-1n57dna e1uzxhvi6">
+              <label for="name" class="css-c3g9of e1uzxhvi4">배송지명</label>
               <div height="44" class="css-t7kbxx e1uzxhvi3">
                 <input
-                  v-model="newAddress.name"
+                  maxlength="30"
+                  v-model="editedAddress.name"
                   data-testid="input-box"
-                  placeholder="별칭을 입력해 주세요"
+                  placeholder="배송지명을 입력해 주세요"
                   type="text"
                   height="44"
                   class="css-1quw3ub e1uzxhvi2"
                 />
               </div>
-              <label for="addressDetail" class="css-c3g9of e1uzxhvi4">{{
-                newAddress.area
-              }}</label>
+              <label for="addressDetail" class="css-c3g9of e1uzxhvi4">상세주소</label>
               <div height="44" class="css-t7kbxx e1uzxhvi3">
                 <input
-                  v-model="newAddress.detail"
+                  maxlength="30"
+                  v-model="editedAddress.addressDetail"
                   data-testid="input-box"
-                  placeholder="상세 주소를 입력해 주세요"
+                  placeholder="상세주소를 입력해 주세요"
                   type="text"
                   height="44"
                   class="css-1quw3ub e1uzxhvi2"
@@ -35,7 +36,7 @@
           </div>
           <div type="recent" class="css-1y14kop e1k348230">
             <button
-              @click="saveNewAddress"
+              @click="validateAndSave"
               class="css-10voksq e4nu7ef3"
               type="button"
               height="44"
@@ -44,10 +45,12 @@
               <span class="css-nytqmg e4nu7ef1">저장</span>
             </button>
             <button
-              class="css-d85pyu e4nu7ef3"
+              :disabled="oldAddress.isDefault" 
+              class="css-d85pyu e4nu7ef3 button"
               type="button"
               height="44"
               radius="3"
+              @click="deleteOne"
             >
               <span class="css-nytqmg e4nu7ef1">삭제</span>
             </button>
@@ -59,16 +62,20 @@
 </template>
 
 <script>
+import { useUserStore } from "@/stores/useUserStore";
+import { mapStores } from "pinia";
+import { Validator } from "@/util/validator";
 export default {
   name: "AddressEditModalComponent",
   data() {
     return {
-      newAddress: {
-        id: "",
+      editedAddress: {
+        idx: null,
         name: "",
-        zonecode: "",
-        area: "",
-        detail: "",
+        postNumber: "",
+        address: "",
+        addressDetail: "",
+        isDefault: false
       },
     };
   },
@@ -78,24 +85,82 @@ export default {
       default: null,
     },
   },
-  created() {
+  computed: {
+    ...mapStores(useUserStore),
+  },
+  mounted() {
     if (this.oldAddress) {
-      this.newAddress.id = this.oldAddress.id;
-      this.newAddress.name = this.oldAddress.name;
-      this.newAddress.zonecode = this.oldAddress.zonecode;
-      this.newAddress.area = this.oldAddress.area;
-      this.newAddress.detail = this.oldAddress.detail;
+      this.editedAddress.idx = this.oldAddress.idx;
+      this.editedAddress.name = this.oldAddress.name;
+      this.editedAddress.postNumber = this.oldAddress.postNumber;
+      this.editedAddress.address = this.oldAddress.address;
+      this.editedAddress.addressDetail = this.oldAddress.addressDetail;
+      this.editedAddress.isDefault = this.oldAddress.isDefault;
+      console.log(this.editedAddress.isDefault);
+      
     }
   },
   methods: {
     closeModal() {
       this.$emit("closeModal");
     },
-    saveNewAddress() {
-      console.log(this.newAddress);
-      this.$emit("saveNewAddress", this.newAddress);
+    saveEditedAddress() {
+      if(!this.areAddressesEqual()){
+        this.$emit("saveEditedAddress", this.editedAddress);
+      }
       this.closeModal();
     },
+    areAddressesEqual() {
+      // 모든 속성이 일치하는지 확인하는 함수
+      return (
+        this.editedAddress.idx === this.oldAddress.idx &&
+        this.editedAddress.name === this.oldAddress.name &&
+        this.editedAddress.postNumber === this.oldAddress.postNumber &&
+        this.editedAddress.address === this.oldAddress.address &&
+        this.editedAddress.addressDetail === this.oldAddress.addressDetail &&
+        this.editedAddress.isDefault === this.oldAddress.isDefault
+      );
+    },
+    validateAndSave() {
+      try {
+        const validInputRegex = /^(?!.*[!@#$%^&*()_+={}:;"'<>,.?/~`|\\-])(?=.*[^\n])[^\nㄱ-ㅎ]*$/;
+
+        // 검증 로직
+        new Validator(this.editedAddress.name, "배송지명을 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+
+        new Validator(this.editedAddress.postNumber, "우편번호를 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+
+        new Validator(this.editedAddress.address, "주소를 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+
+        new Validator(this.editedAddress.addressDetail, "상세주소를 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+        this.saveEditedAddress();
+      } catch (error) {
+        // 검증 실패 시 에러 메시지 출력
+        alert(error.message);
+      }
+    },
+    async deleteOne(){
+      if(this.editedAddress.idx === null){
+        alert("유효하지 않은 배송지입니다.");
+        this.closeModal();
+      }else{
+        if(await this.userStore.deleteDelivery(this.editedAddress.idx)){
+         this.userStore.getDeliveryList();
+        }
+        this.closeModal();
+      }
+    },
+    validateAll(){
+
+    }
   },
 };
 </script>
@@ -185,9 +250,6 @@ h2 {
   line-height: 36px;
 }
 
-.css-1holwxw {
-  padding-top: 24px;
-}
 
 .css-1holwxw > div {
   padding-bottom: 24px;
@@ -321,5 +383,15 @@ input[type="radio"] {
 .css-d85pyu > span {
   font-size: 14px;
   font-weight: 500;
+}
+
+.button{
+  position: relative;
+}
+
+.button:disabled {
+  background-color: #d6d6d6; /* 회색 배경색 */
+  color: #a1a1a1; /* 회색 글자색 */
+  cursor: not-allowed; /* 금지 커서 */
 }
 </style>

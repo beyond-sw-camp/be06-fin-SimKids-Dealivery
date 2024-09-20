@@ -20,7 +20,7 @@
             'tab',
             { active: activeTab === 'inquiries' },
           ]"
-          @click.prevent="activeTab = 'inquiries'"
+          @click.prevent="loadInquiries"
         >
           <a class="css-1t0ft7s efe6b6j0"><span class="name">문의</span></a>
         </li>
@@ -89,12 +89,16 @@
           <tr @click="toggleInquiry(index)" class="css-atz965 e1l5ky7y9">
             <td class="css-1brd6ns e1l5ky7y8">{{ row.title }}</td>
             <td class="css-1pkqelu e1l5ky7y7">
-              {{ maskAuthorName(row.author) }}
+              {{ maskAuthorName(row.userName) }}
             </td>
             <td class="css-1pkqelu e1l5ky7y6">
-              {{ row.modified_at || row.created_at }}
+              {{
+                row.modifiedAt
+                  ? formatDate(row.modifiedAt)
+                  : formatDate(row.createdAt)
+              }}
             </td>
-            <td class="css-bhr3cq e1l5ky7y5">{{ row.answer_status }}</td>
+            <td class="css-bhr3cq e1l5ky7y5">{{ row.answerStatus }}</td>
           </tr>
           <tr
             v-show="expandedInquiryIndex === index"
@@ -112,7 +116,7 @@
                 </div>
                 <div
                   class="css-1j49yxi e11ufodi1"
-                  v-if="row.answer_status !== '답변완료'"
+                  v-if="row.answerStatus !== '답변완료'"
                 >
                   <button type=" button" @click="openEditModal(index)">
                     수정
@@ -128,7 +132,7 @@
               </div>
               <div
                 class="css-tnubsz e1ptpt003"
-                v-if="row.answer_status !== '답변대기'"
+                v-if="row.answerStatus !== '답변대기'"
               >
                 <div class="css-1n83etr e1ptpt002">
                   <div class="css-m1wgq7 e1ptpt001">
@@ -153,6 +157,9 @@
       v-if="showNewInquiryModal"
       @close="closeModal"
       @submit="addNewInquiry"
+      :productBoardIdx="productBoardIdx"
+      :thumbnail="thumbnails[0].src"
+      :title="productTitle"
     />
 
     <!-- 수정 모달 -->
@@ -167,17 +174,29 @@
 </template>
 
 <script>
+import { useQnaStore } from "@/stores/useQnaStore";
 import QnaRegisterModalComponent from "../qna/QnaRegisterModalComponent.vue";
+import { mapStores } from "pinia";
 
 export default {
   name: "BoardDetailNavComponent",
+  computed: {
+    ...mapStores(useQnaStore),
+  },
   props: {
-    tableData: {
+    thumbnails: {
       type: Array,
       required: true,
     },
+    productBoardIdx: {
+      type: Number,
+      required: true,
+    },
+    productTitle: {
+      type: String,
+      required: true,
+    },
   },
-
   data() {
     return {
       activeTab: "description",
@@ -189,12 +208,26 @@ export default {
         title: "",
         content: "",
       },
-      localTableData: [...this.tableData],
+      localTableData: [],
       expandedInquiryIndex: null,
       editingIndex: null, // 수정할 문의 인덱스
     };
   },
   methods: {
+    loadInquiries() {
+      this.activeTab = "inquiries"; // 문의 탭 활성화
+      this.qnaStore.fetchInquiries().then(() => {
+        this.localTableData = this.qnaStore.inquiries;
+      });
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+    },
     openNewInquiryModal() {
       this.showNewInquiryModal = true;
     },
@@ -212,6 +245,9 @@ export default {
         this.expandedInquiryIndex === index ? null : index;
     },
     maskAuthorName(name) {
+      if (!name) {
+        return "익명"; // name이 undefined나 null일 경우 기본값을 반환
+      }
       if (name.length <= 2) {
         return name[0] + "*";
       }

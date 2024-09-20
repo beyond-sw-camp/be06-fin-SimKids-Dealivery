@@ -7,7 +7,11 @@
           <BoardDetailThumnailComponent :thumbnails="thumbnails" />
           <BoardDetailProductInfoComponent @submitOrder="submitOrder" />
         </main>
-        <BoardDetailNavComponent :tableData="qnaStore.inquiries" />
+        <BoardDetailNavComponent
+          :thumbnails="thumbnails"
+          :productBoardIdx="productBoardIdx"
+          :productTitle="productTitle"
+        />
       </div>
     </div>
   </div>
@@ -20,9 +24,7 @@ import FooterComponent from "@/components/common/FooterComponent.vue";
 import BoardDetailThumnailComponent from "@/components/board/BoardDetailThumnailComponent.vue";
 import BoardDetailProductInfoComponent from "@/components/board/BoardDetailProductInfoComponent.vue";
 import BoardDetailNavComponent from "@/components/board/BoardDetailNavComponent.vue";
-
 import { useOrderStore } from "@/stores/useOrderStore";
-import { useQnaStore } from "@/stores/useQnaStore";
 import { mapStores } from "pinia";
 
 export default {
@@ -35,15 +37,11 @@ export default {
     BoardDetailNavComponent,
   },
   computed: {
-    ...mapStores(useOrderStore, useQnaStore),
-  },
-  async mounted() {
-    // 페이지가 로드될 때 fetchInquiries를 호출
-    await this.qnaStore.fetchInquiries();
+    ...mapStores(useOrderStore),
   },
   data() {
     return {
-      activeTab: "description",
+      activeTab: "description", // 초기에는 '상품설명' 탭이 활성화됨
       thumbnails: [
         {
           src: "https://product-image.kurly.com/hdims/resize/%5E%3E720x%3E936/cropcenter/720x936/quality/85/src/product/image/c0599d4f-d892-4d43-a22d-277459e929bd.jpg",
@@ -52,6 +50,8 @@ export default {
           src: "https://pbs.twimg.com/media/EE0R8XcU0AAlbth.jpg",
         },
       ],
+      productBoardIdx: 1, // 추후에 실제 상품의 boardIdx로 변경
+      productTitle: "[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종: 홍로]",
     };
   },
   methods: {
@@ -61,9 +61,10 @@ export default {
       if (result) {
         console.log("[SUCCESS] 주문 생성 성공");
         this.$router.push("/orders");
-      } else {
-        console.log("[ERROR] 주문 생성 실패");
       }
+    },
+    addNewInquiry(registeredInquiry) {
+      this.qnaStore.addNewInquiry(registeredInquiry);
     },
   },
 };

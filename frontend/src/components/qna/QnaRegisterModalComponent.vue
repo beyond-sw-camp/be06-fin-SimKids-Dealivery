@@ -15,11 +15,10 @@
                         </div>
                         <div class="css-1tm481w eell72m3">
                             <div class="css-l4dbne eell72m2">
-                                <img src="https://product-image.kurly.com/product/image/7a79c0a2-31c7-4cb4-9c93-4ebded5e42b8.jpeg"
-                                    class="css-1vpfo16 eell72m1">
+                                <img :src="thumbnail" class="css-1vpfo16 eell72m1">
                             </div>
                             <div class="css-1mysn55 eell72m0">
-                                <span>[에스티 로더] 갈색병 세럼 50ml 기획세트 (+15ml*3ea 추가 증정)</span>
+                                <span>{{title}}</span>
                             </div>
                         </div>
                         <div class="css-4qu8li e43j10r2">
@@ -89,6 +88,10 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { useQnaStore } from "@/stores/useQnaStore";
+import { mapStores } from "pinia";
+
 export default {
     name: "QnaRegisterModalComponent",
     props: {
@@ -99,7 +102,15 @@ export default {
         initialContent: {
             type: String,
             default: ""
-        }
+        },
+        thumbnail: {
+            type: String,
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
+        },
     },
     data() {
         return {
@@ -120,24 +131,39 @@ export default {
     computed: {
         isFormValid() {
             return this.subject.trim().length >= 2 && this.content.trim().length >= 5;
-        }
+        },
+        ...mapStores(useQnaStore),
+        localTableData() {
+            return this.qnaStore.inquiries;
+        },
     },
     methods: {
         closeModal() {
             this.$emit("close");
         },
-        submitForm() {
+        async submitForm() {
             const newInquiry = {
                 title: this.subject,
                 content: this.content,
-                author: "익명", // 실제로는 로그인된 사용자의 이름을 사용
-                created_at: new Date().toISOString().split("T")[0],
-                answer_status: "답변대기",
+                userIdx: 1, // 추후 로그인된 사용자 IDX 사용
+                productBoardIdx: 1, // 추후 해당 게시글 IDX 사용
             };
 
-            // 부모 컴포넌트에 데이터 전달
-            this.$emit("submit", newInquiry);
-            this.closeModal();
+            try {
+                const response = await axios.post('/api/qna/question/create', newInquiry);
+
+                if (response.data.isSuccess) {
+                    const registeredInquiry = response.data.result; // 응답으로 받은 데이터를 registeredInquiry에 저장
+
+                    // 부모 컴포넌트에 데이터 전달
+                    this.$emit("submit", registeredInquiry);
+                    this.closeModal();
+                } else {
+                    console.error("문의 등록 실패:", response.data.message);
+                }
+            } catch (error) {
+                console.error("문의 등록 중 오류 발생:", error);
+            }
         },
         limitContentLength() {
             if (this.content.length > 255) {
