@@ -15,11 +15,10 @@
                         </div>
                         <div class="css-1tm481w eell72m3">
                             <div class="css-l4dbne eell72m2">
-                                <img src="https://product-image.kurly.com/product/image/7a79c0a2-31c7-4cb4-9c93-4ebded5e42b8.jpeg"
-                                    class="css-1vpfo16 eell72m1">
+                                <img :src="thumbnail" class="css-1vpfo16 eell72m1">
                             </div>
                             <div class="css-1mysn55 eell72m0">
-                                <span>[에스티 로더] 갈색병 세럼 50ml 기획세트 (+15ml*3ea 추가 증정)</span>
+                                <span>{{title}}</span>
                             </div>
                         </div>
                         <div class="css-4qu8li e43j10r2">
@@ -103,7 +102,15 @@ export default {
         initialContent: {
             type: String,
             default: ""
-        }
+        },
+        thumbnail: {
+            type: String,
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
+        },
     },
     data() {
         return {

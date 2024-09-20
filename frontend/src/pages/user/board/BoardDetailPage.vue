@@ -7,7 +7,8 @@
           <BoardDetailThumnailComponent :thumbnails="thumbnails" />
           <BoardDetailProductInfoComponent @submitOrder="submitOrder" />
         </main>
-        <BoardDetailNavComponent />
+        <BoardDetailNavComponent :thumbnails="thumbnails" :productBoardIdx="productBoardIdx"
+          :productTitle="productTitle" />
       </div>
     </div>
   </div>
@@ -46,7 +47,8 @@ export default {
           src: "https://pbs.twimg.com/media/EE0R8XcU0AAlbth.jpg",
         },
       ],
-
+      productBoardIdx: 1, // 추후에 실제 상품의 boardIdx로 변경
+      productTitle: "[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종: 홍로]"
     };
   },
   methods: {

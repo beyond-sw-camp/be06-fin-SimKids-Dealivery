@@ -10,7 +10,6 @@ export const useQnaStore = defineStore("qna", {
         async fetchInquiries() {
             try {
                 const response = await axios.get('/api/qna/question/list'); // 실제 API URL
-                console.log(response.data.result); // API 응답 로그 출력
                 if (response.data.isSuccess) {
                     this.inquiries = response.data.result;
                 } else {
