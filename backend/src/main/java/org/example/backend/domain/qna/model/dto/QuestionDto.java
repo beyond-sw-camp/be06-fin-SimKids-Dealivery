@@ -24,9 +24,7 @@ public class QuestionDto {
         private String title;
         @NotBlank(message = "내용은 공백일 수 없습니다.")
         private String content;
-        @NotNull
-        private Long userIdx;
-        @NotNull
+        @NotNull(message = "게시글 ID는 필수입니다.")
         private Long productBoardIdx;
 
         public Question toEntity(User user, ProductBoard productBoard) {
@@ -46,7 +44,6 @@ public class QuestionDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class QuestionCreateResponse{
-        private Long idx;
         private String title;
         private String content;
         private String userName;
@@ -59,7 +56,6 @@ public class QuestionDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class QuestionListResponse {
-        private Long idx;
         private String title;
         private String content;
         private String userName;

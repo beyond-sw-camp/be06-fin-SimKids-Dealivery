@@ -12,6 +12,8 @@ import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.common.constants.SwaggerDescription;
 import org.example.backend.global.common.constants.SwaggerExamples;
 import org.example.backend.global.exception.InvalidCustomException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,16 +36,21 @@ public class QuestionController {
             ))
 
     @PostMapping("/create")
-    public BaseResponse create(@RequestBody QuestionDto.QuestionCreateRequest request){
+    public BaseResponse create(@RequestBody QuestionDto.QuestionCreateRequest request, @AuthenticationPrincipal UserDetails userDetails){
         try{
+            String email = userDetails.getUsername(); // 인증된 사용자의 이메일 가져오기
+
             if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
                 throw new InvalidCustomException(BaseResponseStatus.QNA_QUESTION_FAIL_EMPTY_TITLE);
             }
             if (request.getContent() == null || request.getContent().trim().isEmpty()) {
                 throw new InvalidCustomException(BaseResponseStatus.QNA_QUESTION_FAIL_EMPTY_CONTENT);
             }
+
+            Long productBoardIdx = request.getProductBoardIdx();  // Request Body로 전달받은 productBoardIdx 사용
+
             // 문의 등록 후 사용자 이름, 날짜, 답변 상태를 함께 응답
-            QuestionDto.QuestionCreateResponse response = questionService.createQuestion(request);
+            QuestionDto.QuestionCreateResponse response = questionService.createQuestion(request, email, productBoardIdx);
             return new BaseResponse<>(response);
 
         } catch (InvalidCustomException e){

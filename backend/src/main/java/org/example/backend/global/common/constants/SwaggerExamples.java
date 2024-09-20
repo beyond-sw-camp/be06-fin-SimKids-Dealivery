@@ -42,10 +42,9 @@ public class SwaggerExamples {
     //문의 등록 틀
     public static final String QNA_QUESTION_REQUEST = """
        {
-           "title": "제목입력",
-           "content": "내용입력",
-           "userIdx": 1,
-           "productBoardIdx": 1
+           "title": "문의 제목",
+           "content": "문의 내용",
+           "productBoardIdx": 123
        }
     """;
 
