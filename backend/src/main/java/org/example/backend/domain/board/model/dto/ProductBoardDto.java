@@ -59,20 +59,6 @@ public class ProductBoardDto {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class CompanyBoardListResponse {
-		private Long idx;
-		private String productThumbnailUrl;
-		private String title;
-		private String category;
-		private String status;
-		private LocalDateTime startedAt;
-		private LocalDateTime endedAt;
-	}
-
-	@Builder
-	@Getter
-	@NoArgsConstructor
-	@AllArgsConstructor
 	public static class BoardListResponse {
 		private Long idx;
 		private String productThumbnailUrl;
@@ -90,12 +76,44 @@ public class ProductBoardDto {
 	@Getter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class BoardDetailResponse{
+	public static class BoardDetailResponse {
+		private List<String> productThumbnailUrls;
+		private String productDetailUrl;
+		private String title;
+		private List<ProductDto.Response> products;
+		private LocalDateTime startedAt;
+		private LocalDateTime endedAt;
+		private String companyName;
+		private String category;
+		private Boolean likes;
+		private Integer price;
+		private Integer discountRate;
+	}
+
+	@Builder
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class CompanyBoardListResponse {
+		private Long idx;
+		private String productThumbnailUrl;
+		private String title;
+		private String category;
+		private String status;
+		private LocalDateTime startedAt;
+		private LocalDateTime endedAt;
+	}
+
+	@Builder
+	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	public static class CompanyBoardDetailResponse {
 		private List<String> productThumbnailUrls;
 		private String productDetailUrl;
 		private String title;
 		private Integer discountRate;
-		private List<ProductDto.Request> products;
+		private List<ProductDto.CompanyResponse> products;
 		private LocalDateTime startedAt;
 		private LocalDateTime endedAt;
 		private String category;

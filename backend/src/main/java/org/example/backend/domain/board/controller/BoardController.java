@@ -37,6 +37,13 @@ public class BoardController {
 		return new BaseResponse(boardListResponses);
 	}
 
+	@Operation(summary = "상품 게시글 상세 조회 API")
+	@GetMapping(value = "/{idx}/detail")
+	public BaseResponse detail(@PathVariable Long idx) {
+		ProductBoardDto.BoardDetailResponse response = productBoardService.detail(idx);
+		return response == null ? new BaseResponse(BaseResponseStatus.FAIL) : new BaseResponse(response);
+	}
+
 	@Operation(summary = "판매자 회원 상품 등록 API")
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
 	public BaseResponse create(@RequestPart("boardCreateRequest") ProductBoardDto.BoardCreateRequest boardCreateRequest,
@@ -57,10 +64,13 @@ public class BoardController {
 		return new BaseResponse(boardListResponses);
 	}
 
+	/* TODO
+	@AuthenticationPrincipal 적용하면, Company Idx를 이용해 ProductBoard 필터링하는 로직 추가 되어야 함
+	* */
 	@Operation(summary = "판매자 회원 게시글 상세 조회 API")
 	@GetMapping(value = "/company/{idx}/detail")
-	public BaseResponse getDetail(@PathVariable Long idx) {
-		ProductBoardDto.BoardDetailResponse response =  productBoardService.getCompanyDetail(idx);
+	public BaseResponse companyDetail(@PathVariable Long idx) {
+		ProductBoardDto.CompanyBoardDetailResponse response =  productBoardService.getCompanyDetail(idx);
 		return response == null ? new BaseResponse(BaseResponseStatus.FAIL) : new BaseResponse(response);
 	}
 }

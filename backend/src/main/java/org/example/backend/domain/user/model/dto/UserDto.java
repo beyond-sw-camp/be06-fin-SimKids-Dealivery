@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.backend.domain.delivery.model.dto.DeliveryDto;
+import org.example.backend.domain.delivery.model.entity.Delivery;
 import org.example.backend.domain.user.model.entity.User;
 import org.example.backend.global.common.constants.Role;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class UserDto {
 
@@ -73,6 +76,17 @@ public class UserDto {
                     .point(0L)
                     .build();
         }
+
+        public Delivery toDeliveryEntity(User user){
+            return Delivery.builder()
+                    .name("집")
+                    .user(user)
+                    .address(this.address)
+                    .addressDetail(this.addressDetail)
+                    .postNumber(this.postNumber)
+                    .isDefault(true)
+                    .build();
+        }
     }
 
     @Getter
@@ -134,6 +148,31 @@ public class UserDto {
                     .point(0L)
                     .build();
         }
+
+        public Delivery toDeliveryEntity(User user){
+            return Delivery.builder()
+                    .name("집")
+                    .user(user)
+                    .address(this.address)
+                    .addressDetail(this.addressDetail)
+                    .postNumber(this.postNumber)
+                    .isDefault(true)
+                    .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserDetailResponse{
+        private String name;
+        private String email;
+        private String address;
+        private String addressDetail;
+        private String postNumber;
+        private String phoneNumber;
+        private List<DeliveryDto.DeliveryResponse> deliveries;
     }
 
 }

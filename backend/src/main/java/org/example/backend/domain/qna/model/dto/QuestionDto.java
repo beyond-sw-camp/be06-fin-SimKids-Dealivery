@@ -53,4 +53,17 @@ public class QuestionDto {
         private String answerStatus;
         private LocalDateTime createdAt;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class QuestionListResponse {
+        private Long idx;
+        private String title;
+        private String content;
+        private String userName;
+        private String answerStatus;
+        private LocalDateTime createdAt;
+    }
 }

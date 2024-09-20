@@ -5,14 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.company.model.dto.CompanyDto;
 import org.example.backend.domain.company.model.entity.Company;
 import org.example.backend.domain.company.repository.CompanyRepository;
-import org.example.backend.domain.user.model.dto.UserDto;
-import org.example.backend.domain.user.model.entity.User;
-import org.example.backend.domain.user.repository.DeliveryRepository;
-import org.example.backend.domain.user.repository.UserAuthTokenRepository;
-import org.example.backend.domain.user.repository.UserRepository;
 import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.exception.InvalidCustomException;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

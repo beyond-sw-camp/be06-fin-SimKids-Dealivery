@@ -5,11 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.backend.domain.delivery.model.entity.Delivery;
+import org.example.backend.domain.user.model.dto.UserDto;
 import org.example.backend.domain.qna.model.entity.Question;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.example.backend.domain.likes.model.entity.Likes;
 
@@ -50,11 +53,23 @@ public class User {
     private String role;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Delivery> deliveryList;
+    private List<Delivery> deliveries;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Question> questions = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Likes> likes;
+  
+    public UserDto.UserDetailResponse toUserDetailResponse(){
+        return UserDto.UserDetailResponse.builder()
+                .name(this.name)
+                .email(this.email)
+                .address(this.address)
+                .addressDetail(this.addressDetail)
+                .postNumber(this.postNumber)
+                .phoneNumber(this.phoneNumber)
+                .deliveries(this.deliveries.stream().map(Delivery::toDeliveryResponse).collect(Collectors.toList()))
+                .build();
+    }
 }

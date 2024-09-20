@@ -91,6 +91,24 @@ public class ProductBoard {
 			.likes(false)
 			.build();
 	}
+
+	public ProductBoardDto.BoardDetailResponse toBoardDetailResponse(List<String> productThumbnailUrls, List<ProductDto.Response> products) {
+		return ProductBoardDto.BoardDetailResponse.builder()
+			.productThumbnailUrls(productThumbnailUrls)
+			.productDetailUrl(this.productDetailUrl)
+			.title(this.title)
+			.products(products)
+			.startedAt(this.startedAt)
+			.endedAt(this.endedAt)
+			.companyName(this.company.getName())
+			.category(this.category.getName())
+			.likes(false) // <-- 로그인 한 유저에 따라 달라져야 함
+			.price(products.stream().min(Comparator.comparing(ProductDto.Response::getPrice)).map(ProductDto.Response::getPrice).orElse(null))
+			.discountRate(this.discountRate)
+			.build();
+	}
+
+
 	// 판매자 게시글 목록 조회 DTO
 	public ProductBoardDto.CompanyBoardListResponse toCompanyBoardListResponse() {
 		/* TODO
@@ -108,8 +126,8 @@ public class ProductBoard {
 			.build();
 	}
 
-	public ProductBoardDto.BoardDetailResponse toBoardDetailResponse(List<String> productDetailUrls, List<ProductDto.Request> products) {
-		return ProductBoardDto.BoardDetailResponse.builder()
+	public ProductBoardDto.CompanyBoardDetailResponse toCompanyBoardDetailResponse(List<String> productDetailUrls, List<ProductDto.CompanyResponse> products) {
+		return ProductBoardDto.CompanyBoardDetailResponse.builder()
 			.productThumbnailUrls(productDetailUrls)
 			.productDetailUrl(this.productDetailUrl)
 			.title(this.title)

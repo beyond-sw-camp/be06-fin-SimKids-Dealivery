@@ -14,10 +14,9 @@ import org.example.backend.global.common.constants.BaseResponse;
 import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.common.constants.SwaggerDescription;
 import org.example.backend.global.common.constants.SwaggerExamples;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.example.backend.global.security.custom.model.dto.CustomUserDetails;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -81,5 +80,14 @@ public class UserController {
         }
 
         return new BaseResponse();
+    }
+
+    @GetMapping("/detail")
+    public BaseResponse<UserDto.UserDetailResponse> getDetail(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+            ){
+        UserDto.UserDetailResponse userDetailResponse =
+                userService.getDetail(userDetails.getUsername(),userDetails.getIdx());
+        return new BaseResponse<>(userDetailResponse);
     }
 }
