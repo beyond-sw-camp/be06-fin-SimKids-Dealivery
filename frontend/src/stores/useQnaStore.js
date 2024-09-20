@@ -12,6 +12,7 @@ export const useQnaStore = defineStore("qna", {
                 const response = await axios.get('/api/qna/question/list'); // 실제 API URL
                 if (response.data.isSuccess) {
                     this.inquiries = response.data.result;
+                    console.log(this.inquiries);
                 } else {
                     console.error('문의 목록을 불러오는 중 오류 발생:', response.data.message);
                 }
