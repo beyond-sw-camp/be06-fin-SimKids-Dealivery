@@ -6,12 +6,13 @@
       :title="notice[0]"
       :subtitle="notice[1]"
     ></SectionTitleComponent>
+    <ObserverComponent @show="getOpenList"></ObserverComponent>
     <div class="main-card-container">
-      <MainCardViewComponent></MainCardViewComponent>
-      <MainCardViewComponent></MainCardViewComponent>
-      <MainCardViewComponent></MainCardViewComponent>
-
-      <!-- 추가 카드들 -->
+      <MainCardViewComponent
+        v-for="data in openDataList"
+        :key="data.idx"
+        :data="data"
+      ></MainCardViewComponent>
     </div>
     <SectionTitleComponent
       :title="notice[2]"
@@ -20,7 +21,7 @@
     <br />
     <div class="board-card-container">
       <ProductBoardListCardComponent
-        v-for="data in dataList"
+        v-for="data in readyDataList"
         :key="data.idx"
         :data="data"
       ></ProductBoardListCardComponent>
@@ -37,6 +38,7 @@ import BannerComponent from "@/components/mainpage/BannerComponent.vue";
 import SectionTitleComponent from "@/components/mainpage/SectionTitleComponent.vue";
 import MainCardViewComponent from "@/components/mainpage/MainCardViewComponent.vue";
 import ProductBoardListCardComponent from "@/components/mainpage/ProductBoardListCardComponent.vue";
+import ObserverComponent from "@/components/mainpage/ObserverComponent.vue";
 import { useBoardStore } from "@/stores/useBoardStore";
 import { mapStores } from "pinia";
 
@@ -48,6 +50,7 @@ export default {
     SectionTitleComponent,
     MainCardViewComponent,
     ProductBoardListCardComponent,
+    ObserverComponent,
     FooterComponent,
   },
   computed: {
@@ -55,7 +58,10 @@ export default {
   },
   data() {
     return {
-      dataList: null,
+      readyDataList: [],
+      openDataList: [],
+      readyPage: 1,
+      openPage: 1,
       notice: [
         "🎉 특가 가득! 진행 중인 이벤트 🎉",
         "놓치지 말고 지금 주문하세요!",
@@ -65,12 +71,21 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.getReadyList();
+    this.getOpenList();
   },
   methods: {
-    async getList() {
-      this.dataList = await this.boardStore.getList(1, null, null);
-      this.dataList = this.dataList.content;
+    async getReadyList() {
+      this.readyDataList = await this.boardStore.getMainList(1, "진행 전");
+      this.readyDataList = this.readyDataList.content;
+    },
+    async getOpenList() {
+      const newData = await this.boardStore.getMainList(
+        this.openPage,
+        "진행 중"
+      );
+      this.openDataList = [...this.openDataList, ...newData.content];
+      this.openPage += 1;
     },
   },
 };
