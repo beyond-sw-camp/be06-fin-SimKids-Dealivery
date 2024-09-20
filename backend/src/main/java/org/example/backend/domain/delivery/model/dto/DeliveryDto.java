@@ -54,4 +54,12 @@ public class DeliveryDto {
                     .build();
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class SetDefaultRequest{
+        private Long idx;
+    }
 }

@@ -57,7 +57,7 @@ public class DeliveryService {
                 .anyMatch(Delivery::getIsDefault);
     }
     public Delivery getDefaultDelivery(List<Delivery> deliveries) {
-        //받아온 리스트에서 isDefault가 true인 객체의 해당 값을 true로 바꾸고 반환
+        //받아온 리스트에서 isDefault가 true인 객체의 해당 값을 false로 바꾸고 반환
         return deliveries.stream()
                 .filter(Delivery::getIsDefault)
                 .findFirst()
@@ -68,15 +68,49 @@ public class DeliveryService {
                 .orElse(null);
     }
 
+    //배송지 삭제
     public void deleteDelivery(Long idx) {
         deliveryRepository.deleteById(idx);
     }
 
+    //idx로 단건조회 후 존재여부 반환
     public boolean isExist(Long idx) {
         Optional<Delivery> optionalDelivery = deliveryRepository.findByIdx(idx);
         if (optionalDelivery.isEmpty()){
             return false;
         }
         return true;
+    }
+
+    //조회된 list중 해당 idx로 등록된 배송지가 있으면 배송지 반환
+    public Delivery isExist(List<Delivery> deliveries, Long idx){
+        for (Delivery d : deliveries){
+            if (d.getIdx() == idx){
+                return d;
+            }
+        }
+        return null;
+    }
+
+    //회원정보로 배송지목록 조회
+    //idx에 해당하는 배송지가 있는지 체크
+    //기존 기본배송지 여부를 확인
+    //있으면 false처리 후 넘겨받은 idx의 배송지를 true로 변경
+    //저장
+    public void setDefault(Long idx,Long userIdx) {
+        List<Delivery> deliveries = deliveryRepository.findAllByUserIdx(userIdx).orElseThrow(
+                () -> new InvalidCustomException(BaseResponseStatus.USER_DELIVERY_EDIT_FAIL)
+        );
+        Delivery newDefaultDelivery = isExist(deliveries, idx);
+        if (newDefaultDelivery == null){
+            throw new InvalidCustomException(BaseResponseStatus.USER_DELIVERY_EDIT_FAIL);
+        }
+        if(isDefaultExist(deliveries)){
+            //기존 기본배송지를 false로 바꿔서 반환
+            Delivery existingDefaultDelivery = getDefaultDelivery(deliveries);
+            deliveryRepository.save(existingDefaultDelivery);
+        }
+        newDefaultDelivery.setIsDefault(true);
+        deliveryRepository.save(newDefaultDelivery);
     }
 }

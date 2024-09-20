@@ -39,10 +39,26 @@ public class DeliveryController {
     public BaseResponse deleteDelivery(
             @PathVariable Long idx
     ){
+        if (idx == null || idx <= 0){
+            throw new InvalidCustomException(BaseResponseStatus.FAIL);
+        }
         if(!deliveryService.isExist(idx)){
         throw new InvalidCustomException(BaseResponseStatus.USER_DELIVERY_REMOVE_FAIL_NO_MATCH_DELIVERY);
         }
         deliveryService.deleteDelivery(idx);
+        return new BaseResponse();
+    }
+
+    @PatchMapping("")
+    public BaseResponse setDefault(
+            @RequestBody DeliveryDto.SetDefaultRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
+        if (request.getIdx() == null || request.getIdx() <= 0){
+            throw new InvalidCustomException(BaseResponseStatus.FAIL);
+        }
+        deliveryService.setDefault(request.getIdx(), userDetails.getIdx());
+
         return new BaseResponse();
     }
 
