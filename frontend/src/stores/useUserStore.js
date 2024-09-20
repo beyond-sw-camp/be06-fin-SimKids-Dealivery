@@ -275,7 +275,19 @@ export const useUserStore = defineStore("user", {
       }catch{
         return false;
       }
+    },
+    async editDelivery(request){
+      try {
+        let response = await axios.put(backend+"/delivery",request, {withCredentials:true});
+        if(response.data.code !== 1000){
+          return false;
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
     }
+    
   },
 
   

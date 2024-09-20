@@ -129,9 +129,14 @@ export default {
       }
       
     },
-    saveEditedAddress(data) {
+    async saveEditedAddress(data) {
       console.log(data);
-      alert("추가될 기능")
+      if(await this.userStore.editDelivery(data)){
+        await this.userStore.getDeliveryList();
+      }else{
+        alert("회원정보 수정에 실패했습니다.");
+      }
+      
     },
     setInitialSelectedAddress() {
       const defaultDeliveryIndex = this.userStore.userDetail.deliveries.findIndex(
