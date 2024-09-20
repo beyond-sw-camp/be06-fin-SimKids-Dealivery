@@ -43,6 +43,7 @@ public class DeliveryService {
         if (request.getIsDefault()){
             if (isDefaultExist(user.getDeliveries())){
                 Delivery defaultDelivery = getDefaultDelivery(user.getDeliveries());
+                defaultDelivery.setIsDefault(false);
                 //기존 기본배송지 false로 업데이트
                 deliveryRepository.save(defaultDelivery);
             }
@@ -61,10 +62,6 @@ public class DeliveryService {
         return deliveries.stream()
                 .filter(Delivery::getIsDefault)
                 .findFirst()
-                .map(delivery -> {
-                    delivery.setIsDefault(false);
-                    return delivery;
-                })
                 .orElse(null);
     }
 
@@ -107,8 +104,9 @@ public class DeliveryService {
             throw new InvalidCustomException(BaseResponseStatus.USER_DELIVERY_EDIT_FAIL);
         }
         if(isDefaultExist(deliveries)){
-            //기존 기본배송지를 false로 바꿔서 반환
+            //기존 기본배송지를 false로 변경 후 저장
             Delivery existingDefaultDelivery = getDefaultDelivery(deliveries);
+            existingDefaultDelivery.setIsDefault(false);
             deliveryRepository.save(existingDefaultDelivery);
         }
         newDefaultDelivery.setIsDefault(true);
