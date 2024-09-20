@@ -88,19 +88,27 @@
             <h2 class="product-name css-eaolx3 e1cmg4vm5">
               {{ data.companyName }}
             </h2>
-            <h3 class="product-name css-eaolx3 e1cmg4vm5">홍삼정 에브리타임</h3>
+            <h3 class="product-name css-eaolx3 e1cmg4vm5">{{ data.title }}</h3>
             <div class="content-row css-1066lcq e1cmg4vm3">
               <div class="product-price discount-price css-1fttcpj ei5rudb2">
                 <div>
                   <span class="dimmed-price css-105zgxh ei5rudb1"
-                    ><span class="price-number">77,000</span
+                    ><span class="price-number">{{
+                      data.price.toLocaleString()
+                    }}</span
                     ><span class="won">원</span></span
                   >
                 </div>
                 <div class="discount">
-                  <span class="discount-rate css-19lkxd2 ei5rudb0">10%</span
+                  <span class="discount-rate css-19lkxd2 ei5rudb0"
+                    >{{ data.discountRate }}%</span
                   ><span class="sales-price css-105zgxh ei5rudb1"
-                    ><span class="price-number">69,300</span
+                    ><span class="price-number">{{
+                      (
+                        this.data.price *
+                        (1 - this.data.discountRate / 100)
+                      ).toLocaleString()
+                    }}</span
                     ><span class="won">원</span></span
                   >
                 </div>
