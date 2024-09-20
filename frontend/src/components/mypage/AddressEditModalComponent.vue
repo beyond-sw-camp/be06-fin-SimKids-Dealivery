@@ -34,7 +34,7 @@
           </div>
           <div type="recent" class="css-1y14kop e1k348230">
             <button
-              @click="saveEditedAddress"
+              @click="validateAndSave"
               class="css-10voksq e4nu7ef3"
               type="button"
               height="44"
@@ -62,6 +62,7 @@
 <script>
 import { useUserStore } from "@/stores/useUserStore";
 import { mapStores } from "pinia";
+import { Validator } from "@/util/validator";
 export default {
   name: "AddressEditModalComponent",
   data() {
@@ -117,6 +118,18 @@ export default {
         this.editedAddress.isDefault === this.oldAddress.isDefault
       );
     },
+    validateAndSave() {
+      try {
+        new Validator(this.editedAddress.name, "배송지명을 입력해 주세요").isNotEmpty();
+        new Validator(this.editedAddress.postNumber, "우편번호를 입력해 주세요").isNotEmpty();
+        new Validator(this.editedAddress.address, "주소를 입력해 주세요").isNotEmpty();
+        new Validator(this.editedAddress.addressDetail, "상세주소를 입력해 주세요").isNotEmpty();
+        this.saveEditedAddress();
+      } catch (error) {
+        // 검증 실패 시 에러 메시지 출력
+        alert(error.message);
+      }
+    },
     async deleteOne(){
       if(this.editedAddress.idx === null){
         alert("유효하지 않은 배송지입니다.");
@@ -127,6 +140,9 @@ export default {
         }
         this.closeModal();
       }
+    },
+    validateAll(){
+
     }
   },
 };

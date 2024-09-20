@@ -205,7 +205,6 @@ export const useUserStore = defineStore("user", {
         let response = await axios.get(backend+"/user/detail", {withCredentials: true});
         if(response.data.code === 1000){
           this.userDetail = response.data.result;
-          console.log(this.userDetail);
           return true;
         }else{
           return false;
@@ -220,7 +219,6 @@ export const useUserStore = defineStore("user", {
         let response = await axios.get(backend+"/delivery/list", {withCredentials: true});
         if(response.data.code === 1000){
           this.userDetail.deliveries = response.data.result;
-          console.log(this.userDetail.deliveries);
           return true;
         }else{
           return false;
@@ -266,6 +264,17 @@ export const useUserStore = defineStore("user", {
         return false;
       }
       
+    },
+    async setIsDefault(idx){
+      try{
+        let response = await axios.patch(backend+"/delivery",{idx:idx},{withCredentials:true});
+        if (response.data.code != 1000){
+          return false;
+        }
+        return true;
+      }catch{
+        return false;
+      }
     }
   },
 

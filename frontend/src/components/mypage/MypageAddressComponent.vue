@@ -73,7 +73,7 @@
     </div>
   </div>
   <div v-if="userStore.userDetail.deliveries.length !== 0" class="save-address-container">
-    <button class="save-address">저장하기</button>
+    <button class="save-address" @click="setDefault">기본 배송지로 설정</button>
   </div>
 </template>
 
@@ -140,6 +140,16 @@ export default {
       
       if (defaultDeliveryIndex !== -1) {
         this.selectedAddress = defaultDeliveryIndex;
+        this.selectedDelivery = this.userStore.userDetail.deliveries[defaultDeliveryIndex];
+      }
+    },
+    async setDefault(){
+      if(!this.selectedDelivery.isDefault){
+        if(await this.userStore.setIsDefault(this.selectedDelivery.idx)){
+          await this.userStore.getDeliveryList();
+        }else{
+          alert("기본배송지 설정에 실패했습니다.");
+        }
       }
     }
   },
@@ -320,6 +330,7 @@ ul {
     font-weight: 600;
     font-size: 12px;
     text-align: center;
+    margin-top:5px;
 }
 
 .empty-notice {

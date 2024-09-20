@@ -358,7 +358,6 @@ export default {
         // 이메일 인증 코드 검증
         new Validator(this.signupRequest.emailCode, "이메일 인증코드를 입력해주세요.").isNotEmpty();
         
-        console.log(this.signupRequest.password);
         // 비밀번호 검증
         new Validator(this.signupRequest.password, "비밀번호를 입력해주세요.")
           .isNotEmpty()
@@ -392,7 +391,6 @@ export default {
 
         return true; // 모든 검증 통과
       } catch (error) {
-        alert(error.message);
         return false;
       }
 

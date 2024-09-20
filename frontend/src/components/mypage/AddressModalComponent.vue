@@ -45,7 +45,7 @@
                   </div><span>기본 배송지로 저장</span>
                 </label></div>
             </div>
-            <button @click="saveDelivery" class="css-10voksq e4nu7ef3" type="button" height="44" radius="3">
+            <button @click="validateAndSave" class="css-10voksq e4nu7ef3" type="button" height="44" radius="3">
               <span class="css-nytqmg e4nu7ef1">저장</span>
             </button>
           </div>
@@ -58,6 +58,7 @@
 <script>
 import { useUserStore } from '@/stores/useUserStore';
 import { mapStores } from 'pinia';
+import { Validator } from '@/util/validator';
 export default {
   name: "AddressModalComponent",
   data() {
@@ -95,8 +96,19 @@ export default {
         top: window.screen.height / 2 - height / 2,
       });
     },
+    validateAndSave() {
+      try {
+        new Validator(this.delivery.name, "배송지명을 입력해 주세요").isNotEmpty();
+        new Validator(this.delivery.postNumber, "우편번호를 입력해 주세요").isNotEmpty();
+        new Validator(this.delivery.address, "주소를 입력해 주세요").isNotEmpty();
+        new Validator(this.delivery.addressDetail, "상세주소를 입력해 주세요").isNotEmpty();
+
+        this.saveDelivery();
+      } catch (error) {
+        alert(error.message);
+      }
+    },
     saveDelivery() {
-      console.log(this.delivery);
       this.$emit("saveDelivery", this.delivery);
       this.closeModal();
     },
