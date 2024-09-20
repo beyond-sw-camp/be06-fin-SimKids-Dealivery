@@ -44,6 +44,7 @@ public class QuestionDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class QuestionCreateResponse{
+        private Long idx;
         private String title;
         private String content;
         private String userName;
@@ -56,10 +57,12 @@ public class QuestionDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class QuestionListResponse {
+        private Long idx;
         private String title;
         private String content;
         private String userName;
         private String answerStatus;
         private LocalDateTime createdAt;
+        private String email;
     }
 }

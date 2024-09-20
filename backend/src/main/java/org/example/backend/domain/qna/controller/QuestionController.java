@@ -66,4 +66,17 @@ public class QuestionController {
         List<QuestionDto.QuestionListResponse> questionList = questionService.getQuestions();
         return new BaseResponse<>(questionList);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public BaseResponse deleteQuestion(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
+        try{
+            String email = userDetails.getUsername();
+            questionService.deleteQuestion(id, email);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+        } catch (InvalidCustomException e) {
+            return new BaseResponse<>(e.getStatus());
+        } catch (Exception e) {
+            return new BaseResponse<>(BaseResponseStatus.QNA_QUESTION_DELETE_FAIL);
+        }
+    }
 }
