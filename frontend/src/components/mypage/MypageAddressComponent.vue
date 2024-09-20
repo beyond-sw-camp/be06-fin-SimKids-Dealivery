@@ -130,7 +130,6 @@ export default {
       
     },
     async saveEditedAddress(data) {
-      console.log(data);
       if(await this.userStore.editDelivery(data)){
         await this.userStore.getDeliveryList();
       }else{
