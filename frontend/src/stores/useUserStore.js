@@ -27,6 +27,9 @@ export const useUserStore = defineStore("user", {
     }
 
   }),
+  persist: {
+    storage: sessionStorage,
+  },
   actions: {
     async login(type, loginRequest) {
       try {
