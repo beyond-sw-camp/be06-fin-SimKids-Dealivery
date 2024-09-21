@@ -3,8 +3,11 @@ package org.example.backend.domain.qna.service;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.board.repository.ProductBoardRepository;
+import org.example.backend.domain.qna.model.dto.AnswerDto;
 import org.example.backend.domain.qna.model.dto.QuestionDto;
+import org.example.backend.domain.qna.model.entity.Answer;
 import org.example.backend.domain.qna.model.entity.Question;
+import org.example.backend.domain.qna.repository.AnswerRepository;
 import org.example.backend.domain.qna.repository.QuestionRepository;
 import org.example.backend.domain.user.model.entity.User;
 import org.example.backend.domain.user.repository.UserRepository;
@@ -23,6 +26,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final ProductBoardRepository productBoardRepository;
     private final UserRepository userRepository;
+    private final AnswerRepository answerRepository;
 
     public QuestionDto.QuestionCreateResponse createQuestion(QuestionDto.QuestionCreateRequest request, String email, Long productBoardIdx) {
         // 사용자 조회
@@ -49,15 +53,31 @@ public class QuestionService {
     }
     public List<QuestionDto.QuestionListResponse> getQuestions() {
         return questionRepository.findAll().stream()
-                .map(question -> QuestionDto.QuestionListResponse.builder()
-                        .idx(question.getIdx())
-                        .title(question.getTitle())
-                        .content(question.getContent())
-                        .userName(question.getUser().getName())  // 사용자 이름
-                        .answerStatus(question.getAnswerStatus())  // 답변 상태
-                        .createdAt(question.getCreatedAt())  // 생성일
-                        .email(question.getUser().getEmail())
-                        .build())
+                .map(question -> {
+                    // 해당 문의에 대한 답변 리스트 조회
+                    List<Answer> answers = answerRepository.findAllByQuestionIdx(question.getIdx());
+
+                    // 답변 리스트를 응답 DTO로 변환
+                    List<AnswerDto.AnswerResponse> answerResponses = answers.stream()
+                            .map(answer -> AnswerDto.AnswerResponse.builder()
+                                    .idx(answer.getIdx())
+                                    .content(answer.getContent())
+                                    .companyName(answer.getCompany().getName())
+                                    .createdAt(answer.getCreatedAt())
+                                    .build())
+                            .collect(Collectors.toList());
+
+                    return QuestionDto.QuestionListResponse.builder()
+                            .idx(question.getIdx())
+                            .title(question.getTitle())
+                            .content(question.getContent())
+                            .userName(question.getUser().getName())  // 사용자 이름
+                            .answerStatus(question.getAnswerStatus())  // 답변 상태
+                            .createdAt(question.getCreatedAt())  // 문의 생성일
+                            .email(question.getUser().getEmail())  // 작성자 이메일
+                            .answers(answerResponses)  // 답변 리스트 추가
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
     public void deleteQuestion(Long questionId, String email){

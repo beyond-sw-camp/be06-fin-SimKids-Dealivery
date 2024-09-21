@@ -12,6 +12,7 @@ import org.example.backend.domain.user.model.entity.User;
 import org.example.backend.global.common.constants.AnswerStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class QuestionDto {
 
@@ -50,6 +51,9 @@ public class QuestionDto {
         private String userName;
         private String answerStatus;
         private LocalDateTime createdAt;
+
+        private String answerContent;
+        private LocalDateTime answerCreatedAt;
     }
 
     @Getter
@@ -64,5 +68,7 @@ public class QuestionDto {
         private String answerStatus;
         private LocalDateTime createdAt;
         private String email;
+
+        private List<AnswerDto.AnswerResponse> answers;
     }
 }
