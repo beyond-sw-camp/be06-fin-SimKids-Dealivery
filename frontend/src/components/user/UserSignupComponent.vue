@@ -9,22 +9,42 @@
         <form>
           <div class="css-1pjgd36 e744wfw6">
             <div class="css-1y8737n e744wfw5">
-              <label class="css-1obgjqh e744wfw4">아이디<span class="css-qq9ke6 e744wfw0">*</span></label>
+              <label class="css-1obgjqh e744wfw4"
+                >아이디<span class="css-qq9ke6 e744wfw0">*</span></label
+              >
             </div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3">
-                  <input v-model="signupRequest.email" data-testid="input-box" id="memberId" name="memberId"
-                    placeholder="아이디를 입력해주세요 (이메일 형식)" type="text" required="" class="css-u52dqk e1uzxhvi2"
-                    maxlength="40" value="" @keydown.enter="userSignup" />
+                  <input
+                    v-model="signupRequest.email"
+                    data-testid="input-box"
+                    id="memberId"
+                    name="memberId"
+                    placeholder="아이디를 입력해주세요 (이메일 형식)"
+                    type="text"
+                    required=""
+                    class="css-u52dqk e1uzxhvi2"
+                    maxlength="40"
+                    value=""
+                    @keydown.enter="userSignup"
+                  />
                 </div>
               </div>
             </div>
             <div class="css-1w0ksfz e744wfw2">
-              <button class="css-ufulao e4nu7ef3" type="button" @click="doEmailAuth">
+              <button
+                class="css-ufulao e4nu7ef3"
+                type="button"
+                @click="doEmailAuth"
+              >
                 <span class="css-nytqmg e4nu7ef1">
-                  <img src="https://res.kurly.com/pc/service/cart/2007/ico_search.svg" alt=""
-                    class="css-1m3kac1 e4nu7ef0" />이메일 인증</span>
+                  <img
+                    src="https://res.kurly.com/pc/service/cart/2007/ico_search.svg"
+                    alt=""
+                    class="css-1m3kac1 e4nu7ef0"
+                  />이메일 인증</span
+                >
               </button>
             </div>
           </div>
@@ -32,14 +52,26 @@
           <!-- 안보이다가 이메일 인증버튼 클릭시 보여지게 -->
           <div v-if="isClickedEmailAuth" class="css-1pjgd36 e744wfw6">
             <div class="css-1y8737n e744wfw5">
-              <label class="css-1obgjqh e744wfw4">인증코드<span class="css-qq9ke6 e744wfw0">*</span></label>
+              <label class="css-1obgjqh e744wfw4"
+                >인증코드<span class="css-qq9ke6 e744wfw0">*</span></label
+              >
             </div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3">
-                  <input v-model="signupRequest.emailCode" data-testid="input-box" id="emailCode" name="emailCode"
-                    placeholder="인증코드 6자리" type="text" required="" maxlength="6" class="css-u52dqk e1uzxhvi2" value=""
-                    @keydown.enter="userSignup" />
+                  <input
+                    v-model="signupRequest.emailCode"
+                    data-testid="input-box"
+                    id="emailCode"
+                    name="emailCode"
+                    placeholder="인증코드 6자리"
+                    type="text"
+                    required=""
+                    maxlength="6"
+                    class="css-u52dqk e1uzxhvi2"
+                    value=""
+                    @keydown.enter="userSignup"
+                  />
                 </div>
               </div>
             </div>
@@ -49,14 +81,26 @@
 
           <div class="css-1pjgd36 e744wfw6">
             <div class="css-1y8737n e744wfw5">
-              <label class="css-1obgjqh e744wfw4">비밀번호<span class="css-qq9ke6 e744wfw0">*</span></label>
+              <label class="css-1obgjqh e744wfw4"
+                >비밀번호<span class="css-qq9ke6 e744wfw0">*</span></label
+              >
             </div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3">
-                  <input v-model="signupRequest.password" data-testid="input-box" id="password" name="password"
-                    placeholder="비밀번호를 입력해주세요" type="password" autocomplete="off" maxlength="20"
-                    class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="userSignup" />
+                  <input
+                    v-model="signupRequest.password"
+                    data-testid="input-box"
+                    id="password"
+                    name="password"
+                    placeholder="비밀번호를 입력해주세요"
+                    type="password"
+                    autocomplete="off"
+                    maxlength="20"
+                    class="css-u52dqk e1uzxhvi2"
+                    value=""
+                    @keydown.enter="userSignup"
+                  />
                 </div>
               </div>
             </div>
@@ -64,14 +108,26 @@
           </div>
           <div class="css-1pjgd36 e744wfw6">
             <div class="css-1y8737n e744wfw5">
-              <label class="css-1obgjqh e744wfw4">비밀번호확인<span class="css-qq9ke6 e744wfw0">*</span></label>
+              <label class="css-1obgjqh e744wfw4"
+                >비밀번호확인<span class="css-qq9ke6 e744wfw0">*</span></label
+              >
             </div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3">
-                  <input v-model="confirmPassword" data-testid="input-box" id="passwordConfirm" name="passwordConfirm"
-                    placeholder="비밀번호를 한번 더 입력해주세요" type="password" autocomplete="off" maxlength="20"
-                    class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="userSignup" />
+                  <input
+                    v-model="confirmPassword"
+                    data-testid="input-box"
+                    id="passwordConfirm"
+                    name="passwordConfirm"
+                    placeholder="비밀번호를 한번 더 입력해주세요"
+                    type="password"
+                    autocomplete="off"
+                    maxlength="20"
+                    class="css-u52dqk e1uzxhvi2"
+                    value=""
+                    @keydown.enter="userSignup"
+                  />
                 </div>
               </div>
             </div>
@@ -79,14 +135,26 @@
           </div>
           <div class="css-1pjgd36 e744wfw6">
             <div class="css-1y8737n e744wfw5">
-              <label class="css-1obgjqh e744wfw4">이름<span class="css-qq9ke6 e744wfw0">*</span></label>
+              <label class="css-1obgjqh e744wfw4"
+                >이름<span class="css-qq9ke6 e744wfw0">*</span></label
+              >
             </div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3">
-                  <input v-model="signupRequest.name" data-testid="input-box" id="name" name="name"
-                    placeholder="이름을 입력해 주세요" type="text" required="" maxlength="10" class="css-u52dqk e1uzxhvi2"
-                    value="" @keydown.enter="userSignup" />
+                  <input
+                    v-model="signupRequest.name"
+                    data-testid="input-box"
+                    id="name"
+                    name="name"
+                    placeholder="이름을 입력해 주세요"
+                    type="text"
+                    required=""
+                    maxlength="10"
+                    class="css-u52dqk e1uzxhvi2"
+                    value=""
+                    @keydown.enter="userSignup"
+                  />
                 </div>
               </div>
             </div>
@@ -95,14 +163,26 @@
 
           <div class="css-1pjgd36 e744wfw6">
             <div class="css-1y8737n e744wfw5">
-              <label class="css-1obgjqh e744wfw4">휴대폰<span class="css-qq9ke6 e744wfw0">*</span></label>
+              <label class="css-1obgjqh e744wfw4"
+                >휴대폰<span class="css-qq9ke6 e744wfw0">*</span></label
+              >
             </div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3">
-                  <input v-model="signupRequest.phoneNumber" data-testid="input-box" id="phoneNumber" name="phoneNumber"
-                    placeholder="-를 포함하여 입력해주세요." maxlength="13" type="tel" required="" class="css-u52dqk e1uzxhvi2"
-                    value="" @keydown.enter="userSignup" />
+                  <input
+                    v-model="signupRequest.phoneNumber"
+                    data-testid="input-box"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    placeholder="-를 포함하여 입력해주세요."
+                    maxlength="13"
+                    type="tel"
+                    required=""
+                    class="css-u52dqk e1uzxhvi2"
+                    value=""
+                    @keydown.enter="userSignup"
+                  />
                 </div>
               </div>
             </div>
@@ -111,34 +191,64 @@
 
           <div class="css-1pjgd36 e744wfw6">
             <div class="css-1y8737n e744wfw5">
-              <label class="css-1obgjqh e744wfw4">주소<span class="css-qq9ke6 e744wfw0">*</span></label>
+              <label class="css-1obgjqh e744wfw4"
+                >주소<span class="css-qq9ke6 e744wfw0">*</span></label
+              >
             </div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3">
-                  <input data-testid="input-box" id="address" name="address" readonly type="text" required=""
-                    class="css-u52dqk e1uzxhvi2 read-only" value="" v-model="signupRequest.address" />
+                  <input
+                    data-testid="input-box"
+                    id="address"
+                    name="address"
+                    readonly
+                    type="text"
+                    required=""
+                    class="css-u52dqk e1uzxhvi2 read-only"
+                    value=""
+                    v-model="signupRequest.address"
+                  />
                 </div>
               </div>
             </div>
             <div class="css-1w0ksfz e744wfw2">
-              <button class="css-ufulao e4nu7ef3" type="button" @click="openPostcode">
+              <button
+                class="css-ufulao e4nu7ef3"
+                type="button"
+                @click="openPostcode"
+              >
                 <span class="css-nytqmg e4nu7ef1">
-                  <img src="https://res.kurly.com/pc/service/cart/2007/ico_search.svg" alt=""
-                    class="css-1m3kac1 e4nu7ef0" />주소 검색</span>
+                  <img
+                    src="https://res.kurly.com/pc/service/cart/2007/ico_search.svg"
+                    alt=""
+                    class="css-1m3kac1 e4nu7ef0"
+                  />주소 검색</span
+                >
               </button>
             </div>
           </div>
 
           <div class="css-1pjgd36 e744wfw6">
             <div class="css-1y8737n e744wfw5">
-              <label class="css-1obgjqh e744wfw4">우편번호<span class="css-qq9ke6 e744wfw0">*</span></label>
+              <label class="css-1obgjqh e744wfw4"
+                >우편번호<span class="css-qq9ke6 e744wfw0">*</span></label
+              >
             </div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3">
-                  <input data-testid="input-box" id="postNumber" name="postNumber" readonly type="text" required=""
-                    class="css-u52dqk e1uzxhvi2 read-only" value="" v-model="signupRequest.postNumber" />
+                  <input
+                    data-testid="input-box"
+                    id="postNumber"
+                    name="postNumber"
+                    readonly
+                    type="text"
+                    required=""
+                    class="css-u52dqk e1uzxhvi2 read-only"
+                    value=""
+                    v-model="signupRequest.postNumber"
+                  />
                 </div>
               </div>
             </div>
@@ -148,14 +258,26 @@
 
           <div class="css-1pjgd36 e744wfw6">
             <div class="css-1y8737n e744wfw5">
-              <label class="css-1obgjqh e744wfw4">상세주소<span class="css-qq9ke6 e744wfw0">*</span></label>
+              <label class="css-1obgjqh e744wfw4"
+                >상세주소<span class="css-qq9ke6 e744wfw0">*</span></label
+              >
             </div>
             <div class="css-82a6rk e744wfw3">
               <div class="css-jmalg e1uzxhvi6">
                 <div class="css-176lya2 e1uzxhvi3">
-                  <input v-model="signupRequest.addressDetail" data-testid="input-box" id="addressDetail"
-                    name="addressDetail" placeholder="상세주소를 입력해주세요." maxlength="30" type="text" required=""
-                    class="css-u52dqk e1uzxhvi2" value="" @keydown.enter="userSignup" />
+                  <input
+                    v-model="signupRequest.addressDetail"
+                    data-testid="input-box"
+                    id="addressDetail"
+                    name="addressDetail"
+                    placeholder="상세주소를 입력해주세요."
+                    maxlength="30"
+                    type="text"
+                    required=""
+                    class="css-u52dqk e1uzxhvi2"
+                    value=""
+                    @keydown.enter="userSignup"
+                  />
                 </div>
               </div>
             </div>
@@ -173,69 +295,118 @@
       <div class="css-y8aj3r e1k9oeg10">
         <div class="css-2yzr8b e744wfw6">
           <div class="css-1y8737n e744wfw5">
-            <label class="css-1obgjqh e744wfw4">이용약관동의<span class="css-qq9ke6 e744wfw0">*</span></label>
+            <label class="css-1obgjqh e744wfw4"
+              >이용약관동의<span class="css-qq9ke6 e744wfw0">*</span></label
+            >
           </div>
           <div class="css-82a6rk e744wfw3">
             <div class="css-ov2xfu e1sjmfnv6">
-              <label class="css-msja7w e1dcessg3" for="TermsAgreeAll"><input id="TermsAgreeAll" type="checkbox"
-                  class="css-agvwxo e1dcessg2" />
+              <label class="css-msja7w e1dcessg3" for="TermsAgreeAll"
+                ><input
+                  id="TermsAgreeAll"
+                  type="checkbox"
+                  class="css-agvwxo e1dcessg2"
+                />
                 <div class="css-79hxr7 e1dcessg1">
-                  <img :src="radioAllStatus
-                      ? require('@/assets/filled-custom-radio.svg')
-                      : require('@/assets/outline-custom-radio.svg')
-                    " @click="checkRadio('radioAll')" alt="Icon" />
+                  <img
+                    :src="
+                      radioAllStatus
+                        ? require('@/assets/filled-custom-radio.svg')
+                        : require('@/assets/outline-custom-radio.svg')
+                    "
+                    @click="checkRadio('radioAll')"
+                    alt="Icon"
+                  />
                 </div>
                 <span>전체 동의합니다.</span>
               </label>
             </div>
             <div class="css-ov2xfu e1sjmfnv6">
               <div class="css-s5xdrg e1sjmfnv3">
-                <label class="css-1mjkje9 e1dcessg3" for="RequiredTermsCondition"><input id="RequiredTermsCondition"
-                    type="checkbox" class="css-agvwxo e1dcessg2" />
+                <label
+                  class="css-1mjkje9 e1dcessg3"
+                  for="RequiredTermsCondition"
+                  ><input
+                    id="RequiredTermsCondition"
+                    type="checkbox"
+                    class="css-agvwxo e1dcessg2"
+                  />
                   <div class="css-79hxr7 e1dcessg1">
-                    <img :src="radioFirstStatus
-                        ? require('@/assets/filled-custom-radio.svg')
-                        : require('@/assets/outline-custom-radio.svg')
-                      " @click="checkRadio('radioFirst')" alt="Icon" />
+                    <img
+                      :src="
+                        radioFirstStatus
+                          ? require('@/assets/filled-custom-radio.svg')
+                          : require('@/assets/outline-custom-radio.svg')
+                      "
+                      @click="checkRadio('radioFirst')"
+                      alt="Icon"
+                    />
                   </div>
-                  <span>이용약관 동의</span>
-                </label><span class="css-64z8en e1sjmfnv4">(필수)</span>
+                  <span>이용약관 동의</span> </label
+                ><span class="css-64z8en e1sjmfnv4">(필수)</span>
               </div>
             </div>
             <div class="css-ov2xfu e1sjmfnv6">
               <div class="css-s5xdrg e1sjmfnv3">
-                <label class="css-1mjkje9 e1dcessg3" for="RequiredTermsOfPrivacy"><input id="RequiredTermsOfPrivacy"
-                    type="checkbox" class="css-agvwxo e1dcessg2" />
+                <label
+                  class="css-1mjkje9 e1dcessg3"
+                  for="RequiredTermsOfPrivacy"
+                  ><input
+                    id="RequiredTermsOfPrivacy"
+                    type="checkbox"
+                    class="css-agvwxo e1dcessg2"
+                  />
                   <div class="css-79hxr7 e1dcessg1">
-                    <img :src="radioSecondStatus
-                        ? require('@/assets/filled-custom-radio.svg')
-                        : require('@/assets/outline-custom-radio.svg')
-                      " @click="checkRadio('radioSecond')" alt="Icon" />
+                    <img
+                      :src="
+                        radioSecondStatus
+                          ? require('@/assets/filled-custom-radio.svg')
+                          : require('@/assets/outline-custom-radio.svg')
+                      "
+                      @click="checkRadio('radioSecond')"
+                      alt="Icon"
+                    />
                   </div>
-                  <span>개인정보 수집∙이용 동의</span>
-                </label><span class="css-64z8en e1sjmfnv4">(필수)</span>
+                  <span>개인정보 수집∙이용 동의</span> </label
+                ><span class="css-64z8en e1sjmfnv4">(필수)</span>
               </div>
             </div>
 
             <div class="css-ov2xfu e1sjmfnv6">
               <div class="css-s5xdrg e1sjmfnv3">
-                <label class="css-1mjkje9 e1dcessg3" for="RequiredSignupAge"><input id="RequiredSignupAge"
-                    type="checkbox" class="css-agvwxo e1dcessg2" />
+                <label class="css-1mjkje9 e1dcessg3" for="RequiredSignupAge"
+                  ><input
+                    id="RequiredSignupAge"
+                    type="checkbox"
+                    class="css-agvwxo e1dcessg2"
+                  />
                   <div class="css-79hxr7 e1dcessg1">
-                    <img :src="radioThirdStatus
-                        ? require('@/assets/filled-custom-radio.svg')
-                        : require('@/assets/outline-custom-radio.svg')
-                      " @click="checkRadio('radioThird')" alt="Icon" />
+                    <img
+                      :src="
+                        radioThirdStatus
+                          ? require('@/assets/filled-custom-radio.svg')
+                          : require('@/assets/outline-custom-radio.svg')
+                      "
+                      @click="checkRadio('radioThird')"
+                      alt="Icon"
+                    />
                   </div>
-                  <span>본인은 만 14세 이상입니다.</span>
-                </label><span class="css-64z8en e1sjmfnv4">(필수)</span>
+                  <span>본인은 만 14세 이상입니다.</span> </label
+                ><span class="css-64z8en e1sjmfnv4">(필수)</span>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="css-ud3rkg e1utgeno0">
-        <button @click="userSignup" class="css-18m884r e4nu7ef3" type="button" width="240" height="56" radius="3">
+        <button
+          @click="userSignup"
+          class="css-18m884r e4nu7ef3"
+          type="button"
+          width="240"
+          height="56"
+          radius="3"
+        >
           <span class="css-nytqmg e4nu7ef1">가입하기</span>
         </button>
       </div>
@@ -269,8 +440,8 @@ export default {
         type: "",
       },
       userEmailAuthRequest: {
-        email: ""
-      }
+        email: "",
+      },
     };
   },
   computed: {
@@ -305,14 +476,15 @@ export default {
         alert("아이디는 이메일 형식이어야 합니다.");
       } else {
         this.userEmailAuthRequest.email = this.signupRequest.email;
-        const isSuccess = this.userStore.sendUserEmailCode(this.userEmailAuthRequest);
+        const isSuccess = this.userStore.sendUserEmailCode(
+          this.userEmailAuthRequest
+        );
         if (isSuccess) {
           alert("이메일이 발송되었습니다.");
           this.isClickedEmailAuth = true;
         } else {
           alert("이메일 발송에 실패했습니다.");
         }
-
       }
     },
     checkRadio(target) {
@@ -353,11 +525,17 @@ export default {
         // 이메일 검증
         new Validator(this.signupRequest.email, "아이디를 입력해주세요.")
           .isNotEmpty()
-          .matches(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/, "아이디는 이메일 형식입니다.");          
+          .matches(
+            /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/,
+            "아이디는 이메일 형식입니다."
+          );
 
         // 이메일 인증 코드 검증
-        new Validator(this.signupRequest.emailCode, "이메일 인증코드를 입력해주세요.").isNotEmpty();
-        
+        new Validator(
+          this.signupRequest.emailCode,
+          "이메일 인증코드를 입력해주세요."
+        ).isNotEmpty();
+
         // 비밀번호 검증
         new Validator(this.signupRequest.password, "비밀번호를 입력해주세요.")
           .isNotEmpty()
@@ -369,20 +547,41 @@ export default {
         // 비밀번호 확인
         new Validator(this.confirmPassword, "비밀번호를 한번 더 입력해주세요.")
           .isNotEmpty()
-          .isEqualTo(this.signupRequest.password, "비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+          .isEqualTo(
+            this.signupRequest.password,
+            "비밀번호와 확인 비밀번호가 일치하지 않습니다."
+          );
 
         // 이름 검증
-        new Validator(this.signupRequest.name, "이름을 입력해주세요.").isNotEmpty();
+        new Validator(
+          this.signupRequest.name,
+          "이름을 입력해주세요."
+        ).isNotEmpty();
 
         // 휴대폰 번호 검증
-        new Validator(this.signupRequest.phoneNumber, "휴대폰 번호를 입력해주세요.")
+        new Validator(
+          this.signupRequest.phoneNumber,
+          "휴대폰 번호를 입력해주세요."
+        )
           .isNotEmpty()
-          .matches(/^\d{3}-\d{4}-\d{4}$/, "-를 포함한 휴대폰번호 11자리를 입력해주세요.");
+          .matches(
+            /^\d{3}-\d{4}-\d{4}$/,
+            "-를 포함한 휴대폰번호 11자리를 입력해주세요."
+          );
 
         // 주소 검증
-        new Validator(this.signupRequest.address, "주소를 입력해주세요.").isNotEmpty();
-        new Validator(this.signupRequest.postNumber, "우편번호를 입력해주세요.").isNotEmpty();
-        new Validator(this.signupRequest.addressDetail, "상세주소를 입력해주세요.").isNotEmpty();
+        new Validator(
+          this.signupRequest.address,
+          "주소를 입력해주세요."
+        ).isNotEmpty();
+        new Validator(
+          this.signupRequest.postNumber,
+          "우편번호를 입력해주세요."
+        ).isNotEmpty();
+        new Validator(
+          this.signupRequest.addressDetail,
+          "상세주소를 입력해주세요."
+        ).isNotEmpty();
 
         // 필수 약관 체크
         if (!this.radioAllStatus) {
@@ -393,7 +592,6 @@ export default {
       } catch (error) {
         return false;
       }
-
     },
     async userSignup() {
       if (this.validateAll()) {
@@ -595,7 +793,7 @@ html {
   color: rgb(221, 221, 221);
 }
 
-.css-1w0ksfz>button {
+.css-1w0ksfz > button {
   height: 44px;
   border-radius: 3px;
 }
@@ -651,7 +849,7 @@ textarea {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-.css-1w0ksfz>button>span {
+.css-1w0ksfz > button > span {
   font-weight: 500;
   font-size: 14px;
 }

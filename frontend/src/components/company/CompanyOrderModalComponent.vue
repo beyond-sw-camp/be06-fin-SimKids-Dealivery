@@ -29,7 +29,7 @@
 
 <script>
 import { mapStores } from "pinia";
-import { useCompanyBoardStore } from "@/stores/useCompanyBoardStore.js";
+import { useBoardStore } from "@/stores/useBoardStore.js";
 
 export default {
   name: "CompanyBoardModalComponent",
@@ -48,7 +48,7 @@ export default {
     this.fetchOrderData();
   },
   computed: {
-    ...mapStores(useCompanyBoardStore),
+    ...mapStores(useBoardStore),
     totalPaidPrice() {
       return this.orderedProducts.reduce((total, product) => {
         return total + product.price * product.amount;
@@ -62,9 +62,7 @@ export default {
     async fetchOrderData() {
       // store에서 주문 데이터를 가져오는 로직 구현
       console.log("Fetching order data for idx:", this.orderIdx);
-      const response = await this.companyBoardStore.getOrderDetail(
-        this.orderIdx
-      );
+      const response = await this.boardStore.getOrderDetail(this.orderIdx);
       this.orderedProducts = response.products;
     },
   },

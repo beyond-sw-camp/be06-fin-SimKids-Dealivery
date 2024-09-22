@@ -16,6 +16,16 @@ export const useBoardStore = defineStore("board", {
     totalPages: 0,
   }),
   actions: {
+    async getMainList(page, status) {
+      const response = await axios.get(backend + "/main/list", {
+        params: {
+          page: page,
+          status: status,
+        },
+      });
+      console.log(response);
+      return response.data.result;
+    },
     async getList(page, category, search) {
       const params = { page: page };
       if (category != "undefined" && category != null && category != "전체") {
@@ -50,12 +60,16 @@ export const useBoardStore = defineStore("board", {
       });
       return response.data.result;
     },
+<<<<<<< HEAD
     async getProductBoardListByDateRange(option) {
       console.log(option);
       // 백엔드 개발 후 구현
       const data = await axios.get(mockyListOptionURL);
       return data.data;
     },
+=======
+
+>>>>>>> c8bad4929ebeabbfe34713c9c9d2a2db9632e3eb
     async getOrderListWithOption(page, status, month) {
       status = String(status);
       status = status.includes("전체") ? null : status;
@@ -75,6 +89,7 @@ export const useBoardStore = defineStore("board", {
       return response.data.result;
     },
 
+<<<<<<< HEAD
     async getProductBoardListByOrderStatus(option) {
       console.log(option);
       // 백엔드 개발 후 구현
@@ -85,6 +100,13 @@ export const useBoardStore = defineStore("board", {
       const data = await axios.get(mockyDetailURL);
       this.boardData = data.data;
       return data.data;
+=======
+    async getProductBoardDetail(idx) {
+      const data = await axios.get(backend + `/company/${idx}/detail`);
+      this.boardData = data.data.result;
+      return data.data.result;
+
+>>>>>>> c8bad4929ebeabbfe34713c9c9d2a2db9632e3eb
     },
     async createProductBoard(req) {
       const formData = new FormData();
