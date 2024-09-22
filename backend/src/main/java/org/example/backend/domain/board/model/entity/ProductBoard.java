@@ -98,9 +98,9 @@ public class ProductBoard {
 			.productDetailUrl(this.productDetailUrl)
 			.title(this.title)
 			.products(products)
-			.startedAt(this.startedAt)
-			.endedAt(this.endedAt)
-			.companyName(this.company.getName())
+			.startedAt(this.startedAt.withSecond(0).withNano(0))
+			.endedAt(this.endedAt.withNano(0).withNano(0))
+			.companyName(this.company.getCompanyName())
 			.category(this.category.getName())
 			.likes(false) // <-- 로그인 한 유저에 따라 달라져야 함
 			.price(products.stream().min(Comparator.comparing(ProductDto.Response::getPrice)).map(ProductDto.Response::getPrice).orElse(null))
