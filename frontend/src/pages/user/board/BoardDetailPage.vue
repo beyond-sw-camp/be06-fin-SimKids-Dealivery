@@ -7,8 +7,11 @@
           <BoardDetailThumnailComponent :thumbnails="thumbnails" />
           <BoardDetailProductInfoComponent @submitOrder="submitOrder" />
         </main>
-        <BoardDetailNavComponent :thumbnails="thumbnails" :productBoardIdx="productBoardIdx"
-          :productTitle="productTitle" />
+        <BoardDetailNavComponent
+          :thumbnails="thumbnails"
+          :productBoardIdx="productBoardIdx"
+          :productTitle="productTitle"
+        />
       </div>
     </div>
   </div>
@@ -48,7 +51,7 @@ export default {
         },
       ],
       productBoardIdx: 1, // 추후에 실제 상품의 boardIdx로 변경
-      productTitle: "[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종: 홍로]"
+      productTitle: "[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종: 홍로]",
     };
   },
   methods: {
@@ -62,7 +65,7 @@ export default {
     },
     addNewInquiry(registeredInquiry) {
       this.qnaStore.addNewInquiry(registeredInquiry);
-    }
+    },
   },
 };
 </script>

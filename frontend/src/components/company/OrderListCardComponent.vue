@@ -1,49 +1,66 @@
 <template>
-  <ul class="list_order">
-    <li>
-      <div class="date">2020.12.17 (12시 29분)</div>
-      <div class="order_goods">
-        <div class="name">
-          <a href="#none" class="order-link" @click="displayModal"
-            >[Dole] 후릇컵 3종 외 2건</a
-          >
-          <div v-if="isDisplayModal">
-            <CompanyOrderModalComponent @closeModal="displayModal" />
+  <div>
+    <ul class="list_order">
+      <li v-for="data in dataList" :key="data.id">
+        <div class="date">{{ formattedDate(data.modifiedAt) }}</div>
+        <div class="order_goods">
+          <div class="name">
+            <a
+              href="#none"
+              class="order-link"
+              @click="displayModal(data.orderIdx)"
+              >{{ data.title }}</a
+            >
+          </div>
+          <div class="order_info">
+            <div class="desc">
+              <dl>
+                <dt>주문번호</dt>
+                <dd>{{ data.ordersNumber }}</dd>
+              </dl>
+
+              <dl>
+                <dt>결제금액</dt>
+                <dd>13,560원</dd>
+              </dl>
+            </div>
+
+            <div class="desc" style="margin-left: 50px">
+              <dl>
+                <dt>주문자명</dt>
+                <dd>심키즈</dd>
+              </dl>
+
+              <dl>
+                <dt>주문방법</dt>
+                <dd>{{ data.payMethod }}</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="order_status">
+            <span class="inner_status">
+              <div
+                style="line-height: 24px"
+                class="order_status_box"
+                :class="{
+                  completed: data.status === '주문 완료',
+                  cancelled: data.status === '주문 취소',
+                }"
+              >
+                {{ data.status }}
+              </div>
+            </span>
           </div>
         </div>
-        <div class="order_info">
-          <div class="desc">
-            <dl>
-              <dt>주문번호</dt>
-              <dd>1608175672040</dd>
-            </dl>
-
-            <dl>
-              <dt>결제금액</dt>
-              <dd>13,560원</dd>
-            </dl>
-          </div>
-
-          <div class="desc" style="margin-left: 50px">
-            <dl>
-              <dt>주문자명</dt>
-              <dd>심키즈</dd>
-            </dl>
-
-            <dl>
-              <dt>주문방법</dt>
-              <dd>카카오페이</dd>
-            </dl>
-          </div>
-        </div>
-        <div class="order_status">
-          <span class="inner_status">
-            <div class="order_status_box">주문 완료</div>
-          </span>
-        </div>
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
+    <div v-if="isDisplayModal">
+      <CompanyOrderModalComponent
+        @closeModal="closeModal"
+        :orderIdx="selectedOrderIdx"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -54,15 +71,41 @@ export default {
   components: {
     CompanyOrderModalComponent,
   },
-  props: {},
+  props: {
+    noDataMsg: {
+      type: String,
+      default: "데이터가 없습니다.",
+    },
+    dataList: {
+      type: Array,
+      default: null,
+    },
+  },
   data() {
     return {
       isDisplayModal: false,
+      selectedOrderIdx: null,
     };
   },
   methods: {
-    displayModal() {
+    displayModal(orderIdx) {
       this.isDisplayModal = !this.isDisplayModal;
+      this.selectedOrderIdx = orderIdx;
+    },
+    closeModal() {
+      this.isDisplayModal = false;
+      this.selectedOrderIdx = null;
+    },
+
+    formattedDate(dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      const day = ("0" + date.getDate()).slice(-2);
+      const hours = ("0" + date.getHours()).slice(-2);
+      const minutes = ("0" + date.getMinutes()).slice(-2);
+
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
     },
   },
 };
@@ -317,5 +360,28 @@ li {
   font-size: 15px;
   color: #757575;
   text-align: center;
+}
+
+.section_orderlist .list_order .order_status .order_status_box {
+  display: inline-block;
+  padding: 5px 5px 5px 5px; /* 내부 여백 */
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 20px; /* 둥근 모서리 */
+  text-align: center;
+  cursor: default;
+  margin: 0 auto;
+  margin-top: 14px;
+}
+
+.section_orderlist .list_order .order_status .order_status_box.completed {
+  background-color: #5f0080;
+  border: 1px solid #5f0080;
+}
+
+.section_orderlist .list_order .order_status .order_status_box.cancelled {
+  background-color: #c5c5c5; /* 회색 배경 */
+  border: 1px solid #c5c5c5;
 }
 </style>
