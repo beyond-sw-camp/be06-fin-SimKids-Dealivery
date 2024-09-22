@@ -7,9 +7,9 @@
           <th class="tit_title">제목</th>
           <th class="tit_name">작성자</th>
           <th class="tit_status">상태</th>
-          <th class="tit_date">작성일</th>
-          <th class="tit_write">답변확인</th>
-          <th class="tit_delete">삭제</th>
+          <th class="tit_date">문의 등록일</th>
+          <th class="tit_write">답변등록</th>
+          <th class="tit_delete">답변확인</th>
         </tr>
       </thead>
       <tbody id="addrList">
@@ -40,43 +40,52 @@
             </button>
           </td>
           <td class="delete_position">
-            <button name="delete" value="" class="product_delete" @click="deleteInquiry(inquiry.id)">
+            <button name="delete" value="" class="product_delete" @click="openAnswerListModal(inquiry)">
               삭제
             </button>
           </td>
         </tr>
       </tbody>
     </table>
+
+    <!-- 기존의 답변 등록 모달 -->
     <CompanyQnAModalComponent v-if="isDisplayModal" :title="selectedInquiry.title" :content="selectedInquiry.content"
       :thumbnail="selectedInquiry.thumbnail" :productTitle="selectedInquiry.productTitle"
-      :questionIdx="selectedInquiry.idx" @closeModal="closeModal" @registerAnswer="registerAnswer" />
+      :questionIdx="selectedInquiry.idx" @closeModal="closeModal" @registerAnswer="onAnswerRegistered" />
+
+    <!-- 답변 리스트 모달 -->
+    <CompanyAnswerListModalComponent v-if="isDisplayAnswerListModal" :selectedInquiry="selectedInquiry"
+      @closeModal="closeAnswerListModal" @answerDeleted="removeAnswerFromList" />
   </div>
 </template>
 
 <script>
+import CompanyAnswerListModalComponent from "./CompanyAnswerListModalComponent.vue";
 import CompanyQnAModalComponent from "./CompanyQnAModalComponent.vue";
 import axios from "axios";
-import { useBoardStore } from "@/stores/useBoardStore";
 import { mapStores } from "pinia";
+import { useBoardStore } from "@/stores/useBoardStore";
 
 export default {
   name: "CompanyQnAManageComponent",
   components: {
     CompanyQnAModalComponent,
-  },
-  computed: {
-    ...mapStores(useBoardStore), 
-    filteredInquiries() {
-      // 기업회원이 작성한 게시글에 달린 문의만 필터링
-      return this.inquiries;
-    },
+    CompanyAnswerListModalComponent,
   },
   data() {
     return {
       inquiries: [], // 서버에서 받아온 문의 목록
       isDisplayModal: false,
+      isDisplayAnswerListModal: false,
       selectedInquiry: null,
     };
+  },
+  computed: {
+    ...mapStores(useBoardStore),
+    filteredInquiries() {
+      // 기업회원이 작성한 게시글에 달린 문의만 필터링
+      return this.inquiries;
+    },
   },
   mounted() {
     this.loadInquiries(); // 기업 회원 이메일을 기반으로 문의 목록 로드
@@ -85,20 +94,20 @@ export default {
     async loadInquiries() {
       try {
         // 로그인된 기업 회원의 게시글에 달린 문의 조회
-        const response = await axios.get('/api/qna/question/list/company');
+        const response = await axios.get("/api/qna/question/list/company");
         this.inquiries = response.data.result; // 데이터를 inquiries에 저장
-        console.log(response.data.result); // 이 데이터를 확인해서 thumbnail과 productTitle이 포함되어 있는지 확인
+        console.log(this.inquiries); // 데이터를 확인해서 thumbnail과 productTitle이 포함되어 있는지 확인
       } catch (error) {
         console.error("문의 목록 로드 실패:", error);
       }
     },
     async openModal(inquiry) {
       try {
-        console.log(inquiry);  // inquiry 객체의 내용을 확인하여 productBoardIdx 값이 있는지 확인
+        console.log(inquiry); // inquiry 객체의 내용을 확인하여 productBoardIdx 값이 있는지 확인
 
         // 스토어에서 상품 상세 정보 가져오기
         const boardDetail = await this.boardStore.getProductBoardDetail(inquiry.productBoardIdx);
-        const lastAnswerContent = inquiry.answers.length > 0 ? inquiry.answers[inquiry.answers.length - 1].content : ""; 
+        const lastAnswerContent = inquiry.answers.length > 0 ? inquiry.answers[inquiry.answers.length - 1].content : "";
 
         // 문의 정보에 썸네일 이미지와 게시글 제목 추가
         this.selectedInquiry = {
@@ -107,7 +116,6 @@ export default {
           productTitle: boardDetail.title || "No Title", // 게시글 제목
           answerContent: lastAnswerContent, // 마지막 답변 내용 추가
         };
-        console.log(this.selectedInquiry);
         this.isDisplayModal = true; // 모달을 열기
       } catch (error) {
         console.error("상품 상세 정보 로드 실패:", error);
@@ -116,6 +124,17 @@ export default {
     closeModal() {
       this.selectedInquiry = null; // 선택된 문의 초기화
       this.isDisplayModal = false; // 모달 닫기
+    },
+    openAnswerListModal(inquiry) {
+      this.selectedInquiry = inquiry;
+      this.isDisplayAnswerListModal = true;
+    },
+    closeAnswerListModal() {
+      this.selectedInquiry = null;
+      this.isDisplayAnswerListModal = false;
+    },
+    removeAnswerFromList(answerId) {
+      this.selectedInquiry.answers = this.selectedInquiry.answers.filter(answer => answer.idx !== answerId);
     },
     async deleteInquiry(inquiryId) {
       try {
@@ -140,18 +159,28 @@ export default {
       });
     },
     async registerAnswer(answerContent) {
-      // 답변 등록 로직
       try {
-        await axios.post(`/api/question/${this.selectedInquiry.id}/answer`, { content: answerContent });
+        const response = await axios.post(`/api/question/${this.selectedInquiry.id}/answer`, { content: answerContent });
+        const newAnswer = response.data.result;
+
+        // 반응성을 유지하기 위해 새로운 배열을 생성하여 answers에 반영
+        this.selectedInquiry.answers = [...this.selectedInquiry.answers, newAnswer];
         this.closeModal();
-        this.loadInquiries(); // 답변 등록 후 목록 다시 로드
       } catch (error) {
         console.error("답변 등록 실패:", error);
+      }
+    },
+    onAnswerRegistered(newAnswer) {
+      if (this.selectedInquiry && Array.isArray(this.selectedInquiry.answers)) {
+        // 기존 answers 배열을 새로운 배열로 재할당하여 반응성 유도
+        this.selectedInquiry.answers = [...this.selectedInquiry.answers, newAnswer];
       }
     },
   },
 };
 </script>
+
+
 
 <style scoped>
 div {
@@ -307,7 +336,6 @@ div {
 }
 
 .product_delete {
-  position: absolute;
   width: 24px;
   height: 24px;
   border: 0 none;

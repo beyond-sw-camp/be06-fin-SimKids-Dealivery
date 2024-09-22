@@ -5,7 +5,7 @@
       <div class="MuiDialogContent-root css-ew9uri">
         <div class="css-190e3ze eg43r0m0">
           <div class="css-1c7i6of et95tiw2">
-            <div class="css-1d3g9q7 et95tiw1">상품 문의하기</div>
+            <div class="css-1d3g9q7 et95tiw1">답변 등록하기</div>
           </div>
           <div class="css-1tm481w eell72m3">
             <div class="css-l4dbne eell72m2">
@@ -17,7 +17,7 @@
           </div>
           <div class="css-4qu8li e43j10r2">
             <div class="css-171jy4 e43j10r1">
-              <span>제목</span>
+              <span>문의 제목</span>
             </div>
             <div class="css-ehb3da e43j10r0">
               <div class="css-1u16q1v e1uzxhvi6">
@@ -29,7 +29,7 @@
           </div>
           <div class="css-4qu8li e43j10r2">
             <div class="css-171jy4 e43j10r1">
-              <span>내용</span>
+              <span>문의 내용</span>
             </div>
             <div class="css-ehb3da e43j10r0">
               <div class="css-1u16q1v e1uzxhvi6">
@@ -133,8 +133,8 @@ export default {
           questionIdx: this.questionIdx,  // 문의 ID 전달
           content: this.textareaContent,  // 답변 내용 전달
         });
-        console.log("답변 등록 성공:", response.data);
-        this.$emit("registerAnswer", this.textareaContent); // 입력한 답변을 부모 컴포넌트로 전달
+        const newAnswer = response.data.result;  // 서버에서 응답 받은 새 답변
+        this.$emit("registerAnswer", newAnswer); // 부모 컴포넌트로 새 답변 전달
         this.closeModal();
       } catch (error) {
         console.error("답변 등록 실패:", error);
