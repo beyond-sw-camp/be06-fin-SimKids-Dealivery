@@ -65,4 +65,12 @@ public class QuestionController {
         List<QuestionDto.QuestionListResponse> questionList = questionService.getQuestionsByCompanyEmail(companyEmail);
         return new BaseResponse<>(questionList);
     }
+
+    @Operation(summary = "로그인된 사용자의 문의 목록 조회 API", description = "로그인된 사용자가 작성한 문의 목록만 조회합니다.")
+    @GetMapping("/list/my")
+    public BaseResponse<List<QuestionDto.QuestionListResponse>> getMyQuestions(@AuthenticationPrincipal UserDetails userDetails) {
+        String userEmail = userDetails.getUsername();  // 인증된 사용자의 이메일 가져오기
+        List<QuestionDto.QuestionListResponse> questionList = questionService.getQuestionsByUserEmail(userEmail);
+        return new BaseResponse<>(questionList);
+    }
 }

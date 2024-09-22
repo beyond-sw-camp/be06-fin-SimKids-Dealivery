@@ -74,4 +74,13 @@ public class QuestionService {
                 .map(Question::toListResponse)  // 엔티티의 변환 메서드 사용
                 .collect(Collectors.toList());
     }
+
+    public List<QuestionDto.QuestionListResponse> getQuestionsByUserEmail(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.QNA_USER_NOT_FOUND));
+
+        return questionRepository.findByUser(user).stream()
+                .map(Question::toListResponse)  // 엔티티의 변환 메서드 사용
+                .collect(Collectors.toList());
+    }
 }
