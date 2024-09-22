@@ -13,13 +13,8 @@
         />
       </label>
     </div>
-    <a
-      href="https://product.29cm.co.kr/catalog/2499794"
-      class="css-3f55di ea4dcdh1"
-      ><img
-        src="//img.29cm.co.kr/next-edition/2024/08/22/a5bc747e66474c508e0c8928adbe16b2_20240822161238.jpg"
-        alt=""
-      />
+    <a :href="`/board/detail/${data.idx}`" class="css-3f55di ea4dcdh1"
+      ><img :src="data.productThumbnailUrl" alt="" />
       <div class="css-wjc4eh ea4dcdh2">
         <p class="css-11z2gb8 ea4dcdh4">[{{ data.companyName }}]</p>
         <h2 class="css-sdq6iq ea4dcdh3">{{ data.title }}</h2>
