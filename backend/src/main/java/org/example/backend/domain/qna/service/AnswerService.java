@@ -47,4 +47,18 @@ public class AnswerService {
         question.markAsAnswered();
         questionRepository.save(question);
     }
+
+    public void deleteAnswer(Long answerIdx, String email) {
+        // 답변 조회
+        Answer answer = answerRepository.findById(answerIdx)
+                .orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.QNA_ANSWER_FAIL_NOT_FOUND));
+
+        // 기업회원이 답변을 작성한 사람이 맞는지 확인
+        if (!answer.getCompany().getEmail().equals(email)) {
+            throw new InvalidCustomException(BaseResponseStatus.FAIL_UNAUTHORIZED);
+        }
+
+        // 답변 삭제
+        answerRepository.delete(answer);
+    }
 }

@@ -9,10 +9,7 @@ import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.exception.InvalidCustomException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/qna/answer")
@@ -29,6 +26,20 @@ public class AnswerController {
 
             // 답변 등록 서비스 호출
             answerService.createAnswer(request, email);
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+        } catch (InvalidCustomException e) {
+            return new BaseResponse<>(e.getStatus());
+        } catch (Exception e) {
+            return new BaseResponse<>(BaseResponseStatus.FAIL);
+        }
+    }
+
+    @Operation(summary = "답변 삭제 API", description = "답변을 삭제합니다.")
+    @DeleteMapping("/delete/{id}")
+    public BaseResponse deleteAnswer(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            String email = userDetails.getUsername(); // 인증된 기업회원 이메일
+            answerService.deleteAnswer(id, email);
             return new BaseResponse<>(BaseResponseStatus.SUCCESS);
         } catch (InvalidCustomException e) {
             return new BaseResponse<>(e.getStatus());
