@@ -25,20 +25,29 @@
             >{{ discountPrice.toLocaleString() }}원</span
           >
         </div>
+
         <div class="css-1712oqi e1lvum6h0">
-          <div class="css-1d3r7u5 e1lvum6h3" style="left: 93.4524%">
-            <div class="css-2ugc89 e1lvum6h4">D-1</div>
+          <div
+            class="css-1d3r7u5 e1lvum6h3"
+            :style="{ left: `${percentage}%` }"
+          >
+            <div class="css-2ugc89 e1lvum6h4">D-{{ daysRemaining() }}</div>
           </div>
-          <div class="css-8frsro e1lvum6h2" style="left: calc(93.4524% + 0px)">
-            <div class="css-eio8nx e1lvum6h4">D-1</div>
+          <div
+            class="css-8frsro e1lvum6h2"
+            :style="{ left: `calc(${percentage}% + 0px)` }"
+          >
+            <div class="css-eio8nx e1lvum6h4">D-{{ daysRemaining() }}</div>
           </div>
-          <div class="css-e335q6 e1lvum6h1" style="width: 93.4524%"></div>
+          <div
+            class="css-e335q6 e1lvum6h1"
+            :style="{ width: `${percentage}%` }"
+          ></div>
         </div>
-        <span class="css-islv3w etq0wqf0"
-          ><span class="css-12f2xxd etq0wqf1">D-1</span
-          >{{ getStartDate(data.startedAt) }} ~
-          {{ getEndDate(data.endedAt) }}</span
-        >
+        <span class="css-islv3w etq0wqf0">
+          <span class="css-12f2xxd etq0wqf1">D-{{ daysRemaining() }}</span>
+          {{ getStartDate(data.startedAt) }} ~ {{ getEndDate(data.endedAt) }}
+        </span>
       </div>
     </a>
   </li>
@@ -50,6 +59,7 @@ export default {
     return {
       discountPrice: 0,
       isLiked: false,
+      percentage: 0, // 퍼센트 변수 추가
     };
   },
   props: {
@@ -60,10 +70,40 @@ export default {
   },
   created() {
     this.discountPrice = this.getDiscountPrice();
+    this.calculatePercentage(); // 초기 퍼센트 계산
+    setInterval(() => {
+      this.calculatePercentage(); // 1초마다 퍼센트 갱신
+    }, 1000);
   },
   methods: {
     getDiscountPrice() {
       return this.data.price * (1 - this.data.discountRate / 100);
+    },
+    calculatePercentage() {
+      const startDate = new Date(this.data.startedAt);
+      const endDate = new Date(this.data.endedAt);
+      const now = new Date();
+
+      // 전체 기간 (밀리초 단위로 계산)
+      const totalTime = endDate - startDate;
+      // 현재까지 경과된 시간
+      const elapsedTime = now - startDate;
+
+      // 퍼센트 계산
+      let percentage = (elapsedTime / totalTime) * 100;
+
+      // 퍼센트가 100%를 넘지 않도록 제한
+      if (percentage > 100) percentage = 100;
+      if (percentage < 0) percentage = 0;
+
+      this.percentage = percentage.toFixed(2); // 소수점 두 자리까지
+    },
+    daysRemaining() {
+      const endDate = new Date(this.data.endedAt);
+      const now = new Date();
+      const diffTime = endDate - now;
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays >= 0 ? diffDays : 0; // 0 이하가 되지 않도록
     },
     getStartDate(dateTime) {
       dateTime = new Date(dateTime);
@@ -83,7 +123,6 @@ export default {
       return `${month}.${day}. ${hours}:${minutes}`;
     },
     like() {
-      console.log(this.isLiked);
       this.isLiked = !this.isLiked;
     },
   },
