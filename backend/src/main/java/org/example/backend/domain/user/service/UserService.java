@@ -52,4 +52,12 @@ public class UserService {
         deliveryRepository.save(socialSignupRequest.toDeliveryEntity(newUser));
         return true;
     }
+
+    public void editDetail(Long idx, UserDto.UserDetailEditRequest request) {
+        User user = userRepository.findByIdx(idx).orElseThrow(
+                () -> new InvalidCustomException(BaseResponseStatus.USER_DETAIL_EDIT_FAIL_USER_NOT_FOUND)
+        );
+        user.editDetail(request);
+        userRepository.save(user);
+    }
 }
