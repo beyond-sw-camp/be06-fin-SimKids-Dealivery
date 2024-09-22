@@ -97,4 +97,36 @@ public class QuestionService {
         // 삭제 처리
         questionRepository.delete(question);
     }
+
+    public List<QuestionDto.QuestionListResponse> getQuestionsByCompanyEmail(String companyEmail) {
+        List<ProductBoard> productBoards = productBoardRepository.findByCompanyEmail(companyEmail);
+
+        return questionRepository.findByProductBoardIn(productBoards).stream()
+                .map(question -> {
+                    List<Answer> answers = answerRepository.findAllByQuestionIdx(question.getIdx());
+
+                    // 답변 리스트를 응답 DTO로 변환
+                    List<AnswerDto.AnswerResponse> answerResponses = answers.stream()
+                            .map(answer -> AnswerDto.AnswerResponse.builder()
+                                    .idx(answer.getIdx())
+                                    .content(answer.getContent())
+                                    .companyName(answer.getCompany().getName())
+                                    .createdAt(answer.getCreatedAt())
+                                    .build())
+                            .collect(Collectors.toList());
+
+                    return QuestionDto.QuestionListResponse.builder()
+                            .idx(question.getIdx())
+                            .title(question.getTitle())
+                            .content(question.getContent())
+                            .userName(question.getUser().getName())
+                            .answerStatus(question.getAnswerStatus())
+                            .createdAt(question.getCreatedAt())
+                            .email(question.getUser().getEmail())
+                            .productBoardIdx(question.getProductBoard().getIdx())
+                            .answers(answerResponses)
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
 }

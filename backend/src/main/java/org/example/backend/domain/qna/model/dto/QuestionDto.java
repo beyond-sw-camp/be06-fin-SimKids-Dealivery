@@ -68,6 +68,7 @@ public class QuestionDto {
         private String answerStatus;
         private LocalDateTime createdAt;
         private String email;
+        private Long productBoardIdx;
 
         private List<AnswerDto.AnswerResponse> answers;
     }

@@ -79,4 +79,21 @@ public class QuestionController {
             return new BaseResponse<>(BaseResponseStatus.QNA_QUESTION_DELETE_FAIL);
         }
     }
+
+    @Operation(summary = "문의 목록 조회 API", description = "로그인된 기업 회원이 자신의 게시글에 달린 문의만 조회합니다.")
+    @GetMapping("/list/company")
+    public BaseResponse<List<QuestionDto.QuestionListResponse>> getCompanyQuestions(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            String companyEmail = userDetails.getUsername();  // 인증된 기업 회원의 이메일 가져오기
+
+            // 기업 회원의 이메일을 기반으로 게시글에 달린 문의 조회
+            List<QuestionDto.QuestionListResponse> questionList = questionService.getQuestionsByCompanyEmail(companyEmail);
+            return new BaseResponse<>(questionList);
+        } catch (InvalidCustomException e) {
+            return new BaseResponse<>(e.getStatus());
+        } catch (Exception e) {
+            return new BaseResponse<>(BaseResponseStatus.FAIL);
+        }
+    }
 }
