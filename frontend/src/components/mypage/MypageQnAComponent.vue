@@ -2,42 +2,53 @@
     <div class="css-heioij eug5r8l1">
         <div class="css-1xdhyk6 eug5r8l0">
             <ul>
-                <li class="css-1w5u25a e1q2koch0" v-for="(inquiry, index) in inquiries" :key="index">
+                <li class="css-1w5u25a e1q2koch0" v-for="(inquiry, index) in inquiries || []" :key="index">
                     <button type="button" class="inquiry-product-info" @click="toggleDetail(index)">
                         <div class="product-info-wrap">
-                            <div class="product-name">{{ inquiry.productName }}</div>
+                            <div class="product-name">{{ inquiry.productTitle }}</div>
                             <div class="inquiry-subject">
-                                <p class="subject-text">{{ inquiry.subject }}</p>
+                                <p class="subject-text">{{ inquiry.title }}</p>
                             </div>
                             <div class="status-and-created-at">
-                                <span class="status-text commented">{{ inquiry.status }}</span>
+                                <span class="status-text commented">{{ inquiry.answerStatus }}</span>
                                 <span class="text-divider"></span>
-                                <span class="created-at-text">{{ inquiry.date }}</span>
+                                <span class="created-at-text">{{ formatDate(inquiry.createdAt) }}</span>
                             </div>
                         </div>
-                        <a :href="inquiry.productLink" class="product-image-wrap">
-                            <img :src="inquiry.productImage" :alt="inquiry.productName">
+                        <a :href="'/product/' + inquiry.productBoardIdx" class="product-image-wrap">
+                            <!-- 이미지가 없는 경우 대비하여 기본 이미지를 제공 -->
+                            <img :src="getProductImage(inquiry)" :alt="inquiry.title">
                         </a>
                     </button>
                     <transition name="fade" @after-enter="afterEnter" @after-leave="afterLeave">
                         <div v-if="showDetailIndex === index" class="row-inquiry-detail">
                             <div class="inquiry-detail-content">
-                                <div class="content-row">
+                                <!-- 아이콘과 질문/답변을 같은 줄에 배치 -->
+                                <div class="content-row flex-row">
                                     <div class="icon-wrap">
                                         <img src="https://res.kurly.com/kurly/ico/2021/question_24_24_purple.svg"
                                             alt="질문">
                                     </div>
-                                    <p class="subject">{{ inquiry.question }}</p>
+                                    <p class="subject">{{ inquiry.content }}</p>
                                 </div>
-                                <div class="content-row">
-                                    <div class="icon-wrap">
-                                        <img src="https://res.kurly.com/kurly/ico/2021/answer_24_24_purple.svg"
-                                            alt="답변">
+                                <div class="content-row horizontal-answers flex-row" v-if="inquiry.answers.length > 0">
+                                    <div v-for="(answer, answerIndex) in inquiry.answers" :key="answerIndex"
+                                        class="answer-section flex-row">
+                                        <div class="icon-wrap">
+                                            <img src="https://res.kurly.com/kurly/ico/2021/answer_24_24_purple.svg"
+                                                alt="답변">
+                                        </div>
+                                        <div class="answer-content">
+                                            <p class="subject">{{ answer.content }}</p>
+                                            <div class="answer-meta">
+                                                <span class="answer-date">{{ formatDate(answer.createdAt) }}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p class="subject">{{ inquiry.answer }}</p>
                                 </div>
-                                <div class="status-and-created-at">
-                                    <span class="created-at-text">{{ inquiry.answerDate }}</span>
+                                <div v-if="inquiry.answers.length === 0" class="no-answer">
+                                    <img src="https://res.kurly.com/kurly/ico/2021/answer_24_24_purple.svg" alt="답변">
+                                    아직 답변이 없습니다.
                                 </div>
                             </div>
                         </div>
@@ -49,43 +60,79 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     data() {
         return {
-            inquiries: [
-                {
-                    productName: "[라 메르] 쿠션 & 크렘 드 라 메르 15ml 크림 듀오 세트 4종",
-                    subject: "추후에 할인 재예정 있을까요?",
-                    status: "답변완료",
-                    date: "2024.09.03",
-                    productLink: "/goods/1000747340",
-                    productImage: "https://product-image.kurly.com/product/image/71d93cd9-06fb-4f1a-a96d-27bcf9fb69bc.jpg",
-                    question: "안녕하세요. 해당 상품 추후에 할인 재 예정 있는지 문의드립니다.",
-                    answer: "안녕하세요. 고객님 항상 라 메르를 믿고 이용해 주시는 고객님께 감사 인사드립니다. 문의하신 상품의 경우 현재 진행하고 있는 할인 이벤트는 상시 할인 진행 예정인 점 안내해 드립니다. 감사합니다.",
-                    answerDate: "2024.09.04"
-                },
-                // Add more items as needed
-            ],
+            inquiries: [],  // 서버로부터 받아온 문의 목록
             showDetailIndex: null
         };
     },
+    mounted() {
+        this.loadMyInquiries();  // 컴포넌트가 마운트될 때 로그인된 사용자의 문의 목록을 불러옴
+    },
     methods: {
+        async loadMyInquiries() {
+            try {
+                const response = await axios.get('/api/qna/question/list/my');
+                this.inquiries = response.data.result;  // 문의 목록을 데이터에 저장
+                console.log(this.inquiries);
+            } catch (error) {
+                console.error("로그인된 사용자의 문의 목록을 불러오는 데 실패했습니다.", error);
+            }
+        },
         toggleDetail(index) {
             this.showDetailIndex = this.showDetailIndex === index ? null : index;
         },
         afterEnter(el) {
-            console.log("Entering element", el);
-            el.style.maxHeight = 'none'; // 혹시 문제 발생 시 여유있게 설정
+            el.style.maxHeight = 'none';  // 애니메이션 후 스타일 설정
         },
         afterLeave(el) {
-            console.log("Leaving element", el);
-            el.style.maxHeight = '0px';
+            el.style.maxHeight = '0px';  // 애니메이션 후 스타일 설정
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                return 'Invalid Date';
+            }
+            return date.toLocaleDateString(); // 원하는 형식으로 변환
+        },
+        getProductImage(inquiry) {
+            return inquiry.productImageUrl || "https://via.placeholder.com/150";  // 기본 이미지 제공
         }
     }
 }
 </script>
 
+
 <style scoped>
+.row-inquiry-detail>.inquiry-detail-content>.content-row {
+    display: flex;
+    align-items: center;
+    /* 아이콘과 텍스트를 같은 높이로 정렬 */
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.row-inquiry-detail>.inquiry-detail-content>.content-row>.icon-wrap {
+    flex-shrink: 0;
+    display: inline-flex;
+    /* 아이콘을 줄에 맞게 배치 */
+    align-items: center;
+    /* 아이콘과 텍스트를 수평 정렬 */
+}
+
+.row-inquiry-detail>.inquiry-detail-content>.content-row>.subject {
+    margin-left: 12px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0px;
+    min-height: 24px;
+    word-break: break-all;
+    display: flex;
+}
+
 :root {
     --swiper-theme-color: #007aff;
 }
@@ -388,27 +435,6 @@ button {
     padding: 20px;
 }
 
-.row-inquiry-detail>.inquiry-detail-content>.content-row {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin-bottom: 20px;
-}
-
-.row-inquiry-detail>.inquiry-detail-content>.content-row>.icon-wrap {
-    flex-shrink: 0;
-}
-
-.row-inquiry-detail>.inquiry-detail-content>.content-row>.subject {
-    margin-left: 12px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: 0px;
-    min-height: 24px;
-    word-break: break-all;
-}
-
 .row-inquiry-detail>.inquiry-detail-content>.content-row:last-child {
     margin-bottom: 0px;
 }
@@ -486,5 +512,90 @@ img {
     font-size: 14px;
     color: #848f9a;
     /* 색상 필요에 따라 조절 */
+}
+
+/* Flex 속성으로 답변을 가로로 나열 */
+.horizontal-answers {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.answer-section {
+    flex: 1 1 auto;
+    min-width: 200px;
+}
+
+.answer-content {
+    margin-top: 25px;
+    margin-left: 12px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0px;
+    min-height: 24px;
+    word-break: break-all;
+    display: flex;
+    /* 수직 정렬을 위해 flex-direction을 column으로 설정 */
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.answer-meta {
+    margin-top: 10px;
+    font-size: 12px;
+    color: gray;
+    
+}
+
+.no-answer {
+    margin-top: 10px;
+    color: gray;
+    display: flex;
+    align-items: center;
+}
+
+.no-answer img {
+    margin-right: 12px;
+    /* 아이콘과 텍스트 사이에 여백 추가 */
+}
+
+.css-1w5u25a>.inquiry-product-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-info-wrap {
+    flex: 1;
+}
+
+.product-image-wrap img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.row-inquiry-detail {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.row-inquiry-detail .status-and-created-at {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.row-inquiry-detail .created-at-text {
+    font-size: 14px;
+    color: #848f9a;
+}
+
+.flex-row {
+    display: flex;
+    align-items: center;
 }
 </style>
