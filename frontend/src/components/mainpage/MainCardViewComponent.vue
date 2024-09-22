@@ -12,9 +12,8 @@
           />
         </div>
         <div class="time-units css-hb6k3w e17lobue0">
-          <span>19</span>
-          <span>34</span>
-          <span>48</span>
+          <span>{{ hours }}</span> <span>{{ minutes }}</span>
+          <span>{{ seconds }}</span>
         </div>
       </div>
       <p class="css-d0y7nj e1e6st7u1">망설이면 늦어요!</p>
@@ -40,30 +39,33 @@
                     position: absolute;
                     inset: 0px;
                   "
-                  ><img
-                    alt=""
-                    src="https://product-image.kurly.com/hdims/resize/%5E%3E720x%3E936/cropcenter/720x936/quality/85/src/product/image/d11bd78c-e4a9-432e-89f7-862f5092bf49.jpg"
-                    decoding="async"
-                    data-nimg="fill"
-                    class="css-1zjvv7"
-                    style="
-                      position: absolute;
-                      inset: 0px;
-                      box-sizing: border-box;
-                      padding: 0px;
-                      border: none;
-                      margin: auto;
-                      display: block;
-                      width: 0px;
-                      height: 0px;
-                      min-width: 100%;
-                      max-width: 100%;
-                      min-height: 100%;
-                      max-height: 100%;
-                      object-fit: cover;
-                    "
-                    sizes="100vw"
-                  />
+                >
+                  <a :href="`/board/detail/${data.idx}`">
+                    <img
+                      alt=""
+                      :src="data.productThumbnailUrl"
+                      decoding="async"
+                      data-nimg="fill"
+                      class="css-1zjvv7"
+                      style="
+                        position: absolute;
+                        inset: 0px;
+                        box-sizing: border-box;
+                        padding: 0px;
+                        border: none;
+                        margin: auto;
+                        display: block;
+                        width: 0px;
+                        height: 0px;
+                        min-width: 100%;
+                        max-width: 100%;
+                        min-height: 100%;
+                        max-height: 100%;
+                        object-fit: cover;
+                      "
+                      sizes="100vw"
+                    />
+                  </a>
                 </span>
               </div>
             </div>
@@ -83,7 +85,7 @@
             관심 등록
           </button>
         </div>
-        <a href="/goods/1000030900">
+        <a :href="`/board/detail/${data.idx}`">
           <div class="product-info css-1ud9i0q e1cmg4vm4">
             <h2 class="product-name css-eaolx3 e1cmg4vm5">
               {{ data.companyName }}
@@ -130,6 +132,10 @@ export default {
     return {
       isActive: false,
       heartIcon: heartIcon,
+      hours: "00",
+      minutes: "00",
+      seconds: "00",
+      intervalId: null,
     };
   },
   props: {
@@ -137,11 +143,54 @@ export default {
       type: Object,
     },
   },
+  mounted() {
+    this.startTimer();
+  },
+  beforeUnmount() {
+    clearInterval(this.intervalId);
+  },
   methods: {
-    toggleHeart() {
-      this.isActive = !this.isActive;
-      this.heartIcon = this.isActive ? heartIconActive : heartIcon;
+    startTimer() {
+      const now = new Date();
+      const endTime = new Date(this.data.endedAt);
+
+      let remainingTime = Math.floor((endTime - now) / 1000); // 초 단위로 남은 시간 계산
+
+      if (remainingTime <= 0) {
+        this.resetTimer();
+        return;
+      }
+
+      this.updateTime(remainingTime);
+
+      this.intervalId = setInterval(() => {
+        remainingTime -= 1;
+        if (remainingTime <= 0) {
+          clearInterval(this.intervalId);
+          this.resetTimer();
+        } else {
+          this.updateTime(remainingTime);
+        }
+      }, 1000);
     },
+    updateTime(remainingTime) {
+      const hours = Math.floor(remainingTime / 3600);
+      const minutes = Math.floor((remainingTime % 3600) / 60);
+      const seconds = remainingTime % 60;
+
+      this.hours = String(hours).padStart(2, "0");
+      this.minutes = String(minutes).padStart(2, "0");
+      this.seconds = String(seconds).padStart(2, "0");
+    },
+    resetTimer() {
+      this.hours = "00";
+      this.minutes = "00";
+      this.seconds = "00";
+    },
+  },
+  toggleHeart() {
+    this.isActive = !this.isActive;
+    this.heartIcon = this.isActive ? heartIconActive : heartIcon;
   },
 };
 </script>
