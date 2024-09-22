@@ -38,6 +38,11 @@ export const useBoardStore = defineStore("board", {
       });
       return response.data.result;
     },
+    async getDetail(idx) {
+      const data = await axios.get(backend + `/${idx}/detail`);
+      this.boardData = data.data.result;
+      return data.data.result;
+    },
 
     // --------- 판매자 ---------
     async getProductBoardList(page) {

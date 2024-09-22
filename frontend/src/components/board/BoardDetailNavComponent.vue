@@ -114,13 +114,29 @@
                     <span>{{ row.content }}<br /></span>
                   </div>
                 </div>
-                <div class="css-1j49yxi e11ufodi1"
-                  v-if="row.answerStatus !== '답변완료' && row.email === this.userEmail">
-                  <button type="button" @click="openEditModal(index)">수정</button>
-                  <button type="button" class="css-1ankuif e11ufodi0" @click="deleteInquiry(row.idx, index)">삭제</button>
+                <div
+                  class="css-1j49yxi e11ufodi1"
+                  v-if="
+                    row.answerStatus !== '답변완료' &&
+                    row.email === this.userEmail
+                  "
+                >
+                  <button type="button" @click="openEditModal(index)">
+                    수정
+                  </button>
+                  <button
+                    type="button"
+                    class="css-1ankuif e11ufodi0"
+                    @click="deleteInquiry(row.idx, index)"
+                  >
+                    삭제
+                  </button>
                 </div>
               </div>
-              <div class="css-tnubsz e1ptpt003" v-if="row.answerStatus !== '답변대기'">
+              <div
+                class="css-tnubsz e1ptpt003"
+                v-if="row.answerStatus !== '답변대기'"
+              >
                 <div class="css-1n83etr e1ptpt002">
                   <div class="css-m1wgq7 e1ptpt001">
                     <span class="css-1non6l6 ey0f1wv0"></span>
@@ -145,7 +161,7 @@
       @close="closeModal"
       @submit="addNewInquiry"
       :productBoardIdx="productBoardIdx"
-      :thumbnail="thumbnails[0].src"
+      :thumbnail="thumbnails[0]"
       :title="productTitle"
     />
 
@@ -257,7 +273,7 @@ export default {
       el.style.maxHeight = "0px";
     },
     addNewInquiry(newInquiry) {
-      newInquiry.email = this.userEmail;  // 로그인된 사용자의 이메일을 새 문의에 추가
+      newInquiry.email = this.userEmail; // 로그인된 사용자의 이메일을 새 문의에 추가
       this.closeModal();
     },
     updateInquiry(updatedInquiry) {

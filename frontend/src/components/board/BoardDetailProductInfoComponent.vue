@@ -2,31 +2,37 @@
   <section class="css-1ua1wyk">
     <div class="deal">
       <p class="buy">이벤트 기간</p>
-      <p class="time">2024.09.05 ~ 2024.09.07</p>
+      <p class="time">
+        {{ getDate(data.startedAt) }} ~ {{ getDate(data.endedAt) }}
+      </p>
     </div>
     <div class="css-1qy9c46 ezpe9l12">
       <h1 class="css-13lg2xu ezpe9l11">
-        [음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로]
+        {{ data.title }}
       </h1>
-      <h2 class="css-1q0tnnd ezpe9l10">큰 일교차를 견대고 열매를 맺은</h2>
+      <!-- <h2 class="css-1q0tnnd ezpe9l10">큰 일교차를 견대고 열매를 맺은</h2> -->
     </div>
     <h2 class="css-abwjr2 e1q8tigr4">
-      <span class="css-5nirzt e1q8tigr3">23%</span
-      ><span class="css-9pf1ze e1q8tigr2">15,900</span
+      <span class="css-5nirzt e1q8tigr3">{{ data.discountRate }}%</span
+      ><span class="css-9pf1ze e1q8tigr2">{{
+        (this.data.price * (1 - this.data.discountRate / 100)).toLocaleString()
+      }}</span
       ><span class="css-1x9cx9j e1q8tigr1">원</span>
     </h2>
-    <span class="css-1e1rd4p e1q8tigr0"><span>20,900원</span></span>
+    <span class="css-1e1rd4p e1q8tigr0"
+      ><span>{{ data.price.toLocaleString() }}원</span></span
+    >
     <ul class="css-iqoq9n e6qx2kx2">
       <dl class="css-e6zlnr epzddad2">
         <dt class="css-lytdfk epzddad1">판매자</dt>
         <dd class="css-1k8t52o epzddad0">
-          <p class="css-c02hqi e6qx2kx1">컬리</p>
+          <p class="css-c02hqi e6qx2kx1">{{ data.companyName }}</p>
         </dd>
       </dl>
       <dl class="css-e6zlnr epzddad2">
         <dt class="css-lytdfk epzddad1">카테고리</dt>
         <dd class="css-1k8t52o epzddad0">
-          <p class="css-c02hqi e6qx2kx1">식품</p>
+          <p class="css-c02hqi e6qx2kx1">{{ data.category }}</p>
         </dd>
       </dl>
     </ul>
@@ -234,19 +240,28 @@
 <script>
 export default {
   name: "BoardDetailProductInfoComponent",
+  props: {
+    data: {
+      type: Object,
+    },
+  },
   data() {
     return {
+      getDate(dateTime) {
+        dateTime = new Date(dateTime);
+        const year = dateTime.getFullYear();
+        const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+        const day = String(dateTime.getDate()).padStart(2, "0");
+        const hours = String(dateTime.getHours()).padStart(2, "0");
+        const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+        return `${year}.${month}.${day}. ${hours}:${minutes}`;
+      },
       isDropdownOpen: false,
       productOptions: [
         {
           idx: "1",
-          label: "[99치킨] 순살 닭강정",
-          originalPrice: 20900,
-        },
-        {
-          idx: "2",
-          label: "[99치킨] 마라 순살 닭강정",
-          originalPrice: 20900,
+          label: "",
+          originalPrice: 0,
         },
       ],
       cartItems: [],
@@ -260,6 +275,9 @@ export default {
       discountPercentage: 23,
     };
   },
+  created() {
+    this.mapProductsToOptions();
+  },
   computed: {
     totalPrice() {
       return this.cartItems.reduce(
@@ -272,6 +290,13 @@ export default {
     },
   },
   methods: {
+    mapProductsToOptions() {
+      this.productOptions = this.data.products.map((product) => ({
+        idx: String(product.idx), // idx를 문자열로 변환
+        label: product.name, // 이름 앞에 '[99치킨]' 추가
+        originalPrice: product.price,
+      }));
+    },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
