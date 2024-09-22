@@ -1,7 +1,7 @@
 <template>
   <div id="productModal" class="modal" @click.self="closeModal">
     <div class="modal-content">
-      <span class="close" @click="closeModal()">&times;</span>
+      <span class="close" @click="closeModal">&times;</span>
       <div class="MuiDialogContent-root css-ew9uri">
         <div class="css-190e3ze eg43r0m0">
           <div class="css-1c7i6of et95tiw2">
@@ -9,14 +9,10 @@
           </div>
           <div class="css-1tm481w eell72m3">
             <div class="css-l4dbne eell72m2">
-              <img
-                src="https://product-image.kurly.com/product/image/abad31fe-e14b-4568-8c9d-d08825ee3ba5.jpg"
-                class="css-1vpfo16 eell72m1"
-                alt="Product Image"
-              />
+              <img :src="thumbnail" class="css-1vpfo16 eell72m1" alt="Product Image" />
             </div>
             <div class="css-1mysn55 eell72m0">
-              <span>[선물세트] 혜윰 별빛공진 +(보자기포장 및 쇼핑백 증정)</span>
+              <span>{{ productTitle }}</span>
             </div>
           </div>
           <div class="css-4qu8li e43j10r2">
@@ -26,7 +22,7 @@
             <div class="css-ehb3da e43j10r0">
               <div class="css-1u16q1v e1uzxhvi6">
                 <div height="42" class="css-1xbd2py e1uzxhvi3">
-                  <p>이벤트 문의 드립니다.</p>
+                  <p>{{ title }}</p>
                 </div>
               </div>
             </div>
@@ -38,7 +34,7 @@
             <div class="css-ehb3da e43j10r0">
               <div class="css-1u16q1v e1uzxhvi6">
                 <div height="42" class="css-1xbd2py e1uzxhvi3">
-                  <p>인당 구매수량 제한 있나요?</p>
+                  <p>{{ content }}</p>
                 </div>
               </div>
             </div>
@@ -52,15 +48,8 @@
               <div class="css-17xxk8 e6w4oc80">
                 <div class="css-0 e1tjt2bn7">
                   <div class="css-l45xk5 e1tjt2bn5">
-                    <textarea
-                      inputmode="text"
-                      aria-label="textarea-message"
-                      name="content"
-                      placeholder="내용을 입력해 주세요"
-                      class="css-5etceh e1tjt2bn1"
-                      v-model="textareaContent"
-                      @input="checkTextareaContent"
-                    ></textarea>
+                    <textarea inputmode="text" aria-label="textarea-message" name="content" placeholder="답변을 입력해 주세요"
+                      class="css-5etceh e1tjt2bn1" v-model="textareaContent" @input="checkTextareaContent"></textarea>
                   </div>
                 </div>
               </div>
@@ -68,22 +57,14 @@
           </div>
 
           <div class="css-f9c7pn e6wys6s0">
-            <button
-              :class="{
+            <button :class="{
                 'css-f4f4h7 e4nu7ef3': true,
                 'enabled-button': !isRegisterDisabled,
-              }"
-              type="button"
-              :disabled="isRegisterDisabled"
-              @click="closeModal"
-            >
-              <span
-                :class="{
+              }" type="button" :disabled="isRegisterDisabled" @click="registerAnswer">
+              <span :class="{
                   'css-nytqmg e4nu7ef1': true,
                   'enabled-button': !isRegisterDisabled,
-                }"
-                >등록</span
-              >
+                }">등록</span>
             </button>
           </div>
         </div>
@@ -93,8 +74,45 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "CompanyQnAModalComponent",
+  props: {
+    thumbnail: {
+      type: String,
+      required: true,
+    },
+    productTitle: {
+      type: String,
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    answerContent: {
+      type: String,
+      default: "", // 기본값으로 빈 문자열
+    },
+    questionIdx: {
+      type: Number,
+      required: true, // 문의 ID
+    },
+  },
+  mounted() {
+    console.log("Thumbnail: ", this.thumbnail); // 데이터가 전달되었는지 확인
+    console.log("Product Title: ", this.productTitle);
+    // 만약 answerContent가 있으면 textareaContent에 세팅
+    if (this.answerContent) {
+      this.textareaContent = this.answerContent;
+      this.isRegisterDisabled = false; // 답변이 있을 때는 버튼 활성화
+    }
+  },
   data() {
     return {
       textareaContent: "",
@@ -106,10 +124,20 @@ export default {
       this.$emit("closeModal");
     },
     checkTextareaContent() {
-      if (this.textareaContent.trim() !== "") {
-        this.isRegisterDisabled = false;
-      } else {
-        this.isRegisterDisabled = true;
+      this.isRegisterDisabled = this.textareaContent.trim() === "";
+    },
+    async registerAnswer() {
+      try {
+        // 답변 등록 API 호출
+        const response = await axios.post("/api/qna/answer/create", {
+          questionIdx: this.questionIdx,  // 문의 ID 전달
+          content: this.textareaContent,  // 답변 내용 전달
+        });
+        console.log("답변 등록 성공:", response.data);
+        this.$emit("registerAnswer", this.textareaContent); // 입력한 답변을 부모 컴포넌트로 전달
+        this.closeModal();
+      } catch (error) {
+        console.error("답변 등록 실패:", error);
       }
     },
   },
