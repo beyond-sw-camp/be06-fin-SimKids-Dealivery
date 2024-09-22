@@ -94,6 +94,11 @@ export default {
   },
   mounted(){
     this.setInitialSelectedAddress();
+    window.scrollTo({
+            top: 200,
+            left: 0,
+            behavior: 'smooth'
+        });
   },
   data() {
     return {

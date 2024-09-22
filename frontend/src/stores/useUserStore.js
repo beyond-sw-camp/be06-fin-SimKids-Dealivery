@@ -23,7 +23,8 @@ export const useUserStore = defineStore("user", {
       "addressDetail": "",
       "postNumber": "",
       "phoneNumber": "",
-      "deliveries": []
+      "deliveries": [],
+      "point": null
     }
 
   }),
@@ -166,7 +167,6 @@ export const useUserStore = defineStore("user", {
       }catch{
         alert("소셜 로그인 요청 수행중 문제가 발생했습니다.");
       }
-      
     },
 
     async socialSignup(socialSignupRequest){
@@ -282,6 +282,22 @@ export const useUserStore = defineStore("user", {
     async editDelivery(request){
       try {
         let response = await axios.put(backend+"/delivery",request, {withCredentials:true});
+        if(response.data.code !== 1000){
+          return false;
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    async editDetail(request){
+      try {
+        let response = await axios.put(backend + "/user/edit", request, {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
         if(response.data.code !== 1000){
           return false;
         }

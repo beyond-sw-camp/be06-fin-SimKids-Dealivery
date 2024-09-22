@@ -400,7 +400,7 @@ export default {
         this.signupRequest.type = "inapp";
         if (await this.userStore.userSignup(this.signupRequest)) {
           alert("회원가입에 성공했습니다. 로그인 후 서비스를 이용해주세요.");
-          this.$router.push("/auth/login");
+          this.$router.go(0);
         }
       }
     },

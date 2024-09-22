@@ -52,14 +52,18 @@ export default {
         await this.getDeliveryList();
         this.$router.push("/mypage/address");
       }else if (menu === "info"){
+        this.currentTitle = "내 정보";
         await this.getUserInfo();
+        this.$router.push("/mypage/detail")
+      }else if (menu === "update-info"){
+        await this.getUserInfo();
+        this.currentTitle = "개인정보 수정";
+        this.$router.push("/mypage/detail/edit");
       }
       
     },
     async getUserInfo(){
-      if(await this.userStore.getDetail()){
-        alert("성공");
-      }else{
+      if(!await this.userStore.getDetail()){
         alert("회원정보를 가져오는데 실패했습니다.");
       }
     },
@@ -78,7 +82,10 @@ export default {
         this.currentTitle = "찜한 게시글";
       } else if (currentRoute.includes("address")) {
         this.currentTitle = "배송지 관리";
-        this.$router.push("/mypage/address");
+      } else if (currentRoute.includes("detail/edit")){
+        this.currentTitle = "개인정보 수정";
+      } else if (currentRoute.includes("detail")){
+        this.currentTitle = "내 정보";
       }
     },
   },
