@@ -3,7 +3,6 @@ package org.example.backend.domain.qna.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.qna.model.dto.QuestionDto;
 import org.example.backend.domain.qna.service.QuestionService;
@@ -34,30 +33,22 @@ public class QuestionController {
                             }
                     )
             ))
-
     @PostMapping("/create")
-    public BaseResponse create(@RequestBody QuestionDto.QuestionCreateRequest request, @AuthenticationPrincipal UserDetails userDetails){
-        try{
-            String email = userDetails.getUsername(); // 인증된 사용자의 이메일 가져오기
+    public BaseResponse create(@RequestBody QuestionDto.QuestionCreateRequest request,
+                               @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername(); // 인증된 사용자의 이메일 가져오기
 
-            if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
-                throw new InvalidCustomException(BaseResponseStatus.QNA_QUESTION_FAIL_EMPTY_TITLE);
-            }
-            if (request.getContent() == null || request.getContent().trim().isEmpty()) {
-                throw new InvalidCustomException(BaseResponseStatus.QNA_QUESTION_FAIL_EMPTY_CONTENT);
-            }
-
-            Long productBoardIdx = request.getProductBoardIdx();  // Request Body로 전달받은 productBoardIdx 사용
-
-            // 문의 등록 후 사용자 이름, 날짜, 답변 상태를 함께 응답
-            QuestionDto.QuestionCreateResponse response = questionService.createQuestion(request, email, productBoardIdx);
-            return new BaseResponse<>(response);
-
-        } catch (InvalidCustomException e){
-            return new  BaseResponse<>(e.getStatus());
-        } catch (Exception e){
-            return new BaseResponse<>(BaseResponseStatus.FAIL);
+        if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
+            throw new InvalidCustomException(BaseResponseStatus.QNA_QUESTION_FAIL_EMPTY_TITLE);
         }
+        if (request.getContent() == null || request.getContent().trim().isEmpty()) {
+            throw new InvalidCustomException(BaseResponseStatus.QNA_QUESTION_FAIL_EMPTY_CONTENT);
+        }
+
+        Long productBoardIdx = request.getProductBoardIdx();  // Request Body로 전달받은 productBoardIdx 사용
+        QuestionDto.QuestionCreateResponse response = questionService.createQuestion(request, email, productBoardIdx);
+
+        return new BaseResponse<>(response);
     }
 
     @Operation(summary = "문의 목록 조회 API", description = "DB에 저장된 문의 목록을 반환합니다.")
@@ -68,15 +59,10 @@ public class QuestionController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public BaseResponse deleteQuestion(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
-        try{
-            String email = userDetails.getUsername();
-            questionService.deleteQuestion(id, email);
-            return new BaseResponse<>(BaseResponseStatus.SUCCESS);
-        } catch (InvalidCustomException e) {
-            return new BaseResponse<>(e.getStatus());
-        } catch (Exception e) {
-            return new BaseResponse<>(BaseResponseStatus.QNA_QUESTION_DELETE_FAIL);
-        }
+    public BaseResponse deleteQuestion(@PathVariable Long id,
+                                       @AuthenticationPrincipal UserDetails userDetails) {
+        String email = userDetails.getUsername();
+        questionService.deleteQuestion(id, email);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 }
