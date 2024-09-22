@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class="css-1w0ksfz e744wfw2">
-                            <div class="css-1w0ksfz e744wfw2"><button class="css-ufulao e4nu7ef3" type="button"><span
+                            <div class="css-1w0ksfz e744wfw2"><button v-if="userStore.socialLoginResponse === ''" class="css-ufulao e4nu7ef3" type="button"><span
                                 class="css-nytqmg e4nu7ef1">비밀번호 변경</span></button></div>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                         <div class="css-82a6rk e744wfw3">
                             <div class="css-1waqr6j e1uzxhvi6">
                                 <div class="css-176lya2 e1uzxhvi3"><input v-model="editedUserDetail.phoneNumber" data-testid="input-box" id="mobileNumber"
-                                        name="mobileNumber" placeholder="-를 포함하여 입력해 주세요" type="text" readonly=""
+                                        name="mobileNumber" placeholder="-를 포함하여 입력해 주세요" type="text"
                                         class="css-u52dqk e1uzxhvi2" value=""></div>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                     
                     <div class="css-14332pf e1m8ervv0"><button class="css-ufulao e4nu7ef3" type="button"><span
                                 class="css-nytqmg e4nu7ef1">탈퇴하기</span></button><button class="css-1qirdbn e4nu7ef3"
-                            type="button" @click="editDetail"><span class="css-nytqmg e4nu7ef1"  >회원정보수정</span></button></div>
+                            type="button" @click="validateAndEdit"><span class="css-nytqmg e4nu7ef1"  >회원정보수정</span></button></div>
                 </form>
             </div>
         </div>
@@ -112,6 +112,7 @@
 <script>
 import { useUserStore } from '@/stores/useUserStore';
 import { mapStores } from 'pinia';
+import { Validator } from '@/util/validator';
 export default {
     name: "MypageDetailEditComponent",
     data(){
@@ -158,7 +159,25 @@ export default {
         top: window.screen.height / 2 - height / 2,
       });
     },
+    validateAndEdit(){
+        try{
+            const validInputRegex = /^(?!.*[!@#$%^&*()_+={}:;"'<>,.?/~`|\\-])(?=.*[^\n])[^\nㄱ-ㅎ]*$/;
+            const phoneRegex = /^\d{3}-\d{4}-\d{4}$/;
+            new Validator(this.editedUserDetail.phoneNumber, "휴대폰 번호를 입력해주세요.")
+            .isNotEmpty()
+            .matches(phoneRegex, "-를 포함한 휴대폰번호 11자리를 입력해주세요.");
+
+            new Validator(this.editedUserDetail.addressDetail, "상세주소를 입력해 주세요")
+                .isNotEmpty()
+                .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+            this.editDetail();
+        }catch(error){
+            alert(error.message);
+        }
+        
+    },
     async editDetail(){
+        
         if(await this.userStore.editDetail(this.editedUserDetail)){
             await this.userStore.getDetail();
             alert("회원정보가 수정 되었습니다.")
