@@ -58,7 +58,7 @@ public class DeliveryService {
                 .anyMatch(Delivery::getIsDefault);
     }
     public Delivery getDefaultDelivery(List<Delivery> deliveries) {
-        //받아온 리스트에서 isDefault가 true인 객체의 해당 값을 false로 바꾸고 반환
+        //받아온 리스트에서 isDefault가 true인 객체 반환
         return deliveries.stream()
                 .filter(Delivery::getIsDefault)
                 .findFirst()
