@@ -1,6 +1,6 @@
 <template>
-  <HeaderComponent />
   <div id="top">
+    <HeaderComponent />
     <div class="css-n48rgu">
       <div class="css-16c0d8l">
         <main id="product-atf" class="css-1eoy87d">
@@ -12,6 +12,7 @@
         </main>
         <BoardDetailNavComponent
           :thumbnails="thumbnails"
+          :detail="detail"
           :productBoardIdx="productBoardIdx"
           :productTitle="productTitle"
         />
@@ -48,6 +49,7 @@ export default {
     return {
       activeTab: "description", // 초기에는 '상품설명' 탭이 활성화됨
       thumbnails: [],
+      detail: "",
       productBoardIdx: 1, // 추후에 실제 상품의 boardIdx로 변경
       productTitle: "",
       data: null,
@@ -62,6 +64,7 @@ export default {
       this.data = await this.boardStore.getDetail(this.productBoardIdx);
       this.productTitle = this.data.title;
       this.thumbnails = this.data.productThumbnailUrls;
+      this.detail = this.data.productDetailUrl;
       console.log(this.data);
     },
     async submitOrder(cartItems) {
