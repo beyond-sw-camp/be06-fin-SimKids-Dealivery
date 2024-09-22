@@ -3,6 +3,8 @@ package org.example.backend.domain.qna.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.backend.domain.board.model.entity.ProductBoard;
+import org.example.backend.domain.qna.model.dto.AnswerDto;
+import org.example.backend.domain.qna.model.dto.QuestionDto;
 import org.example.backend.domain.user.model.entity.User;
 import org.example.backend.global.common.constants.AnswerStatus;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -47,6 +50,37 @@ public class Question {
 
     @Column(name = "answer_status")
     private String answerStatus = AnswerStatus.ANSWER_WAITING.getStatus();
+
+    // DTO 변환 메서드: 문의 생성 후 응답
+    public QuestionDto.QuestionCreateResponse toCreateResponse() {
+        return QuestionDto.QuestionCreateResponse.builder()
+                .idx(this.idx)
+                .title(this.title)
+                .content(this.content)
+                .userName(this.user.getName())
+                .answerStatus(this.answerStatus)
+                .createdAt(this.createdAt)
+                .build();
+    }
+
+    // DTO 변환 메서드: 문의 목록 조회
+    public QuestionDto.QuestionListResponse toListResponse() {
+        List<AnswerDto.AnswerResponse> answerResponses = this.answers.stream()
+                .map(answer -> answer.toResponse())
+                .collect(Collectors.toList());
+
+        return QuestionDto.QuestionListResponse.builder()
+                .idx(this.idx)
+                .title(this.title)
+                .content(this.content)
+                .userName(this.user.getName())
+                .answerStatus(this.answerStatus)
+                .createdAt(this.createdAt)
+                .email(this.user.getEmail())
+                .answers(answerResponses)  // 답변 리스트 포함
+                .productBoardIdx(getProductBoard().getIdx())
+                .build();
+    }
 
     // 답변이 등록 되면 문의 상태를 "답변완료"로 변경하는 메서드
     public void markAsAnswered(){

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.backend.domain.company.model.entity.Company;
+import org.example.backend.domain.qna.model.dto.AnswerDto;
 
 import java.time.LocalDateTime;
 
@@ -31,4 +32,14 @@ public class Answer {
     private Question question;
 
     private LocalDateTime createdAt;
+
+    // DTO 변환 메서드: 답변 조회 응답
+    public AnswerDto.AnswerResponse toResponse() {
+        return AnswerDto.AnswerResponse.builder()
+                .idx(this.idx)
+                .content(this.content)
+                .companyName(this.company.getName())
+                .createdAt(this.createdAt)
+                .build();
+    }
 }
