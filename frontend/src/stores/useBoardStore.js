@@ -125,14 +125,17 @@ export const useBoardStore = defineStore("board", {
         .then((response) => {
           if (response.data.code != 1000) {
             alert(response.data.message);
+            return false;
           } else {
             console.log("Success:", response.data);
             alert("상품이 성공적으로 등록되었습니다!");
+            return true;
           }
         })
         .catch((error) => {
           console.error("There was an error!", error);
           alert("상품 등록 중 오류가 발생했습니다.");
+          return false;
         });
     },
     getThumbnailUrls() {

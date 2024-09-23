@@ -402,7 +402,10 @@ export default {
         thumbnailImages: this.thumbnailImages,
         detailImage: this.detailImage,
       };
-      this.boardStore.createProductBoard(req);
+      const response = this.boardStore.createProductBoard(req);
+      if (response) {
+        this.$router.push("/product-boards/company/list");
+      }
     },
   },
 };
