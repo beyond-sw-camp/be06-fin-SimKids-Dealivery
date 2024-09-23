@@ -265,6 +265,11 @@ export default {
     },
   },
   methods: {
+    validateTime(time) {
+      const dateTime = new Date(time);
+      const minutes = dateTime.getMinutes();
+      return minutes === 0 || minutes === 30;
+    },
     validateDates() {
       const startTime = new Date(this.startTime);
       const endTime = new Date(this.endTime);
@@ -294,6 +299,13 @@ export default {
           "시작 시간 ~ 종료 시간은 2 ~ 48시간 사이여야 합니다.";
         return false;
       }
+
+      if (!this.validateTime(startTime) || !this.validateTime(endTime)) {
+        this.dateErrorMsg =
+          "시작/종료 시간은 정각(00분) 또는 30분이어야 합니다.";
+        return false;
+      }
+
       return true;
     },
     validateTitle() {
@@ -390,7 +402,10 @@ export default {
         thumbnailImages: this.thumbnailImages,
         detailImage: this.detailImage,
       };
-      this.boardStore.createProductBoard(req);
+      const response = this.boardStore.createProductBoard(req);
+      if (response) {
+        this.$router.push("/product-boards/company/list");
+      }
     },
   },
 };

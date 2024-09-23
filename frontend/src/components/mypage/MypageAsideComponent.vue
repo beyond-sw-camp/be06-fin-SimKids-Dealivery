@@ -4,7 +4,7 @@
             <div class="top-info-section">
                 <div class="pc css-jagjhu e1w7rsa02">
                     <div class="grade-name">
-                        <div class="user-name">심키즈님</div>
+                        <div v-text="userStore.userDetail.name+'님'" class="user-name"></div>
                     </div>
                 </div>
                 <div class="css-rurvds e5rtjnl2">
@@ -13,7 +13,7 @@
                             <button class="menu-item">
                                 <div class="name-text">포인트</div>
                                 <div class="amount-text">
-                                    <div class="number-text">0</div>
+                                    <div v-text="userStore.userDetail.point" class="number-text"></div>
                                     원
                                 </div>
                             </button>
@@ -66,6 +66,8 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/useUserStore';
+import { mapStores } from 'pinia';
 export default {
     name: 'MypageAsideComponent',
     data() {
@@ -73,6 +75,9 @@ export default {
             activeMenu: '',  // 기본으로 활성화된 메뉴
         };
     },
+    computed: {
+        ...mapStores(useUserStore)
+     },
     methods: {
         setActiveMenu(menu) {
             this.activeMenu = menu;
@@ -100,6 +105,7 @@ export default {
     },
     mounted() {
         this.updateActiveMenuBasedOnRoute();  // 페이지 로드 시 현재 경로에 따라 활성화된 메뉴 설정
+        this.userStore.getDetail();
     },
     watch: {
         '$route'() {  // 라우트가 변경될 때마다 호출

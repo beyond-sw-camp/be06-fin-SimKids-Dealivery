@@ -1,129 +1,239 @@
 <template>
-  <div class="css-heioij eug5r8l1">
-    <div v-for="order in orderList" :key="order.id" class="order-item">
-      <MypageOrderComponent :order="order" />
-    </div>
-    <div v-if="orderList.length === 0" class="empty-notice">
-      <p>주문 내역이 없습니다.</p>
-    </div>
-
-    <div class="css-rdz8z7 e82lnfz1" v-if="orderList.length !== 0">
-      <a class="page-unselected e82lnfz0" @click="goToPage(1)"
-        ><img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
-          alt="처음 페이지로 이동하기 아이콘" /></a
-      ><a class="page-unselected e82lnfz0" @click="prevPageGroup"
-        ><img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
-          alt="이전 페이지로 이동하기 아이콘"
-      /></a>
-
-      <a
-        v-for="pageNumber in visiblePages"
-        :key="pageNumber"
-        :class="
-          pageNumber === currentPage
-            ? 'page-selected e82lnfz0'
-            : 'page-unselected e82lnfz0'
-        "
-        @click="goToPage(pageNumber)"
-      >
-        {{ pageNumber }}
-      </a>
-
-      <a class="page-unselected e82lnfz0" @click="nextPageGroup"
-        ><img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
-          alt="다음 페이지로 이동하기 아이콘" /></a
-      ><a class="page-unselected e82lnfz0" @click="goToPage(totalPages)"
-        ><img
-          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
-          alt="마지막 페이지로 이동하기 아이콘"
-      /></a>
+  <div>
+    <div class="css-3dze2x eug5r8l1" id="details">
+      <button class="css-f848a6 e2jhvp32">
+        <p
+          class="_97oqoup _97oqouu _97oqou4 ldmw177d _97oqou18 _97oqoui ldmw177p _97oqou12 _97oqouc ldmw177j css-1dl78ek e2jhvp31"
+        >
+          주문정보
+        </p>
+      </button>
+      <div class="css-d3v9zr e14m4ys50" style="opacity: 1; height: auto">
+        <div class="css-1a0zxau e1ckt0s50">
+          <div class="css-1aim50k e93c1qv0">
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j"
+            >
+              주문번호
+            </p>
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j"
+            >
+              {{ order.ordersNumber }}
+            </p>
+          </div>
+          <div class="css-1aim50k e2upnqp1">
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0"
+            >
+              주문 상태
+            </p>
+            <div class="css-8yre18 e2upnqp1">
+              <p
+                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0"
+              >
+                {{ order.status }}
+              </p>
+            </div>
+          </div>
+          <div class="css-1aim50k e2upnqp1">
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0"
+            >
+              결제 일시
+            </p>
+            <div class="css-8yre18 e2upnqp1">
+              <p
+                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0"
+              >
+                {{ formattedDate(order.createdAt) }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="css-f848a6 e2jhvp32">
+        <p
+          class="_97oqoup _97oqouu _97oqou4 ldmw177d _97oqou18 _97oqoui ldmw177p _97oqou12 _97oqouc ldmw177j css-1dl78ek e2jhvp31"
+        >
+          결제정보
+        </p>
+      </button>
+      <div class="css-d3v9zr e14m4ys50" style="opacity: 1; height: auto">
+        <div class="css-1a0zxau e13968o84">
+          <div class="css-1aim50k e93c1qv0">
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j"
+            >
+              상품금액
+            </p>
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j"
+            >
+              {{ order.originalPaidAmount }}원
+            </p>
+          </div>
+          <div class="css-1aim50k e2upnqp1">
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0"
+            >
+              상품할인금액
+            </p>
+            <div class="css-8yre18 e2upnqp1">
+              <p
+                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0"
+              >
+                -{{
+                  order.originalPaidAmount -
+                  order.usedPoint -
+                  order.totalPaidAmount
+                }}원
+              </p>
+            </div>
+          </div>
+          <div class="css-1aim50k e2upnqp1">
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0"
+            >
+              포인트
+            </p>
+            <div class="css-8yre18 e2upnqp1">
+              <p
+                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0"
+              >
+                -{{ order.usedPoint }}원
+              </p>
+            </div>
+          </div>
+          <div class="css-1aim50k e2upnqp1">
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-15bah7q e2upnqp0"
+            >
+              결제방법
+            </p>
+            <div class="css-8yre18 e2upnqp1">
+              <p
+                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-uwqhso e2upnqp0"
+              >
+                {{ order.payMethod == "kakaopay" ? "카카오페이" : "토스페이" }}
+              </p>
+            </div>
+          </div>
+          <div class="css-1aim50k e2upnqp1">
+            <p
+              class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j"
+            >
+              총 결제금액
+            </p>
+            <div class="css-8yre18 e2upnqp1">
+              <p
+                class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j"
+              >
+                {{ order.totalPaidAmount }}원
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="css-f848a6 e2jhvp32">
+        <p
+          class="_97oqoup _97oqouu _97oqou4 ldmw177d _97oqou18 _97oqoui ldmw177p _97oqou12 _97oqouc ldmw177j css-1dl78ek e2jhvp31"
+        >
+          배송정보
+        </p>
+      </button>
+      <div class="css-d3v9zr e14m4ys50" style="opacity: 1; height: auto">
+        <div class="css-6z4447 e1n2ou003">
+          <p
+            class="_97oqoup _97oqouv _97oqou5 ldmw177c _97oqou19 _97oqouj ldmw177q _97oqou12 _97oqouc ldmw177j css-luewyl e1n2ou001"
+          >
+            {{ order.receiverName }}
+          </p>
+          <p
+            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-4qwok1 e1n2ou001"
+          >
+            {{ order.receiverPhoneNumber }}
+          </p>
+          <p
+            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou13 _97oqoud ldmw177i css-303o8l e1n2ou001"
+          >
+            {{ order.address }}
+          </p>
+        </div>
+      </div>
+      <div class="css-od0sqq ecvmg6w3">
+        <p
+          class="_97oqoup _97oqoux _97oqou7 ldmw177a _97oqou1b _97oqoul ldmw177s _97oqou13 _97oqoud ldmw177i css-1fdfbqy ecvmg6w1"
+        >
+          주문취소는 [주문완료] 상태일 경우에만 가능합니다.
+        </p>
+        <p
+          class="_97oqoup _97oqoux _97oqou7 ldmw177a _97oqou1b _97oqoul ldmw177s _97oqou13 _97oqoud ldmw177i css-1fdfbqy ecvmg6w1"
+        >
+          단, 일부 상품의 경우 [주문완료] 상태이더라도 상품의 특성상 주문취소가
+          불가능할 수 있습니다.
+        </p>
+        <button
+          :disabled="order.status !== '주문 완료'"
+          class="tew5wjw tew5wj0 ldmw1780 tew5wjy tew5wj19 tew5wj1b tew5wj14 tew5wj3 ldmw1717i ldmw17183 ldmw1715v ldmw177b tew5wj17 tew5wj1c tew5wj5 ldmw177j tew5wj1l tew5wje ldmw17y6 ldmw17ok ldmw178w tew5wjp ldmw171du css-jz9jxv ecvmg6w2"
+          :class="{ 'able-cancel': order.status === '주문 완료' }"
+          @click="cancelOrder"
+        >
+          <p
+            class="_97oqoup _97oqouw _97oqou6 ldmw177b _97oqou1a _97oqouk ldmw177r _97oqou12 _97oqouc ldmw177j"
+          >
+            주문 취소
+          </p>
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import MypageOrderComponent from "@/components/mypage/MypageOrderComponent.vue";
 import { mapStores } from "pinia";
 import { useOrderStore } from "@/stores/useOrderStore.js";
 
 export default {
+  created() {
+    this.setDetail();
+  },
   data() {
     return {
-      orderList: [],
-      pagesPerGroup: 5,
-      totalPages: 1,
+      isDetailsVisible: true,
+      arrowRotated: false,
+      order: {},
     };
-  },
-  components: {
-    MypageOrderComponent,
-  },
-
-  created() {
-    this.setOrderList();
   },
   computed: {
     ...mapStores(useOrderStore),
-    currentPage() {
-      return Number(this.$route.query.page) || 1;
-    },
-    // 시작 페이지 번호 계산
-    startPage() {
-      return (
-        Math.floor((this.currentPage - 1) / this.pagesPerGroup) *
-          this.pagesPerGroup +
-        1
-      );
-    },
-    // 끝 페이지 번호 계산
-    endPage() {
-      return Math.min(this.startPage + this.pagesPerGroup - 1, this.totalPages);
-    },
-    // 현재 보여질 페이지 번호 목록
-    visiblePages() {
-      const pageNumbers = [];
-      for (let i = this.startPage; i <= this.endPage; i++) {
-        pageNumbers.push(i);
-      }
-      return pageNumbers;
-    },
-  },
-  watch: {
-    "$route.query.page": "setOrderList",
-    "$route.query.dateRange": "setOrderList",
-    "$route.query.orderStatus": "setOrderList",
   },
   methods: {
-    async setOrderList() {
-      const response = await this.orderStore.getUserOrderListWithOption(
-        this.currentPage
+    async setDetail() {
+      const response = await this.orderStore.getUserOrderDetail(
+        this.$route.params.orderId
       );
-      this.orderList = response.content;
-      this.totalPages = response.totalPages;
-      console.log("요기!!!" + response + "  totalpage ==> " + this.totalPages);
+      this.order = response;
     },
-    goToPage(pageNumber) {
-      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
-        this.$router.push({
-          query: {
-            page: pageNumber,
-          },
-        });
-      } else if (pageNumber < 1) {
-        alert("첫 번째 페이지입니다.");
-      } else {
-        alert("마지막 페이지입니다.");
+    formattedDate(dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      const day = ("0" + date.getDate()).slice(-2);
+      const hours = ("0" + date.getHours()).slice(-2);
+      const minutes = ("0" + date.getMinutes()).slice(-2);
+
+      return `${year}.${month}.${day} ${hours}:${minutes}`;
+    },
+    async cancelOrder() {
+      const confirmed = confirm("주문을 취소하시겠습니까?");
+      if (confirmed) {
+        await this.orderStore.cancelOrder(
+          this.$route.params.orderId,
+          "/mypage/order",
+          "주문이 성공적으로 취소되었습니다."
+        );
       }
-    },
-    prevPageGroup() {
-      const newPage = this.startPage - 1;
-      this.goToPage(newPage);
-    },
-    nextPageGroup() {
-      const newPage = this.endPage + 1;
-      this.goToPage(newPage);
     },
   },
 };
@@ -186,23 +296,6 @@ html {
   padding: 20px 0;
 }
 
-.empty-notice {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 40px;
-  margin-top: 20px;
-  line-height: 20px;
-  letter-spacing: -0.2px;
-  background-color: rgb(255, 255, 255);
-  color: rgb(153, 153, 153);
-  border-radius: 16px;
-  font-size: 20px;
-  width: 100%;
-  height: 200px;
-}
-
 .css-72lz6z {
   display: flex;
   align-items: flex-start;
@@ -226,10 +319,6 @@ html {
   justify-content: space-between;
   margin: 0px 20px;
   padding: 25px 0px 20px;
-}
-
-.order-item {
-  margin-bottom: 10px;
 }
 
 .css-eq7f8j {
@@ -1028,11 +1117,17 @@ input {
 .tew5wj1l:disabled {
   color: #222;
   background-color: #eceff3;
+  cursor: not-allowed;
 }
 
 button[disabled],
 input[disabled] {
   cursor: pointer;
+}
+
+.able-cancel {
+  color: rgb(255, 255, 255);
+  background-color: rgb(95, 0, 128);
 }
 
 .css-jz9jxv {
@@ -1100,52 +1195,5 @@ textarea {
   justify-content: center;
   cursor: pointer;
   border-width: 0;
-}
-
-.css-rdz8z7 {
-  display: flex;
-  -webkit-box-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.page-unselected:first-of-type {
-  border-left: 1px solid rgb(221, 221, 221);
-}
-
-.page-unselected {
-  display: flex;
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-top: 1px solid rgb(221, 221, 221);
-  border-right: 1px solid rgb(221, 221, 221);
-  border-bottom: 1px solid rgb(221, 221, 221);
-  border-image: initial;
-  border-left: none;
-  cursor: pointer;
-}
-
-.page-selected {
-  display: flex;
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-top: 1px solid rgb(221, 221, 221);
-  border-right: 1px solid rgb(221, 221, 221);
-  border-bottom: 1px solid rgb(221, 221, 221);
-  border-image: initial;
-  border-left: none;
-  cursor: pointer;
-  background-color: rgb(247, 247, 247);
-  color: rgb(95, 0, 128);
 }
 </style>

@@ -159,11 +159,11 @@ export default {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 상단 여백을 15% 설정하고, 자동으로 좌우 중앙 정렬 */
+  margin: 7% auto; /* 상단 여백을 7% 설정하고, 자동으로 좌우 중앙 정렬 */
   padding: 20px;
   border: 1px solid #888;
   width: 80%; /* 모달의 너비를 80%로 설정 */
-  max-width: 850px;
+  max-width: 680px;
   border-radius: 10px;
   /* max-width: 600px; 최대 너비 설정 */
 }
@@ -302,9 +302,8 @@ textarea {
 .css-190e3ze {
   display: flex;
   flex-direction: column;
-  width: 800px;
-  height: 690px;
-  padding: 30px;
+  width: 600px;
+  padding: 15px;
   background: rgb(255, 255, 255);
 }
 
@@ -408,7 +407,7 @@ img {
 }
 
 .css-171jy4 {
-  width: 100px;
+  width: 95px;
   padding-top: 12px;
 }
 
@@ -461,7 +460,7 @@ img {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 260px;
+  height: 140px;
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(221, 221, 221);
   border-radius: 4px;
@@ -479,7 +478,7 @@ img {
 
 .css-f9c7pn button {
   width: 160px;
-  height: 56px;
+  height: 52px;
   border-radius: 3px;
 }
 
@@ -560,7 +559,7 @@ input[disabled] {
 }
 
 .css-17xxk8 textarea {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .css-5etceh {
@@ -608,6 +607,7 @@ textarea {
 
 .css-1xbd2py p {
   padding-top: 12px;
+  padding-left: 12px;
 }
 
 /* .tbl_type1 tr:first-child td[data-v-cc43e902],

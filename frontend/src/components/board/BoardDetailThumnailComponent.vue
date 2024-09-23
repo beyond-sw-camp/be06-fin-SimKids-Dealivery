@@ -7,14 +7,13 @@
           <div class="css-j2pfbl">
             <span class="thumnail-wrapper">
               <img
-                :alt="`Image ${mainThumbnail.src}`"
-                :src="mainThumbnail.src"
+                :alt="`Image ${mainThumbnail}`"
+                :src="mainThumbnail"
                 decoding="async"
                 data-nimg="fill"
                 class="css-1zjvv7 thumnail-img"
                 :style="imageStyle"
                 sizes="100vw"
-                :srcset="mainThumbnail.srcset"
               />
             </span>
           </div>
@@ -34,14 +33,13 @@
             <div class="css-j2pfbl">
               <span class="thumnail-wrapper">
                 <img
-                  :alt="`Thumbnail ${thumbnail.src}`"
-                  :src="thumbnail.src"
+                  :alt="`Thumbnail ${thumbnail}`"
+                  :src="thumbnail"
                   decoding="async"
                   data-nimg="fill"
                   class="css-1zjvv7 thumnail-img"
                   :style="imageStyle"
                   :sizes="thumbnail.sizes"
-                  :srcset="thumbnail.srcset"
                 />
               </span>
             </div>

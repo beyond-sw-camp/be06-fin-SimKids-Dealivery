@@ -25,6 +25,10 @@ import MyPageAddressComponent from "@/components/mypage/MypageAddressComponent.v
 import CompanyQnAListPage from "@/pages/company/qna/CompanyQnAListPage.vue";
 import LoginRedirectPage from "@/pages/common/LoginRedirectPage.vue";
 import SocialSignupComponent from "@/components/user/SocialSignupComponent.vue";
+import MypageOrderDetail from "@/components/mypage/MypageOrderDetailComponent.vue"
+import MypageDetailEditComponent from "@/components/mypage/MypageDetailEditComponent.vue";
+import MypageDetailComponent from "@/components/mypage/MypageDetailComponent.vue";
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -83,14 +87,15 @@ const router = createRouter({
           component: FindIdComponent,
           meta: { requiresAuth: false },
         },
-        { path: "social/signup",
+        {
+          path: "social/signup",
           component: SocialSignupComponent,
-          meta: {requiresAuth: false}
+          meta: { requiresAuth: false }
         },
         { path: "", redirect: "/auth/login", meta: { requiresAuth: false } },
       ],
     },
-    { path: "/login/redirect", component: LoginRedirectPage},
+    { path: "/login/redirect", component: LoginRedirectPage },
     {
       path: "/board",
       component: BoardListPage,
@@ -134,9 +139,12 @@ const router = createRouter({
       redirect: "/mypage/order",
       children: [
         { path: "order", component: MypageOrderListComponent },
+        { path: 'order/:orderId', component: MypageOrderDetail },
         { path: "qna", component: MypageQnAComponent },
         { path: "likes", component: MypageLikesEventComponent },
         { path: "address", component: MyPageAddressComponent },
+        { path: "detail/edit", component: MypageDetailEditComponent },
+        { path: "detail", component: MypageDetailComponent },
       ],
     },
   ],
