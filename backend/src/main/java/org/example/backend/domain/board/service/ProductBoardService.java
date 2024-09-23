@@ -83,13 +83,13 @@ public class ProductBoardService {
 	}
 
 	// 판매자 게시글 조회
-	public Page<ProductBoardDto.CompanyBoardListResponse> companyList(String status, Integer month, Pageable pageable) {
-		Page<ProductBoard> productBoards = productBoardRepository.companySearch(status, month, pageable);
+	public Page<ProductBoardDto.CompanyBoardListResponse> companyList(Long companyIdx, String status, Integer month, Pageable pageable) {
+		Page<ProductBoard> productBoards = productBoardRepository.companySearch(companyIdx, status, month, pageable);
 		return productBoards.map(ProductBoard::toCompanyBoardListResponse);
 	}
 
-	public ProductBoardDto.CompanyBoardDetailResponse getCompanyDetail(Long idx) {
-		ProductBoard productBoard = productBoardRepository.findByIdx(idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
+	public ProductBoardDto.CompanyBoardDetailResponse getCompanyDetail(Long companyIdx, Long idx) {
+		ProductBoard productBoard = productBoardRepository.findByCompanyIdxAndIdx(companyIdx, idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
 		List<ProductThumbnailImage> productThumbnailImages = productThumbnailImageRepository.findAllByProductBoardIdx(idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
 		List<Product> products = productRepository.findAllByProductBoardIdx(idx).orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_DETAIL_FAIL));
 

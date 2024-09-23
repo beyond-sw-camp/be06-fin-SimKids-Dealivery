@@ -13,5 +13,8 @@ public interface ProductBoardRepository extends JpaRepository<ProductBoard, Long
 	@Query("SELECT pb FROM ProductBoard pb JOIN fetch pb.category WHERE pb.idx = :idx")
 	Optional<ProductBoard> findByIdx(Long idx);
 
+	@Query("SELECT pb FROM ProductBoard pb JOIN FETCH pb.category WHERE pb.idx = :idx and pb.company.idx = :companyIdx")
+	Optional<ProductBoard> findByCompanyIdxAndIdx(Long companyIdx, Long idx);
+
 	Slice<ProductBoard> findByStatus(String status, Pageable pageable);
 }

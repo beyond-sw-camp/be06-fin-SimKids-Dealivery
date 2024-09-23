@@ -57,7 +57,6 @@ public class ProductBoardDto {
 		private LocalDateTime endedAt;
 
 		@NotNull
-		@NotEmpty(message = "카테고리를 설정해야 합니다.")
 		private CategoryType category;
 
 		public ProductBoard toEntity(Long companyIdx, String thumbnailUrl, String detailUrl, Category category) {

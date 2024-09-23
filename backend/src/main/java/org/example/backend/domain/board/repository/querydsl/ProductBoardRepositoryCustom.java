@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProductBoardRepositoryCustom {
 	Page<ProductBoard> search(String search, Pageable pageable);
-	Page<ProductBoard> companySearch(String status, Integer month, Pageable pageable);
+	Page<ProductBoard> companySearch(Long companyIdx, String status, Integer month, Pageable pageable);
 }

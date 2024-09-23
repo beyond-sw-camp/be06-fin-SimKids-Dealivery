@@ -5,6 +5,7 @@ import org.example.backend.domain.board.service.ProductBoardService;
 import org.example.backend.global.common.constants.BaseResponse;
 import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.common.constants.BoardStatus;
+import org.example.backend.global.exception.InvalidCustomException;
 import org.example.backend.global.security.custom.model.dto.CustomCompanyDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,18 +73,24 @@ public class BoardController {
 	public BaseResponse create(@AuthenticationPrincipal CustomCompanyDetails customCompanyDetails, @Valid @RequestPart("boardCreateRequest") ProductBoardDto.BoardCreateRequest boardCreateRequest,
 		@RequestPart(value = "productThumbnails") MultipartFile[] productThumbnails,
 		@RequestPart(value = "productDetail") MultipartFile productDetail) {
+		if (customCompanyDetails == null) {
+			throw new InvalidCustomException(BaseResponseStatus.FAIL);
+		}
 		productBoardService.create(customCompanyDetails.getIdx(), boardCreateRequest, productThumbnails, productDetail);
 		return new BaseResponse();
 	}
 
 	@Operation(summary = "판매자 회원 게시글 조회 API")
 	@GetMapping(value = "/company/list")
-	public BaseResponse companyList(Integer page,
-	@RequestParam(required = false) String status,
-		@RequestParam(required = false) Integer month) {
+	public BaseResponse companyList(
+		@AuthenticationPrincipal CustomCompanyDetails customCompanyDetails, Integer page,
+		@RequestParam(required = false) String status, @RequestParam(required = false) Integer month) {
+		if (customCompanyDetails == null) {
+			throw new InvalidCustomException(BaseResponseStatus.FAIL);
+		}
 		Pageable pageable = PageRequest.of(page - 1, COMPANY_LIST_SIZE);
 		BoardStatus boardStatus = status == null ? null : BoardStatus.from(status);
-		Page<ProductBoardDto.CompanyBoardListResponse> boardListResponses = productBoardService.companyList(boardStatus == null ? null : boardStatus.getStatus(), month, pageable);
+		Page<ProductBoardDto.CompanyBoardListResponse> boardListResponses = productBoardService.companyList(customCompanyDetails.getIdx(), boardStatus == null ? null : boardStatus.getStatus(), month, pageable);
 		return new BaseResponse(boardListResponses);
 	}
 
@@ -92,8 +99,11 @@ public class BoardController {
 	* */
 	@Operation(summary = "판매자 회원 게시글 상세 조회 API")
 	@GetMapping(value = "/company/{idx}/detail")
-	public BaseResponse companyDetail(@PathVariable Long idx) {
-		ProductBoardDto.CompanyBoardDetailResponse response =  productBoardService.getCompanyDetail(idx);
+	public BaseResponse companyDetail(@AuthenticationPrincipal CustomCompanyDetails customCompanyDetails, @PathVariable Long idx) {
+		if (customCompanyDetails == null) {
+			throw new InvalidCustomException(BaseResponseStatus.FAIL);
+		}
+		ProductBoardDto.CompanyBoardDetailResponse response =  productBoardService.getCompanyDetail(customCompanyDetails.getIdx(), idx);
 		return response == null ? new BaseResponse(BaseResponseStatus.FAIL) : new BaseResponse(response);
 	}
 }
