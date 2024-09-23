@@ -80,6 +80,7 @@ public class Question {
                 .answers(answerResponses)  // 답변 리스트 포함
                 .productBoardIdx(getProductBoard().getIdx())
                 .productTitle(getProductBoard().getTitle())
+
                 .build();
     }
 

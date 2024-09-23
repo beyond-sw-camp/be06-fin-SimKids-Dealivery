@@ -3,7 +3,6 @@ package org.example.backend.domain.qna.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.domain.qna.model.dto.QuestionDto;
 import org.example.backend.domain.qna.service.QuestionService;
@@ -34,7 +33,6 @@ public class QuestionController {
                             }
                     )
             ))
-
     @PostMapping("/create")
     public BaseResponse create(@RequestBody QuestionDto.QuestionCreateRequest request, @AuthenticationPrincipal UserDetails userDetails) {
         String email = userDetails.getUsername(); // 인증된 사용자의 이메일 가져오기

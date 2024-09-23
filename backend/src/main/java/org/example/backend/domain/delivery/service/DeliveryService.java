@@ -58,7 +58,7 @@ public class DeliveryService {
                 .anyMatch(Delivery::getIsDefault);
     }
     public Delivery getDefaultDelivery(List<Delivery> deliveries) {
-        //받아온 리스트에서 isDefault가 true인 객체의 해당 값을 false로 바꾸고 반환
+        //받아온 리스트에서 isDefault가 true인 객체 반환
         return deliveries.stream()
                 .filter(Delivery::getIsDefault)
                 .findFirst()
@@ -111,5 +111,16 @@ public class DeliveryService {
         }
         newDefaultDelivery.setIsDefault(true);
         deliveryRepository.save(newDefaultDelivery);
+    }
+
+    public void editDelivery(Long idx, DeliveryDto.EditDeliveryRequest request) {
+        Delivery beforeDelivery = deliveryRepository.findByIdx(request.getIdx()).orElseThrow(
+                () -> new InvalidCustomException(BaseResponseStatus.USER_DELIVERY_EDIT_FAIL)
+        );
+        if (beforeDelivery.getUser().getIdx() != idx){
+            throw new InvalidCustomException(BaseResponseStatus.USER_DELIVERY_EDIT_FAIL_USER_NOT_MATCH);
+        }
+        beforeDelivery.updateEntity(request);
+        deliveryRepository.save(beforeDelivery);
     }
 }

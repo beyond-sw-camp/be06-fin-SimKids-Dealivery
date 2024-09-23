@@ -31,4 +31,14 @@ public class OrderedProductDto {
                     .build();
         }
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderedProductResponse {
+        private String name;
+        private Integer amount;
+        private Long price;
+    }
 }

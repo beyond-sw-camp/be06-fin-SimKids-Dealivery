@@ -72,7 +72,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
             // refresh token을 가지고 있는 경우 (타입에 맞게 만료 확인 후 재발급 진행)
-
             if (!isExpiredRefreshToken(refreshTokenCookie)){
                 return;
             }

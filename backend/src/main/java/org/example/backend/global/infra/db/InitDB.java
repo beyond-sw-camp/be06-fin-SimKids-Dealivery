@@ -16,7 +16,14 @@ import org.example.backend.domain.board.repository.ProductBoardRepository;
 import org.example.backend.domain.board.repository.ProductThumbnailImageRepository;
 import org.example.backend.domain.company.model.entity.Company;
 import org.example.backend.domain.company.repository.CompanyRepository;
+import org.example.backend.domain.orders.model.entity.OrderedProduct;
+import org.example.backend.domain.orders.model.entity.Orders;
+import org.example.backend.domain.orders.repository.OrderedProductRepository;
+import org.example.backend.domain.orders.repository.OrdersRepository;
 import org.example.backend.global.common.constants.BoardStatus;
+import org.example.backend.global.common.constants.OrderStatus;
+import org.example.backend.global.common.constants.PaymentType;
+import org.example.backend.global.utils.RandomCodeGenerator;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,9 +35,12 @@ public class InitDB {
     private final ProductRepository productRepository;
     private final ProductThumbnailImageRepository productThumbnailImageRepository;
     private final CompanyRepository companyRepository;
-
+    private final OrdersRepository ordersRepository;
+    private final OrderedProductRepository orderedProductRepository;
     private List<Category> categories;
     private List<ProductBoard> productBoards;
+
+    private List<Orders> ordersList;
 
 
     @PostConstruct
@@ -68,7 +78,7 @@ public class InitDB {
 
         productBoards = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             productBoards.add(ProductBoard.builder()
                 .title("[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로] " + i)
                 .discountRate(23)
@@ -83,7 +93,7 @@ public class InitDB {
                 .build());
         }
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             productBoards.add(ProductBoard.builder()
                 .title("[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로] " + (10 + i))
                 .discountRate(23)
@@ -98,7 +108,7 @@ public class InitDB {
                 .build());
         }
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             productBoards.add(ProductBoard.builder()
                 .title("[음성명작]500m 고랭지에서 수확한 사과1.3kg[품종:홍로] " + (20 + i))
                 .discountRate(23)
