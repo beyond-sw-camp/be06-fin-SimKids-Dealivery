@@ -94,6 +94,11 @@ export default {
   },
   mounted(){
     this.setInitialSelectedAddress();
+    window.scrollTo({
+            top: 200,
+            left: 0,
+            behavior: 'smooth'
+        });
   },
   data() {
     return {
@@ -116,7 +121,10 @@ export default {
     },
     displayEditModal(data) {
       this.isDisplayEditModal = !this.isDisplayEditModal;
-      this.selectedDelivery = data;
+      if(data != null){
+        this.selectedDelivery = data;  
+      }
+      
     },
     checkRadio(delivery,index) {
       this.selectedAddress = index;
@@ -129,9 +137,13 @@ export default {
       }
       
     },
-    saveEditedAddress(data) {
-      console.log(data);
-      alert("추가될 기능")
+    async saveEditedAddress(data) {
+      if(await this.userStore.editDelivery(data)){
+        await this.userStore.getDeliveryList();
+      }else{
+        alert("회원정보 수정에 실패했습니다.");
+      }
+      
     },
     setInitialSelectedAddress() {
       const defaultDeliveryIndex = this.userStore.userDetail.deliveries.findIndex(
@@ -317,7 +329,7 @@ ul {
 
 .css-zone-name {
   font-size: 13px;
-  color: rgb(95, 0, 128);
+  color: #505050;
   margin: 5px;
 }
 

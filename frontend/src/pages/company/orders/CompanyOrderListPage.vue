@@ -83,7 +83,7 @@ import CompanyAsideComponent from "@/components/company/CompanyAsideComponent.vu
 import DropdownMenu from "../../../components/company/DropdownMenu.vue";
 import OrderListCardComponent from "../../../components/company/OrderListCardComponent.vue";
 import { mapStores } from "pinia";
-import { useCompanyBoardStore } from "@/stores/useCompanyBoardStore.js";
+import { useBoardStore } from "@/stores/useBoardStore.js";
 
 export default {
   name: "CompanyOrderListPage",
@@ -106,7 +106,7 @@ export default {
     };
   },
   computed: {
-    ...mapStores(useCompanyBoardStore),
+    ...mapStores(useBoardStore),
     currentPage() {
       return Number(this.$route.query.page) || 1;
     },
@@ -145,7 +145,7 @@ export default {
       this.selectedDateRange = this.$route.query.dateRange || "전체기간";
       this.selectedOrderStatus = this.$route.query.orderStatus || "전체보기";
 
-      const response = await this.companyBoardStore.getOrderListWithOption(
+      const response = await this.boardStore.getOrderListWithOption(
         this.currentPage,
         this.selectedOrderStatus,
         this.extractNumber(this.selectedDateRange)
@@ -201,7 +201,7 @@ export default {
       await this.fetchBoards();
     },
     async fetchBoards() {
-      const response = await this.companyBoardStore.getOrderListWithOption(
+      const response = await this.boardStore.getOrderListWithOption(
         this.currentPage,
         this.selectedOrderStatus,
         this.extractNumber(this.selectedDateRange)

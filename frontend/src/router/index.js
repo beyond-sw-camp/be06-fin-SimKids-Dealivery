@@ -25,6 +25,8 @@ import MyPageAddressComponent from "@/components/mypage/MypageAddressComponent.v
 import CompanyQnAListPage from "@/pages/company/qna/CompanyQnAListPage.vue";
 import LoginRedirectPage from "@/pages/common/LoginRedirectPage.vue";
 import SocialSignupComponent from "@/components/user/SocialSignupComponent.vue";
+import MypageDetailEditComponent from "@/components/mypage/MypageDetailEditComponent.vue";
+import MypageDetailComponent from "@/components/mypage/MypageDetailComponent.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -137,6 +139,8 @@ const router = createRouter({
         { path: "qna", component: MypageQnAComponent },
         { path: "likes", component: MypageLikesEventComponent },
         { path: "address", component: MyPageAddressComponent },
+        { path: "detail/edit", component: MypageDetailEditComponent },
+        { path: "detail", component: MypageDetailComponent },
       ],
     },
   ],

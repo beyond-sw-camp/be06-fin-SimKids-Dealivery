@@ -1,5 +1,5 @@
 <template>
-  <div id="productModal" class="modal" @click.self="closeModal">
+  <div id="productModal" class="modal" >
     <div class="modal-content">
       <span class="close" @click="closeModal">&times;</span>
       <div data-reactroot="">
@@ -11,6 +11,7 @@
               <label for="name" class="css-c3g9of e1uzxhvi4">배송지명</label>
               <div height="44" class="css-t7kbxx e1uzxhvi3">
                 <input
+                  maxlength="30"
                   v-model="editedAddress.name"
                   data-testid="input-box"
                   placeholder="배송지명을 입력해 주세요"
@@ -22,6 +23,7 @@
               <label for="addressDetail" class="css-c3g9of e1uzxhvi4">상세주소</label>
               <div height="44" class="css-t7kbxx e1uzxhvi3">
                 <input
+                  maxlength="30"
                   v-model="editedAddress.addressDetail"
                   data-testid="input-box"
                   placeholder="상세주소를 입력해 주세요"
@@ -94,6 +96,7 @@ export default {
       this.editedAddress.address = this.oldAddress.address;
       this.editedAddress.addressDetail = this.oldAddress.addressDetail;
       this.editedAddress.isDefault = this.oldAddress.isDefault;
+      console.log(this.editedAddress.isDefault);
       
     }
   },
@@ -120,10 +123,24 @@ export default {
     },
     validateAndSave() {
       try {
-        new Validator(this.editedAddress.name, "배송지명을 입력해 주세요").isNotEmpty();
-        new Validator(this.editedAddress.postNumber, "우편번호를 입력해 주세요").isNotEmpty();
-        new Validator(this.editedAddress.address, "주소를 입력해 주세요").isNotEmpty();
-        new Validator(this.editedAddress.addressDetail, "상세주소를 입력해 주세요").isNotEmpty();
+        const validInputRegex = /^(?!.*[!@#$%^&*()_+={}:;"'<>,.?/~`|\\-])(?=.*[^\n])[^\nㄱ-ㅎ]*$/;
+
+        // 검증 로직
+        new Validator(this.editedAddress.name, "배송지명을 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+
+        new Validator(this.editedAddress.postNumber, "우편번호를 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+
+        new Validator(this.editedAddress.address, "주소를 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
+
+        new Validator(this.editedAddress.addressDetail, "상세주소를 입력해 주세요")
+            .isNotEmpty()
+            .matches(validInputRegex, "특수문자 및 초성은 입력할 수 없습니다.");
         this.saveEditedAddress();
       } catch (error) {
         // 검증 실패 시 에러 메시지 출력

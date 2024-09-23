@@ -1,13 +1,21 @@
 <template>
-  <HeaderComponent />
   <div id="top">
+    <HeaderComponent />
     <div class="css-n48rgu">
       <div class="css-16c0d8l">
         <main id="product-atf" class="css-1eoy87d">
           <BoardDetailThumnailComponent :thumbnails="thumbnails" />
-          <BoardDetailProductInfoComponent @submitOrder="submitOrder" />
+          <BoardDetailProductInfoComponent
+            :data="data"
+            @submitOrder="submitOrder"
+          />
         </main>
-        <BoardDetailNavComponent :tableData="tableData" />
+        <BoardDetailNavComponent
+          :thumbnails="thumbnails"
+          :detail="detail"
+          :productBoardIdx="productBoardIdx"
+          :productTitle="productTitle"
+        />
       </div>
     </div>
   </div>
@@ -20,12 +28,12 @@ import FooterComponent from "@/components/common/FooterComponent.vue";
 import BoardDetailThumnailComponent from "@/components/board/BoardDetailThumnailComponent.vue";
 import BoardDetailProductInfoComponent from "@/components/board/BoardDetailProductInfoComponent.vue";
 import BoardDetailNavComponent from "@/components/board/BoardDetailNavComponent.vue";
-
+import { useBoardStore } from "@/stores/useBoardStore";
 import { useOrderStore } from "@/stores/useOrderStore";
 import { mapStores } from "pinia";
 
 export default {
-  name: "OrdersPage",
+  name: "BoardDetailPage",
   components: {
     HeaderComponent,
     FooterComponent,
@@ -35,22 +43,30 @@ export default {
   },
   computed: {
     ...mapStores(useOrderStore),
+    ...mapStores(useBoardStore),
   },
   data() {
     return {
       activeTab: "description", // 초기에는 '상품설명' 탭이 활성화됨
-      thumbnails: [
-        {
-          src: "https://product-image.kurly.com/hdims/resize/%5E%3E720x%3E936/cropcenter/720x936/quality/85/src/product/image/c0599d4f-d892-4d43-a22d-277459e929bd.jpg",
-        },
-        {
-          src: "https://pbs.twimg.com/media/EE0R8XcU0AAlbth.jpg",
-        },
-      ],
-
+      thumbnails: [],
+      detail: "",
+      productBoardIdx: 1, // 추후에 실제 상품의 boardIdx로 변경
+      productTitle: "",
+      data: null,
     };
   },
+  created() {
+    this.productBoardIdx = parseInt(this.$route.params.idx);
+    this.getData();
+  },
   methods: {
+    async getData() {
+      this.data = await this.boardStore.getDetail(this.productBoardIdx);
+      this.productTitle = this.data.title;
+      this.thumbnails = this.data.productThumbnailUrls;
+      this.detail = this.data.productDetailUrl;
+      console.log(this.data);
+    },
     async submitOrder(cartItems) {
       console.log(cartItems);
       let result = await this.orderStore.submitOrder(cartItems);
@@ -61,7 +77,7 @@ export default {
     },
     addNewInquiry(registeredInquiry) {
       this.qnaStore.addNewInquiry(registeredInquiry);
-    }
+    },
   },
 };
 </script>

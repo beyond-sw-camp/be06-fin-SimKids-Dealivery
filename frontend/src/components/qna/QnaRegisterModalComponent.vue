@@ -15,11 +15,10 @@
                         </div>
                         <div class="css-1tm481w eell72m3">
                             <div class="css-l4dbne eell72m2">
-                                <img src="https://product-image.kurly.com/product/image/7a79c0a2-31c7-4cb4-9c93-4ebded5e42b8.jpeg"
-                                    class="css-1vpfo16 eell72m1">
+                                <img :src="thumbnail" class="css-1vpfo16 eell72m1">
                             </div>
                             <div class="css-1mysn55 eell72m0">
-                                <span>[에스티 로더] 갈색병 세럼 50ml 기획세트 (+15ml*3ea 추가 증정)</span>
+                                <span>{{title}}</span>
                             </div>
                         </div>
                         <div class="css-4qu8li e43j10r2">
@@ -90,6 +89,9 @@
 
 <script>
 import axios from 'axios';
+import { useQnaStore } from "@/stores/useQnaStore";
+import { mapStores } from "pinia";
+import { useUserStore } from "@/stores/useUserStore";  // 사용자 스토어 가져오기
 
 export default {
     name: "QnaRegisterModalComponent",
@@ -101,7 +103,19 @@ export default {
         initialContent: {
             type: String,
             default: ""
-        }
+        },
+        thumbnail: {
+            type: String,
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
+        },
+        productBoardIdx: {
+            type: Number,
+            required: true,  // 상품 ID가 필수 값
+        },
     },
     data() {
         return {
@@ -122,7 +136,11 @@ export default {
     computed: {
         isFormValid() {
             return this.subject.trim().length >= 2 && this.content.trim().length >= 5;
-        }
+        },
+        ...mapStores(useQnaStore, useUserStore),
+        localTableData() {
+            return this.qnaStore.inquiries;
+        },
     },
     methods: {
         closeModal() {
@@ -132,8 +150,8 @@ export default {
             const newInquiry = {
                 title: this.subject,
                 content: this.content,
-                userIdx: 1, // 추후 로그인된 사용자 IDX 사용
-                productBoardIdx: 1, // 추후 해당 게시글 IDX 사용
+                userIdx: this.userStore.userDetail.idx,  // Pinia에서 userStore로부터 userIdx 가져오기
+                productBoardIdx: this.productBoardIdx, // 추후 해당 게시글 IDX 사용
             };
 
             try {
@@ -141,7 +159,7 @@ export default {
 
                 if (response.data.isSuccess) {
                     const registeredInquiry = response.data.result; // 응답으로 받은 데이터를 registeredInquiry에 저장
-
+                    this.qnaStore.addInquiry(registeredInquiry); // 등록된 문의를 스토어에 추가
                     // 부모 컴포넌트에 데이터 전달
                     this.$emit("submit", registeredInquiry);
                     this.closeModal();

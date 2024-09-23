@@ -16,6 +16,16 @@ export const useBoardStore = defineStore("board", {
     totalPages: 0,
   }),
   actions: {
+    async getMainList(page, status) {
+      const response = await axios.get(backend + "/main/list", {
+        params: {
+          page: page,
+          status: status,
+        },
+      });
+      console.log(response);
+      return response.data.result;
+    },
     async getList(page, category, search) {
       const params = { page: page };
       if (category != "undefined" && category != null && category != "전체") {
@@ -27,6 +37,11 @@ export const useBoardStore = defineStore("board", {
         params: params,
       });
       return response.data.result;
+    },
+    async getDetail(idx) {
+      const data = await axios.get(backend + `/${idx}/detail`);
+      this.boardData = data.data.result;
+      return data.data.result;
     },
 
     // --------- 판매자 ---------
@@ -50,12 +65,6 @@ export const useBoardStore = defineStore("board", {
       });
       return response.data.result;
     },
-    async getProductBoardListByDateRange(option) {
-      console.log(option);
-      // 백엔드 개발 후 구현
-      const data = await axios.get(mockyListOptionURL);
-      return data.data;
-    },
     async getOrderListWithOption(page, status, month) {
       status = String(status);
       status = status.includes("전체") ? null : status;
@@ -75,16 +84,10 @@ export const useBoardStore = defineStore("board", {
       return response.data.result;
     },
 
-    async getProductBoardListByOrderStatus(option) {
-      console.log(option);
-      // 백엔드 개발 후 구현
-      const data = await axios.get(mockyListOptionURL);
-      return data.data;
-    },
-    async getProductBoardDetail() {
-      const data = await axios.get(mockyDetailURL);
-      this.boardData = data.data;
-      return data.data;
+    async getProductBoardDetail(idx) {
+      const data = await axios.get(backend + `/company/${idx}/detail`);
+      this.boardData = data.data.result;
+      return data.data.result;
     },
     async createProductBoard(req) {
       const formData = new FormData();
