@@ -73,11 +73,11 @@ public class ProductBoardService {
 	}
 
 	@Transactional
-	public void create(ProductBoardDto.BoardCreateRequest boardCreateRequest, MultipartFile[] productThumbnails, MultipartFile productDetail) {
+	public void create(Long companyIdx, ProductBoardDto.BoardCreateRequest boardCreateRequest, MultipartFile[] productThumbnails, MultipartFile productDetail) {
 		List<String> thumbnailUrls = uploadImage(productThumbnails);
 		String productDetailUrl = uploadImage(productDetail);
 
-		ProductBoard savedProductBoard = saveProductBoard(boardCreateRequest, thumbnailUrls.get(0), productDetailUrl);
+		ProductBoard savedProductBoard = saveProductBoard(companyIdx, boardCreateRequest, thumbnailUrls.get(0), productDetailUrl);
 		List<Product> savedProducts = saveProduct(boardCreateRequest, savedProductBoard);
 		List<ProductThumbnailImage> productThumbnailImages = saveProductThumbnailImage(boardCreateRequest, thumbnailUrls, savedProductBoard);
 	}
@@ -102,9 +102,9 @@ public class ProductBoardService {
 		return productBoard.toCompanyBoardDetailResponse(productThumbnailUrls, productCompanyResponse);
 	}
 
-	private ProductBoard saveProductBoard(ProductBoardDto.BoardCreateRequest boardCreateRequest, String productThumbnailUrl, String productDetailUrl) {
+	private ProductBoard saveProductBoard(Long companyIdx, ProductBoardDto.BoardCreateRequest boardCreateRequest, String productThumbnailUrl, String productDetailUrl) {
 		Category category = categoryRepository.findByName(boardCreateRequest.getCategory().getType());
-		ProductBoard productBoard = boardCreateRequest.toEntity(productThumbnailUrl, productDetailUrl, category);
+		ProductBoard productBoard = boardCreateRequest.toEntity(companyIdx, productThumbnailUrl, productDetailUrl, category);
 		return productBoardRepository.save(productBoard);
 	}
 

@@ -7,6 +7,7 @@ import org.example.backend.domain.board.category.model.entity.Category;
 import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.board.model.entity.ProductThumbnailImage;
 import org.example.backend.domain.board.product.model.dto.ProductDto;
+import org.example.backend.domain.company.model.entity.Company;
 import org.example.backend.global.common.constants.BoardStatus;
 import org.example.backend.global.common.constants.CategoryType;
 import org.example.backend.global.validator.annotation.MinuteCheck;
@@ -59,13 +60,14 @@ public class ProductBoardDto {
 		@NotEmpty(message = "카테고리를 설정해야 합니다.")
 		private CategoryType category;
 
-		public ProductBoard toEntity(String thumbnailUrl, String detailUrl, Category category) {
+		public ProductBoard toEntity(Long companyIdx, String thumbnailUrl, String detailUrl, Category category) {
 			Integer minimumPrice = this.products.stream()
 				.map(ProductDto.Request::getPrice)
 				.min(Integer::compareTo)
 				.orElse(Integer.MAX_VALUE);
 
 			return ProductBoard.builder()
+				.company(Company.builder().idx(companyIdx).build())
 				.title(this.title)
 				.discountRate(this.discountRate)
 				.startedAt(this.startedAt)

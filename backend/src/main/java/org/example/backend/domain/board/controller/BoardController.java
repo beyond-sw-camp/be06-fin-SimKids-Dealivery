@@ -5,12 +5,14 @@ import org.example.backend.domain.board.service.ProductBoardService;
 import org.example.backend.global.common.constants.BaseResponse;
 import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.common.constants.BoardStatus;
+import org.example.backend.global.security.custom.model.dto.CustomCompanyDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,10 +69,10 @@ public class BoardController {
 
 	@Operation(summary = "판매자 회원 상품 등록 API")
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
-	public BaseResponse create(@Valid @RequestPart("boardCreateRequest") ProductBoardDto.BoardCreateRequest boardCreateRequest,
+	public BaseResponse create(@AuthenticationPrincipal CustomCompanyDetails customCompanyDetails, @Valid @RequestPart("boardCreateRequest") ProductBoardDto.BoardCreateRequest boardCreateRequest,
 		@RequestPart(value = "productThumbnails") MultipartFile[] productThumbnails,
 		@RequestPart(value = "productDetail") MultipartFile productDetail) {
-		productBoardService.create(boardCreateRequest, productThumbnails, productDetail);
+		productBoardService.create(customCompanyDetails.getIdx(), boardCreateRequest, productThumbnails, productDetail);
 		return new BaseResponse();
 	}
 
