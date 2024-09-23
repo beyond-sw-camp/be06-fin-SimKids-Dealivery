@@ -284,6 +284,15 @@ export default {
     };
   },
   mounted() {
+    if(this.userStore.isLogined){
+        alert("잘못된 접근입니다.");
+        this.$router.push("/");
+    }
+    window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant'
+        });
     this.socialSignupRequest.email = this.userStore.socialLoginResponse.email;
     this.socialSignupRequest.name = this.userStore.socialLoginResponse.name;
     this.socialSignupRequest.type = this.userStore.socialLoginResponse.type;

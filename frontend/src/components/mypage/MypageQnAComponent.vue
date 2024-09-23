@@ -1,4 +1,5 @@
 <template>
+    
     <div class="css-heioij eug5r8l1">
         <div class="css-1xdhyk6 eug5r8l0">
             <ul>
@@ -81,7 +82,14 @@ export default {
             console.log("Leaving element", el);
             el.style.maxHeight = '0px';
         }
-    }
+    },
+    mounted(){
+    window.scrollTo({
+            top: 100,
+            left: 0,
+            behavior: 'smooth'
+        });
+  },
 }
 </script>
 

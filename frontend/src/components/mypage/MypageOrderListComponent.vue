@@ -206,6 +206,13 @@ export default {
             this.arrowRotated = !this.arrowRotated;
         },
     },
+    mounted(){
+    window.scrollTo({
+            top: 100,
+            left: 0,
+            behavior: 'smooth'
+        });
+  },
 };
 </script>
 

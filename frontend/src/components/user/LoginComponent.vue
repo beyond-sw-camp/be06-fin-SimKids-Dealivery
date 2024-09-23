@@ -77,6 +77,10 @@ export default {
         ...mapStores(useUserStore)
     },
   mounted() {
+    if(this.userStore.isLogined){
+        alert("잘못된 접근입니다.");
+        this.$router.push("/");
+    }
     window.scrollTo({
             top: 0,
             left: 0,

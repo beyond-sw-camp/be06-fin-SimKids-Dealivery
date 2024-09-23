@@ -337,6 +337,11 @@ export default {
     },
 
     emitSubmitOrder() {
+      if(!this.userStore.isLogined){
+        alert("로그인이 필요한 서비스입니다.");
+        this.$router.push({ path: '/auth/login', query: { redirect: this.$route.fullPath } });
+        return
+      }
       if (!this.isAnySelected) {
         alert("상품을 선택하세요.");
         return;

@@ -38,7 +38,7 @@
             @click="routeTo('/')"
           />
           <span class="separator">|</span>
-          <button class="css-mxd3pm ekdqe1a0">Company</button>
+          <button class="css-mxd3pm ekdqe1a0" @click="routeTo('/product-boards/company/list')">Company</button>
         </div>
         <div class="css-pqw0uk e1493ofl4">
           <div class="css-w444a2 e1493ofl1">
@@ -62,10 +62,10 @@
             <button
               class="css-231fw3 etxxzpc0"
               aria-label="찜하기"
-              type="button"
+              type="button" @click="routeTo('/mypage/likes')"
             ></button>
             <div class="css-ff2aah e14oy6dx2">
-              <button class="css-g25h97 e14oy6dx1"></button>
+              <button class="css-g25h97 e14oy6dx1" @click="routeTo('/mypage/address')"></button>
             </div>
           </div>
         </div>
@@ -427,7 +427,7 @@ textarea {
   display: block;
   width: 36px;
   height: 36px;
-  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIHZpZXdCb3g9IjAgMCAzNiAzNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+CiAgICAgICAgPHBhdGggZD0iTTM2IDM2SDBWMGgzNnoiLz4KICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1LjE2NCA2LjU0NykiIHN0cm9rZT0iIzMzMyIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIxLjciPgogICAgICAgICAgICA8cGF0aCBkPSJtMjUuNjggMy42Ni0yLjcyIDExLjU3SDcuMzdMNC42NiAzLjY2eiIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSIyMC41MiIgY3k9IjIwLjc4IiByPSIyLjE0Ii8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjkuODEiIGN5PSIyMC43OCIgcj0iMi4xNCIvPgogICAgICAgICAgICA8cGF0aCBkPSJNMCAwaDMuOGwxLjc2IDcuNSIvPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+Cg==);
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGlkPSJMYXllcl8xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA2NCA2NDsiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDY0IDY0IiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiMzMzM7fQo8L3N0eWxlPjxnPjxnIGlkPSJJY29uLUxvY2F0aW9uIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzIuMDAwMDAwLCAzNzYuMDAwMDAwKSI+PHBhdGggc3Ryb2tlLXdpZHRoPSIxLjciIGNsYXNzPSJzdDAiIGQ9Ik0tMjAwLTMyMC4zbC0wLjktMS4xYy0wLjYtMC44LTE1LjktMTguNy0xNS45LTI5LjRjMC05LjMsNy42LTE2LjgsMTYuOC0xNi44ICAgICBzMTYuOCw3LjYsMTYuOCwxNi44YzAsMTAuNy0xNS4zLDI4LjctMTUuOSwyOS40TC0yMDAtMzIwLjNMLTIwMC0zMjAuM3ogTS0yMDAtMzY1LjNjLTgsMC0xNC40LDYuNS0xNC40LDE0LjQgICAgIGMwLDguNCwxMS4xLDIyLjcsMTQuNCwyNi44YzMuMy00LjEsMTQuNC0xOC4zLDE0LjQtMjYuOEMtMTg1LjYtMzU4LjgtMTkyLTM2NS4zLTIwMC0zNjUuM0wtMjAwLTM2NS4zeiIgaWQ9IkZpbGwtNTUiLz48cGF0aCBjbGFzcz0ic3QwIiBkPSJNLTIwMC0zNDQuNGMtMy41LDAtNi40LTIuOS02LjQtNi40czIuOS02LjQsNi40LTYuNHM2LjQsMi45LDYuNCw2LjRTLTE5Ni41LTM0NC40LTIwMC0zNDQuNCAgICAgTC0yMDAtMzQ0LjR6IE0tMjAwLTM1NC44Yy0yLjIsMC00LDEuOC00LDRzMS44LDQsNCw0YzIuMiwwLDQtMS44LDQtNFMtMTk3LjgtMzU0LjgtMjAwLTM1NC44TC0yMDAtMzU0Ljh6IiBpZD0iRmlsbC01NiIvPjwvZz48L2c+PC9zdmc+);
   cursor: pointer;
 }
 

@@ -125,7 +125,7 @@ export default {
         this.editedUserDetail.addressDetail = this.userStore.userDetail.addressDetail;
         this.editedUserDetail.postNumber = this.userStore.userDetail.postNumber;
         window.scrollTo({
-            top: 200,
+            top: 100,
             left: 0,
             behavior: 'smooth'
         });
