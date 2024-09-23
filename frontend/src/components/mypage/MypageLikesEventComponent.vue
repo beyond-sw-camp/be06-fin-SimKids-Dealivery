@@ -56,6 +56,7 @@
 </template>
 
 <script>
+
 export default {
     data() {
         return {
@@ -92,6 +93,14 @@ export default {
             return value.toLocaleString();
         }
     },
+    mounted(){
+        window.scrollTo({
+            top: 200,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+
 };
 </script>
 

@@ -4,47 +4,66 @@
       <span class="close" @click="closeModal">&times;</span>
       <h2>상품 주문서</h2>
       <hr class="thick-line" />
-      <div class="product-item">
-        <div class="title"><strong>상품명: </strong> 망고</div>
-        <div class="contents">
-          <p><strong>수량:</strong> 2</p>
-        </div>
-        <div class="contents">
-          <p><strong>가격:</strong> 4,000 원</p>
-        </div>
-      </div>
-      <hr class="thin-line" />
-      <div class="product-item">
-        <div class="title"><strong>상품명: </strong> 딸기</div>
-        <div class="contents">
-          <p><strong>수량:</strong> 3</p>
-        </div>
-        <div class="contents">
-          <p><strong>가격:</strong> 6,000 원</p>
+      <div v-for="(data, index) in orderedProducts" :key="data.id">
+        <hr v-if="index !== 0" class="thin-line" />
+        <div class="product-item">
+          <div class="title"><strong>상품명: </strong> {{ data.name }}</div>
+          <div class="contents">
+            <p><strong>가격:</strong> {{ data.price.toLocaleString() }} 원</p>
+          </div>
+          <div class="contents">
+            <p><strong>수량:</strong> {{ data.amount }}</p>
+          </div>
         </div>
       </div>
 
       <hr class="thin-line" />
       <div class="total-price">
-        <p><strong>총 결제 금액: 13,560원</strong></p>
+        <p>
+          <strong>총 결제 금액: {{ totalPaidPrice.toLocaleString() }}</strong>
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapStores } from "pinia";
+import { useBoardStore } from "@/stores/useBoardStore.js";
+
 export default {
   name: "CompanyBoardModalComponent",
   data() {
     return {
-      // productName: "",
-      // productPrice: "",
-      // productQuantity: "",
+      orderedProducts: [],
     };
+  },
+  props: {
+    orderIdx: {
+      type: Number,
+      required: true, // 필수 prop으로 설정
+    },
+  },
+  mounted() {
+    this.fetchOrderData();
+  },
+  computed: {
+    ...mapStores(useBoardStore),
+    totalPaidPrice() {
+      return this.orderedProducts.reduce((total, product) => {
+        return total + product.price * product.amount;
+      }, 0);
+    },
   },
   methods: {
     closeModal() {
       this.$emit("closeModal");
+    },
+    async fetchOrderData() {
+      // store에서 주문 데이터를 가져오는 로직 구현
+      console.log("Fetching order data for idx:", this.orderIdx);
+      const response = await this.boardStore.getOrderDetail(this.orderIdx);
+      this.orderedProducts = response.products;
     },
   },
 };

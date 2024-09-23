@@ -22,15 +22,18 @@
     </nav>
     <!-- 상품 상세 설명 section -->
     <div class="css-0 el27cq1">
-      <div id="description" class="css-18eozqj el27cq0" v-show="activeTab === 'description'">
+      <div
+        id="description"
+        class="css-18eozqj el27cq0"
+        v-show="activeTab === 'description'"
+      >
         <div class="css-1d3w5wq e1d86arr0">
           <div class="css-1lyi66c">
             <div class="goods_wrap">
               <div class="goods_note">
                 <div class="context">
                   <div class="pic">
-                    <img
-                      src="https://img-cf.kurly.com/hdims/resize/%3E1010x/quality/90/src/shop/data/goodsview/20240829/gv10001551896_1.jpg" />
+                    <img :src="detail" class="responsive-image" />
                   </div>
                   <p class="words"></p>
                 </div>
@@ -45,7 +48,13 @@
     <!-- 문의 하기 리스트 section -->
     <div class="css-30tvht eewa3w91" v-show="activeTab === 'inquiries'">
       <div class="css-17juoyc eewa3w90">
-        <button class="css-mhrz8m e4nu7ef3" type="button" width="120" height="40" @click="openNewInquiryModal">
+        <button
+          class="css-mhrz8m e4nu7ef3"
+          type="button"
+          width="120"
+          height="40"
+          @click="openNewInquiryModal"
+        >
           <span class="css-nytqmg e4nu7ef1">문의하기</span>
         </button>
       </div>
@@ -71,12 +80,22 @@
         <tbody v-for="(row, index) in localTableData" :key="index">
           <tr @click="toggleInquiry(index)" class="css-atz965 e1l5ky7y9">
             <td class="css-1brd6ns e1l5ky7y8">{{ row.title }}</td>
-            <td class="css-1pkqelu e1l5ky7y7">{{ maskAuthorName(row.userName) }}</td>
-            <td class="css-1pkqelu e1l5ky7y6">{{ row.modifiedAt ? formatDate(row.modifiedAt) : formatDate(row.createdAt)
-              }}</td>
+            <td class="css-1pkqelu e1l5ky7y7">
+              {{ maskAuthorName(row.userName) }}
+            </td>
+            <td class="css-1pkqelu e1l5ky7y6">
+              {{
+                row.modifiedAt
+                  ? formatDate(row.modifiedAt)
+                  : formatDate(row.createdAt)
+              }}
+            </td>
             <td class="css-bhr3cq e1l5ky7y5">{{ row.answerStatus }}</td>
           </tr>
-          <tr v-show="expandedInquiryIndex === index" class="css-1mvq381 e61d7mt0">
+          <tr
+            v-show="expandedInquiryIndex === index"
+            class="css-1mvq381 e61d7mt0"
+          >
             <td colspan="4">
               <div class="css-tnubsz e1ptpt003">
                 <div class="css-1n83etr e1ptpt002">
@@ -112,12 +131,23 @@
     </div>
 
     <!-- 새 문의 작성 모달 -->
-    <QnaRegisterModalComponent v-if="showNewInquiryModal" @close="closeModal" @submit="addNewInquiry"
-      :productBoardIdx="productBoardIdx" :thumbnail="thumbnails[0].src" :title="productTitle" />
+    <QnaRegisterModalComponent
+      v-if="showNewInquiryModal"
+      @close="closeModal"
+      @submit="addNewInquiry"
+      :productBoardIdx="productBoardIdx"
+      :thumbnail="thumbnails[0]"
+      :title="productTitle"
+    />
 
     <!-- 수정 모달 -->
-    <QnaRegisterModalComponent v-if="showEditInquiryModal" :initialSubject="selectedInquiry.title"
-      :initialContent="selectedInquiry.content" @close="closeModal" @submit="updateInquiry" />
+    <QnaRegisterModalComponent
+      v-if="showEditInquiryModal"
+      :initialSubject="selectedInquiry.title"
+      :initialContent="selectedInquiry.content"
+      @close="closeModal"
+      @submit="updateInquiry"
+    />
   </div>
 </template>
 
@@ -139,6 +169,10 @@ export default {
   props: {
     thumbnails: {
       type: Array,
+      required: true,
+    },
+    detail: {
+      type: String,
       required: true,
     },
     productBoardIdx: {
@@ -169,7 +203,7 @@ export default {
   methods: {
     loadInquiries() {
       this.activeTab = "inquiries"; // 문의 탭 활성화
-
+      
       axios.get('/api/user/detail', { withCredentials: true })
         .then((response) => {
           if (response.data.code === 1000) {
@@ -194,9 +228,9 @@ export default {
     formatDate(dateString) {
       const date = new Date(dateString);
       return date.toLocaleDateString("ko-KR", {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
       });
     },
     openNewInquiryModal() {
@@ -217,7 +251,7 @@ export default {
     },
     maskAuthorName(name) {
       if (!name) {
-        return "익명";  // name이 undefined나 null일 경우 기본값을 반환
+        return "익명"; // name이 undefined나 null일 경우 기본값을 반환
       }
       if (name.length <= 2) {
         return name[0] + "*";
@@ -683,5 +717,11 @@ div {
   background: rgb(238, 238, 238);
   vertical-align: top;
   content: "";
+}
+
+.responsive-image {
+  width: 1050px;
+  height: auto; /* 이미지 비율에 맞게 자동으로 높이 설정 */
+  object-fit: contain; /* 비율을 유지하면서 영역에 맞게 이미지 표시 */
 }
 </style>
