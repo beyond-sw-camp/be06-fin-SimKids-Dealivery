@@ -1,10 +1,7 @@
 package org.example.backend.domain.user.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.backend.domain.delivery.model.entity.Delivery;
 import org.example.backend.domain.user.model.dto.UserDto;
 import org.example.backend.domain.qna.model.entity.Question;
@@ -70,6 +67,14 @@ public class User {
                 .postNumber(this.postNumber)
                 .phoneNumber(this.phoneNumber)
                 .deliveries(this.deliveries.stream().map(Delivery::toDeliveryResponse).collect(Collectors.toList()))
+                .point(this.point)
                 .build();
+    }
+
+    public void editDetail(UserDto.UserDetailEditRequest request){
+        this.address = request.getAddress();
+        this.addressDetail = request.getAddressDetail();
+        this.phoneNumber = request.getPhoneNumber();
+        this.postNumber = request.getPostNumber();
     }
 }

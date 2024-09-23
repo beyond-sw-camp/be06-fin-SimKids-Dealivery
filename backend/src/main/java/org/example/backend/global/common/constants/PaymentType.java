@@ -11,6 +11,10 @@ public enum PaymentType {
         this.type = type;
     }
 
+    public String getType(){
+        return type;
+    }
+
     @JsonCreator
     public static PaymentType of(final String parameter) {
         return Arrays.stream(values())

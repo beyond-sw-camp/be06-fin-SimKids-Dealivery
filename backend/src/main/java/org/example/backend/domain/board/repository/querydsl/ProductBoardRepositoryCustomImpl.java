@@ -51,8 +51,8 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 	}
 
 	@Override
-	public Page<ProductBoard> companySearch(String status, Integer month, Pageable pageable) {
-		BooleanExpression condition = getCondition(status, month);
+	public Page<ProductBoard> companySearch(Long companyIdx, String status, Integer month, Pageable pageable) {
+		BooleanExpression condition = qProductBoard.company.idx.eq(companyIdx).and(getCondition(status, month));
 		List<ProductBoard> result = queryFactory
 			.selectFrom(qProductBoard)
 			.leftJoin(qProductBoard.category, qCategory).fetchJoin()

@@ -10,7 +10,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.board.product.model.entity.Product;
+import org.example.backend.domain.orders.model.dto.OrderDto.CompanyOrderDetailResponse;
+import org.example.backend.domain.orders.model.dto.OrderDto.UserOrderListResponse;
+import org.example.backend.domain.orders.model.dto.OrderedProductDto.OrderedProductResponse;
 
 @Entity
 @Builder
@@ -31,4 +35,12 @@ public class OrderedProduct {
     @ManyToOne
     @JoinColumn(name="product_idx")
     private Product product;
+
+    public OrderedProductResponse toOrderedProductResponse(Integer discountRate) {
+        return OrderedProductResponse.builder()
+                .name(product.getName())
+                .amount(quantity)
+                .price(Math.round(product.getPrice() * quantity * (1 - discountRate / 100.0)))
+                .build();
+    }
 }

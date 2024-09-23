@@ -21,6 +21,7 @@ import org.example.backend.domain.board.product.model.entity.Product;
 import org.example.backend.domain.board.product.repository.ProductRepository;
 import org.example.backend.domain.orders.model.entity.OrderedProduct;
 import org.example.backend.domain.orders.model.entity.Orders;
+import org.example.backend.domain.user.model.entity.User;
 import org.example.backend.global.exception.InvalidCustomException;
 import org.springframework.stereotype.Service;
 
@@ -45,16 +46,30 @@ public class PaymentService {
         Integer discountRate = Integer.parseInt(String.valueOf(data.get("discountRate")));
         Integer amount = payment.getAmount().intValue(); // 결제된 금액
 
+        AtomicLong totalPrice = validateAndDecreaseStock(payment, usedPoint, order, discountRate);
+
+        if (usedPoint > order.getUser().getPoint()) {
+            refund(payment.getImpUid(), payment);
+            throw new InvalidCustomException(ORDER_VALIDATION_FAIL_PRICE_MISMATCH);
+        }
+
+       if (amount != totalPrice.intValue()) {
+           refund(payment.getImpUid(), payment);
+           throw new InvalidCustomException(ORDER_VALIDATION_FAIL_PRICE_MISMATCH);
+       }
+
+    }
+
+    public AtomicLong validateAndDecreaseStock(Payment payment, Integer usedPoint, Orders order, Integer discountRate) {
 
         AtomicLong totalPrice = new AtomicLong(-usedPoint.longValue()); // 결제해야할 총 금액
+
         List<OrderedProduct> orderedProducts = order.getOrderedProducts();
         orderedProducts.forEach((orderdProduct) -> {
             Product product = productRepository.findByIdWithLock(orderdProduct.getProduct().getIdx())
                     .orElseThrow(() -> new InvalidCustomException(ORDER_FAIL_PRODUCT_NOT_FOUND)); // 해당하는 상품을 찾을 수가 없을 때
 
-            System.out.println("product idx ====> " + product.getIdx());
             if (orderdProduct.getQuantity() > product.getStock()) {
-                System.out.println("왜 안돼지");
                 refund(payment.getImpUid(), payment);
                 throw new InvalidCustomException(ORDER_CREATE_FAIL_LACK_STOCK); // 재고 수량 없을 때
             }
@@ -66,18 +81,10 @@ public class PaymentService {
             totalPrice.updateAndGet(v -> v + Math.round(originalPrice * quantity * (1 - discountRate / 100.0)));
         });
 
-
-//        TODO: 사용자 보유 포인트보다 많은 포인트 결제했을 때 (포인트 조작 확인)
-//        if (usedPoint > 사용자 보유 포인트) {
-//            refund(payment.getImpUid(), payment);
-//        }
-
-       if (amount != totalPrice.intValue()) {
-           refund(payment.getImpUid(), payment);
-           throw new InvalidCustomException(ORDER_VALIDATION_FAIL_PRICE_MISMATCH);
-       }
-
+        return totalPrice;
     }
+
+
 
     public IamportResponse refund(String impUid, Payment info)  {
         CancelData cancelData = new CancelData(impUid, true, info.getAmount());

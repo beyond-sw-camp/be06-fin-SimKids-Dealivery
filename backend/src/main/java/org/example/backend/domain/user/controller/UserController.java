@@ -90,4 +90,13 @@ public class UserController {
                 userService.getDetail(userDetails.getUsername(),userDetails.getIdx());
         return new BaseResponse<>(userDetailResponse);
     }
+
+    @PutMapping("/edit")
+    public BaseResponse editDetail(
+            @Valid @RequestBody UserDto.UserDetailEditRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ){
+        userService.editDetail(userDetails.getIdx(),request);
+        return new BaseResponse();
+    }
 }

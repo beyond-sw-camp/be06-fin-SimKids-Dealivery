@@ -1,5 +1,8 @@
 package org.example.backend.domain.delivery.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,15 +35,19 @@ public class DeliveryDto {
     @AllArgsConstructor
     @Builder
     public static class CreateDeliveryRequest{
-
+        @NotBlank
+        @Pattern(regexp = "^(?!.*[!@#$%^&*()_+={}:;\"'<>,.?/~`|\\\\-])(?=.*[^\\n])[^\\nㄱ-ㅎ]*$")
         private String name;
-
+        @NotNull
         private Boolean isDefault;
-
+        @NotBlank
+        @Pattern(regexp = "^(?!.*[!@#$%^&*()_+={}:;\"'<>,.?/~`|\\\\-])(?=.*[^\\n])[^\\nㄱ-ㅎ]*$")
         private String address;
-
+        @NotBlank
+        @Pattern(regexp = "^(?!.*[!@#$%^&*()_+={}:;\"'<>,.?/~`|\\\\-])(?=.*[^\\n])[^\\nㄱ-ㅎ]*$")
         private String addressDetail;
-
+        @NotBlank
+        @Pattern(regexp = "^(?!.*[!@#$%^&*()_+={}:;\"'<>,.?/~`|\\\\-])(?=.*[^\\n])[^\\nㄱ-ㅎ]*$")
         private String postNumber;
 
         public Delivery toEntity(User user){
@@ -60,6 +67,33 @@ public class DeliveryDto {
     @AllArgsConstructor
     @Builder
     public static class SetDefaultRequest{
+        @NotNull
         private Long idx;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class EditDeliveryRequest{
+        @NotNull
+        private Long idx;
+        @NotBlank
+        @Pattern(regexp = "^(?!.*[!@#$%^&*()_+={}:;\"'<>,.?/~`|\\\\-])(?=.*[^\\n])[^\\nㄱ-ㅎ]*$")
+        private String name;
+        @NotNull
+        private Boolean isDefault;
+        @NotBlank
+        @Pattern(regexp = "^(?!.*[!@#$%^&*()_+={}:;\"'<>,.?/~`|\\\\-])(?=.*[^\\n])[^\\nㄱ-ㅎ]*$")
+        private String address;
+        @NotBlank
+        @Pattern(regexp = "^(?!.*[!@#$%^&*()_+={}:;\"'<>,.?/~`|\\\\-])(?=.*[^\\n])[^\\nㄱ-ㅎ]*$")
+        private String addressDetail;
+        @NotBlank
+        @Pattern(regexp = "^(?!.*[!@#$%^&*()_+={}:;\"'<>,.?/~`|\\\\-])(?=.*[^\\n])[^\\nㄱ-ㅎ]*$")
+        private String postNumber;
+
+    }
+
+
 }

@@ -45,6 +45,15 @@ public class Delivery {
                 .build();
     }
 
+    public void updateEntity(DeliveryDto.EditDeliveryRequest request){
+        this.idx = request.getIdx();
+        this.name = request.getName();
+        this.address = request.getAddress();
+        this.addressDetail = request.getAddressDetail();
+        this.isDefault = request.getIsDefault();
+        this.postNumber = request.getPostNumber();
+    }
+
     public void setIsDefault(Boolean asDefault) {
         isDefault = asDefault;
     }

@@ -43,6 +43,7 @@ public class QuestionService {
 
         return question.toCreateResponse();  // 엔티티의 변환 메서드 사용
     }
+
     public List<QuestionDto.QuestionListResponse> getQuestions() {
         return questionRepository.findAll().stream()
                 .map(Question::toListResponse)  // 엔티티의 변환 메서드 사용

@@ -173,6 +173,30 @@ public class UserDto {
         private String postNumber;
         private String phoneNumber;
         private List<DeliveryDto.DeliveryResponse> deliveries;
+        private Long point;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserDetailEditRequest{
+        @NotBlank
+        @Pattern(regexp = "^(010)-\\d{4}-\\d{4}$")
+        private String phoneNumber;
+
+        @NotBlank
+        @Size(max = 30)
+        private String address;
+
+        @NotBlank
+        @Size(max = 30)
+        private String addressDetail;
+
+        @NotBlank
+        @Size(max = 6)
+        @Pattern(regexp = "^\\d{5,}$")
+        private String postNumber;
     }
 
 }
