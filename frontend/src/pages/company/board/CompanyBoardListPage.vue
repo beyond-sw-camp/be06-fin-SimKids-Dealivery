@@ -219,6 +219,16 @@ export default {
       return number ? parseInt(number[0], 10) : null;
     },
   },
+  beforeRouteUpdate(to, from, next) {
+    if (
+      to.query.page !== from.query.page ||
+      to.query.dateRange !== from.query.dateRange ||
+      to.query.orderStatus !== from.query.orderStatus
+    ) {
+      this.setBoards();
+    }
+    next();
+  },
 };
 </script>
 

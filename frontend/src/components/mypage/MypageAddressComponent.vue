@@ -19,14 +19,18 @@
         </button>
       </div>
     </div>
-    <div v-if="userStore.userDetail.deliveries.length === 0" class="empty-notice">
+    <div
+      v-if="userStore.userDetail.deliveries.length === 0"
+      class="empty-notice"
+    >
       배송지가 없습니다. 배송지를 추가해주세요.
     </div>
     <div class="css-ehagcz eug5r8l0">
       <ul>
         <div
           class="css-jxzkyr enjmmt32"
-          v-for="(delivery, index) in userStore.userDetail.deliveries" :key="index"
+          v-for="(delivery, index) in userStore.userDetail.deliveries"
+          :key="index"
         >
           <div class="css-1nt6ns3 enjmmt31">
             <label class="css-1xdhyk6 e1dcessg3">
@@ -47,7 +51,9 @@
             </label>
           </div>
           <div data-testid="address-area" class="css-upe1zs e77s2kj4">
-            <div v-if="delivery.isDefault" class="css-2n86z e77s2kj1">기본 배송지</div>
+            <div v-if="delivery.isDefault" class="css-2n86z e77s2kj1">
+              기본 배송지
+            </div>
             <p class="css-zone-name e77s2kj2">
               {{ delivery.name }}
             </p>
@@ -72,7 +78,10 @@
       </ul>
     </div>
   </div>
-  <div v-if="userStore.userDetail.deliveries.length !== 0" class="save-address-container">
+  <div
+    v-if="userStore.userDetail.deliveries.length !== 0"
+    class="save-address-container"
+  >
     <button class="save-address" @click="setDefault">기본 배송지로 설정</button>
   </div>
 </template>
@@ -80,8 +89,8 @@
 <script>
 import AddressModalComponent from "./AddressModalComponent.vue";
 import AddressEditModalComponent from "./AddressEditModalComponent.vue";
-import { useUserStore } from '@/stores/useUserStore';
-import { mapStores } from 'pinia';
+import { useUserStore } from "@/stores/useUserStore";
+import { mapStores } from "pinia";
 
 export default {
   name: "MypageAddressComponent",
@@ -90,9 +99,9 @@ export default {
     AddressEditModalComponent,
   },
   computed: {
-    ...mapStores(useUserStore)
+    ...mapStores(useUserStore),
   },
-  mounted(){
+  mounted() {
     this.setInitialSelectedAddress();
     window.scrollTo({
             top: 100,
@@ -111,8 +120,8 @@ export default {
         postNumber: "",
         address: "",
         addressDetail: "",
-        isDefault: false
-      }
+        isDefault: false,
+      },
     };
   },
   methods: {
@@ -121,49 +130,48 @@ export default {
     },
     displayEditModal(data) {
       this.isDisplayEditModal = !this.isDisplayEditModal;
-      if(data != null){
-        this.selectedDelivery = data;  
+      if (data != null) {
+        this.selectedDelivery = data;
       }
-      
     },
-    checkRadio(delivery,index) {
+    checkRadio(delivery, index) {
       this.selectedAddress = index;
       this.selectedDelivery = delivery;
     },
     async saveDelivery(data) {
-      if(await this.userStore.createDelivery(data)){
+      if (await this.userStore.createDelivery(data)) {
         await this.userStore.getDeliveryList();
         this.setInitialSelectedAddress();
       }
-      
     },
     async saveEditedAddress(data) {
-      if(await this.userStore.editDelivery(data)){
+      if (await this.userStore.editDelivery(data)) {
         await this.userStore.getDeliveryList();
-      }else{
+      } else {
         alert("회원정보 수정에 실패했습니다.");
       }
-      
     },
     setInitialSelectedAddress() {
-      const defaultDeliveryIndex = this.userStore.userDetail.deliveries.findIndex(
-        (delivery) => delivery.isDefault === true
-      );
-      
+      const defaultDeliveryIndex =
+        this.userStore.userDetail.deliveries.findIndex(
+          (delivery) => delivery.isDefault === true
+        );
+
       if (defaultDeliveryIndex !== -1) {
         this.selectedAddress = defaultDeliveryIndex;
-        this.selectedDelivery = this.userStore.userDetail.deliveries[defaultDeliveryIndex];
+        this.selectedDelivery =
+          this.userStore.userDetail.deliveries[defaultDeliveryIndex];
       }
     },
-    async setDefault(){
-      if(!this.selectedDelivery.isDefault){
-        if(await this.userStore.setIsDefault(this.selectedDelivery.idx)){
+    async setDefault() {
+      if (!this.selectedDelivery.isDefault) {
+        if (await this.userStore.setIsDefault(this.selectedDelivery.idx)) {
           await this.userStore.getDeliveryList();
-        }else{
+        } else {
           alert("기본배송지 설정에 실패했습니다.");
         }
       }
-    }
+    },
   },
 };
 </script>
@@ -334,15 +342,15 @@ ul {
 }
 
 .css-2n86z {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 11px;
-    background-color: rgb(247, 247, 247);
-    color: rgb(95, 0, 128);
-    font-weight: 600;
-    font-size: 12px;
-    text-align: center;
-    margin-top:5px;
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 11px;
+  background-color: rgb(247, 247, 247);
+  color: rgb(95, 0, 128);
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .empty-notice {

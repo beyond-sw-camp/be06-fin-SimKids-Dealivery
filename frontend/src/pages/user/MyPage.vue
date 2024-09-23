@@ -20,8 +20,8 @@ import HeaderComponent from "@/components/common/HeaderComponent.vue";
 import MypageAsideComponent from "@/components/mypage/MypageAsideComponent.vue";
 import FooterComponent from "@/components/common/FooterComponent.vue";
 import TitleComponent from "@/components/mypage/TitleComponent.vue";
-import { useUserStore } from '@/stores/useUserStore';
-import { mapStores } from 'pinia';
+import { useUserStore } from "@/stores/useUserStore";
+import { mapStores } from "pinia";
 
 export default {
   name: "MyPage",
@@ -51,30 +51,33 @@ export default {
         this.currentTitle = "배송지 관리";
         await this.getDeliveryList();
         this.$router.push("/mypage/address");
-      }else if (menu === "info"){
+      } else if (menu === "info") {
         this.currentTitle = "내 정보";
+
         await this.getUserInfo();
-        this.$router.push("/mypage/detail")
-      }else if (menu === "update-info"){
+        this.$router.push("/mypage/detail");
+      } else if (menu === "update-info") {
         await this.getUserInfo();
         this.currentTitle = "개인정보 수정";
         this.$router.push("/mypage/detail/edit");
       }
-      
     },
-    async getUserInfo(){
-      if(!await this.userStore.getDetail()){
+
+    async getUserInfo() {
+      if (!(await this.userStore.getDetail())) {
         alert("회원정보를 가져오는데 실패했습니다.");
       }
     },
-    async getDeliveryList(){
-      if(!await this.userStore.getDeliveryList()){
+    async getDeliveryList() {
+      if (!(await this.userStore.getDeliveryList())) {
         alert("회원정보를 가져오는데 실패했습니다.");
       }
     },
     updateTitleBasedOnRoute() {
       const currentRoute = this.$route.path;
-      if (currentRoute.includes("order")) {
+      if (currentRoute.includes("order/")) {
+        this.currentTitle = "주문 상세";
+      } else if (currentRoute.includes("order")) {
         this.currentTitle = "주문 내역";
       } else if (currentRoute.includes("qna")) {
         this.currentTitle = "My 문의";
@@ -82,15 +85,15 @@ export default {
         this.currentTitle = "찜한 게시글";
       } else if (currentRoute.includes("address")) {
         this.currentTitle = "배송지 관리";
-      } else if (currentRoute.includes("detail/edit")){
+      } else if (currentRoute.includes("detail/edit")) {
         this.currentTitle = "개인정보 수정";
-      } else if (currentRoute.includes("detail")){
+      } else if (currentRoute.includes("detail")) {
         this.currentTitle = "내 정보";
       }
     },
   },
   computed: {
-    ...mapStores(useUserStore)
+    ...mapStores(useUserStore),
   },
   mounted() {
     this.updateTitleBasedOnRoute(); // 페이지 로드 시 현재 경로에 따라 타이틀 설정

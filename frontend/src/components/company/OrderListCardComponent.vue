@@ -21,19 +21,21 @@
 
               <dl>
                 <dt>결제금액</dt>
-                <dd>13,560원</dd>
+                <dd>{{ data.totalPaidAmount }}원</dd>
               </dl>
             </div>
 
             <div class="desc" style="margin-left: 50px">
               <dl>
                 <dt>주문자명</dt>
-                <dd>심키즈</dd>
+                <dd>{{ data.ordererName }}</dd>
               </dl>
 
               <dl>
                 <dt>주문방법</dt>
-                <dd>{{ data.payMethod }}</dd>
+                <dd>
+                  {{ data.payMethod == "kakaopay" ? "카카오페이" : "토스페이" }}
+                </dd>
               </dl>
             </div>
           </div>

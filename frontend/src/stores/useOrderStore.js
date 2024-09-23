@@ -14,6 +14,12 @@ export const useOrderStore = defineStore('order', {
         customData: { products: [], discountRate: null, usedPoint: null }
     }),
     actions: {
+        initData() {
+            this.boardInfo = null;
+            this.orderInfo = { orderIdx: null, orderedProducts: [] }
+            this.paymentInfo = { impUid: null, paymentMethod: null, addredss: null, usedPoint: null, totalAmount: null, receiverName: null, receiverPhoneNumber: null }
+            this.customData = { products: [], discountRate: null, usedPoint: null }
+        },
         async submitOrder(orderRequest) {
             this.boardInfo = orderRequest.boardInfo;
             this.orderInfo.orderedProducts = orderRequest.cartItems;
@@ -33,6 +39,7 @@ export const useOrderStore = defineStore('order', {
 
                 if (response.data.code !== 1000) {
                     alert(`${response.data.message}`);
+                    this.initData();
                     return false;
                 }
 
@@ -44,6 +51,7 @@ export const useOrderStore = defineStore('order', {
 
             } catch (error) {
                 alert("주문에 실패했습니다\n\n반복적인 문제 발생시 고객센터로 문의바랍니다.");
+                this.initData();
                 return false;
             }
         },
@@ -66,11 +74,12 @@ export const useOrderStore = defineStore('order', {
 
                 if (paymentRequest.paymentMethod === 'kakaopay' && !rsp.success) {
                     this.cancelOrder(this.orderInfo.orderIdx, '/', '결제가 취소되었습니다. 주문이 취소됩니다.')
-
+                    this.initData()
                 }
 
                 else if (paymentRequest.paymentMethod === 'tosspay' && rsp.error_msg != null) {
                     this.cancelOrder(this.orderInfo.orderIdx, '/', '결제가 취소되었습니다. 주문이 취소됩니다.')
+                    this.initData()
                 }
 
                 else {
@@ -85,10 +94,10 @@ export const useOrderStore = defineStore('order', {
 
             let request = {
                 orderIdx: this.orderInfo.orderIdx,
-                address: this.paymentInfo.address,
-                adderessDetail: "4층 강의실",
-                postNumber: "01677",
+                deliveryIdx: this.paymentInfo.deliveryIdx,
                 paymentId: this.paymentInfo.impUid,
+                originalPaidAmount: this.paymentInfo.originalPaidAmount,
+                totalPaidAmount: this.paymentInfo.totalAmount,
                 payMethod: this.paymentInfo.paymentMethod,
                 usedPoint: this.paymentInfo.usedPoint,
                 receiverName: this.paymentInfo.receiverName,
@@ -101,23 +110,43 @@ export const useOrderStore = defineStore('order', {
 
                 if (response.data.code !== 1000) {
                     alert(`결제에 실패했습니다\n\n반복적인 문제 발생시 고객센터로 문의바랍니다.\n\n${response.data.message}`);
+                    this.initData()
                     return router.push('/');
                 }
 
                 alert("결제가 성공적으로 완료되었습니다.");
+                this.initData()
                 router.push('/');
 
             } catch (error) {
                 alert("결제에 실패했습니다\n\n반복적인 문제 발생시 고객센터로 문의바랍니다.");
+                this.initData()
                 router.push('/');
             }
         },
 
-        async cancelOrder(orderIdx, root, errMsg) {
+        async cancelOrder(orderIdx, root, msg) {
             await axios.patch(backend + `/${orderIdx}/cancel`, { withCredentials: true });
 
-            alert(errMsg);
+            alert(msg);
             router.push(root);
-        }
+        },
+
+        async getUserOrderListWithOption(page) {
+            const response = await axios.get("/api/orders/user/history", {
+                params: {
+                    page: page
+                },
+
+            }, { withCredentials: true });
+            return response.data.result;
+        },
+
+        async getUserOrderDetail(orderIdx) {
+
+            const response = await axios.get(`/api/orders/user/${orderIdx}/detail`, { withCredentials: true });
+            return response.data.result;
+        },
+
     }
 });

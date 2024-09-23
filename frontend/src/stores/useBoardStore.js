@@ -38,6 +38,11 @@ export const useBoardStore = defineStore("board", {
       });
       return response.data.result;
     },
+    async getDetail(idx) {
+      const data = await axios.get(backend + `/${idx}/detail`);
+      this.boardData = data.data.result;
+      return data.data.result;
+    },
 
     // --------- 판매자 ---------
     async getProductBoardList(page) {
@@ -60,7 +65,6 @@ export const useBoardStore = defineStore("board", {
       });
       return response.data.result;
     },
-
     async getOrderListWithOption(page, status, month) {
       status = String(status);
       status = status.includes("전체") ? null : status;
@@ -74,8 +78,9 @@ export const useBoardStore = defineStore("board", {
       return response.data.result;
     },
     async getOrderDetail(orderIdx) {
-
-      const response = await axios.get(`/api/orders/company/${orderIdx}/detail`);
+      const response = await axios.get(
+        `/api/orders/company/${orderIdx}/detail`
+      );
       return response.data.result;
     },
 
@@ -83,7 +88,6 @@ export const useBoardStore = defineStore("board", {
       const data = await axios.get(backend + `/company/${idx}/detail`);
       this.boardData = data.data.result;
       return data.data.result;
-
     },
     async createProductBoard(req) {
       const formData = new FormData();
@@ -119,12 +123,19 @@ export const useBoardStore = defineStore("board", {
           },
         })
         .then((response) => {
-          console.log("Success:", response.data);
-          alert("상품이 성공적으로 등록되었습니다!");
+          if (response.data.code != 1000) {
+            alert(response.data.message);
+            return false;
+          } else {
+            console.log("Success:", response.data);
+            alert("상품이 성공적으로 등록되었습니다!");
+            return true;
+          }
         })
         .catch((error) => {
           console.error("There was an error!", error);
           alert("상품 등록 중 오류가 발생했습니다.");
+          return false;
         });
     },
     getThumbnailUrls() {
