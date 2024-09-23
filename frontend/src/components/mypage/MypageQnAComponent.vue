@@ -20,7 +20,7 @@
                             <img :src="getProductImage(inquiry)" :alt="inquiry.title">
                         </a>
                     </button>
-                    <transition name="fade" @after-enter="afterEnter" @after-leave="afterLeave">
+                    <div name="fade" @after-enter="afterEnter" @after-leave="afterLeave">
                         <div v-if="showDetailIndex === index" class="row-inquiry-detail">
                             <div class="inquiry-detail-content">
                                 <!-- 아이콘과 질문/답변을 같은 줄에 배치 -->
@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                         </div>
-                    </transition>
+                    </div>
                 </li>
             </ul>
         </div>
