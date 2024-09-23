@@ -111,6 +111,7 @@ public enum BaseResponseStatus {
     PRODUCT_BOARD_REGISTER_FAIL_EMPTY_END_TIME(false, 4011, "상품게시글 등록에 실패했습니다. 상품 판매 종료 시간을 입력해주세요"),
     PRODUCT_BOARD_REGISTER_FAIL_INVALID_START_TIME(false, 4012, "상품게시글 등록에 실패했습니다. 유효한 시작 시간이 아닙니다."),
     PRODUCT_BOARD_REGISTER_FAIL_INVALID_END_TIME(false, 4013, "상품게시글 등록에 실패했습니다. 유효한 종료 시간이 아닙니다."),
+    PRODUCT_BOARD_REGISTER_FAIL_INVALID_MINUTE(false, 4014, "상품게시글 등록에 실패했습니다. 유효한 시간(minute)이 아닙니다."),
     PRODUCT_BOARD_REGISTER_FAIL_EMPTY_PRODUCT_NAME(false, 4020, "상품게시글 등록에 실패했습니다. 상품 이름을 입력해주세요"),
     PRODUCT_BOARD_REGISTER_FAIL_EMPTY_STOCK(false, 4021, "상품게시글 등록에 실패했습니다. 상품 재고를 입력해주세요"),
     PRODUCT_BOARD_REGISTER_FAIL_EMPTY_PRICE(false, 4022, "상품게시글 등록에 실패했습니다. 상품 가격을 입력해주세요"),

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -66,9 +67,9 @@ public class BoardController {
 
 	@Operation(summary = "판매자 회원 상품 등록 API")
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE , MediaType.MULTIPART_FORM_DATA_VALUE})
-	public BaseResponse create(@RequestPart("boardCreateRequest") ProductBoardDto.BoardCreateRequest boardCreateRequest,
-		@RequestPart("productThumbnails") MultipartFile[] productThumbnails,
-		@RequestPart("productDetail") MultipartFile productDetail) {
+	public BaseResponse create(@Valid @RequestPart("boardCreateRequest") ProductBoardDto.BoardCreateRequest boardCreateRequest,
+		@RequestPart(value = "productThumbnails") MultipartFile[] productThumbnails,
+		@RequestPart(value = "productDetail") MultipartFile productDetail) {
 		productBoardService.create(boardCreateRequest, productThumbnails, productDetail);
 		return new BaseResponse();
 	}

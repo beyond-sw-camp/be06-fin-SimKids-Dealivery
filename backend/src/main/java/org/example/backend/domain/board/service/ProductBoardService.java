@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -158,5 +159,15 @@ public class ProductBoardService {
 		} catch (IOException e) {
 			throw new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_REGISTER_FAIL_UPLOAD_IMAGE);
 		}
+	}
+
+	@Scheduled(cron = "0 0/30 * * * ?") // 매 30분마다 정각 또는 30분에 실행
+	public void updateStatus() {
+		List<ProductBoard> productBoards = productBoardRepository.findAll();
+		for (ProductBoard productBoard : productBoards) {
+			BoardStatus status = BoardStatus.calculateStatus(productBoard.getStartedAt(), productBoard.getEndedAt());
+			productBoard.updateStatus(status);
+		}
+		productBoardRepository.saveAll(productBoards);
 	}
 }

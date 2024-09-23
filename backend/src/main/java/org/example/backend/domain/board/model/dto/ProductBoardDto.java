@@ -9,7 +9,15 @@ import org.example.backend.domain.board.model.entity.ProductThumbnailImage;
 import org.example.backend.domain.board.product.model.dto.ProductDto;
 import org.example.backend.global.common.constants.BoardStatus;
 import org.example.backend.global.common.constants.CategoryType;
+import org.example.backend.global.validator.annotation.MinuteCheck;
+import org.example.backend.global.validator.annotation.TimeRangeCheck;
 
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,11 +30,33 @@ public class ProductBoardDto {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class BoardCreateRequest{
+
+		@NotNull
+		@Size(min = 1, max = 50, message = "제목은 1자 이상, 50자 이하로 입력해야 합니다.")
 		private String title;
+
+		@NotNull
+		@Min(value = 0, message = "할인율은 0 이상이어야 합니다.")
+		@Max(value = 100, message = "할인율은 100 이하이어야 합니다.")
 		private Integer discountRate;
+
+		@NotNull
+		@NotEmpty(message = "상품을 등록해야 합니다.")
 		private List<ProductDto.Request> products;
+
+		@NotNull
+		@Future(message = "시작 시간은 현재 시간 이후로 설정해야 합니다.")
+		@MinuteCheck
+		@TimeRangeCheck
 		private LocalDateTime startedAt;
+
+		@NotNull
+		@Future(message = "종료 시간은 현재 시간 이후로 설정해야 합니다.")
+		@MinuteCheck
 		private LocalDateTime endedAt;
+
+		@NotNull
+		@NotEmpty(message = "카테고리를 설정해야 합니다.")
 		private CategoryType category;
 
 		public ProductBoard toEntity(String thumbnailUrl, String detailUrl, Category category) {

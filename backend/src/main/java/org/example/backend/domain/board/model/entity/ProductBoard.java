@@ -138,4 +138,8 @@ public class ProductBoard {
 			.category(this.category.getName())
 			.build();
 	}
+
+	public void updateStatus(BoardStatus status) {
+		this.status = status.getStatus();
+	}
 }
