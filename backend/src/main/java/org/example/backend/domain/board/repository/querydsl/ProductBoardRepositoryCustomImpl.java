@@ -7,6 +7,7 @@ import org.example.backend.domain.board.category.model.entity.QCategory;
 import org.example.backend.domain.board.model.entity.ProductBoard;
 import org.example.backend.domain.board.model.entity.QProductBoard;
 import org.example.backend.domain.company.model.entity.QCompany;
+import org.example.backend.global.common.constants.BoardStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -75,7 +76,9 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 		BooleanExpression categoryCondition = containsCategory(search);
 		BooleanExpression companyCondition = containsCompanyName(search);
 		BooleanExpression titleCondition = containsTitle(search);
-		if (categoryCondition == null && companyCondition == null && titleCondition == null) {
+		BooleanExpression statusCondition = containsStatus(BoardStatus.OPEN.getStatus());
+
+		if (categoryCondition == null && companyCondition == null && titleCondition == null && statusCondition == null) {
 			return null;
 		}
 		if (categoryCondition != null) {
@@ -86,6 +89,11 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 		}
 		if (titleCondition != null) {
 			booleanBuilder.or(titleCondition);
+		}
+		if (search != null && search.equals(BoardStatus.READY.getStatus())) {
+			booleanBuilder.or(containsStatus(BoardStatus.READY.getStatus()));
+		} else if (statusCondition != null) {
+			booleanBuilder.and(statusCondition);
 		}
 		return booleanBuilder;
 	}
@@ -100,6 +108,10 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 
 	private BooleanExpression containsTitle(String search) {
 		return search == null ? null : qProductBoard.title.containsIgnoreCase(search);
+	}
+
+	private BooleanExpression containsStatus(String search) {
+		return search == null ? null : qProductBoard.status.containsIgnoreCase(search);
 	}
 
 
