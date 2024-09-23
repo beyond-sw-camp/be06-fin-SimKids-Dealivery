@@ -407,7 +407,7 @@ img {
 }
 
 .css-171jy4 {
-  width: 100px;
+  width: 95px;
   padding-top: 12px;
 }
 
@@ -559,7 +559,7 @@ input[disabled] {
 }
 
 .css-17xxk8 textarea {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .css-5etceh {
@@ -607,6 +607,7 @@ textarea {
 
 .css-1xbd2py p {
   padding-top: 12px;
+  padding-left: 12px;
 }
 
 /* .tbl_type1 tr:first-child td[data-v-cc43e902],

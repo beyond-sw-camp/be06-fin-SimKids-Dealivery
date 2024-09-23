@@ -5,7 +5,8 @@
             <div class="answer-list-modal">
                 <h3>답변 목록</h3>
                 <ul>
-                    <li v-for="answer in selectedInquiry.answers" :key="answer.idx">
+                    <!-- selectedInquiry.answers가 있을 때만 v-for 실행 -->
+                    <li v-for="answer in selectedInquiry.answers || []" :key="answer.idx">
                         <div class="answer-item">
                             <p class="answer-content">{{ answer.content }}</p>
                             <div class="answer-footer">
@@ -15,6 +16,10 @@
                         </div>
                     </li>
                 </ul>
+                <!-- 답변이 없을 때 처리 -->
+                <p v-if="!selectedInquiry.answers || selectedInquiry.answers.length === 0">
+                    아직 답변이 없습니다.
+                </p>
             </div>
         </div>
     </div>
@@ -53,6 +58,7 @@ export default {
     },
 };
 </script>
+
 
 <style scoped>
 .modal {

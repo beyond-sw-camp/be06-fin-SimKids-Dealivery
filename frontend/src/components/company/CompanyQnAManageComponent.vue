@@ -165,6 +165,20 @@ export default {
 
         // 반응성을 유지하기 위해 새로운 배열을 생성하여 answers에 반영
         this.selectedInquiry.answers = [...this.selectedInquiry.answers, newAnswer];
+
+        // 전체 문의 목록에서도 해당 문의의 답변 목록에 새 답변 추가
+        const inquiryIndex = this.inquiries.findIndex(inquiry => inquiry.idx === this.selectedInquiry.idx);
+        if (inquiryIndex !== -1) {
+          // 기존 answers 배열에 새 답변 추가
+          this.inquiries[inquiryIndex].answers = [...this.inquiries[inquiryIndex].answers, newAnswer];
+        }
+
+        // 상태를 '답변완료'로 변경
+        this.selectedInquiry.answerStatus = '답변완료';
+        if (inquiryIndex !== -1) {
+          this.inquiries[inquiryIndex].answerStatus = '답변완료';
+        }
+
         this.closeModal();
       } catch (error) {
         console.error("답변 등록 실패:", error);
@@ -174,8 +188,17 @@ export default {
       if (this.selectedInquiry && Array.isArray(this.selectedInquiry.answers)) {
         // 기존 answers 배열을 새로운 배열로 재할당하여 반응성 유도
         this.selectedInquiry.answers = [...this.selectedInquiry.answers, newAnswer];
+
+        // 답변이 등록되었으므로 상태를 '답변완료'로 변경
+        this.selectedInquiry.answerStatus = '답변완료';
+
+        // 전체 문의 목록에서도 해당 문의의 상태 업데이트
+        const inquiryIndex = this.inquiries.findIndex(inquiry => inquiry.idx === this.selectedInquiry.idx);
+        if (inquiryIndex !== -1) {
+          this.inquiries[inquiryIndex].answerStatus = '답변완료';
+        }
       }
-    },
+    }
   },
 };
 </script>
