@@ -232,6 +232,8 @@
 </template>
 
 <script>
+import { useUserStore } from "@/stores/useUserStore";
+import { mapStores } from "pinia";
 export default {
   name: "BoardDetailProductInfoComponent",
   data() {
@@ -258,6 +260,9 @@ export default {
       emptyHeartImage:
         "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0yNS44MDcgNy44NjNhNS43NzcgNS43NzcgMCAwIDAtOC4xNzIgMEwxNiA5LjQ5N2wtMS42MzUtMS42MzRhNS43NzkgNS43NzkgMCAxIDAtOC4xNzMgOC4xNzJsMS42MzQgMS42MzQgNy40NjYgNy40NjdhMSAxIDAgMCAwIDEuNDE1IDBzMCAwIDAgMGw3LjQ2Ni03LjQ2N2gwbDEuNjM0LTEuNjM0YTUuNzc3IDUuNzc3IDAgMCAwIDAtOC4xNzJ6IiBzdHJva2U9IiM1RjAwODAiIHN0cm9rZS13aWR0aD0iMS42IiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K",
       discountPercentage: 23,
+      request: {
+        productBoardIdx: null
+      }
     };
   },
   computed: {
@@ -270,6 +275,7 @@ export default {
     isAnySelected() {
       return this.cartItems.length > 0;
     },
+    ...mapStores(useUserStore)
   },
   methods: {
     toggleDropdown() {
@@ -312,11 +318,22 @@ export default {
       this.cartItems.splice(index, 1);
     },
 
-    toggleHeart() {
-      this.isHeartFilled = !this.isHeartFilled;
-      this.heartImage = this.isHeartFilled
-        ? this.filledHeartImage
-        : this.emptyHeartImage;
+    async toggleHeart() {
+      this.request.productBoardIdx = 1;
+      if(!this.userStore.isLogined){
+        alert("로그인이 필요한 서비스입니다.");
+        this.$router.push({ path: '/auth/login', query: { redirect: this.$route.fullPath } });
+        return
+      }
+      if(await this.userStore.like(this.request)){
+        this.isHeartFilled = !this.isHeartFilled;
+        this.heartImage = this.isHeartFilled
+          ? this.filledHeartImage
+          : this.emptyHeartImage;
+      }else{
+        alert("관심 등록에 실패했습니다.");
+      }
+      
     },
 
     emitSubmitOrder() {

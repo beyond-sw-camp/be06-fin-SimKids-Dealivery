@@ -49,12 +49,17 @@
   </li>
 </template>
 <script>
+import { useUserStore } from "@/stores/useUserStore";
+import { mapStores } from "pinia";
 export default {
   name: "ProductBoardListCardComponent",
   data() {
     return {
       discountPrice: 0,
       isLiked: false,
+      request: {
+        productBoardIdx: null
+      }
     };
   },
   props: {
@@ -62,6 +67,9 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    ...mapStores(useUserStore),
   },
   created() {
     this.discountPrice = this.getDiscountPrice();
@@ -87,9 +95,19 @@ export default {
       const minutes = String(dateTime.getMinutes()).padStart(2, "0");
       return `${month}.${day}. ${hours}:${minutes}`;
     },
-    like() {
-      console.log(this.isLiked);
-      this.isLiked = !this.isLiked;
+    async like() {
+      this.request.productBoardIdx = this.data.idx;
+      if(!this.userStore.isLogined){
+        alert("로그인이 필요한 서비스입니다.");
+        this.$router.push("/auth/login");
+        return
+      }
+      if(await this.userStore.like(this.request)){
+        this.isLiked = !this.isLiked;
+      }else{
+        alert("관심 등록에 실패했습니다.");
+      }
+      
     },
   },
 };

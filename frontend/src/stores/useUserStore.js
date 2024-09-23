@@ -25,7 +25,8 @@ export const useUserStore = defineStore("user", {
       "phoneNumber": "",
       "deliveries": [],
       "point": null
-    }
+    },
+    socialRedirect: ""
   }),
   persist: {
     storage: sessionStorage,
@@ -311,6 +312,17 @@ export const useUserStore = defineStore("user", {
             'Content-Type': 'application/json',
           }
         });
+        if(response.data.code !== 1000){
+          return false;
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    async like(request){
+      try {
+        let response = await axios.post(backend+"/likes",request,{withCredentials:true});
         if(response.data.code !== 1000){
           return false;
         }

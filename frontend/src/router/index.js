@@ -27,6 +27,7 @@ import LoginRedirectPage from "@/pages/common/LoginRedirectPage.vue";
 import SocialSignupComponent from "@/components/user/SocialSignupComponent.vue";
 import MypageDetailEditComponent from "@/components/mypage/MypageDetailEditComponent.vue";
 import MypageDetailComponent from "@/components/mypage/MypageDetailComponent.vue";
+import { useUserStore } from "@/stores/useUserStore";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -105,11 +106,12 @@ const router = createRouter({
         },
       ],
     },
-    { path: "/orders", component: OrdersPage },
+    { path: "/orders", component: OrdersPage, meta: { requiresAuth: true, roles:['ROLE_USER'] } },
     { path: "/board/detail/:idx", component: BoardDetailPage },
     {
       path: "/product-boards/company",
       component: CompanyBoardPostPage,
+      meta: { requiresAuth: true, roles:['ROLE_COMPANY'] }
     },
     {
       path: "/product-boards/company/:idx",
@@ -117,33 +119,60 @@ const router = createRouter({
       component: () =>
         import("../pages/company/board/CompanyBoardPostPage.vue"),
       props: true,
+      meta: { requiresAuth: true, roles:['ROLE_COMPANY'] }
     },
     {
       path: "/product-boards/company/list",
       component: CompanyBoardListPage,
+      meta: { requiresAuth: true, roles:['ROLE_COMPANY'] }
     },
     {
       path: "/orders/company/list",
       component: CompanyOrderListPage,
+      meta: { requiresAuth: true, roles:['ROLE_COMPANY'] }
     },
     {
       path: "/qna/company/list",
       component: CompanyQnAListPage,
+      meta: { requiresAuth: true, roles:['ROLE_COMPANY']}
     },
     {
       path: "/mypage",
       component: MyPage,
       redirect: "/mypage/order",
+      meta: { requiresAuth: true, roles:['ROLE_USER'] },
       children: [
-        { path: "order", component: MypageOrderListComponent },
-        { path: "qna", component: MypageQnAComponent },
-        { path: "likes", component: MypageLikesEventComponent },
-        { path: "address", component: MyPageAddressComponent },
-        { path: "detail/edit", component: MypageDetailEditComponent },
-        { path: "detail", component: MypageDetailComponent },
+        { path: "order", component: MypageOrderListComponent, meta: { requiresAuth: true, roles:['ROLE_USER'] } },
+        { path: "qna", component: MypageQnAComponent, meta: { requiresAuth: true, roles:['ROLE_USER'] } },
+        { path: "likes", component: MypageLikesEventComponent, meta: { requiresAuth: true, roles:['ROLE_USER'] } },
+        { path: "address", component: MyPageAddressComponent, meta: { requiresAuth: true, roles:['ROLE_USER'] } },
+        { path: "detail/edit", component: MypageDetailEditComponent, meta: { requiresAuth: true, roles:['ROLE_USER'] } },
+        { path: "detail", component: MypageDetailComponent, meta: { requiresAuth: true, roles:['ROLE_USER'] } },
       ],
     },
   ],
 });
 
+router.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore(); // Pinia 스토어
+  const isAuthenticated = userStore.isLogined; // 로그인 상태 확인
+  const userRoles = userStore.roles; // 사용자 역할 (예: ['user'])
+
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const requiredRoles = to.matched.flatMap(record => record.meta.roles || []);
+
+  if (requiresAuth) {
+    if (!isAuthenticated) {
+      alert("로그인이 필요한 서비스입니다.");
+      next({ path: '/auth/login', query: { redirect: to.fullPath } });
+    } else if (!requiredRoles.some(role => userRoles.includes(role))) {
+      alert("페이지에 접근할 수 있는 권한이 없습니다.");
+      next('/'); // 권한 없음 페이지로 리다이렉트
+    } else {
+      next(); // 경로 허용
+    }
+  } else {
+    next(); // 인증 필요 없는 페이지는 그대로 허용
+  }
+});
 export default router;

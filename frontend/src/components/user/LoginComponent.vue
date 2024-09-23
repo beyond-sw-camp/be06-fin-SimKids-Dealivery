@@ -63,6 +63,7 @@
 <script>
 import { useUserStore } from '@/stores/useUserStore';
 import { mapStores } from 'pinia';
+
 export default {
   name: 'LoginComponent',
   data(){
@@ -75,6 +76,13 @@ export default {
   computed: {
         ...mapStores(useUserStore)
     },
+  mounted() {
+    window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant'
+        });
+  },
   methods:{
     routeToSignup(type){
         if(type === 'user'){
@@ -90,7 +98,8 @@ export default {
         if(this.validateForm()){
             const isSuccess = await this.userStore.login(this.type, this.loginRequest);
             if(isSuccess){
-                this.$router.push('/');
+                const redirect = this.$route.query.redirect || '/';
+                this.$router.push(redirect); // 로그인 후 리다이렉트
             }else{
                 alert("로그인에 실패했습니다. 아이디, 비밀번호 또는 이메일 인증상태를 확인해주세요");
             }
@@ -120,6 +129,11 @@ export default {
         return true;
     },
     socialLogin(loginType){
+        const redirectPath = this.$route.query.redirect; // ?redirect=경로 형태
+        if (redirectPath) {
+            const value = redirectPath; // "경로"만 추출
+            this.userStore.socialRedirect = value; // userStore에 저장
+        }
         const response = this.userStore.socialLogin(loginType);
         if(response === "fail"){
             alert("로그인에 실패했습니다.");

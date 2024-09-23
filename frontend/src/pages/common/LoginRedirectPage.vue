@@ -19,7 +19,10 @@ export default {
         const role = query.get("role");
         this.userStore.isLogined = true;
         this.userStore.roles = [role];
-        this.$router.push("/");
+        const redirect = this.userStore.socialRedirect || '/';
+        this.$router.push(redirect); // 로그인 후 리다이렉트
+        this.userStore.socialRedirect = "";
+        console.log(this.userStore.socialRedirect);
       } else {
         this.userStore.socialLoginResponse.email = decodeURIComponent(
           query.get("email")
