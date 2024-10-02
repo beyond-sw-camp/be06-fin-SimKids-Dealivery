@@ -43,17 +43,17 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 
 	@Override
 	public Page<ProductBoard> search(String search, Pageable pageable) {
+		Predicate condition = getCondition(search);
 		JPQLQuery<ProductBoard> query = queryFactory
 			.selectFrom(qProductBoard)
 			.leftJoin(qProductBoard.category, qCategory).fetchJoin()
 			.leftJoin(qProductBoard.company, qCompany).fetchJoin()
 			.leftJoin(qProductBoard.products, qProduct).fetchJoin()
-			.where(getCondition(search));
+			.where(condition);
 
-		JPQLQuery<Long> countQuery = queryFactory
-			.select(qProductBoard.count())
-			.from(qProductBoard)
-			.where(getCondition(search));
+		int total = queryFactory.selectFrom(qProductBoard)
+			.where(condition)
+			.fetch().size();
 
 		List<ProductBoard> result = query
 			.orderBy(qProductBoard.idx.desc())
@@ -61,9 +61,7 @@ public class ProductBoardRepositoryCustomImpl implements ProductBoardRepositoryC
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		long count = countQuery.fetch().size();
-
-		return new PageImpl<>(result, pageable, count);
+		return new PageImpl<>(result, pageable, total);
 	}
 
 	@Override
