@@ -1,6 +1,7 @@
 package org.example.backend.global.security.config;
 
 
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.example.backend.global.security.custom.service.OAuth2Service;
 import org.example.backend.global.security.filter.JwtFilter;
@@ -23,6 +24,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -55,6 +57,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:8081"); // 허용할 출처
         config.addAllowedOrigin("http://localhost:3000"); // 허용할 출처
+        config.addAllowedOrigin("/api"); // 허용할 출처
         config.addAllowedOrigin(domain); // 허용할 출처
         config.addAllowedOrigin(domain + "/api"); // 허용할 출처
         config.addAllowedOriginPattern("*"); // 허용할 출처
@@ -88,11 +91,25 @@ public class SecurityConfig {
         );
         //로그아웃 처리
         http.logout(logout -> {
-            logout.logoutUrl("/logout");
-            logout.logoutSuccessHandler(customLogoutSuccessHandler);
-            logout.deleteCookies("JSESSIONID","AToken","RToken","type");
-            logout.invalidateHttpSession(true);
-            logout.permitAll();
+            logout.logoutUrl("/logout")
+                    .logoutSuccessHandler(customLogoutSuccessHandler)
+                    .addLogoutHandler(new CookieClearingLogoutHandler(
+                            new Cookie("type", null) {{
+                                setPath("/");// root 경로의 쿠키 삭제
+                                setMaxAge(0);
+                            }},
+                            new Cookie("AToken", null) {{
+                                setPath("/");  // root 경로의 쿠키 삭제
+                                setMaxAge(0);
+                            }},
+                            new Cookie("RToken", null) {{
+                                setPath("/");  // root 경로의 쿠키 삭제
+                                setMaxAge(0);
+                            }}
+                    ))
+                    .invalidateHttpSession(true)
+                    .deleteCookies("AToken", "RToken", "type")
+                    .permitAll();
         });
 
         http.oauth2Login(

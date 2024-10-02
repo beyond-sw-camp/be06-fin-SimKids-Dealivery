@@ -17,6 +17,7 @@ import org.example.backend.global.security.jwt.model.entity.CompanyRefreshToken;
 import org.example.backend.global.security.jwt.model.entity.UserRefreshToken;
 import org.example.backend.global.security.jwt.repository.CompanyRefreshTokenRepository;
 import org.example.backend.global.security.jwt.repository.UserRefreshTokenRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

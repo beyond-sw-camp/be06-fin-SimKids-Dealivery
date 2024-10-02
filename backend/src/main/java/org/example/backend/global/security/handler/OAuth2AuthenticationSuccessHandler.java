@@ -27,7 +27,6 @@ import java.util.Optional;
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final int COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
-
     private final UserRepository userRepository;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final JwtUtil jwtUtil;
@@ -83,7 +82,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         rToken.setMaxAge(COOKIE_MAX_AGE);
 
         Cookie typeCookie = new Cookie("type", type);
-        typeCookie.setPath("/");
         typeCookie.setSecure(true);
         typeCookie.setHttpOnly(true);
 
