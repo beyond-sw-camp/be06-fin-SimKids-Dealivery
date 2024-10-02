@@ -47,12 +47,12 @@
 
     <!-- 페이징 버튼 -->
     <div class="css-rdz8z7 e82lnfz1" v-if="inquiries.length !== 0">
-      <a class="page-unselected e82lnfz0" @click="goToPage(1)">
+      <a class="page-unselected e82lnfz0" @click="goToFirstPage">
         <img
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
           alt="처음 페이지로 이동하기 아이콘" />
       </a>
-      <a class="page-unselected e82lnfz0" @click="prevPageGroup">
+      <a class="page-unselected e82lnfz0" @click="prevPage">
         <img
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
           alt="이전 페이지로 이동하기 아이콘"
@@ -68,13 +68,13 @@
         {{ pageNumber }}
       </a>
 
-      <a class="page-unselected e82lnfz0" @click="nextPageGroup">
+      <a class="page-unselected e82lnfz0" @click="nextPage">
         <img
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
           alt="다음 페이지로 이동하기 아이콘"
         />
       </a>
-      <a class="page-unselected e82lnfz0" @click="goToPage(totalPages)">
+      <a class="page-unselected e82lnfz0" @click="goToLastPage">
         <img
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
           alt="마지막 페이지로 이동하기 아이콘"
@@ -114,6 +114,7 @@ export default {
       currentPage: 1, // 현재 페이지
       pageSize: 5, // 페이지당 표시할 문의 개수
       totalPages: 1, // 전체 페이지 수
+      totalInquiries: 0, // 전체 문의 수
       pagesPerGroup: 5, // 한 그룹 당 페이지 수
     };
   },
@@ -121,9 +122,7 @@ export default {
     ...mapStores(useBoardStore),
     // 페이징 처리를 위한 필터링된 문의 목록
     filteredInquiries() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = this.currentPage * this.pageSize;
-      return this.inquiries.slice(start, end); // 현재 페이지에 해당하는 데이터만 반환
+      return this.inquiries; // inquiries 데이터를 그대로 반환
     },
     startPage() {
       return (
@@ -148,20 +147,17 @@ export default {
     async loadInquiries() {
       try {
         const response = await axios.get("/api/qna/question/list/company", {
-          params: { page: this.currentPage, size: this.pageSize }  // 페이지와 크기를 백엔드에 전달
+          params: { page: this.currentPage }  // 페이지와 크기를 백엔드에 전달
         });
-        console.log("API 응답 데이터:", response.data);
-        this.inquiries = response.data.result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        this.totalInquiries = this.inquiries.length;  // 전체 문의 개수를 받아오는 경우
-        this.totalPages = Math.ceil(this.totalInquiries / this.pageSize); // 총 페이지 수 계산
+        this.inquiries = response.data.result.content;
+        this.totalInquiries = response.data.result.totalElements;  // 전체 문의 개수
+        this.totalPages = response.data.result.totalPages; // 총 페이지 수 계산
       } catch (error) {
         console.error("문의 목록 로드 실패:", error);
       }
     },
     async openModal(inquiry) {
     try {
-      console.log(inquiry); // inquiry 객체의 내용을 확인하여 productBoardIdx 값이 있는지 확인
-
       // 스토어에서 상품 상세 정보 가져오기
       const boardDetail = await this.boardStore.getProductBoardDetail(inquiry.productBoardIdx);
       const lastAnswerContent = inquiry.answers.length > 0 ? inquiry.answers[inquiry.answers.length - 1].content : "";
@@ -252,20 +248,23 @@ export default {
     goToPage(pageNumber) {
       if (pageNumber >= 1 && pageNumber <= this.totalPages) {
         this.currentPage = pageNumber;
-        this.loadInquiries();  // 페이지를 이동할 때마다 데이터를 다시 불러옵니다.
       }
     },
-    prevPageGroup() {
-      const newPage = this.startPage - 1;
-      if (newPage >= 1) {
-        this.goToPage(newPage);
-      }
+    goToFirstPage(){
+      this.goToPage(1);
     },
-    nextPageGroup() {
-      const newPage = this.endPage + 1;
-      if (newPage <= this.totalPages) {
-        this.goToPage(newPage);
-      }
+    goToLastPage(){
+      this.goToPage(this.totalPages);
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+            this.goToPage(this.currentPage - 1); // 현재 페이지의 이전 페이지로 이동
+        }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+            this.goToPage(this.currentPage + 1); // 현재 페이지의 다음 페이지로 이동
+        }
     },
   },
   watch: {

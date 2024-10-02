@@ -2,7 +2,7 @@
     <div class="css-heioij eug5r8l1">
         <div class="css-1xdhyk6 eug5r8l0">
             <ul>
-                <li class="css-1w5u25a e1q2koch0" v-for="(inquiry, index) in paginatedInquiries" :key="index">
+                <li class="css-1w5u25a e1q2koch0" v-for="(inquiry, index) in inquiries" :key="index">
                     <button type="button" class="inquiry-product-info" @click="toggleDetail(index)">
                         <div class="product-info-wrap">
                             <div class="product-name">{{ inquiry.productTitle }}</div>
@@ -58,13 +58,13 @@
                 </li>
             </ul>
             <!-- 페이지 네비게이션 -->
-            <div class="css-rdz8z7 e82lnfz1" v-if="inquiries.length !== 0">
-                <a class="page-unselected e82lnfz0" @click="goToPage(1)">
+            <div class="css-rdz8z7 e82lnfz1" v-if="totalPages > 1">
+                <a class="page-unselected e82lnfz0" @click="goToFirstPage">
                     <img
                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
                     alt="처음 페이지로 이동하기 아이콘" />
                 </a>
-                <a class="page-unselected e82lnfz0" @click="prevPageGroup">
+                <a class="page-unselected e82lnfz0" @click="prevPage">
                     <img
                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
                     alt="이전 페이지로 이동하기 아이콘"
@@ -80,13 +80,13 @@
                     {{ pageNumber }}
                 </a>
 
-                <a class="page-unselected e82lnfz0" @click="nextPageGroup">
+                <a class="page-unselected e82lnfz0" @click="nextPage">
                     <img
                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
                     alt="다음 페이지로 이동하기 아이콘"
                     />
                 </a>
-                <a class="page-unselected e82lnfz0" @click="goToPage(totalPages)">
+                <a class="page-unselected e82lnfz0" @click="goToLastPage">
                 <img
                     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
                     alt="마지막 페이지로 이동하기 아이콘"
@@ -118,8 +118,11 @@ export default {
             showEditInquiryModal: false,
             selectedInquiry: null,  // 선택된 문의 데이터
             currentPage: 1,       // 현재 페이지
+            pagesPerGroup: 5,     // 한 그룹에 보여줄 페이지 수
             pageSize: 5,          // 페이지 당 아이템 개수
+            totalPages: 0,        // 전체 페이지 개수
             totalInquiries: 0,    // 전체 문의 개수
+            currentPageGroup: 1,  // 현재 페이지 그룹
         };
     },
     mounted() {
@@ -127,40 +130,41 @@ export default {
     },
     computed: {
         ...mapStores(useBoardStore),
-                // 페이징 처리된 문의 목록
-                paginatedInquiries() {
-            const start = (this.currentPage - 1) * this.pageSize;
-            const end = start + this.pageSize;
-            return this.inquiries.slice(start, end);
-        },
-        totalPages() {
-            return Math.ceil(this.totalInquiries / this.pageSize);
-        },
         visiblePages() {
+            const startPage = (this.currentPageGroup - 1) * this.pagesPerGroup + 1;
+            const endPage = Math.min(this.currentPageGroup * this.pagesPerGroup, this.totalPages);
+
             const pages = [];
-            for (let i = 1; i <= this.totalPages; i++) {
-                pages.push(i);
+            for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
             }
             return pages;
-        },
+        }
     },
     methods: {
-        async loadMyInquiries() {
+        async loadMyInquiries(page = 1) {
             try {
-                const response = await axios.get('/api/qna/question/list/my');
-                this.inquiries = response.data.result;
+                const response = await axios.get(`/api/qna/question/list/my?page=${page}&size=${this.pageSize}`)
 
-                this.inquiries.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-                this.totalInquiries = this.inquiries.length; // 전체 문의 수 설정
-
-                // 각 문의에 대한 상품 이미지 URL을 추가로 불러옴
-                for (const inquiry of this.inquiries) {
-                    const product = await this.boardStore.getDetail(inquiry.productBoardIdx);
-                    inquiry.productImageUrl = product?.productThumbnailUrls?.[0] || null;
+                if (response.data.isSuccess) {
+                    this.inquiries = response.data.result.content;
+                    this.totalInquiries = response.data.result.totalElements;
+                    this.totalPages = response.data.result.totalPages;
+                } else {
+                    console.error("문의 목록 불러오기 실패:", response.data.message);
+                    return;
                 }
 
-                console.log(this.inquiries);  // 문의 목록 확인
+                // 각 문의에 대한 상품 이미지 URL을 추가로 불러옴 (병렬 처리)
+                const productDetails = await Promise.all(
+                    this.inquiries.map(inquiry => this.boardStore.getDetail(inquiry.productBoardIdx))
+                );
+
+                // 상품 이미지 URL을 각 문의에 추가
+                this.inquiries.forEach((inquiry, index) => {
+                    inquiry.productImageUrl = productDetails[index]?.productThumbnailUrls?.[0] || null;
+                }); 
+        
             } catch (error) {
                 console.error("로그인된 사용자의 문의 목록을 불러오는 데 실패했습니다.", error);
             }
@@ -169,7 +173,6 @@ export default {
             this.showDetailIndex = this.showDetailIndex === index ? null : index;
         },
         openEditModal(inquiry) {
-            console.log(inquiry);  // inquiry에 idx 값이 있는지 확인
             this.selectedInquiry = inquiry;
             this.showEditInquiryModal = true; // 수정 모달 표시
         },
@@ -201,6 +204,13 @@ export default {
             try {
                 await axios.delete(`/api/qna/question/delete/${idx}`);
                 this.inquiries.splice(index, 1); // 삭제 후 목록에서 제거
+                this.totalInquiries -= 1; // 전체 문의 수 감소
+
+                if (this.currentPage > 1 && this.inquiries.length === 0) {
+                    this.currentPage -= 1;
+                }
+                
+                this.loadMyInquiries(this.currentPage);  // 현재 페이지 데이터 다시 로드
                 this.showDetailIndex = null; // 페이지 이동 시 토글 상태 초기화
             } catch (error) {
                 console.error("문의 삭제 실패:", error);
@@ -210,23 +220,39 @@ export default {
             const date = new Date(dateString);
             return isNaN(date.getTime()) ? 'Invalid Date' : date.toLocaleDateString(); 
         },
-        // 페이징 처리 관련 메서드들
+        // 특정 페이지로 이동
         goToPage(pageNumber) {
             if (pageNumber >= 1 && pageNumber <= this.totalPages) {
                 this.currentPage = pageNumber;
-                this.showDetailIndex = null; // 페이지 이동 시 토글 상태 초기화
+                this.loadMyInquiries(pageNumber); // 해당 페이지 데이터 로드
+
+                // 현재 페이지 그룹 업데이트 (페이지 그룹에 따른 계산)
+                const newPageGroup = Math.ceil(pageNumber / this.pagesPerGroup);
+                if (newPageGroup !== this.currentPageGroup) {
+                    this.currentPageGroup = newPageGroup;
+                }
+
+                this.showDetailIndex = null; // 페이지 이동 시 토글 초기화
             }
         },
-        prevPage() {
-            if (this.currentPage > 1) {
-                this.currentPage -= 1;
-                this.showDetailIndex = null; // 페이지 이동 시 토글 상태 초기화
-            }
+         // 처음 페이지로 이동
+        goToFirstPage() {
+            this.goToPage(1); // 첫 페이지로 이동
         },
+        // 마지막 페이지로 이동
+        goToLastPage() {
+            this.goToPage(this.totalPages); // 마지막 페이지로 이동
+        },
+        // 다음 페이지 이동
         nextPage() {
             if (this.currentPage < this.totalPages) {
-                this.currentPage += 1;
-                this.showDetailIndex = null; // 페이지 이동 시 토글 상태 초기화
+                this.goToPage(this.currentPage + 1); // 현재 페이지의 다음 페이지로 이동
+            }
+        },
+        // 이전 페이지 이동
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.goToPage(this.currentPage - 1); // 현재 페이지의 이전 페이지로 이동
             }
         },
     },

@@ -115,7 +115,7 @@
       </table>
       <div class="css-rdz8z7 e82lnfz1" v-if="totalInquiries > 0">
         <!-- 처음 페이지로 이동 -->
-          <a class="page-unselected" @click="goToPage(1)">
+          <a class="page-unselected" @click="goToFirstPage">
             <img
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
               alt="처음 페이지로 이동"
@@ -138,13 +138,13 @@
             {{ pageNumber }}
           </a>
           <!-- 다음 페이지로 이동 -->
-          <a class="page-unselected" @click="nextPageGroup">
+          <a class="page-unselected" @click="nextPage">
             <img
             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
             alt="다음 페이지로 이동"/>
           </a>
           <!-- 마지막 페이지로 이동 -->
-          <a class="page-unselected" @click="goToPage(totalPages)">
+          <a class="page-unselected" @click="goToLastPage">
             <img
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
               alt="마지막 페이지로 이동"/>
@@ -191,7 +191,10 @@ export default {
     },
     visiblePages() {
       const pageNumbers = [];
-      for (let i = this.startPage; i <= this.endPage; i++) {
+      const startPage = Math.floor((this.currentPage - 1) / this.pagesPerGroup) * this.pagesPerGroup + 1;
+      const endPage = Math.min(startPage + this.pagesPerGroup - 1, this.totalPages);
+      
+      for (let i = startPage; i <= endPage; i++) {
         pageNumbers.push(i);
       }
       return pageNumbers;
@@ -236,7 +239,7 @@ export default {
       expandedInquiryIndex: null,
       editingIndex: null,
       currentPage: 1,
-      pageSize: 6,
+      pageSize: 5,
       totalInquiries: 0,
       pagesPerGroup: 5,
       // 사용자 정보를 직접 관리하기 위해 새로운 상태 추가
@@ -252,16 +255,10 @@ export default {
 
       // 사용자 정보를 alert 없이 로드
       this.getUserDetailWithoutAlert().then(() => {
-        this.qnaStore.fetchInquiries().then(() => {
-          const inquiries = this.qnaStore.inquiries
-            .filter((inquiry) => inquiry.productBoardIdx === this.productBoardIdx)
-            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        this.qnaStore.fetchInquiries(this.productBoardIdx, this.currentPage).then(() => {
+          this.totalInquiries = this.qnaStore.totalInquiries;
 
-          this.totalInquiries = inquiries.length;
-          this.localTableData = inquiries.slice(
-            (this.currentPage - 1) * this.pageSize,
-            this.currentPage * this.pageSize
-          );
+          this.localTableData = this.qnaStore.inquiries;
         });
       });
     },
@@ -343,7 +340,6 @@ export default {
     },
     // 수정/삭제 버튼이 노출될 조건 체크
     shouldShowEditDeleteButtons(row) {
-      console.log("row.email->" + row.email + "  userEmail->" + this.userDetailWithoutAlert.email);
       return row.answerStatus === '답변대기' && row.email === this.userDetailWithoutAlert.email;
     },
     checkPageAdjustments() {
@@ -359,17 +355,21 @@ export default {
         this.loadInquiries();
       }
     },
-    prevPageGroup() {
-      const newPage = this.startPage - 1;
-      if (newPage >= 1) {
-        this.goToPage(newPage);
-      }
+    goToFirstPage(){
+      this.goToPage(1);
     },
-    nextPageGroup() {
-      const newPage = this.endPage + 1;
-      if (newPage <= this.totalPages){
-        this.goToPage(newPage);
-      }
+    goToLastPage(){
+      this.goToPage(this.totalPages);
+    },
+    prevPage() {
+        if (this.currentPage > 1) {
+            this.goToPage(this.currentPage - 1); // 현재 페이지의 이전 페이지로 이동
+        }
+    },
+    nextPage() {
+        if (this.currentPage < this.totalPages) {
+            this.goToPage(this.currentPage + 1); // 현재 페이지의 다음 페이지로 이동
+        }
     },
     // 새로운 사용자 정보 로드 메서드 추가
     async getUserDetailWithoutAlert() {
@@ -379,7 +379,6 @@ export default {
         });
         if (response.data.code === 1000) {
           this.userDetailWithoutAlert = response.data.result;
-          console.log(this.userDetailWithoutAlert)
           return true;
         } else {
           console.log("사용자 정보 조회 실패");

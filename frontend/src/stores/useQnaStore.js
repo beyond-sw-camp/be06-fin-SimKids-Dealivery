@@ -3,14 +3,16 @@ import axios from "axios";
 
 export const useQnaStore = defineStore("qna", {
     state: () => ({
-        inquiries: []
+        inquiries: [],
+        totalInquiries: 0, // 총 문의 개수 관리
     }),
     actions: {
-        async fetchInquiries() {
+        async fetchInquiries(productBoardIdx, page = 1) {
             try {
-                const response = await axios.get('/api/qna/question/list');
+                const response = await axios.get(`/api/qna/question/list?productBoardIdx=${productBoardIdx}&page=${page}`);
                 if (response.data.isSuccess) {
-                    this.inquiries = response.data.result;
+                    this.inquiries = response.data.result.content;
+                    this.totalInquiries = response.data.result.totalElements;
                 } else {
                     console.error('문의 목록을 불러오는 중 오류 발생:', response.data.message);
                 }
