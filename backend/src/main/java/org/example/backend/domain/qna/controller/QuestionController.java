@@ -51,7 +51,10 @@ public class QuestionController {
     @GetMapping("/list")
     public BaseResponse<Page<QuestionDto.QuestionListResponse>> getQuestions(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "productBoardIdx") Long productBoardIdx) {
         Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE, Sort.by(Sort.Direction.DESC,"createdAt"));
+        long startTime = System.currentTimeMillis();
         Page<QuestionDto.QuestionListResponse> questionList = questionService.getQuestionsByProductBoardIdx(productBoardIdx, pageable);
+        long endTime = System.currentTimeMillis();
+        System.out.println("문의 목록 조회 시간: " + (endTime - startTime) + "ms");
         return new BaseResponse<>(questionList);
     }
 
