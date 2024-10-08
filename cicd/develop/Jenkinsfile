@@ -24,41 +24,26 @@ pipeline {
             }
         }
 
-        stage('Check for Merge Event') {
+        stage('Initialize Variables') {
             steps {
                 script {
-                    def changeLogSets = currentBuild.changeSets
-                    def isMerge = false
+                    // 커밋 메시지 가져오기
+                    def commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
 
-                    changeLogSets.each { changeSet ->
-                        changeSet.items.each { entry ->
-                            // 커밋 메시지 확인
-                            def commitMessage = entry.msg.toLowerCase()  // 소문자로 변환하여 비교
-                            if (commitMessage.contains('merge')) {
-                                isMerge = true
-                            }
-
-                            // 각 키워드 포함 여부 확인
-                            if (commitMessage.contains('frontend')) {
-                                TARGET_COMPONENT = 'frontend'
-                            } else if (commitMessage.contains('backend')) {
-                                TARGET_COMPONENT = 'backend'
-                            } else if (commitMessage.contains('all')) {
-                                TARGET_COMPONENT = 'all'
-                            }
+                    echo "Commit Message: ${commitMessage}"
+                    if(commitMessage.contains('merge')){
+                        if (commitMessage.contains('frontend')) {
+                            TARGET_COMPONENT = 'frontend'
+                        } else if (commitMessage.contains('backend')) {
+                            TARGET_COMPONENT = 'backend'
+                        } else if (commitMessage.contains('all')) {
+                            TARGET_COMPONENT = 'all'
+                        } else {
+                            error 'No valid component specified in commit message.'
                         }
-                    }
-
-                    // 머지 이벤트 확인
-                    if (!isMerge) {
-                        error('This build is not triggered by a merge event.')  // 전체 파이프라인 종료
-                    }
-
-                    // 타겟 컴포넌트가 설정되지 않은 경우 처리
-                    if (TARGET_COMPONENT == null) {
-                        error('No valid component specified in commit message.')  // 전체 파이프라인 종료
-                    } else {
                         echo "Target Component: ${TARGET_COMPONENT}"
+                    }else{
+                        error 'Pipeline does not triggered by merge event'
                     }
                 }
             }
@@ -67,30 +52,53 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    if (TARGET_COMPONENT == 'backend') {
-                        sh '''
-                        chmod +x backend/gradlew
-                        cd backend
-                        ./gradlew bootJar
-                        '''
-                    } else if (TARGET_COMPONENT == 'frontend') {
-                        sh '''
-                        cd frontend
-                        npm i
-                        npm run build
-                        '''
-                    } else if (TARGET_COMPONENT == 'all') {
-                        sh '''
-                        chmod +x backend/gradlew
-                        cd backend
-                        ./gradlew bootJar
-                        cd ../frontend
-                        npm i
-                        npm run build
-                        '''
-                    } else {
-                        echo "Build Fail........................."
-                    }
+
+                    withCredentials([
+                           string(credentialsId: 'VUE_APP_KAKAOPAY_CID', variable: 'VUE_APP_KAKAOPAY_CID'),
+                           string(credentialsId: 'VUE_APP_TOSSPAY_MID', variable: 'VUE_APP_TOSSPAY_MID'),
+                           string(credentialsId: 'VUE_APP_PORTONE_STORE_ID', variable: 'VUE_APP_PORTONE_STORE_ID')
+                       ]) {
+
+                        if (TARGET_COMPONENT == 'backend') {
+                            sh '''
+                            chmod +x backend/gradlew
+                            cd backend
+                            ./gradlew bootJar
+                            '''
+                        } else if (TARGET_COMPONENT == 'frontend') {
+                            // 프론트엔드 env파일 수정
+                            sh """
+                            sed -i "s|\\${VUE_APP_KAKAOPAY_CID}|${VUE_APP_KAKAOPAY_CID}|g" frontend/.env
+                            sed -i "s|\\${VUE_APP_TOSSPAY_MID}|${VUE_APP_TOSSPAY_MID}|g" frontend/.env
+                            sed -i "s|\\${VUE_APP_PORTONE_STORE_ID}|${VUE_APP_PORTONE_STORE_ID}|g" frontend/.env
+                            
+                            cd frontend
+                            npm i
+                            npm run build
+                            git rm -rf .env
+                            """
+                        } else if (TARGET_COMPONENT == 'all') {
+                            // 프론트엔드 env파일 수정
+                            
+                            sh """
+                            chmod +x backend/gradlew
+                            cd backend
+                            ./gradlew bootJar
+                            cd ../frontend
+                            sed -i "s|\\${VUE_APP_KAKAOPAY_CID}|${VUE_APP_KAKAOPAY_CID}|g" .env
+                            sed -i "s|\\${VUE_APP_TOSSPAY_MID}|${VUE_APP_TOSSPAY_MID}|g" .env
+                            sed -i "s|\\${VUE_APP_PORTONE_STORE_ID}|${VUE_APP_PORTONE_STORE_ID}|g" .env
+                            
+                            npm i
+                            npm run build
+                            git rm -rf .env
+                            """
+                        } else {
+                            echo "Build Fail........................."
+                        }
+
+                    }  
+                    
                 }
             }
         }

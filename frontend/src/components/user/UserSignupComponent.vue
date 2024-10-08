@@ -364,7 +364,7 @@ export default {
         // 이메일 검증
         new Validator(this.signupRequest.email, "아이디를 입력해주세요.")
           .isNotEmpty()
-          .matches(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/, "아이디는 이메일 형식입니다.");          
+          .matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "아이디는 이메일 형식입니다.");
 
         // 이메일 인증 코드 검증
         new Validator(this.signupRequest.emailCode, "이메일 인증코드를 입력해주세요.").isNotEmpty();
@@ -402,6 +402,7 @@ export default {
 
         return true; // 모든 검증 통과
       } catch (error) {
+        alert(error.message);
         return false;
       }
 
@@ -411,6 +412,7 @@ export default {
         this.signupRequest.type = "inapp";
         if (await this.userStore.userSignup(this.signupRequest)) {
           alert("회원가입에 성공했습니다. 로그인 후 서비스를 이용해주세요.");
+          this.$router.push("/auth/login");
         }
       }
     },

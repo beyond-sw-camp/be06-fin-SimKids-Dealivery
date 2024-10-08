@@ -10,7 +10,7 @@
                 <div class="MuiDialogContent-root css-ew9uri">
                     <div class="css-190e3ze eg43r0m0">
                         <div class="css-1c7i6of et95tiw2">
-                            <div class="css-1d3g9q7 et95tiw1">상품 문의하기</div>
+                            <div class="css-1d3g9q7 et95tiw1">{{ isEditMode ? '문의 수정하기' : '상품 문의하기' }}</div>
                             <span class="css-e50sj0 et95tiw0" @click="closeModal"></span>
                         </div>
                         <div class="css-1tm481w eell72m3">
@@ -18,7 +18,7 @@
                                 <img :src="thumbnail" class="css-1vpfo16 eell72m1">
                             </div>
                             <div class="css-1mysn55 eell72m0">
-                                <span>{{title}}</span>
+                                <span>{{ title }}</span>
                             </div>
                         </div>
                         <div class="css-4qu8li e43j10r2">
@@ -76,7 +76,7 @@
                             </button>
                             <button class="css-f4f4h7 e4nu7ef3" type="button" :disabled="!isFormValid"
                                 @click="submitForm">
-                                <span class="css-nytqmg e4nu7ef1">등록</span>
+                                <span class="css-nytqmg e4nu7ef1">{{ isEditMode ? '수정' : '등록' }}</span>
                             </button>
                         </div>
                     </div>
@@ -96,6 +96,10 @@ import { useUserStore } from "@/stores/useUserStore";  // 사용자 스토어 �
 export default {
     name: "QnaRegisterModalComponent",
     props: {
+        isEditMode: {
+            type: Boolean,
+            default: false
+        },
         initialSubject: {
             type: String,
             default: ""
@@ -103,6 +107,10 @@ export default {
         initialContent: {
             type: String,
             default: ""
+        },
+        inquiryId: {
+            type: Number, // 수정 모드일 때 사용할 문의 ID
+            default: null
         },
         thumbnail: {
             type: String,
@@ -147,27 +155,31 @@ export default {
             this.$emit("close");
         },
         async submitForm() {
-            const newInquiry = {
+            // 문의 수정 또는 등록 로직
+            const inquiryData = {
+                idx: this.inquiryId,  // 수정 시 ID 전달
                 title: this.subject,
                 content: this.content,
-                userIdx: this.userStore.userDetail.idx,  // Pinia에서 userStore로부터 userIdx 가져오기
-                productBoardIdx: this.productBoardIdx, // 추후 해당 게시글 IDX 사용
+                productBoardIdx: this.productBoardIdx,
             };
 
             try {
-                const response = await axios.post('/api/qna/question/create', newInquiry);
-
-                if (response.data.isSuccess) {
-                    const registeredInquiry = response.data.result; // 응답으로 받은 데이터를 registeredInquiry에 저장
-                    this.qnaStore.addInquiry(registeredInquiry); // 등록된 문의를 스토어에 추가
-                    // 부모 컴포넌트에 데이터 전달
-                    this.$emit("submit", registeredInquiry);
-                    this.closeModal();
+                if (this.isEditMode && this.inquiryId) {
+                    // 수정 모드일 때 PUT 요청
+                    const response = await axios.put(`/api/qna/question/update/${this.inquiryId}`, inquiryData);
+                    if (response.data.isSuccess) {
+                        this.$emit("submit", inquiryData); // 부모 컴포넌트에 수정된 데이터를 전달
+                    }
                 } else {
-                    console.error("문의 등록 실패:", response.data.message);
+                    // 등록 모드일 때 POST 요청
+                    const response = await axios.post('/api/qna/question/create', inquiryData);
+                    if (response.data.isSuccess) {
+                        this.$emit("submit", inquiryData); // 부모 컴포넌트에 등록된 데이터를 전달
+                    }
                 }
+                this.closeModal();
             } catch (error) {
-                console.error("문의 등록 중 오류 발생:", error);
+                console.error(this.isEditMode ? "문의 수정 중 오류 발생" : "문의 등록 중 오류 발생", error);
             }
         },
         limitContentLength() {
@@ -271,8 +283,7 @@ th {
 .css-190e3ze {
     display: flex;
     flex-direction: column;
-    width: 800px;
-    height: 620px;
+    width: 700px;
     padding: 30px;
     background: rgb(255, 255, 255);
 }
@@ -344,7 +355,7 @@ video {
 }
 
 .css-1mysn55 {
-    flex: 6.5 1 0%;
+    flex: 4.7 1 0%;
     display: flex;
     -webkit-box-align: center;
     align-items: center;
@@ -418,7 +429,7 @@ video {
     position: relative;
     display: flex;
     flex-direction: column;
-    height: 260px;
+    height: 250px;
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(221, 221, 221);
     border-radius: 4px;
@@ -525,8 +536,8 @@ ul {
 }
 
 .css-f9c7pn button {
-    width: 160px;
-    height: 56px;
+    width: 110px;
+    height: 45px;
     border-radius: 3px;
 }
 
@@ -562,7 +573,7 @@ ul {
 
 .css-nytqmg {
     display: inline-block;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
 }
 

@@ -9,14 +9,14 @@
           <th class="tit_status">상태</th>
           <th class="tit_date">문의 등록일</th>
           <th class="tit_write">답변등록</th>
-          <th class="tit_delete">답변확인</th>
+          <th class="tit_delete">답변목록</th>
         </tr>
       </thead>
       <tbody id="addrList">
         <tr v-for="(inquiry, index) in filteredInquiries" :key="index">
           <td class="select type_radio">
             <label class="skin_checkbox">
-              <p>{{ index + 1 }}</p>
+              <p>{{ (currentPage - 1) * pageSize + index + 1 }}</p>
             </label>
           </td>
           <td class="title">
@@ -25,36 +25,69 @@
           <td class="name">
             <span>{{ maskAuthorName(inquiry.userName) }}</span>
           </td>
-
           <td>
             <span class="status star">{{ inquiry.answerStatus }}</span>
           </td>
-
           <td>
             <span class="date">{{ formatDate(inquiry.createdAt) }}</span>
           </td>
-
           <td>
             <button @click="openModal(inquiry)" class="ico modify" target="_blank">
               답변등록
             </button>
           </td>
           <td class="delete_position">
-            <button name="delete" value="" class="product_delete" @click="openAnswerListModal(inquiry)">
-              삭제
+            <button class="product_delete" @click="openAnswerListModal(inquiry)">
+              답변확인
             </button>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <!-- 기존의 답변 등록 모달 -->
+    <!-- 페이징 버튼 -->
+    <div class="css-rdz8z7 e82lnfz1" v-if="inquiries.length !== 0">
+      <a class="page-unselected e82lnfz0" @click="goToPage(1)">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
+          alt="처음 페이지로 이동하기 아이콘" />
+      </a>
+      <a class="page-unselected e82lnfz0" @click="prevPageGroup">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
+          alt="이전 페이지로 이동하기 아이콘"
+        />
+      </a>
+
+      <a
+        v-for="pageNumber in visiblePages"
+        :key="pageNumber"
+        :class="pageNumber === currentPage ? 'page-selected e82lnfz0' : 'page-unselected e82lnfz0'"
+        @click="goToPage(pageNumber)"
+      >
+        {{ pageNumber }}
+      </a>
+
+      <a class="page-unselected e82lnfz0" @click="nextPageGroup">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
+          alt="다음 페이지로 이동하기 아이콘"
+        />
+      </a>
+      <a class="page-unselected e82lnfz0" @click="goToPage(totalPages)">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
+          alt="마지막 페이지로 이동하기 아이콘"
+        />
+      </a>
+    </div>
+
+    <!-- 모달들 -->
     <CompanyQnAModalComponent v-if="isDisplayModal" :title="selectedInquiry.title" :content="selectedInquiry.content"
       :thumbnail="selectedInquiry.thumbnail" :productTitle="selectedInquiry.productTitle"
-      :questionIdx="selectedInquiry.idx" @closeModal="closeModal" @registerAnswer="onAnswerRegistered" />
+      :questionIdx="selectedInquiry?.idx" @closeModal="closeModal" @registerAnswer="onAnswerRegistered"/>
 
-    <!-- 답변 리스트 모달 -->
-    <CompanyAnswerListModalComponent v-if="isDisplayAnswerListModal" :selectedInquiry="selectedInquiry"
+    <CompanyAnswerListModalComponent v-if="isDisplayAnswerListModal" :key="selectedInquiry?.idx" :selectedInquiry="selectedInquiry"
       @closeModal="closeAnswerListModal" @answerDeleted="removeAnswerFromList" />
   </div>
 </template>
@@ -78,13 +111,34 @@ export default {
       isDisplayModal: false,
       isDisplayAnswerListModal: false,
       selectedInquiry: null,
+      currentPage: 1, // 현재 페이지
+      pageSize: 5, // 페이지당 표시할 문의 개수
+      totalPages: 1, // 전체 페이지 수
+      pagesPerGroup: 5, // 한 그룹 당 페이지 수
     };
   },
   computed: {
     ...mapStores(useBoardStore),
+    // 페이징 처리를 위한 필터링된 문의 목록
     filteredInquiries() {
-      // 기업회원이 작성한 게시글에 달린 문의만 필터링
-      return this.inquiries;
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = this.currentPage * this.pageSize;
+      return this.inquiries.slice(start, end); // 현재 페이지에 해당하는 데이터만 반환
+    },
+    startPage() {
+      return (
+        Math.floor((this.currentPage - 1) / this.pagesPerGroup) * this.pagesPerGroup + 1
+      );
+    },
+    endPage() {
+      return Math.min(this.startPage + this.pagesPerGroup - 1, this.totalPages);
+    },
+    visiblePages() {
+      const pageNumbers = [];
+      for (let i = this.startPage; i <= this.endPage; i++) {
+        pageNumbers.push(i);
+      }
+      return pageNumbers;
     },
   },
   mounted() {
@@ -93,30 +147,34 @@ export default {
   methods: {
     async loadInquiries() {
       try {
-        // 로그인된 기업 회원의 게시글에 달린 문의 조회
-        const response = await axios.get("/api/qna/question/list/company");
-        this.inquiries = response.data.result; // 데이터를 inquiries에 저장
-        console.log(this.inquiries); // 데이터를 확인해서 thumbnail과 productTitle이 포함되어 있는지 확인
+        const response = await axios.get("/api/qna/question/list/company", {
+          params: { page: this.currentPage, size: this.pageSize }  // 페이지와 크기를 백엔드에 전달
+        });
+        console.log("API 응답 데이터:", response.data);
+        this.inquiries = response.data.result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        this.totalInquiries = this.inquiries.length;  // 전체 문의 개수를 받아오는 경우
+        this.totalPages = Math.ceil(this.totalInquiries / this.pageSize); // 총 페이지 수 계산
       } catch (error) {
         console.error("문의 목록 로드 실패:", error);
       }
     },
     async openModal(inquiry) {
-      try {
-        console.log(inquiry); // inquiry 객체의 내용을 확인하여 productBoardIdx 값이 있는지 확인
+    try {
+      console.log(inquiry); // inquiry 객체의 내용을 확인하여 productBoardIdx 값이 있는지 확인
 
-        // 스토어에서 상품 상세 정보 가져오기
-        const boardDetail = await this.boardStore.getProductBoardDetail(inquiry.productBoardIdx);
-        const lastAnswerContent = inquiry.answers.length > 0 ? inquiry.answers[inquiry.answers.length - 1].content : "";
+      // 스토어에서 상품 상세 정보 가져오기
+      const boardDetail = await this.boardStore.getProductBoardDetail(inquiry.productBoardIdx);
+      const lastAnswerContent = inquiry.answers.length > 0 ? inquiry.answers[inquiry.answers.length - 1].content : "";
 
-        // 문의 정보에 썸네일 이미지와 게시글 제목 추가
-        this.selectedInquiry = {
-          ...inquiry,
-          thumbnail: boardDetail.productThumbnailUrls ? boardDetail.productThumbnailUrls[0] : null, // 썸네일 이미지
-          productTitle: boardDetail.title || "No Title", // 게시글 제목
-          answerContent: lastAnswerContent, // 마지막 답변 내용 추가
-        };
-        this.isDisplayModal = true; // 모달을 열기
+      // 문의 정보에 썸네일 이미지와 게시글 제목 추가
+      this.selectedInquiry = {
+        ...inquiry,
+        thumbnail: boardDetail.productThumbnailUrls ? boardDetail.productThumbnailUrls[0] : null, // 썸네일 이미지
+        productTitle: boardDetail.title || "No Title", // 게시글 제목
+        answerContent: lastAnswerContent, // 마지막 답변 내용 추가
+        answers: inquiry.answers || [],  // answers 배열이 없을 경우 빈 배열로 초기화
+      };
+      this.isDisplayModal = true; // 모달을 열기
       } catch (error) {
         console.error("상품 상세 정보 로드 실패:", error);
       }
@@ -126,6 +184,7 @@ export default {
       this.isDisplayModal = false; // 모달 닫기
     },
     openAnswerListModal(inquiry) {
+      // inquiry.answers는 이미 데이터에 포함되어 있으므로 별도로 호출할 필요 없음
       this.selectedInquiry = inquiry;
       this.isDisplayAnswerListModal = true;
     },
@@ -133,8 +192,15 @@ export default {
       this.selectedInquiry = null;
       this.isDisplayAnswerListModal = false;
     },
-    removeAnswerFromList(answerId) {
-      this.selectedInquiry.answers = this.selectedInquiry.answers.filter(answer => answer.idx !== answerId);
+    removeAnswerFromList(answerId, updatedInquiry) {
+      // 부모 컴포넌트에서 상태를 관리하므로, 여기서 상태를 업데이트합니다.
+      this.selectedInquiry.answers = updatedInquiry.answers;
+
+      if (this.selectedInquiry.answers.length === 0) {
+        this.selectedInquiry.answerStatus = '답변대기';
+      }
+
+      // 전체 문의 목록에서도 해당 문의의 상태를 업데이트할 수 있습니다.
     },
     async deleteInquiry(inquiryId) {
       try {
@@ -158,47 +224,63 @@ export default {
         day: "2-digit",
       });
     },
-    async registerAnswer(answerContent) {
-      try {
-        const response = await axios.post(`/api/question/${this.selectedInquiry.id}/answer`, { content: answerContent });
-        const newAnswer = response.data.result;
+    onAnswerRegistered(newAnswer) {
+    // 방금 등록한 답변을 selectedInquiry의 answers에 추가
+    if (this.selectedInquiry && Array.isArray(this.selectedInquiry.answers)) {
+      // 배열을 재할당하여 반응성을 유지
+      this.selectedInquiry.answers = [...this.selectedInquiry.answers, newAnswer];
 
-        // 반응성을 유지하기 위해 새로운 배열을 생성하여 answers에 반영
-        this.selectedInquiry.answers = [...this.selectedInquiry.answers, newAnswer];
-
-        // 전체 문의 목록에서도 해당 문의의 답변 목록에 새 답변 추가
-        const inquiryIndex = this.inquiries.findIndex(inquiry => inquiry.idx === this.selectedInquiry.idx);
-        if (inquiryIndex !== -1) {
-          // 기존 answers 배열에 새 답변 추가
-          this.inquiries[inquiryIndex].answers = [...this.inquiries[inquiryIndex].answers, newAnswer];
+      // 전체 문의 목록에서도 해당 문의의 상태를 업데이트
+      const inquiryIndex = this.inquiries.findIndex(
+        (inquiry) => inquiry.idx === this.selectedInquiry.idx
+      );
+      this.loadInquiries();
+    if (inquiryIndex !== -1) {
+      // inquiries 배열을 업데이트하여 반응성 유지
+      this.inquiries = [
+        ...this.inquiries.slice(0, inquiryIndex),
+        {
+        ...this.inquiries[inquiryIndex],
+        answers: [...this.inquiries[inquiryIndex].answers, newAnswer],
+        answerStatus: '답변완료',
+        },
+        ...this.inquiries.slice(inquiryIndex + 1),
+        ];
         }
-
-        // 상태를 '답변완료'로 변경
-        this.selectedInquiry.answerStatus = '답변완료';
-        if (inquiryIndex !== -1) {
-          this.inquiries[inquiryIndex].answerStatus = '답변완료';
-        }
-
-        this.closeModal();
-      } catch (error) {
-        console.error("답변 등록 실패:", error);
       }
     },
-    onAnswerRegistered(newAnswer) {
-      if (this.selectedInquiry && Array.isArray(this.selectedInquiry.answers)) {
-        // 기존 answers 배열을 새로운 배열로 재할당하여 반응성 유도
-        this.selectedInquiry.answers = [...this.selectedInquiry.answers, newAnswer];
-
-        // 답변이 등록되었으므로 상태를 '답변완료'로 변경
-        this.selectedInquiry.answerStatus = '답변완료';
-
-        // 전체 문의 목록에서도 해당 문의의 상태 업데이트
-        const inquiryIndex = this.inquiries.findIndex(inquiry => inquiry.idx === this.selectedInquiry.idx);
-        if (inquiryIndex !== -1) {
-          this.inquiries[inquiryIndex].answerStatus = '답변완료';
-        }
+    goToPage(pageNumber) {
+      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+        this.currentPage = pageNumber;
+        this.loadInquiries();  // 페이지를 이동할 때마다 데이터를 다시 불러옵니다.
       }
-    }
+    },
+    prevPageGroup() {
+      const newPage = this.startPage - 1;
+      if (newPage >= 1) {
+        this.goToPage(newPage);
+      }
+    },
+    nextPageGroup() {
+      const newPage = this.endPage + 1;
+      if (newPage <= this.totalPages) {
+        this.goToPage(newPage);
+      }
+    },
+  },
+  watch: {
+    selectedInquiry: {
+    handler(newVal) {
+      // 새로운 answers 값이 기존 값과 다를 때만 업데이트
+      if (newVal && newVal.answers && this.selectedInquiry.answers !== newVal.answers) {
+        this.selectedInquiry.answers = [...newVal.answers];
+      }
+    },
+    deep: true, // 객체 내부의 깊은 변화를 감지
+    },
+    currentPage() {
+      this.loadInquiries();  // currentPage가 변경될 때 데이터를 다시 불러옵니다.
+    },
   },
 };
 </script>
@@ -206,6 +288,125 @@ export default {
 
 
 <style scoped>
+.tit_title{
+  width: 310px;
+}
+
+.tit_name {
+  width: 75px; /* 원하는 고정 너비로 설정 */
+  text-align: center; /* 내용 가운데 정렬 */
+}
+
+.tit_status {
+  width: 75px; /* 헤더 셀에도 동일한 고정 너비 적용 */
+}
+
+.tit_date {
+  width: 75px; /* 본문 셀에도 동일한 고정 너비 적용 */
+}
+
+.tit_write{
+  width: 50px;
+}
+
+.tit_delete{
+  width: 50px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 수직 중앙 정렬 추가 */
+  margin-top: 20px;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  gap: 5px; /* 요소 간의 간격을 추가 */
+}
+
+.page-unselected:first-of-type {
+  border-left: 1px solid rgb(221, 221, 221);
+}
+
+.css-30tvht {
+  position: relative;
+  min-height: 400px; /* 페이지가 작을 때에도 테이블 높이를 일정하게 유지 */
+  padding-bottom: 60px; /* 페이징 버튼이 겹치지 않도록 여유 공간 추가 */
+}
+
+.pagination button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  color: #aaa;
+}
+
+.prev-button, .next-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.prev-button:disabled, .next-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5; /* 비활성화 시 불투명하게 처리 */
+}
+
+.page-unselected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgb(221, 221, 221);
+  cursor: pointer;
+}
+
+.page-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgb(221, 221, 221);
+  cursor: pointer;
+  background-color: rgb(247, 247, 247);
+  color: rgb(95, 0, 128);
+}
+
+.page-unselected,
+.page-selected {
+  display: inline-flex; /* a 태그에 수평 배치를 적용 */
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgb(221, 221, 221);
+  cursor: pointer;
+}
+
+.css-rdz8z7.e82lnfz1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 0; /* 부모 요소의 맨 아래에 붙이기 */
+  background-color: white; /* 배경을 흰색으로 설정하여 내용과 구분 */
+  padding: 10px 0;
+  z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
+  width: 100%; /* 너비를 부모 요소에 맞추기 */
+  margin-top: 20px;
+}
+
 div {
   display: block;
   unicode-bidi: isolate;
@@ -362,8 +563,8 @@ div {
   width: 24px;
   height: 24px;
   border: 0 none;
-  background: url(https://res.kurly.com/pc/service/cart/2007/ico_delete.svg)
-    no-repeat 50% 50%;
+  background: url('@/assets/arrow.png') no-repeat 50% 50%;
+  background-size: contain;
   font-size: 0;
   line-height: 0;
   top: 33px;
@@ -378,4 +579,16 @@ div {
   color: #757575;
   text-align: center;
 }
+
+.title {
+  text-align: left !important; /* 강제로 왼쪽 정렬 */
+  padding-left: 30px; /* 왼쪽에 여유 공간 추가 */
+  padding-right: 30px;
+}
+
+.addr {
+  text-align: left !important; /* 내부 텍스트도 강제로 왼쪽 정렬 */
+  padding-left: 10px; /* 왼쪽에 여유 공간 추가 */
+}
 </style>
+

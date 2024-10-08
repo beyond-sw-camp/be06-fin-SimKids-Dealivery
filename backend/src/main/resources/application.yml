@@ -129,6 +129,5 @@ server:
       force: true
     context-path: ${CONTEXT_PATH}
 
-# ex. https://www.dealivery.com
 domain: ${DOMAIN}
 

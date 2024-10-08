@@ -131,10 +131,9 @@
                         <div class="css-t4macj e12wapb62">
                           <div class="css-1fvrsoi e12wapb60">
                             {{
-                              option.price *
                               (
-                                1 -
-                                this.data.discountRate / 100
+                                option.price *
+                                (1 - this.data.discountRate / 100)
                               ).toLocaleString()
                             }}원
                           </div>
@@ -228,11 +227,21 @@
 
       <button
         @click="emitSubmitOrder"
-        class="cart-button css-1qirdbn"
+        :class="
+          isBeforeOpenTime
+            ? 'cart-button css-1qirdbn-disabled'
+            : 'cart-button css-1qirdbn'
+        "
         type="button"
         radius="3"
+        :disabled="isBeforeOpenTime"
       >
-        <span class="css-nytqmg e4nu7ef1">구매하기</span>
+        <span
+          :class="
+            isBeforeOpenTime ? 'css-nytqmg-disabled' : 'css-nytqmg e4nu7ef1'
+          "
+          >{{ isBeforeOpenTime ? "오픈 시간이 아닙니다" : "구매하기" }}</span
+        >
       </button>
     </div>
   </section>
@@ -247,6 +256,7 @@ export default {
     data: {
       type: Object,
     },
+    productBoardIdx: {},
   },
   data() {
     return {
@@ -280,10 +290,16 @@ export default {
       },
     };
   },
-  // created() {
-  //   this.mapProductsToOptions();
-  // },
+  created() {
+    this.isHeartFilled = this.data.likes;
+    if (this.isHeartFilled) {
+      this.heartImage = this.filledHeartImage;
+    }
+  },
   computed: {
+    isBeforeOpenTime() {
+      return Date.now() < new Date(this.data.startedAt).getTime();
+    },
     totalPrice() {
       return this.cartItems.reduce(
         (total, item) => total + item.price * item.quantity,
@@ -352,7 +368,7 @@ export default {
     },
 
     async toggleHeart() {
-      this.request.productBoardIdx = 1;
+      this.request.productBoardIdx = this.productBoardIdx;
       if (!this.userStore.isLogined) {
         alert("로그인이 필요한 서비스입니다.");
         this.$router.push({
@@ -802,6 +818,13 @@ legend {
   cursor: pointer;
 }
 
+.css-nytqmg-disabled {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
 .css-1qirdbn {
   font-weight: 500;
   display: block;
@@ -813,6 +836,21 @@ legend {
   border-radius: 3px;
   color: #fff;
   background-color: #5f0080;
+  border: 0 none;
+}
+
+.css-1qirdbn-disabled {
+  cursor: not-allowed;
+  font-weight: 500;
+  display: block;
+  padding: 0 10px;
+  text-align: center;
+  overflow: hidden;
+  width: 60%;
+  height: 52px;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #dddddd;
   border: 0 none;
 }
 

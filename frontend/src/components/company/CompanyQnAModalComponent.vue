@@ -127,17 +127,23 @@ export default {
       this.isRegisterDisabled = this.textareaContent.trim() === "";
     },
     async registerAnswer() {
-      try {
-        // 답변 등록 API 호출
-        const response = await axios.post("/api/qna/answer/create", {
-          questionIdx: this.questionIdx,  // 문의 ID 전달
-          content: this.textareaContent,  // 답변 내용 전달
-        });
-        const newAnswer = response.data.result;  // 서버에서 응답 받은 새 답변
-        this.$emit("registerAnswer", newAnswer); // 부모 컴포넌트로 새 답변 전달
-        this.closeModal();
+    try {
+      // 답변 등록 API 호출
+      const response = await axios.post("/api/qna/answer/create", {
+        questionIdx: this.questionIdx,  // 문의 ID 전달
+        content: this.textareaContent,  // 답변 내용 전달
+      });
+      const newAnswer = response.data.result;  // 서버에서 응답 받은 새 답변
+      this.$emit("registerAnswer", newAnswer); // 부모 컴포넌트로 새 답변 전달
+
+      // 등록된 답변을 selectedInquiry의 answers에 추가
+      if (this.selectedInquiry && Array.isArray(this.selectedInquiry.answers)) {
+        this.selectedInquiry.answers.push(newAnswer);
+      }
+      
+      this.closeModal();  // 모달 닫기
       } catch (error) {
-        console.error("답변 등록 실패:", error);
+      console.error("답변 등록 실패:", error);
       }
     },
   },
@@ -615,3 +621,4 @@ textarea {
   text-align: left;
 } */
 </style>
+

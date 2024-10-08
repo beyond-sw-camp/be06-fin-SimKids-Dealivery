@@ -4,10 +4,10 @@
             <span class="close" @click="closeModal">&times;</span>
             <div class="answer-list-modal">
                 <h3>답변 목록</h3>
-                <ul>
-                    <li v-for="answer in selectedInquiry.answers || []" :key="answer.idx">
-                        <div class="answer-item">
-                            <p class="answer-content">{{ answer.content }}</p>
+                <ul v-if="selectedInquiry.answers && selectedInquiry.answers.length > 0">
+                    <li v-for="(answer, index) in selectedInquiry.answers" :key="index">
+                        <div v-if="answer" class="answer-item">
+                            <p class="answer-content">{{ answer.content || '아직 답변이 없습니다.' }}</p>
                             <div class="answer-footer">
                                 <span class="answer-date">{{ formatDate(answer.createdAt) }}</span>
                                 <button class="delete-button" @click="deleteAnswer(answer.idx)">삭제</button>
@@ -39,9 +39,19 @@ export default {
             this.$emit("closeModal");
         },
         async deleteAnswer(answerId) {
-            try {
-                await axios.delete(`/api/qna/answer/delete/${answerId}`);
-                this.$emit("answerDeleted", answerId);
+    try {
+        await axios.delete(`/api/qna/answer/delete/${answerId}`);
+        
+        const updatedAnswers = this.selectedInquiry.answers.filter(answer => answer.idx !== answerId);
+
+        // 남은 답변이 없으면 상태를 '답변대기'로 변경
+        const updatedStatus = updatedAnswers.length === 0 ? '답변대기' : this.selectedInquiry.answerStatus;
+
+        // 부모 컴포넌트에게 상태 업데이트 요청
+        this.$emit("answerDeleted", answerId, {
+            answers: updatedAnswers,
+            answerStatus: updatedStatus,
+            });
             } catch (error) {
                 console.error("답변 삭제 실패:", error);
             }
@@ -149,3 +159,4 @@ export default {
     background-color: #5f0080;
 }
 </style>
+

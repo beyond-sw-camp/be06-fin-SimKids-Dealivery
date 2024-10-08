@@ -17,16 +17,19 @@ export const useBoardStore = defineStore("board", {
   }),
   actions: {
     async getMainList(page, status) {
+      const tokenExists = await this.checkToken();
       const response = await axios.get(backend + "/main/list", {
         params: {
           page: page,
           status: status,
         },
+        withCredentials: tokenExists,
       });
       console.log(response);
       return response.data.result;
     },
     async getList(page, category, search) {
+      const tokenExists = await this.checkToken();
       const params = { page: page };
       if (category != "undefined" && category != "null" && category != "전체") {
         params.search = category;
@@ -35,13 +38,40 @@ export const useBoardStore = defineStore("board", {
       }
       const response = await axios.get(backend + "/list", {
         params: params,
+        withCredentials: tokenExists,
       });
+      console.log(response);
       return response.data.result;
     },
     async getDetail(idx) {
-      const data = await axios.get(backend + `/${idx}/detail`);
+      const tokenExists = await this.checkToken();
+      const data = await axios.get(backend + `/${idx}/detail`, {
+        withCredentials: tokenExists,
+      });
       this.boardData = data.data.result;
       return data.data.result;
+    },
+    async getLikesList(page) {
+      const response = await axios.get("/api/likes/list", {
+        params: {
+          page: page,
+        },
+        withCredentials: true,
+      });
+      console.log(response);
+      return response.data.result;
+    },
+
+    async checkToken() {
+      try {
+        const response = await axios.get("/api/check-token", {
+          withCredentials: true,
+        });
+        return response.data.isValid; // 서버에서 쿠키 유효성 검사 결과 반환
+      } catch (error) {
+        console.error(error);
+        return false; // 오류가 발생하면 false 반환
+      }
     },
 
     // --------- 판매자 ---------

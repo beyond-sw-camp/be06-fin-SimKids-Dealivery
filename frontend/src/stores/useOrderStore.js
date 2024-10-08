@@ -59,11 +59,13 @@ export const useOrderStore = defineStore('order', {
 
         async makePayment(paymentRequest) {
             let pg = paymentRequest.paymentMethod === 'kakaopay' ? process.env.VUE_APP_KAKAOPAY_CID : process.env.VUE_APP_TOSSPAY_MID
+            console.log("선택된 pg사 ====> " + pg)
             let payMethod = paymentRequest.paymentMethod === 'kakaopay' ? 'card' : 'tosspay'
             let merchantUid = "order_no_000" + new Date().getMilliseconds();
             this.customData.usedPoint = paymentRequest.usedPoint;
 
             IMP.init(process.env.VUE_APP_PORTONE_STORE_ID); // 상점 식별코드
+            console.log("상점 식별코드 ====> " + process.env.VUE_APP_PORTONE_STORE_ID)
             IMP.request_pay({
                 pg: pg,
                 pay_method: payMethod,

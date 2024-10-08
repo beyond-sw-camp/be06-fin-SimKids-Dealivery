@@ -35,39 +35,43 @@
               @deleteItem="deleteItem"
             />
 
-            <div class="css-rdz8z7 e82lnfz1">
-              <a class="page-unselected e82lnfz0" @click="goToPage(1)"
-                ><img
-                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
-                  alt="처음 페이지로 이동하기 아이콘" /></a
-              ><a class="page-unselected e82lnfz0" @click="prevPageGroup"
-                ><img
-                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
-                  alt="이전 페이지로 이동하기 아이콘"
-              /></a>
+            <div v-if="boards.length > 0">
+              <div class="css-rdz8z7 e82lnfz1">
+                <a class="page-unselected e82lnfz0" @click="goToPage(1)"
+                  ><img
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
+                    alt="처음 페이지로 이동하기 아이콘" /></a
+                ><a class="page-unselected e82lnfz0" @click="prevPageGroup"
+                  ><img
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
+                    alt="이전 페이지로 이동하기 아이콘"
+                /></a>
 
-              <a
-                v-for="pageNumber in visiblePages"
-                :key="pageNumber"
-                :class="
-                  pageNumber === currentPage
-                    ? 'page-selected e82lnfz0'
-                    : 'page-unselected e82lnfz0'
-                "
-                @click="goToPage(pageNumber)"
-              >
-                {{ pageNumber }}
-              </a>
+                <a
+                  v-for="pageNumber in visiblePages"
+                  :key="pageNumber"
+                  :class="
+                    pageNumber === currentPage
+                      ? 'page-selected e82lnfz0'
+                      : 'page-unselected e82lnfz0'
+                  "
+                  @click="goToPage(pageNumber)"
+                >
+                  {{ pageNumber }}
+                </a>
 
-              <a class="page-unselected e82lnfz0" @click="nextPageGroup"
-                ><img
-                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
-                  alt="다음 페이지로 이동하기 아이콘" /></a
-              ><a class="page-unselected e82lnfz0" @click="goToPage(totalPages)"
-                ><img
-                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
-                  alt="마지막 페이지로 이동하기 아이콘"
-              /></a>
+                <a class="page-unselected e82lnfz0" @click="nextPageGroup"
+                  ><img
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
+                    alt="다음 페이지로 이동하기 아이콘" /></a
+                ><a
+                  class="page-unselected e82lnfz0"
+                  @click="goToPage(totalPages)"
+                  ><img
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
+                    alt="마지막 페이지로 이동하기 아이콘"
+                /></a>
+              </div>
             </div>
           </div>
         </div>
@@ -218,16 +222,6 @@ export default {
       const number = str.match(/\d+/);
       return number ? parseInt(number[0], 10) : null;
     },
-  },
-  beforeRouteUpdate(to, from, next) {
-    if (
-      to.query.page !== from.query.page ||
-      to.query.dateRange !== from.query.dateRange ||
-      to.query.orderStatus !== from.query.orderStatus
-    ) {
-      this.setBoards();
-    }
-    next();
   },
 };
 </script>

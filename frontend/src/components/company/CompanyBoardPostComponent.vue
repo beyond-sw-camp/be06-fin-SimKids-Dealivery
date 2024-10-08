@@ -59,14 +59,17 @@
               <tr>
                 <th>상품 추가</th>
                 <td colspan="2">
-                  <button
-                    id="board-link"
-                    class="addProductBtn"
-                    @click="displayModal"
-                    :disabled="!isActivate"
-                  >
-                    추가
-                  </button>
+                  <div v-if="products.length < 5">
+                    <button
+                      id="board-link"
+                      class="addProductBtn"
+                      @click="displayModal"
+                      :disabled="!isActivate"
+                    >
+                      추가
+                    </button>
+                  </div>
+                  <div v-else>상품은 5개까지 등록할 수 있습니다.</div>
                   <div v-if="isDisplayModal">
                     <CompanyBoardModalComponent
                       @closeModal="displayModal"

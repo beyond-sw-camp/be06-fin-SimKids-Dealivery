@@ -7,6 +7,7 @@
           <BoardDetailThumnailComponent :thumbnails="thumbnails" />
           <BoardDetailProductInfoComponent
             :data="data"
+            :productBoardIdx="productBoardIdx"
             @submitOrder="submitOrder"
           />
         </main>

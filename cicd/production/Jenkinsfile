@@ -1,0 +1,217 @@
+pipeline {
+    agent any
+
+    environment {
+        // 현재 작업해야 할 값 (frontend, backend, all)을 저장할 변수
+        TARGET_COMPONENT = ''
+    }
+
+    stages {
+
+        stage('Clean up dealivery-pipeline directory') {
+                steps {
+                    script {
+                        sh 'rm -rf ./* ./.git'
+                    }
+                }
+            }
+
+        stage('Clone Repository') {
+            steps {
+                // Git 리포지토리 클론
+                echo "Cloning Repository..."
+                git branch: 'main', url: 'https://github.com/beyond-sw-camp/be06-fin-SimKids-Dealivery.git'
+            }
+        }
+
+        stage('Initialize Variables') {
+            steps {
+                script {
+                    // 커밋 메시지 가져오기
+                    def commitMessage = sh(script: "git log -1 --pretty=%B", returnStdout: true).trim()
+
+                    echo "Commit Message: ${commitMessage}"
+                    if(commitMessage.contains('merge')){
+                        if (commitMessage.contains('frontend')) {
+                            TARGET_COMPONENT = 'frontend'
+                        } else if (commitMessage.contains('backend')) {
+                            TARGET_COMPONENT = 'backend'
+                        } else if (commitMessage.contains('all')) {
+                            TARGET_COMPONENT = 'all'
+                        } else {
+                            error 'No valid component specified in commit message.'
+                        }
+                        echo "Target Component: ${TARGET_COMPONENT}"
+                    }else{
+                        error 'Pipeline does not triggered by merge event'
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+
+                    withCredentials([
+                           string(credentialsId: 'VUE_APP_KAKAOPAY_CID', variable: 'VUE_APP_KAKAOPAY_CID'),
+                           string(credentialsId: 'VUE_APP_TOSSPAY_MID', variable: 'VUE_APP_TOSSPAY_MID'),
+                           string(credentialsId: 'VUE_APP_PORTONE_STORE_ID', variable: 'VUE_APP_PORTONE_STORE_ID')
+                       ]) {
+
+                        if (TARGET_COMPONENT == 'backend') {
+                            sh '''
+                            chmod +x backend/gradlew
+                            cd backend
+                            ./gradlew bootJar
+                            '''
+                        } else if (TARGET_COMPONENT == 'frontend') {
+                            // 프론트엔드 env파일 수정
+                            sh """
+                            sed -i "s|VUE_APP_KAKAOPAY_CID_PLACEHOLDER|${VUE_APP_KAKAOPAY_CID}|g" frontend/.env
+                            sed -i "s|VUE_APP_TOSSPAY_MID_PLACEHOLDER|${VUE_APP_TOSSPAY_MID}|g" frontend/.env
+                            sed -i "s|VUE_APP_PORTONE_STORE_ID_PLACEHOLDER|${VUE_APP_PORTONE_STORE_ID}|g" frontend/.env
+                            
+                            cat frontend/.env
+
+                            echo ${VUE_APP_KAKAOPAY_CID}
+                            echo ${VUE_APP_TOSSPAY_MID}
+                            echo ${VUE_APP_PORTONE_STORE_ID}
+                            
+                            cd frontend
+                            npm i
+                            npm run build
+                            git rm -rf .env
+                            """
+                        } else if (TARGET_COMPONENT == 'all') {
+                            // 프론트엔드 env파일 수정
+
+                            sh """
+                            chmod +x backend/gradlew
+                            cd backend
+                            ./gradlew bootJar
+                            cd ../frontend
+                            sed -i "s|VUE_APP_KAKAOPAY_CID_PLACEHOLDER|${VUE_APP_KAKAOPAY_CID}|g" .env
+                            sed -i "s|VUE_APP_TOSSPAY_MID_PLACEHOLDER|${VUE_APP_TOSSPAY_MID}|g" .env
+                            sed -i "s|VUE_APP_PORTONE_STORE_ID_PLACEHOLDER|${VUE_APP_PORTONE_STORE_ID}|g" .env
+                            
+                            cat .env
+
+                            echo ${VUE_APP_KAKAOPAY_CID}
+                            echo ${VUE_APP_TOSSPAY_MID}
+                            echo ${VUE_APP_PORTONE_STORE_ID}
+
+                            
+                            npm i
+                            npm run build
+                            git rm -rf .env
+                            """
+                        } else {
+                            echo "Build Fail........................."
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        stage('Dockerize') {
+            steps {
+                script {
+                    echo "Dockerizing Components..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credential', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                                               sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                                           }
+                    if (TARGET_COMPONENT == 'backend') {
+                       // Docker 이미지 빌드 및 푸시
+                       sh '''
+                       docker build --tag simkids/prod-dealivery-backend:1.${BUILD_NUMBER} ./backend
+                       docker push simkids/prod-dealivery-backend:1.${BUILD_NUMBER}
+                       '''
+                    } else if (TARGET_COMPONENT == 'frontend') {
+                        // Docker 이미지 빌드 및 푸시
+                        sh '''
+                        docker build --tag simkids/prod-dealivery-frontend:1.${BUILD_NUMBER} ./frontend
+                        docker push simkids/prod-dealivery-frontend:1.${BUILD_NUMBER}
+                        '''
+                    } else if (TARGET_COMPONENT == 'all') {
+                        sh '''
+                        docker build --tag simkids/prod-dealivery-backend:1.${BUILD_NUMBER} ./backend
+                        docker build --tag simkids/prod-dealivery-frontend:1.${BUILD_NUMBER} ./frontend
+                        docker push simkids/prod-dealivery-backend:1.${BUILD_NUMBER}
+                        docker push simkids/prod-dealivery-frontend:1.${BUILD_NUMBER}
+                        '''
+                    } else {
+                        echo "Build Fail........................."
+                    }
+                }
+            }
+        }
+
+        stage('Edit Manifest') {
+            steps {
+                script{
+                    echo "Editing Manifest..."
+                    sh 'cd ..'
+                    sh 'git checkout argoCD'
+                       if (TARGET_COMPONENT == 'backend') {
+                           // 백엔드 rollout 수정 후
+                          sh """
+                          cd cicd/production
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' backend-rollout.yml
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' backend-oauth-rollout.yml
+                          """
+                       } else if (TARGET_COMPONENT == 'frontend') {
+                          sh """
+                          cd cicd/production
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' frontend-rollout.yml
+                          """
+                       } else if (TARGET_COMPONENT == 'all') {
+                          sh """
+                          cd cicd/production
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' backend-rollout.yml
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' backend-oauth-rollout.yml
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' frontend-rollout.yml
+                          """
+                       } else {
+                           echo "Rollout Edit Fail............................"
+                       }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script{
+                    echo "Deploying Components..."
+                    withCredentials([
+                           string(credentialsId: 'github_username', variable: 'GITHUB_USERNAME'),
+                           string(credentialsId: 'github_token', variable: 'GITHUB_TOKEN'),
+                           string(credentialsId: 'repository', variable: 'GITHUB_URL')
+                       ]) {
+                              sh """
+                              git add .
+                              git commit -m "[Deploy] v1.${BUILD_NUMBER} ${TARGET_COMPONENT} 배포"
+                              git remote set-url origin https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@${GITHUB_URL}
+                              # 변경 사항을 원격 저장소의 cicd 브랜치로 푸시
+                              git push origin argoCD
+                              """
+                       }
+
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            sh '''
+            echo "성공"
+            '''
+        }
+        failure {
+            sh 'echo "실패"'
+        }
+    }
+}

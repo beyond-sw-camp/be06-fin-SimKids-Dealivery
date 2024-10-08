@@ -1,9 +1,8 @@
 <template>
-    
     <div class="css-heioij eug5r8l1">
         <div class="css-1xdhyk6 eug5r8l0">
             <ul>
-                <li class="css-1w5u25a e1q2koch0" v-for="(inquiry, index) in inquiries || []" :key="index">
+                <li class="css-1w5u25a e1q2koch0" v-for="(inquiry, index) in paginatedInquiries" :key="index">
                     <button type="button" class="inquiry-product-info" @click="toggleDetail(index)">
                         <div class="product-info-wrap">
                             <div class="product-name">{{ inquiry.productTitle }}</div>
@@ -16,9 +15,8 @@
                                 <span class="created-at-text">{{ formatDate(inquiry.createdAt) }}</span>
                             </div>
                         </div>
-                        <a :href="'/product/' + inquiry.productBoardIdx" class="product-image-wrap">
-                            <!-- 이미지가 없는 경우 대비하여 기본 이미지를 제공 -->
-                            <img :src="getProductImage(inquiry)" :alt="inquiry.title">
+                        <a :href="'/board/detail/' + inquiry.productBoardIdx" class="product-image-wrap">
+                            <img :src="inquiry.productImageUrl || 'https://via.placeholder.com/150'" :alt="inquiry.title">
                         </a>
                     </button>
                     <div name="fade" @after-enter="afterEnter" @after-leave="afterLeave">
@@ -27,8 +25,7 @@
                                 <!-- 아이콘과 질문/답변을 같은 줄에 배치 -->
                                 <div class="content-row flex-row">
                                     <div class="icon-wrap">
-                                        <img src="https://res.kurly.com/kurly/ico/2021/question_24_24_purple.svg"
-                                            alt="질문">
+                                        <img src="https://res.kurly.com/kurly/ico/2021/question_24_24_purple.svg" alt="질문">
                                     </div>
                                     <p class="subject">{{ inquiry.content }}</p>
                                 </div>
@@ -36,8 +33,7 @@
                                     <div v-for="(answer, answerIndex) in inquiry.answers" :key="answerIndex"
                                         class="answer-section flex-row">
                                         <div class="icon-wrap">
-                                            <img src="https://res.kurly.com/kurly/ico/2021/answer_24_24_purple.svg"
-                                                alt="답변">
+                                            <img src="https://res.kurly.com/kurly/ico/2021/answer_24_24_purple.svg" alt="답변">
                                         </div>
                                         <div class="answer-content">
                                             <p class="subject">{{ answer.content }}</p>
@@ -46,6 +42,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <!-- 답변대기 상태일 때만 수정/삭제 버튼 표시 -->
+                                <div class="css-1j49yxi e11ufodi1" v-if="inquiry.answerStatus === '답변대기'">
+                                    <button @click="openEditModal(inquiry, index)">수정</button>
+                                    <button @click="deleteInquiry(inquiry.idx, index)">삭제</button>
                                 </div>
                                 <div v-if="inquiry.answers.length === 0" class="no-answer">
                                     <img src="https://res.kurly.com/kurly/ico/2021/answer_24_24_purple.svg" alt="답변">
@@ -56,34 +57,110 @@
                     </div>
                 </li>
             </ul>
+            <!-- 페이지 네비게이션 -->
+            <div class="css-rdz8z7 e82lnfz1" v-if="inquiries.length !== 0">
+                <a class="page-unselected e82lnfz0" @click="goToPage(1)">
+                    <img
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
+                    alt="처음 페이지로 이동하기 아이콘" />
+                </a>
+                <a class="page-unselected e82lnfz0" @click="prevPageGroup">
+                    <img
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
+                    alt="이전 페이지로 이동하기 아이콘"
+                    />
+                </a>
+
+                <a
+                    v-for="pageNumber in visiblePages"
+                    :key="pageNumber"
+                    :class="pageNumber === currentPage ? 'page-selected e82lnfz0' : 'page-unselected e82lnfz0'"
+                    @click="goToPage(pageNumber)"
+                >
+                    {{ pageNumber }}
+                </a>
+
+                <a class="page-unselected e82lnfz0" @click="nextPageGroup">
+                    <img
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
+                    alt="다음 페이지로 이동하기 아이콘"
+                    />
+                </a>
+                <a class="page-unselected e82lnfz0" @click="goToPage(totalPages)">
+                <img
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
+                    alt="마지막 페이지로 이동하기 아이콘"
+                    />
+                </a>
+            </div>
         </div>
     </div>
+
+    <!-- 수정 모달 -->
+    <QnaRegisterModalComponent v-if="showEditInquiryModal" :initialSubject="selectedInquiry.title"
+        :initialContent="selectedInquiry.content" :inquiryId="selectedInquiry.idx" @close="closeModal"
+        @submit="updateInquiry" :isEditMode="true" :productBoardIdx="selectedInquiry.productBoardIdx"
+        :thumbnail="selectedInquiry.productImageUrl" :title="selectedInquiry.productTitle" />
 </template>
 
 <script>
+import { useBoardStore } from "@/stores/useBoardStore";
+import { mapStores } from "pinia";
 import axios from "axios";
+import QnaRegisterModalComponent from "../qna/QnaRegisterModalComponent.vue"; // 수정 모달
 
 export default {
+    components: { QnaRegisterModalComponent },
     data() {
         return {
             inquiries: [],  // 서버로부터 받아온 문의 목록
-            showDetailIndex: null
+            showDetailIndex: null,
+            showEditInquiryModal: false,
+            selectedInquiry: null,  // 선택된 문의 데이터
+            currentPage: 1,       // 현재 페이지
+            pageSize: 5,          // 페이지 당 아이템 개수
+            totalInquiries: 0,    // 전체 문의 개수
         };
     },
     mounted() {
         this.loadMyInquiries();  // 컴포넌트가 마운트될 때 로그인된 사용자의 문의 목록을 불러옴
-        window.scrollTo({
-            top: 100,
-            left: 0,
-            behavior: 'smooth'
-        });
+    },
+    computed: {
+        ...mapStores(useBoardStore),
+                // 페이징 처리된 문의 목록
+                paginatedInquiries() {
+            const start = (this.currentPage - 1) * this.pageSize;
+            const end = start + this.pageSize;
+            return this.inquiries.slice(start, end);
+        },
+        totalPages() {
+            return Math.ceil(this.totalInquiries / this.pageSize);
+        },
+        visiblePages() {
+            const pages = [];
+            for (let i = 1; i <= this.totalPages; i++) {
+                pages.push(i);
+            }
+            return pages;
+        },
     },
     methods: {
         async loadMyInquiries() {
             try {
                 const response = await axios.get('/api/qna/question/list/my');
-                this.inquiries = response.data.result;  // 문의 목록을 데이터에 저장
-                console.log(this.inquiries);
+                this.inquiries = response.data.result;
+
+                this.inquiries.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                this.totalInquiries = this.inquiries.length; // 전체 문의 수 설정
+
+                // 각 문의에 대한 상품 이미지 URL을 추가로 불러옴
+                for (const inquiry of this.inquiries) {
+                    const product = await this.boardStore.getDetail(inquiry.productBoardIdx);
+                    inquiry.productImageUrl = product?.productThumbnailUrls?.[0] || null;
+                }
+
+                console.log(this.inquiries);  // 문의 목록 확인
             } catch (error) {
                 console.error("로그인된 사용자의 문의 목록을 불러오는 데 실패했습니다.", error);
             }
@@ -91,29 +168,167 @@ export default {
         toggleDetail(index) {
             this.showDetailIndex = this.showDetailIndex === index ? null : index;
         },
-        afterEnter(el) {
-            el.style.maxHeight = 'none';  // 애니메이션 후 스타일 설정
+        openEditModal(inquiry) {
+            console.log(inquiry);  // inquiry에 idx 값이 있는지 확인
+            this.selectedInquiry = inquiry;
+            this.showEditInquiryModal = true; // 수정 모달 표시
         },
-        afterLeave(el) {
-            el.style.maxHeight = '0px';  // 애니메이션 후 스타일 설정
+        closeModal() {
+            this.showEditInquiryModal = false;
+        },
+        async updateInquiry(updatedInquiry) {
+        // updatedInquiry에 idx가 없으면 경고 메시지를 출력하고 종료
+        if (!updatedInquiry || !updatedInquiry.idx) {
+            console.error("No idx found in updated inquiry:", updatedInquiry);
+            return;
+        }
+
+        try {
+            // PUT 요청을 통해 문의 수정
+            const response = await axios.put(`/api/qna/question/update/${updatedInquiry.idx}`, updatedInquiry);
+            if (response.data.isSuccess) {
+                // 문의 수정 후 목록을 다시 로드
+                await this.loadMyInquiries();
+                this.showEditInquiryModal = false;  // 모달 닫기
+            } else {
+                console.error("문의 수정 실패:", response.data.message);
+            }
+        } catch (error) {
+            console.error("문의 수정 중 오류 발생:", error);
+        }
+    },
+        async deleteInquiry(idx, index) {
+            try {
+                await axios.delete(`/api/qna/question/delete/${idx}`);
+                this.inquiries.splice(index, 1); // 삭제 후 목록에서 제거
+                this.showDetailIndex = null; // 페이지 이동 시 토글 상태 초기화
+            } catch (error) {
+                console.error("문의 삭제 실패:", error);
+            }
         },
         formatDate(dateString) {
             const date = new Date(dateString);
-            if (isNaN(date.getTime())) {
-                return 'Invalid Date';
-            }
-            return date.toLocaleDateString(); // 원하는 형식으로 변환
+            return isNaN(date.getTime()) ? 'Invalid Date' : date.toLocaleDateString(); 
         },
-        getProductImage(inquiry) {
-            return inquiry.productImageUrl || "https://via.placeholder.com/150";  // 기본 이미지 제공
-        }
+        // 페이징 처리 관련 메서드들
+        goToPage(pageNumber) {
+            if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+                this.currentPage = pageNumber;
+                this.showDetailIndex = null; // 페이지 이동 시 토글 상태 초기화
+            }
+        },
+        prevPage() {
+            if (this.currentPage > 1) {
+                this.currentPage -= 1;
+                this.showDetailIndex = null; // 페이지 이동 시 토글 상태 초기화
+            }
+        },
+        nextPage() {
+            if (this.currentPage < this.totalPages) {
+                this.currentPage += 1;
+                this.showDetailIndex = null; // 페이지 이동 시 토글 상태 초기화
+            }
+        },
     },
-
 }
 </script>
 
 
 <style scoped>
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 수직 중앙 정렬 추가 */
+    margin-top: 20px;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    gap: 5px; /* 요소 간의 간격을 추가 */
+}
+
+.page-unselected:first-of-type {
+    border-left: 1px solid rgb(221, 221, 221);
+}
+
+.css-30tvht {
+    position: relative;
+    min-height: 400px; /* 페이지가 작을 때에도 테이블 높이를 일정하게 유지 */
+    padding-bottom: 60px; /* 페이징 버튼이 겹치지 않도록 여유 공간 추가 */
+}
+
+.pagination button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    cursor: not-allowed;
+    color: #aaa;
+}
+
+.prev-button, .next-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.prev-button:disabled, .next-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5; /* 비활성화 시 불투명하게 처리 */
+}
+
+.page-unselected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgb(221, 221, 221);
+    cursor: pointer;
+}
+
+.page-selected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgb(221, 221, 221);
+    cursor: pointer;
+    background-color: rgb(247, 247, 247);
+    color: rgb(95, 0, 128);
+}
+
+.page-unselected,
+.page-selected {
+    display: inline-flex; /* a 태그에 수평 배치를 적용 */
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgb(221, 221, 221);
+    cursor: pointer;
+}
+
+.css-rdz8z7.e82lnfz1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 0; /* 부모 요소의 맨 아래에 붙이기 */
+    background-color: white; /* 배경을 흰색으로 설정하여 내용과 구분 */
+    padding: 10px 0;
+    z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
+    width: 100%; /* 너비를 부모 요소에 맞추기 */
+    margin-top: 20px;
+}
+
 .row-inquiry-detail>.inquiry-detail-content>.content-row {
     display: flex;
     align-items: center;
@@ -523,7 +738,7 @@ img {
 
 /* Flex 속성으로 답변을 가로로 나열 */
 .horizontal-answers {
-    display: flex;
+    display: block;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 20px;
@@ -531,8 +746,7 @@ img {
 }
 
 .answer-section {
-    flex: 1 1 auto;
-    min-width: 200px;
+    width: 100%; /* 한 줄에 하나씩 답변이 나열되도록 설정 */
 }
 
 .answer-content {
@@ -604,5 +818,22 @@ img {
 .flex-row {
     display: flex;
     align-items: center;
+}
+
+.css-1j49yxi {
+    width: 100%;
+    display: flex;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+}
+
+.css-1j49yxi button {
+    position: relative;
+    padding: 0px 11px;
+    font-size: 14px;
+    line-height: 20px;
+    border: 0px;
+    background: none;
+    color: rgb(153, 153, 153);
 }
 </style>

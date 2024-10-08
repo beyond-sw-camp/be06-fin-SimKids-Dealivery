@@ -22,11 +22,7 @@
     </nav>
     <!-- 상품 상세 설명 section -->
     <div class="css-0 el27cq1">
-      <div
-        id="description"
-        class="css-18eozqj el27cq0"
-        v-show="activeTab === 'description'"
-      >
+      <div id="description" class="css-18eozqj el27cq0" v-show="activeTab === 'description'">
         <div class="css-1d3w5wq e1d86arr0">
           <div class="css-1lyi66c">
             <div class="goods_wrap">
@@ -48,13 +44,7 @@
     <!-- 문의 하기 리스트 section -->
     <div class="css-30tvht eewa3w91" v-show="activeTab === 'inquiries'">
       <div class="css-17juoyc eewa3w90">
-        <button
-          class="css-mhrz8m e4nu7ef3"
-          type="button"
-          width="120"
-          height="40"
-          @click="openNewInquiryModal"
-        >
+        <button class="css-mhrz8m e4nu7ef3" type="button" width="120" height="40" @click="openNewInquiryModal">
           <span class="css-nytqmg e4nu7ef1">문의하기</span>
         </button>
       </div>
@@ -92,10 +82,7 @@
             </td>
             <td class="css-bhr3cq e1l5ky7y5">{{ row.answerStatus }}</td>
           </tr>
-          <tr
-            v-show="expandedInquiryIndex === index"
-            class="css-1mvq381 e61d7mt0"
-          >
+          <tr v-show="expandedInquiryIndex === index" class="css-1mvq381 e61d7mt0">
             <td colspan="4">
               <div class="css-tnubsz e1ptpt003">
                 <div class="css-1n83etr e1ptpt002">
@@ -106,8 +93,8 @@
                     <span>{{ row.content }}<br /></span>
                   </div>
                 </div>
-                <div class="css-1j49yxi e11ufodi1" v-if="row.answerStatus !== '답변완료' && row.email === this.userEmail">
-                  <button type=" button" @click="openEditModal(index)">수정</button>
+                <div class="css-1j49yxi e11ufodi1" v-if="shouldShowEditDeleteButtons(row)">
+                  <button type="button" @click="openEditModal(index)">수정</button>
                   <button type="button" class="css-1ankuif e11ufodi0" @click="deleteInquiry(row.idx, index)">삭제</button>
                 </div>
               </div>
@@ -118,9 +105,7 @@
                   </div>
                   <div class="css-1bv2zte e1ptpt000">
                     <div>{{ answer.content }}</div>
-                  </div>
-                  <div class="css-17g9jzg e1gk8zam0">
-                    {{ answer.createdAt ? formatDate(answer.createdAt) : '작성 시간 없음' }}
+                    <div class="css-17g9jzg e1gk8zam0 answer-date-left">{{ answer.createdAt ? formatDate(answer.createdAt) : '작성 시간 없음' }}</div>
                   </div>
                 </div>
               </div>
@@ -128,26 +113,54 @@
           </tr>
         </tbody>
       </table>
+      <div class="css-rdz8z7 e82lnfz1" v-if="totalInquiries > 0">
+        <!-- 처음 페이지로 이동 -->
+          <a class="page-unselected" @click="goToPage(1)">
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
+              alt="처음 페이지로 이동"
+            />
+          </a>
+          <!-- 이전 페이지로 이동 -->
+          <a class="page-unselected" @click="prevPage">
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
+              alt="이전 페이지로 이동"/>
+          </a>
+          <!-- 페이지 번호 표시 -->
+          <!-- 페이지 번호 표시 -->
+          <a
+            v-for="pageNumber in visiblePages"
+            :key="pageNumber"
+            :class="pageNumber === currentPage ? 'page-selected' : 'page-unselected'"
+            @click="goToPage(pageNumber)"
+          >
+            {{ pageNumber }}
+          </a>
+          <!-- 다음 페이지로 이동 -->
+          <a class="page-unselected" @click="nextPageGroup">
+            <img
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
+            alt="다음 페이지로 이동"/>
+          </a>
+          <!-- 마지막 페이지로 이동 -->
+          <a class="page-unselected" @click="goToPage(totalPages)">
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
+              alt="마지막 페이지로 이동"/>
+          </a>
+        </div>
     </div>
 
     <!-- 새 문의 작성 모달 -->
-    <QnaRegisterModalComponent
-      v-if="showNewInquiryModal"
-      @close="closeModal"
-      @submit="addNewInquiry"
-      :productBoardIdx="productBoardIdx"
-      :thumbnail="thumbnails[0]"
-      :title="productTitle"
-    />
+    <QnaRegisterModalComponent v-if="showNewInquiryModal" @close="closeModal" @submit="addNewInquiry"
+      :isEditMode="false" :productBoardIdx="productBoardIdx" :thumbnail="thumbnails[0]" :title="productTitle" />
 
     <!-- 수정 모달 -->
-    <QnaRegisterModalComponent
-      v-if="showEditInquiryModal"
-      :initialSubject="selectedInquiry.title"
-      :initialContent="selectedInquiry.content"
-      @close="closeModal"
-      @submit="updateInquiry"
-    />
+    <QnaRegisterModalComponent v-if="showEditInquiryModal" :initialSubject="selectedInquiry.title"
+      :initialContent="selectedInquiry.content" :inquiryId="selectedInquiry.idx" @close="closeModal"
+      @submit="updateInquiry" :isEditMode="true" :productBoardIdx="productBoardIdx" :thumbnail="thumbnails[0]"
+      :title="productTitle" />
   </div>
 </template>
 
@@ -156,14 +169,38 @@ import { useQnaStore } from "@/stores/useQnaStore";
 import QnaRegisterModalComponent from "../qna/QnaRegisterModalComponent.vue";
 import { mapStores } from "pinia";
 import { useUserStore } from "@/stores/useUserStore";
-import axios from "axios";
+import axios from 'axios'; 
 
 export default {
   name: "BoardDetailNavComponent",
   computed: {
     ...mapStores(useQnaStore, useUserStore),
-    userEmail() {
-      return this.userStore.userDetail.email || "email 세팅 안 됨";
+    userType() {
+      if (this.userStore.roles.includes("ROLE_USER")) {
+        return "ROLE_USER";
+      } else if (this.userStore.roles.includes("ROLE_COMPANY")) {
+        return "ROLE_COMPANY";
+      }
+      return null;
+    },
+    totalPages() {
+      return Math.ceil(this.totalInquiries / this.pageSize);
+    },
+    paginatedInquiries() {
+      return this.localTableData.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+    },
+    visiblePages() {
+      const pageNumbers = [];
+      for (let i = this.startPage; i <= this.endPage; i++) {
+        pageNumbers.push(i);
+      }
+      return pageNumbers;
+    },
+    startPage() {
+      return Math.floor((this.currentPage - 1) / this.pagesPerGroup) * this.pagesPerGroup + 1;
+    },
+    endPage() {
+      return Math.min(this.startPage + this.pagesPerGroup - 1, this.totalPages);
     },
   },
   props: {
@@ -197,48 +234,54 @@ export default {
       },
       localTableData: [],
       expandedInquiryIndex: null,
-      editingIndex: null, // 수정할 문의 인덱스
+      editingIndex: null,
+      currentPage: 1,
+      pageSize: 6,
+      totalInquiries: 0,
+      pagesPerGroup: 5,
+      // 사용자 정보를 직접 관리하기 위해 새로운 상태 추가
+      userDetailWithoutAlert: {
+      email: "",
+      roles: [],
+      },
     };
   },
   methods: {
     loadInquiries() {
-      this.activeTab = "inquiries"; // 문의 탭 활성화
-      
-      axios.get('/api/user/detail', { withCredentials: true })
-        .then((response) => {
-          if (response.data.code === 1000) {
-            const userEmail = response.data.result.email;
-            console.log("로그인된 사용자의 이메일:", userEmail);
-            this.userStore.userDetail = response.data.result;
-          } else {
-            console.log("회원 정보를 가져오는 데 실패했습니다.");
-          }
-        })
-        .catch((error) => {
-          // 에러가 발생해도 alert 대신 로그만 출력
-          console.error("회원 정보 조회 중 오류 발생:", error);
-        })
-        .finally(() => {
-          // 회원정보 조회에 성공하든 실패하든 문의 목록은 조회하도록
-          this.qnaStore.fetchInquiries().then(() => {
-            this.localTableData = this.qnaStore.inquiries;
-          });
+      this.activeTab = "inquiries";
+
+      // 사용자 정보를 alert 없이 로드
+      this.getUserDetailWithoutAlert().then(() => {
+        this.qnaStore.fetchInquiries().then(() => {
+          const inquiries = this.qnaStore.inquiries
+            .filter((inquiry) => inquiry.productBoardIdx === this.productBoardIdx)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+          this.totalInquiries = inquiries.length;
+          this.localTableData = inquiries.slice(
+            (this.currentPage - 1) * this.pageSize,
+            this.currentPage * this.pageSize
+          );
         });
+      });
     },
     formatDate(dateString) {
       const date = new Date(dateString);
-      return date.toLocaleDateString("ko-KR", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      });
+      return date.toLocaleDateString("ko-KR", { year: "numeric", month: "2-digit", day: "2-digit" });
     },
     openNewInquiryModal() {
-      this.showNewInquiryModal = true;
+      if (!this.userStore.isLogined) {
+        alert("로그인 후 이용해주세요.");
+      } else if (this.userType === "ROLE_COMPANY") {
+        alert("일반회원만 문의 가능합니다.");
+      } else if (this.userType === "ROLE_USER") {
+        this.showNewInquiryModal = true;
+      }
     },
     openEditModal(index) {
-      this.selectedInquiry = { ...this.localTableData[index] }; // 선택한 문의 데이터를 저장
-      this.editingIndex = index; // 수정할 문의의 인덱스를 저장
+      const selectedInquiry = { ...this.localTableData[index] };
+      this.selectedInquiry = selectedInquiry;
+      this.editingIndex = index;
       this.showEditInquiryModal = true;
     },
     closeModal() {
@@ -251,7 +294,7 @@ export default {
     },
     maskAuthorName(name) {
       if (!name) {
-        return "익명"; // name이 undefined나 null일 경우 기본값을 반환
+        return "익명";
       }
       if (name.length <= 2) {
         return name[0] + "*";
@@ -265,44 +308,94 @@ export default {
       el.style.maxHeight = "0px";
     },
     addNewInquiry(newInquiry) {
-      newInquiry.email = this.userEmail;  // 로그인된 사용자의 이메일을 새 문의에 추가
+      this.localTableData.unshift(newInquiry);  // 새로 등록된 문의를 맨 위에 추가
+      this.totalInquiries += 1;  // 전체 문의 개수 증가
+      this.checkPageAdjustments();
       this.closeModal();
     },
     updateInquiry(updatedInquiry) {
       if (this.editingIndex !== null) {
-        // 수정된 데이터를 배열에 직접 반영
         this.localTableData[this.editingIndex] = {
           ...this.localTableData[this.editingIndex],
           ...updatedInquiry,
-          created_at: new Date().toISOString().split("T")[0], // 수정 날짜로 갱신
         };
         this.editingIndex = null;
         this.closeModal();
       }
     },
     deleteInquiry(idx, index) {
-      this.qnaStore.deleteInquiry(idx, index);
+      // 서버로 삭제 요청 보내기
+      this.qnaStore.deleteInquiry(idx, index).then(() => {
+        // localTableData에서 해당 문의를 즉시 제거
+        this.localTableData.splice(index, 1);
+        this.totalInquiries -= 1; // 전체 문의 개수 감소
+        this.checkPageAdjustments(); // 페이징 조정
 
-      if (this.expandedInquiryIndex === index) {
-        // 삭제된 인덱스가 현재 토글된 인덱스라면 초기화
-        this.expandedInquiryIndex = null;
-      } else if (this.expandedInquiryIndex > index) {
-        // 삭제된 인덱스가 현재 토글된 인덱스보다 앞에 있을 경우, 인덱스 보정
-        this.expandedInquiryIndex -= 1;
+        // 삭제된 문의가 화면에 보이지 않도록 즉시 반영
+        if (this.expandedInquiryIndex === index) {
+          this.expandedInquiryIndex = null;
+        } else if (this.expandedInquiryIndex > index) { 
+          this.expandedInquiryIndex -= 1;
+        }
+      }).catch(error => {
+        console.error("문의 삭제 중 오류 발생:", error);
+      });
+    },
+    // 수정/삭제 버튼이 노출될 조건 체크
+    shouldShowEditDeleteButtons(row) {
+      console.log("row.email->" + row.email + "  userEmail->" + this.userDetailWithoutAlert.email);
+      return row.answerStatus === '답변대기' && row.email === this.userDetailWithoutAlert.email;
+    },
+    checkPageAdjustments() {
+      // 페이징 계산을 다시 하여 데이터가 제대로 분할되고 표시되는지 확인
+      if (this.totalInquiries <= (this.currentPage - 1) * this.pageSize && this.currentPage > 1) {
+        this.currentPage -= 1;
+      }
+      this.loadInquiries();  // 페이지 재로딩
+    },
+    goToPage(pageNumber) {
+      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+        this.currentPage = pageNumber;
+        this.loadInquiries();
+      }
+    },
+    prevPageGroup() {
+      const newPage = this.startPage - 1;
+      if (newPage >= 1) {
+        this.goToPage(newPage);
+      }
+    },
+    nextPageGroup() {
+      const newPage = this.endPage + 1;
+      if (newPage <= this.totalPages){
+        this.goToPage(newPage);
+      }
+    },
+    // 새로운 사용자 정보 로드 메서드 추가
+    async getUserDetailWithoutAlert() {
+      try {
+        const response = await axios.get("/api/user/detail", {
+          withCredentials: true,
+        });
+        if (response.data.code === 1000) {
+          this.userDetailWithoutAlert = response.data.result;
+          console.log(this.userDetailWithoutAlert)
+          return true;
+        } else {
+          console.log("사용자 정보 조회 실패");
+          return false;
+        }
+      } catch (error) {
+        console.error("사용자 정보 조회 중 오류 발생", error);
+        return false;
       }
     },
   },
   watch: {
-    tableData(newData) {
-      if (Array.isArray(newData)) {
-        this.localTableData = newData.map((item) => ({
-          ...item,
-          content: item.content || "내용이 없습니다.",
-        }));
-      } else {
-        console.error("tableData is not an array:", newData);
-      }
-    },
+    localTableData: {
+      handler() { this.$forceUpdate(); },
+      deep: true
+    }
   },
   components: {
     QnaRegisterModalComponent,
@@ -310,7 +403,115 @@ export default {
 };
 </script>
 
+
 <style scoped>
+.author {
+  width: 150px; /* 원하는 고정 너비로 설정 */
+  text-align: center; /* 내용 가운데 정렬 */
+}
+
+.created-date {
+  width: 150px; /* 헤더 셀에도 동일한 고정 너비 적용 */
+}
+
+.status {
+  width: 150px; /* 본문 셀에도 동일한 고정 너비 적용 */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 수직 중앙 정렬 추가 */
+  margin-top: 20px;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  gap: 5px; /* 요소 간의 간격을 추가 */
+}
+
+.page-unselected:first-of-type {
+  border-left: 1px solid rgb(221, 221, 221);
+}
+
+.css-30tvht {
+  position: relative;
+  min-height: 400px; /* 페이지가 작을 때에도 테이블 높이를 일정하게 유지 */
+  padding-bottom: 60px; /* 페이징 버튼이 겹치지 않도록 여유 공간 추가 */
+}
+
+.pagination button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  color: #aaa;
+}
+
+.prev-button, .next-button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.prev-button:disabled, .next-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5; /* 비활성화 시 불투명하게 처리 */
+}
+
+.page-unselected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgb(221, 221, 221);
+  cursor: pointer;
+}
+
+.page-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgb(221, 221, 221);
+  cursor: pointer;
+  background-color: rgb(247, 247, 247);
+  color: rgb(95, 0, 128);
+}
+
+.page-unselected,
+.page-selected {
+  display: inline-flex; /* a 태그에 수평 배치를 적용 */
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgb(221, 221, 221);
+  cursor: pointer;
+}
+
+.css-rdz8z7.e82lnfz1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 0; /* 부모 요소의 맨 아래에 붙이기 */
+  background-color: white; /* 배경을 흰색으로 설정하여 내용과 구분 */
+  padding: 10px 0;
+  z-index: 100; /* 다른 요소 위에 표시되도록 설정 */
+  width: 100%; /* 너비를 부모 요소에 맞추기 */
+  margin-top: 20px;
+}
+
 button {
   cursor: pointer;
 }
@@ -613,6 +814,7 @@ tr {
 }
 
 .css-1brd6ns {
+  max-width: 250px;
   text-align: left;
   padding: 0px 20px;
   cursor: pointer;
@@ -666,6 +868,7 @@ div {
 }
 
 .css-1bv2zte {
+
   margin-left: 12px;
   padding-top: 2px;
   font-size: 14px;
@@ -684,8 +887,6 @@ div {
 }
 
 .css-17g9jzg {
-  padding: 0px 16px 20px;
-  margin-left: 40px;
   font-size: 14px;
   line-height: 22px;
   color: rgb(153, 153, 153);
@@ -724,4 +925,14 @@ div {
   height: auto; /* 이미지 비율에 맞게 자동으로 높이 설정 */
   object-fit: contain; /* 비율을 유지하면서 영역에 맞게 이미지 표시 */
 }
+
+.answer-date-left {
+  text-align: left; /* 날짜를 왼쪽 정렬 */
+  margin-top: 8px; /* 답변 내용과 날짜 사이 간격 추가 */
+  color: rgb(153, 153, 153); /* 날짜 텍스트 색상 */
+}
 </style>
+
+
+
+

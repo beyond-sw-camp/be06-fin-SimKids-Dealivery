@@ -31,39 +31,41 @@
           :data="data"
         ></ProductBoardListCardComponent>
       </ul>
-      <div class="css-rdz8z7 e82lnfz1">
-        <a class="page-unselected e82lnfz0" @click="goToPage(1)"
-          ><img
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
-            alt="처음 페이지로 이동하기 아이콘" /></a
-        ><a class="page-unselected e82lnfz0" @click="prevPageGroup"
-          ><img
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
-            alt="이전 페이지로 이동하기 아이콘"
-        /></a>
+      <div v-if="dataList.length > 0">
+        <div class="css-rdz8z7 e82lnfz1">
+          <a class="page-unselected e82lnfz0" @click="goToPage(1)"
+            ><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAHUlEQVR42mNgAIPi/8X/kWkwA8SE0UQIMJAsCKMBBzk27fqtkcYAAAAASUVORK5CYII="
+              alt="처음 페이지로 이동하기 아이콘" /></a
+          ><a class="page-unselected e82lnfz0" @click="prevPageGroup"
+            ><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGElEQVR42mNgAIPi/8X/4QwwE5PBQJADAAKSG3cyVhtXAAAAAElFTkSuQmCC"
+              alt="이전 페이지로 이동하기 아이콘"
+          /></a>
 
-        <a
-          v-for="pageNumber in visiblePages"
-          :key="pageNumber"
-          :class="
-            pageNumber === currentPage
-              ? 'page-selected e82lnfz0'
-              : 'page-unselected e82lnfz0'
-          "
-          @click="goToPage(pageNumber)"
-        >
-          {{ pageNumber }}
-        </a>
+          <a
+            v-for="pageNumber in visiblePages"
+            :key="pageNumber"
+            :class="
+              pageNumber === currentPage
+                ? 'page-selected e82lnfz0'
+                : 'page-unselected e82lnfz0'
+            "
+            @click="goToPage(pageNumber)"
+          >
+            {{ pageNumber }}
+          </a>
 
-        <a class="page-unselected e82lnfz0" @click="nextPageGroup"
-          ><img
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
-            alt="다음 페이지로 이동하기 아이콘" /></a
-        ><a class="page-unselected e82lnfz0" @click="goToPage(totalPages)"
-          ><img
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
-            alt="마지막 페이지로 이동하기 아이콘"
-        /></a>
+          <a class="page-unselected e82lnfz0" @click="nextPageGroup"
+            ><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAQAAABqrk9lAAAAGUlEQVR42mMo/l/8nwECQEwCHEwGhAlRBgA2mht3SwgzrwAAAABJRU5ErkJggg=="
+              alt="다음 페이지로 이동하기 아이콘" /></a
+          ><a class="page-unselected e82lnfz0" @click="goToPage(totalPages)"
+            ><img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAHCAQAAABwkq/rAAAAIElEQVR42mMo/l/8n4GBgQFGQ5kgDowmQZCwAMImhDkAb0k27Zcisn8AAAAASUVORK5CYII="
+              alt="마지막 페이지로 이동하기 아이콘"
+          /></a>
+        </div>
       </div>
     </div>
   </div>
@@ -84,7 +86,7 @@ export default {
       totalPages: 100,
       pages: [],
       pagesPerGroup: 5,
-      dataList: null,
+      dataList: [],
     };
   },
   components: {
@@ -140,6 +142,7 @@ export default {
       );
       this.totalPages = this.dataList.totalPages;
       this.dataList = this.dataList.content;
+      console.log(this.dataList);
     },
     handleClick(index) {
       this.selectedIndex = index;
@@ -387,7 +390,6 @@ div {
   -webkit-box-pack: start;
   -ms-flex-pack: start;
   -webkit-justify-content: flex-start;
-  justify-content: space-between;
   margin: 0 -10px;
 }
 
