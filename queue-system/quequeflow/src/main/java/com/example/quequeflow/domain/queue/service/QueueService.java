@@ -54,9 +54,16 @@ public class QueueService {
 	}
 
 	public boolean removeUserFromQueue(Long boardIdx, Long userIdx) {
-		String waitQueueKey = getWaitQueueKey(boardIdx);
+		Long removedCount = 0L;
 
-		Long removedCount = redisTemplate.opsForZSet().remove(waitQueueKey, userIdx.toString());
+		if (isUserInProcceedQueue(boardIdx, userIdx)) { // 사용자가 진행 큐에 있을 때
+			String proceedQueueKey = getProceedQueueKey(boardIdx);
+			removedCount = redisTemplate.opsForZSet().remove(proceedQueueKey, userIdx.toString());
+		}
+		else { // 사용자가 대기 큐에 있을 때
+			String waitQueueKey = getWaitQueueKey(boardIdx);
+			removedCount = redisTemplate.opsForZSet().remove(waitQueueKey, userIdx.toString());
+		}
 
 		return (removedCount != null && removedCount > 0);
 	}
@@ -144,6 +151,14 @@ public class QueueService {
 		return (long) members.size();
 	}
 
+	public boolean isUserInProcceedQueue(Long boardIdx, Long userIdx) {
+		String proceedQueueKey = getProceedQueueKey(boardIdx);
+
+		Long rank = redisTemplate.opsForZSet().rank(proceedQueueKey, userIdx.toString());
+
+		return rank != null;
+	}
+
 
 	@Scheduled(initialDelay = 10000, fixedDelay = 15000)
 	public void scheduleAllowUser() {
@@ -159,13 +174,5 @@ public class QueueService {
 				this.allowUser(boardIdx, maxAllowUserCount - cnt); // 여유분 만큼 진행큐로 이동
 			}
 		}
-	}
-
-	public boolean isUserInProcceedQueue(Long boardIdx, Long userIdx) {
-		String proceedQueueKey = getProceedQueueKey(boardIdx);
-
-		Long rank = redisTemplate.opsForZSet().rank(proceedQueueKey, userIdx.toString());
-
-		return rank != null;
 	}
 }
