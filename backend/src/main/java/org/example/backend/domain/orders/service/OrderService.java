@@ -40,6 +40,7 @@ public class OrderService {
     private final int COMPANY_PAGE_SIZE = 5;
     private final int USER_PAGE_SIZE = 3;
     private final PaymentService paymentService;
+    private final OrderQueueService orderQueueService;
 
     private final OrdersRepository ordersRepository;
     private final OrderedProductRepository orderedProductRepository;
@@ -49,7 +50,7 @@ public class OrderService {
     @Transactional
     public OrderCreateResponse register(User user, OrderRegisterRequest request) {
 
-        validateOrder(request);
+        validateOrder(request, user.getIdx());
 
         Orders order = OrderRegisterRequest.toEntity(request.getBoardIdx(), user);
         ordersRepository.save(order);
@@ -66,10 +67,13 @@ public class OrderService {
     }
 
 
-    public void validateOrder(OrderRegisterRequest order){
+    public void validateOrder(OrderRegisterRequest order, Long userIdx){
 
         ProductBoard board = productBoardRepository.findById(order.getBoardIdx())
-                .orElseThrow(() -> new InvalidCustomException(ORDER_FAIL_EVENT_NOT_FOUND));
+                .orElseThrow(() -> {
+                    orderQueueService.exitQueue(order.getBoardIdx(), userIdx);
+                    return new InvalidCustomException(ORDER_FAIL_EVENT_NOT_FOUND);
+                });
 
         if (board.getEndedAt().isBefore(LocalDateTime.now())) {
             throw new InvalidCustomException(ORDER_FAIL_EXPIRED_EVENT); // 이벤트가 끝났을 때
@@ -77,9 +81,13 @@ public class OrderService {
 
         order.getOrderedProducts().forEach((product) -> {
             Product orderdProduct = productRepository.findByIdWithLock(product.getIdx())
-                    .orElseThrow(() -> new InvalidCustomException(ORDER_FAIL_PRODUCT_NOT_FOUND)); // 해당하는 상품을 찾을 수가 없을 때
+                    .orElseThrow(() -> {
+                        orderQueueService.exitQueue(order.getBoardIdx(), userIdx);
+                        return new InvalidCustomException(ORDER_FAIL_PRODUCT_NOT_FOUND); // 해당하는 상품을 찾을 수가 없을 때
+                    });
 
             if (product.getQuantity() > orderdProduct.getStock()) {
+                orderQueueService.exitQueue(order.getBoardIdx(), userIdx);
                 throw new InvalidCustomException(ORDER_CREATE_FAIL_LACK_STOCK); // 재고 수량 없을 때
             }
         });
@@ -105,15 +113,18 @@ public class OrderService {
             order.getUser().deductPoints(order.getUsedPoint());
             order.setStatus(OrderStatus.ORDER_COMPLETE);
             ordersRepository.save(order);
+            orderQueueService.exitQueue(order.getBoardIdx(), user.getIdx());
 
         } catch (IamportResponseException | IOException e) { // 해당하는 결제 정보를 찾지 못했을 때
             order.setStatus(OrderStatus.ORDER_FAIL);
             ordersRepository.save(order);
+            orderQueueService.exitQueue(order.getBoardIdx(), user.getIdx());
             throw new InvalidCustomException(ORDER_PAYMENT_FAIL);
 
         } catch (InvalidCustomException e) { // 결제 검증 중 발생한 예외 처리
             order.setStatus(OrderStatus.ORDER_FAIL);
             ordersRepository.save(order);
+            orderQueueService.exitQueue(order.getBoardIdx(), user.getIdx());
             throw e;
         }
     }
@@ -129,6 +140,7 @@ public class OrderService {
 
         if (order.getStatus() !=  OrderStatus.ORDER_COMPLETE) {
             ordersRepository.delete(order);
+            orderQueueService.exitQueue(order.getBoardIdx(), user.getIdx());
             return;
         }
 
