@@ -45,7 +45,7 @@ public class WaitingRoomController {
 		// 쿠키값이 있다 = 내가 들어갈 수 있는 순위다
 		boolean isAllowed = queueTokenUtil.isAllowedByToken(boardIdx, userIdx, token);
 
-		if (isAllowed) {
+		if (isAllowed && waitingRoomService.isUserInProceedQueue(boardIdx, userIdx)) {
 			return new BaseResponse(BaseResponseStatus.SUCCESS);
 		}
 

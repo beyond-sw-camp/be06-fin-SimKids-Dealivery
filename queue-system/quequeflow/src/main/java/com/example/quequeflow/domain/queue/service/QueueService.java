@@ -1,16 +1,10 @@
 package com.example.quequeflow.domain.queue.service;
 
-<<<<<<< HEAD
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.concurrent.TimeUnit;
-=======
->>>>>>> 222b3f4a7fe6d88335808f8846d5fea684e96aa6
-
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +30,8 @@ public class QueueService {
 	private final String USER_QUEUE_PROCEED_KEY = "queue:proceed";
 	private final int MAX_PROCEED_SIZE = 1;
 
-<<<<<<< HEAD
+	private final String DUMMY_KEY = "dummy";
+
 	public Boolean createQueue(Long boardIdx, LocalDateTime endedAt) {
 		String waitQueueKey = USER_QUEUE_WAIT_KEY + ":" + boardIdx;
 		String processedQueueKey = USER_QUEUE_PROCEED_KEY + ":" + boardIdx;
@@ -62,9 +57,6 @@ public class QueueService {
 		return addedToWaitQueue && addedToProcessedQueue;
 	}
 
-	//List<> list ; // 식별자 : 만료시간
-=======
->>>>>>> 222b3f4a7fe6d88335808f8846d5fea684e96aa6
 
 	// **쿠키값 없고 대기열 등록 안돼있을 때** 대기열 등록하는 메소드
 	public Long registerWaitQueue(final Long boardIdx, final Long userIdx) {
@@ -102,6 +94,9 @@ public class QueueService {
 			String waitQueueKey = getWaitQueueKey(boardIdx);
 			removedCount = redisTemplate.opsForZSet().remove(waitQueueKey, userIdx.toString());
 		}
+
+		System.out.println("지워진 갯수 :: " + removedCount);
+
 
 		return (removedCount != null && removedCount > 0);
 	}
@@ -177,11 +172,17 @@ public class QueueService {
 
 		Set<String> members = redisTemplate.opsForZSet().range(waiteQueueKey, 0, count - 1);
 
+
 		if (members == null || members.isEmpty()) {
 			return 0L;
 		}
 
 		for (String member : members) { // 대기 큐에서 삭제하고, proceed로 이동ㅅ킴
+
+			if (DUMMY_KEY.equals(member)) {
+				continue;
+			}
+
 			redisTemplate.opsForZSet().remove(waiteQueueKey, member);
 			redisTemplate.opsForZSet().add(proceedQueueKey, member, Instant.now().getEpochSecond());
 		}
@@ -204,8 +205,12 @@ public class QueueService {
 		log.info("called scheduling...");
 		Set<String> proccedQueueKeys = getProceedQueueKeys();
 
-		var maxAllowUserCount = 1L;
+		var maxAllowUserCount = 2L;
 		for (String key : proccedQueueKeys) {
+			if (DUMMY_KEY.equals(key)) {
+				continue;
+			}
+
 			Long cnt = getCount(key);
 			if(cnt < maxAllowUserCount) {
 				Long boardIdx = extractBoardIdxFromKey(key);

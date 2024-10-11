@@ -29,7 +29,6 @@ public class QueueController {
 	private final QueueService queueService;
 	private final QueueTokenUtil queueTokenUtil;
 
-<<<<<<< HEAD
 	@GetMapping("/create")
 	public ResponseEntity<Boolean> createQueue(@RequestParam("productBoardIdx") Long boardIdx,
 		@RequestParam("endedAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endedAt) {
@@ -37,15 +36,6 @@ public class QueueController {
 		return ResponseEntity.ok(isCreated);
 	}
 
-	// TODO
-	// 1. getRankUser 메소드 완성
-	// 2. 일정 시간마다 대기열에 유저 빼내기 + proceed Queue에 넣기
-
-	/*
-	front-end의 while에서 계속 호출되는 함수
-	 * */
-=======
->>>>>>> 222b3f4a7fe6d88335808f8846d5fea684e96aa6
 	@GetMapping("/rank")
 	public BaseResponse getRankUser(@RequestParam(name = "boardIdx") Long boardIdx,
 									@RequestParam(name = "userIdx") Long userIdx, HttpServletResponse response) {
