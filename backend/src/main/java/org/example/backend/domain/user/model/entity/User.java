@@ -70,6 +70,7 @@ public class User {
  
     public UserDto.UserDetailResponse toUserDetailResponse(){
         return UserDto.UserDetailResponse.builder()
+                .userIdx(this.idx)
                 .name(this.name)
                 .email(this.email)
                 .address(this.address)

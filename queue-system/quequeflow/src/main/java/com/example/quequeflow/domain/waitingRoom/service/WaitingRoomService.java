@@ -24,4 +24,8 @@ public class WaitingRoomService {
 		}
 		return WaitingRoomDto.WaitingRoomResponse.builder().rank(rank).build();
 	}
+
+	public boolean isUserInProceedQueue(Long boardIdx, Long userIdx) {
+		return queueService.isUserInProcceedQueue(boardIdx, userIdx);
+	}
 }

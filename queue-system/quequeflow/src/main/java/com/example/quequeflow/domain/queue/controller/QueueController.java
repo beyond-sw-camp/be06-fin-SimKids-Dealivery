@@ -29,6 +29,7 @@ public class QueueController {
 	private final QueueService queueService;
 	private final QueueTokenUtil queueTokenUtil;
 
+<<<<<<< HEAD
 	@GetMapping("/create")
 	public ResponseEntity<Boolean> createQueue(@RequestParam("productBoardIdx") Long boardIdx,
 		@RequestParam("endedAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endedAt) {
@@ -43,17 +44,15 @@ public class QueueController {
 	/*
 	front-end의 while에서 계속 호출되는 함수
 	 * */
+=======
+>>>>>>> 222b3f4a7fe6d88335808f8846d5fea684e96aa6
 	@GetMapping("/rank")
 	public BaseResponse getRankUser(@RequestParam(name = "boardIdx") Long boardIdx,
 									@RequestParam(name = "userIdx") Long userIdx, HttpServletResponse response) {
-		/*
-		if (순위 확인해서 현재 순위 <= 순위 임계값) : 쿠키 세팅해서 응답
-		else : 쿠키 세팅 X 못들어간다 응답
-		* */
 
-		Long rank = queueService.getRank(boardIdx, userIdx);
-		System.out.println("Rank!!!!!!! " + rank);
-		if (rank <= 1) {
+		boolean isAllowed = queueService.isUserInProcceedQueue(boardIdx, userIdx);
+
+		if (isAllowed) {
 			String key = "user-queue-%d-token".formatted(boardIdx);
 			String token = queueTokenUtil.generateToken(boardIdx, userIdx);
 
@@ -65,6 +64,7 @@ public class QueueController {
 			return new BaseResponse(BaseResponseStatus.SUCCESS);
 		}
 
+		Long rank = queueService.getRank(boardIdx, userIdx);
 		QueueDto.QueueRankResponse res = QueueRankResponse.builder().rank(rank).build();
 
 		return new BaseResponse(BaseResponseStatus.WAITING_IN_QUEUE, res);
@@ -81,5 +81,4 @@ public class QueueController {
 			return new BaseResponse(BaseResponseStatus.FAIL);
 		}
 	}
-
 }
