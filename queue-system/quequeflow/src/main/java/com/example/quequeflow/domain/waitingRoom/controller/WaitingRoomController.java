@@ -1,5 +1,8 @@
 package com.example.quequeflow.domain.waitingRoom.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
+import java.time.Duration;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +27,7 @@ public class WaitingRoomController {
 	@GetMapping("/waiting-room")
 	public BaseResponse enter(
 			@RequestParam(name = "boardIdx") Long boardIdx,
-			@RequestParam(name = "userIdx") Long userIdx, HttpServletRequest request) {
+			@RequestParam(name = "userIdx") Long userIdx, HttpServletRequest request, HttpServletResponse response) {
 
 		String key = "user-queue-%d-token".formatted(boardIdx);
 		Cookie[] cookies = request.getCookies();
@@ -46,10 +49,21 @@ public class WaitingRoomController {
 			return new BaseResponse(BaseResponseStatus.SUCCESS);
 		}
 
-		WaitingRoomDto.WaitingRoomResponse response = waitingRoomService.enter(boardIdx, userIdx);
+		WaitingRoomDto.WaitingRoomResponse res = waitingRoomService.enter(boardIdx, userIdx);
+		if (waitingRoomService.isUserInProceedQueue(boardIdx, userIdx)) {
+
+			String allowedToken = queueTokenUtil.generateToken(boardIdx, userIdx);
+
+			ResponseCookie cookie = ResponseCookie.from(key, allowedToken)
+					.maxAge(Duration.ofSeconds(300))
+					.path("/")
+					.build();
+			response.addHeader("Set-Cookie", cookie.toString());
+			return new BaseResponse(BaseResponseStatus.SUCCESS);
+		}
 
 		// 대기열에 등록 후, 현재 순위를 반환
-		return new BaseResponse(BaseResponseStatus.QUEUE_REQUIRED, response);
+		return new BaseResponse(BaseResponseStatus.QUEUE_REQUIRED, res);
 
 	}
 }
