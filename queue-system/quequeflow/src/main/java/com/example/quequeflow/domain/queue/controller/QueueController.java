@@ -35,11 +35,20 @@ public class QueueController {
 	@GetMapping("/rank")
 	public BaseResponse getRankUser(@RequestParam(name = "boardIdx") Long boardIdx,
 									@RequestParam(name = "userIdx") Long userIdx, HttpServletResponse response) {
+
+		//TODO: 내가 현재 진행큐에 들어가 있는지 확인
+		// if 들어가 있다 => 쿠키에 토큰 세팅해두고, 응답
+		// else 들어가 있지 않다 => 대기큐에서 랭킹 조회 +  랭킹 리턴
+
+
+
+
+
+
 		/*
 		if (순위 확인해서 현재 순위 <= 순위 임계값) : 쿠키 세팅해서 응답
 		else : 쿠키 세팅 X 못들어간다 응답
 		* */
-
 		Long rank = queueService.getRank(boardIdx, userIdx);
 		System.out.println("Rank!!!!!!! " + rank);
 		if (rank <= 1) {
