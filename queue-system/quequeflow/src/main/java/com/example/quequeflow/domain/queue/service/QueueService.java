@@ -1,8 +1,14 @@
 package com.example.quequeflow.domain.queue.service;
 
-import java.time.Instant;
 
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.example.quequeflow.global.common.constants.BaseResponseStatus;
@@ -11,6 +17,7 @@ import com.example.quequeflow.global.exception.InvalidCustomException;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class QueueService {
 	private final RedisTemplate<String, String> redisTemplate;
@@ -20,7 +27,6 @@ public class QueueService {
 	private final String USER_QUEUE_PROCEED_KEY = "queue:proceed";
 	private final int MAX_PROCEED_SIZE = 1;
 
-	//List<> list ; // 식별자 : 만료시간
 
 	// **쿠키값 없고 대기열 등록 안돼있을 때** 대기열 등록하는 메소드
 	public Long registerWaitQueue(final Long boardIdx, final Long userIdx) {
@@ -55,6 +61,7 @@ public class QueueService {
 		return (removedCount != null && removedCount > 0);
 	}
 
+
 	private String choiceQueue(Long boardIdx) {
 		String waitQueueKey = getWaitQueueKey(boardIdx);
 		String proceedQueueKey = getProceedQueueKey(boardIdx);
@@ -75,7 +82,6 @@ public class QueueService {
 		return queueCount;
 	}
 
-
 	// 현재 순위 반환
 	public Long getRank(final Long boardIdx, final Long userIdx) {
 		String waitQueueKey = getWaitQueueKey(boardIdx);
@@ -89,5 +95,69 @@ public class QueueService {
 
 	private String getProceedQueueKey(final Long boardIdx) {
 		return USER_QUEUE_PROCEED_KEY + ":" + boardIdx;
+	}
+
+	private Long extractBoardIdxFromKey(String key) {
+		String[] parts = key.split(":");
+		if (parts.length == 3) {
+			try {
+				return Long.parseLong(parts[2]);
+			} catch (NumberFormatException e) {
+				log.error("Invalid boardIdx format in key: {}", key, e);
+			}
+		}
+		return null;
+	}
+
+	public Set<String> getProceedQueueKeys() {
+		Set<String> keys = new HashSet<>();
+
+		ScanOptions scanOptions = ScanOptions.scanOptions().match("queue:proceed*").count(1000).build();
+		Cursor<byte[]> cursor = redisTemplate.getConnectionFactory().getConnection().scan(scanOptions);
+
+		while (cursor.hasNext()) {
+			keys.add(new String(cursor.next()));
+		}
+
+		cursor.close();
+
+		return keys;
+	}
+
+	public Long allowUser(final Long boardIdx, final Long count) { // 상위 (0 부터 count-1) count명의 유저를 뽑음
+
+		String waiteQueueKey = getWaitQueueKey(boardIdx);
+		String proceedQueueKey = getProceedQueueKey(boardIdx);
+
+
+		Set<String> members = redisTemplate.opsForZSet().range(waiteQueueKey, 0, count - 1);
+
+		if (members == null || members.isEmpty()) {
+			return 0L;
+		}
+
+		for (String member : members) { // 대기 큐에서 삭제하고, proceed로 이동ㅅ킴
+			redisTemplate.opsForZSet().remove(waiteQueueKey, member);
+			redisTemplate.opsForZSet().add(proceedQueueKey, member, Instant.now().getEpochSecond());
+		}
+
+		return (long) members.size();
+	}
+
+
+	@Scheduled(initialDelay = 10000, fixedDelay = 15000)
+	public void scheduleAllowUser() {
+
+		log.info("called scheduling...");
+		Set<String> proccedQueueKeys = getProceedQueueKeys();
+
+		var maxAllowUserCount = 1L;
+		for (String key : proccedQueueKeys) {
+			Long cnt = getCount(key);
+			if(cnt < maxAllowUserCount) {
+				Long boardIdx = extractBoardIdxFromKey(key);
+				this.allowUser(boardIdx, maxAllowUserCount - cnt); // 여유분 만큼 진행큐로 이동
+			}
+		}
 	}
 }
