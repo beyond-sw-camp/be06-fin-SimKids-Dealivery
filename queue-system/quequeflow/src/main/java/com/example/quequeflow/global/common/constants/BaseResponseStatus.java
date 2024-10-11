@@ -14,7 +14,10 @@ public enum BaseResponseStatus {
 
     QUEUE_REQUIRED(false, 9100, "[쿠키값 X] 대기열 등록이 필요합니다."),
     // 큐에 이미 등록됨
-    QUEUE_ALREADY_REGISTERED_USER(false, 9200, "이미 대기열에 등록되어 있습니다");
+    QUEUE_ALREADY_REGISTERED_USER(false, 9200, "이미 대기열에 등록되어 있습니다"),
+
+    WAITING_IN_QUEUE(false,9300, "대기열에 있습니다. 대기 중입니다.");
+
 
     private boolean isSuccess;
     private Integer code;
@@ -24,5 +27,5 @@ public enum BaseResponseStatus {
         this.isSuccess = isSuccess;
         this.code = code;
         this.message = message;
-     }
     }
+}

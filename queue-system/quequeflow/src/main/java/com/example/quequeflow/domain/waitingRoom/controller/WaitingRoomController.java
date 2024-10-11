@@ -23,8 +23,8 @@ public class WaitingRoomController {
 	// 1. 최초 대기열 진입점
 	@GetMapping("/waiting-room")
 	public BaseResponse enter(
-		@RequestParam(name = "boardIdx") Long boardIdx,
-		@RequestParam(name = "userIdx") Long userIdx, HttpServletRequest request) {
+			@RequestParam(name = "boardIdx") Long boardIdx,
+			@RequestParam(name = "userIdx") Long userIdx, HttpServletRequest request) {
 
 		String key = "user-queue-%d-token".formatted(boardIdx);
 		Cookie[] cookies = request.getCookies();
@@ -49,7 +49,7 @@ public class WaitingRoomController {
 		WaitingRoomDto.WaitingRoomResponse response = waitingRoomService.enter(boardIdx, userIdx);
 
 		// 대기열에 등록 후, 현재 순위를 반환
-		return new BaseResponse(response);
+		return new BaseResponse(BaseResponseStatus.QUEUE_REQUIRED, response);
 
 	}
 }
