@@ -160,4 +160,12 @@ public class QueueService {
 			}
 		}
 	}
+
+	public boolean isUserInProcceedQueue(Long boardIdx, Long userIdx) {
+		String proceedQueueKey = getProceedQueueKey(boardIdx);
+
+		Long rank = redisTemplate.opsForZSet().rank(proceedQueueKey, userIdx.toString());
+
+		return rank != null;
+	}
 }
