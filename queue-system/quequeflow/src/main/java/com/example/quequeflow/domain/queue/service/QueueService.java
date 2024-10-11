@@ -1,6 +1,11 @@
 package com.example.quequeflow.domain.queue.service;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -19,6 +24,31 @@ public class QueueService {
 	// 진행 큐
 	private final String USER_QUEUE_PROCEED_KEY = "queue:proceed";
 	private final int MAX_PROCEED_SIZE = 1;
+
+	public Boolean createQueue(Long boardIdx, LocalDateTime endedAt) {
+		String waitQueueKey = USER_QUEUE_WAIT_KEY + ":" + boardIdx;
+		String processedQueueKey = USER_QUEUE_PROCEED_KEY + ":" + boardIdx;
+		LocalDateTime endedAtPlusMinutes = endedAt.plusMinutes(10);
+		long unixTimestamp = endedAtPlusMinutes.toInstant(ZoneOffset.UTC).getEpochSecond();
+
+		// 더미 데이터를 ZSet에 추가
+		boolean addedToWaitQueue = Boolean.TRUE.equals(redisTemplate.opsForZSet().add(waitQueueKey, "dummy", unixTimestamp));
+		boolean addedToProcessedQueue = Boolean.TRUE.equals(redisTemplate.opsForZSet().add(processedQueueKey, "dummy", unixTimestamp));
+
+		// endedAt에 1분 추가
+		LocalDateTime expirationTime = endedAt.plusMinutes(1);
+		long expirationTimeInSeconds = Duration.between(LocalDateTime.now(), expirationTime).getSeconds();
+
+		// 만료 시간 설정
+		if (addedToWaitQueue) {
+			redisTemplate.expire(waitQueueKey, expirationTimeInSeconds, TimeUnit.SECONDS);
+		}
+		if (addedToProcessedQueue) {
+			redisTemplate.expire(processedQueueKey, expirationTimeInSeconds, TimeUnit.SECONDS);
+		}
+
+		return addedToWaitQueue && addedToProcessedQueue;
+	}
 
 	//List<> list ; // 식별자 : 만료시간
 

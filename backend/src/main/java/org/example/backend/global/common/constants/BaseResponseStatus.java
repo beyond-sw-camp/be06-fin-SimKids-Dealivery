@@ -125,6 +125,7 @@ public enum BaseResponseStatus {
     PRODUCT_BOARD_REMOVE_FAIL_START_TIME_PASSED(false, 4050, "상품게시글 삭제에 실패했습니다. 시작 시간이 이미 지나 게시글을 삭제할 수 없습니다."),
     PRODUCT_BOARD_LIST_FAIL(false, 4100, "상품게시글 조회에 실패했습니다."),
     PRODUCT_BOARD_DETAIL_FAIL(false, 4200, "상품 상세 조회에 실패했습니다."),
+    PRODUCT_BOARD_QUEUE_CREATE_FAIL(false, 4300, "대기열 생성에 실패했습니다."),
 
     // 관심 기능 5000
     LIKES_REGISTER_FAIL(false, 5000, "관심게시글 등록에 실패했습니다."),

@@ -3,10 +3,8 @@ package org.example.backend.domain.board.service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -20,7 +18,6 @@ import org.example.backend.domain.board.product.model.entity.Product;
 import org.example.backend.domain.board.product.repository.ProductRepository;
 import org.example.backend.domain.board.repository.ProductBoardRepository;
 import org.example.backend.domain.board.repository.ProductThumbnailImageRepository;
-import org.example.backend.domain.likes.model.entity.Likes;
 import org.example.backend.domain.likes.repository.LikesRepository;
 import org.example.backend.global.common.constants.BaseResponseStatus;
 import org.example.backend.global.common.constants.BoardStatus;
@@ -29,8 +26,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,6 +39,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ProductBoardService {
+	private final ProductBoardQueueService productBoardQueueService;
 	private final ProductBoardRepository productBoardRepository;
 	private final ProductRepository productRepository;
 	private final ProductThumbnailImageRepository productThumbnailImageRepository;
@@ -118,6 +114,11 @@ public class ProductBoardService {
 		ProductBoard savedProductBoard = saveProductBoard(companyIdx, boardCreateRequest, thumbnailUrls.get(0), productDetailUrl);
 		List<Product> savedProducts = saveProduct(boardCreateRequest, savedProductBoard);
 		List<ProductThumbnailImage> productThumbnailImages = saveProductThumbnailImage(boardCreateRequest, thumbnailUrls, savedProductBoard);
+
+		Boolean isCreated = productBoardQueueService.createQueue(savedProductBoard.getIdx(), savedProductBoard.getEndedAt());
+		if (!isCreated) {
+			throw new InvalidCustomException(BaseResponseStatus.PRODUCT_BOARD_QUEUE_CREATE_FAIL);
+		}
 	}
 
 	// 판매자 게시글 조회

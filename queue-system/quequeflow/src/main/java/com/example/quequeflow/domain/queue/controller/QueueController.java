@@ -7,12 +7,16 @@ import com.example.quequeflow.global.common.constants.BaseResponseStatus;
 import com.example.quequeflow.global.token.QueueTokenUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
+import java.time.LocalDateTime;
+
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.quequeflow.global.common.constants.BaseResponse;
 
@@ -24,6 +28,13 @@ public class QueueController {
 
 	private final QueueService queueService;
 	private final QueueTokenUtil queueTokenUtil;
+
+	@GetMapping("/create")
+	public ResponseEntity<Boolean> createQueue(@RequestParam("productBoardIdx") Long boardIdx,
+		@RequestParam("endedAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endedAt) {
+		Boolean isCreated = queueService.createQueue(boardIdx, endedAt);
+		return ResponseEntity.ok(isCreated);
+	}
 
 	// TODO
 	// 1. getRankUser 메소드 완성
