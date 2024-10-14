@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
@@ -28,7 +30,11 @@ public class QueueService {
 	private final String USER_QUEUE_WAIT_KEY = "queue:wait";
 	// 진행 큐
 	private final String USER_QUEUE_PROCEED_KEY = "queue:proceed";
-	private final int MAX_PROCEED_SIZE = 1;
+	@Value("${queue.proceed.max-size}")
+	private int MAX_PROCEED_SIZE;
+
+	@Value("${queue.allow.user.cnt}")
+	private Long MAX_ALLOW_USER_CNT;
 
 	private final String DUMMY_KEY = "dummy";
 
@@ -199,22 +205,21 @@ public class QueueService {
 	}
 
 
-	@Scheduled(initialDelay = 10000, fixedDelay = 15000)
+	@Scheduled(fixedRateString = "${queue.delay}")
 	public void scheduleAllowUser() {
 
 		log.info("called scheduling...");
 		Set<String> proccedQueueKeys = getProceedQueueKeys();
 
-		var maxAllowUserCount = 2L;
 		for (String key : proccedQueueKeys) {
 			if (DUMMY_KEY.equals(key)) {
 				continue;
 			}
 
 			Long cnt = getCount(key);
-			if(cnt < maxAllowUserCount) {
+			if(cnt < MAX_ALLOW_USER_CNT) {
 				Long boardIdx = extractBoardIdxFromKey(key);
-				this.allowUser(boardIdx, maxAllowUserCount - cnt); // 여유분 만큼 진행큐로 이동
+				this.allowUser(boardIdx, MAX_ALLOW_USER_CNT - cnt); // 여유분 만큼 진행큐로 이동
 			}
 		}
 	}
