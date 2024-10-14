@@ -14,7 +14,7 @@ public class RestTemplateConfig {
 	@Bean
 	public RestTemplate restTemplate(RestTemplateBuilder builder) {
 		return builder
-			.rootUri("http://localhost:9090")
+			.rootUri(domain)
 			.build();
 	}
 }
