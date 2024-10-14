@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: dev-queue
-          image: simkids/dealivery-queue:1.1
+          image: simkids/dealivery-queue:1.91
           imagePullPolicy: Always
           ports:
             - containerPort: 9090

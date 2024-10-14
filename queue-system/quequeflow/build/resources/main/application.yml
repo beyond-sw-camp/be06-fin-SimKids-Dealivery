@@ -1,0 +1,22 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+    context-path: ${CONTEXT_PATH}
+  port: 9090
+
+redis:
+  host: ${REDIS_HOST}
+  port: ${REDIS_PORT}
+  password: ${REDIS_PASSWORD}
+
+queue:
+  proceed:
+    max-size: ${MAX_PROCEED_SIZE}
+  delay: ${DELAY}
+  allow:
+    user:
+      cnt: ${ALLOW_USER_CNT}
