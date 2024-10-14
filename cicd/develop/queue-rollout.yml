@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: dev-queue-rollout
+spec:
+  replicas: 2
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: dev-queue
+  template:
+    metadata:
+      labels:
+        app: dev-queue
+    spec:
+      containers:
+        - name: dev-queue
+          image: simkids/dealivery-queue:1.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9090
+          envFrom:
+            - configMapRef:
+                name: dev-queue-configmap
+  strategy:
+    blueGreen:
+      #activeService는 현재 운영중인 Blue 서비스
+      activeService: dev-queue-service-active
+
+      #previewService는 새롭게 배포될 Green 서비스
+      previewService: dev-queue-service-preview

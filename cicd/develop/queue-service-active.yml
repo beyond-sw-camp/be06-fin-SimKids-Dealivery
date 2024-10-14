@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dev-queue-service-active
+spec:
+  type: NodePort
+  selector:
+    app: dev-queue
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9090
+      nodePort: 30105

@@ -41,6 +41,13 @@ spec:
                 name: dev-backend-service-active
                 port:
                   number: 8080
+          - path: /queue
+            pathType: Prefix
+            backend:
+             service:
+               name: dev-queue-service-active
+               port:
+                 number: 9090
           - path: /
             pathType: Prefix
             backend:
