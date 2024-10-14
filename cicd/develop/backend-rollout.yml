@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: dev-backend
-          image: simkids/dealivery-backend:1.85
+          image: simkids/dealivery-backend:1.96
           #image: simkids/dealivery-backend:v2 <- 새로운 버전 배포 할 때
           imagePullPolicy: Always
           ports:
