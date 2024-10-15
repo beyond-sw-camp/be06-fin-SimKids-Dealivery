@@ -1,5 +1,6 @@
 package com.example.quequeflow.domain.queue.service;
 
+import com.example.quequeflow.global.aop.DistributedLock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -65,6 +66,7 @@ public class QueueService {
 
 
 	// **쿠키값 없고 대기열 등록 안돼있을 때** 대기열 등록하는 메소드
+	@DistributedLock(key="#boardIdx")
 	public Long registerWaitQueue(final Long boardIdx, final Long userIdx) {
 		String queueKey = choiceQueue(boardIdx);
 		long unixTimestamp = Instant.now().getEpochSecond();
@@ -114,7 +116,7 @@ public class QueueService {
 		Long waitQueueCount = getCount(waitQueueKey);
 		Long proceedQueueCount = getCount(proceedQueueKey);
 
-		if (waitQueueCount == 1 && proceedQueueCount < MAX_PROCEED_SIZE) {
+		if (waitQueueCount == 0 && proceedQueueCount < MAX_PROCEED_SIZE) {
 			return proceedQueueKey;
 		}
 		return waitQueueKey;
