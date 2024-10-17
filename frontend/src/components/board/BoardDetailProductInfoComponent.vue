@@ -413,6 +413,7 @@ export default {
       }
 
       let res = await this.userStore.getDetail();
+      console.log("여기서 res값은?????? ====> " + res);
       if (!res) {
         alert("회원 정보 조회에 실패했습니다.");
         return;
@@ -420,7 +421,7 @@ export default {
 
       let boardIdx = this.$route.params.idx;
       let userIdx = this.userStore.userDetail.userIdx;
-
+      console.log("여기서 userIdx값은?????? ====> " + userIdx);
       let result = await this.queueStore.isAllowed(boardIdx, userIdx);
 
       if (result) {

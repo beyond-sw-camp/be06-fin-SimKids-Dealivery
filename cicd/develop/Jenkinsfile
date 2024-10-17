@@ -101,7 +101,7 @@ pipeline {
                             cd ../queue-system/quequeflow
                             ./gradlew bootJar
 
-                            cd ../frontend
+                            cd ../../frontend
                             sed -i "s|\\${VUE_APP_KAKAOPAY_CID}|${VUE_APP_KAKAOPAY_CID}|g" .env
                             sed -i "s|\\${VUE_APP_TOSSPAY_MID}|${VUE_APP_TOSSPAY_MID}|g" .env
                             sed -i "s|\\${VUE_APP_PORTONE_STORE_ID}|${VUE_APP_PORTONE_STORE_ID}|g" .env
@@ -151,8 +151,10 @@ pipeline {
                         sh '''
                         docker build --tag simkids/dealivery-backend:1.${BUILD_NUMBER} ./backend
                         docker build --tag simkids/dealivery-frontend:1.${BUILD_NUMBER} ./frontend
+                        docker build --tag simkids/dealivery-queue:1.${BUILD_NUMBER} ./queue-system/quequeflow
                         docker push simkids/dealivery-backend:1.${BUILD_NUMBER}
                         docker push simkids/dealivery-frontend:1.${BUILD_NUMBER}
+                        docker push simkids/dealivery-queue:1.${BUILD_NUMBER}
                         '''
                     } else {
                         echo "Build Fail........................."

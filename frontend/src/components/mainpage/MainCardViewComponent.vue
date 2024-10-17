@@ -160,8 +160,6 @@ export default {
     if (this.isActive) {
       this.heartIcon = heartIconActive;
     }
-    console.log("likes여부");
-    console.log(this.data.likes);
   },
   beforeUnmount() {
     clearInterval(this.intervalId);
