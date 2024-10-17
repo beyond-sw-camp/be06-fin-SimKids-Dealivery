@@ -38,15 +38,20 @@ public class QueueService {
 	public Boolean createQueue(Long boardIdx, LocalDateTime endedAt) {
 		String waitQueueKey = USER_QUEUE_WAIT_KEY + ":" + boardIdx;
 		String processedQueueKey = USER_QUEUE_PROCEED_KEY + ":" + boardIdx;
-		long unixTimestamp = endedAt.plusMinutes(10).toInstant(ZoneOffset.UTC).getEpochSecond();
+
+		// endedAt에서 미세한 시간 차이를 추가한 점수 부여 (나노초 단위로 계산)
+		Instant inst = endedAt.plusMinutes(10).toInstant(ZoneOffset.UTC);
+		long time = inst.getEpochSecond();
+		time *= 1000000000L;  // 초 단위를 나노초 단위로 변환
+		time += inst.getNano();  // 나노초를 더해 미세한 차이 부여
 
 		// Redisson의 ScoredSortedSet을 사용하여 대기열 생성, StringCodec을 사용
 		RScoredSortedSet<String> waitQueue = redissonClient.getScoredSortedSet(waitQueueKey);
 		RScoredSortedSet<String> processedQueue = redissonClient.getScoredSortedSet(processedQueueKey);
 
 		// 더미 데이터를 ZSet에 추가
-		boolean addedToWaitQueue = waitQueue.add(unixTimestamp, DUMMY_KEY);
-		boolean addedToProcessedQueue = processedQueue.add(unixTimestamp, DUMMY_KEY);
+		boolean addedToWaitQueue = waitQueue.add(time, DUMMY_KEY);
+		boolean addedToProcessedQueue = processedQueue.add(time, DUMMY_KEY);
 
 		// endedAt을 기준으로 만료 시간 설정 (ZSet 만료 시간 = endedAt에서 현재 시간까지의 시간)
 		long ttl = endedAt.toInstant(ZoneOffset.UTC).getEpochSecond() - Instant.now().getEpochSecond();
@@ -64,18 +69,21 @@ public class QueueService {
 		String queueKey = choiceQueue(boardIdx);
 
 		// 미세한 시간 차이를 추가한 점수 부여 (현재 타임스탬프에 사용자 ID를 더하는 방식)
-		long unixTimestamp = Instant.now().getEpochSecond() + userIdx;
+		Instant inst = Instant.now();
+		long time = inst.getEpochSecond();
+		time *= 1000000000l;
+		time += inst.getNano();
 
 		RScoredSortedSet<String> queue = redissonClient.getScoredSortedSet(queueKey);
 
 		// 대기 없이 바로 진입
 		if (queueKey.equals(getProceedQueueKey(boardIdx))) {
-			queue.add(unixTimestamp, userIdx.toString());
+			queue.add(time, userIdx.toString());
 			return -1L;
 		}
 
 		// 대기 존재 시 등록
-		boolean added = queue.add(unixTimestamp, userIdx.toString());
+		boolean added = queue.add(time, userIdx.toString());
 
 		if (!added) {
 			throw new RuntimeException("User already registered in queue");
