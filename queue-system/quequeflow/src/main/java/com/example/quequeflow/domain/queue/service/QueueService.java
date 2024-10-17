@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 @Slf4j
 @RequiredArgsConstructor
 public class QueueService {
-	private final RedisTemplate<String, String> redisTemplate;
 	private final RedissonClient redissonClient;
 	// 대기 큐
 	private final String USER_QUEUE_WAIT_KEY = "queue:wait";
