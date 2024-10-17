@@ -1,6 +1,6 @@
 package com.example.quequeflow.domain.queue.service;
 
-import io.lettuce.core.RedisException;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -12,8 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
+import org.redisson.client.RedisException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,15 @@ import lombok.RequiredArgsConstructor;
 @Slf4j
 @RequiredArgsConstructor
 public class QueueService {
-	private final RedissonClient redissonClient;
+
+	// Redisson 클라이언트: 쓰기 작업용
+	@Qualifier("writeRedissonClient")
+	private final RedissonClient writeRedissonClient;
+
+	// Redisson 클라이언트: 읽기 작업용
+	@Qualifier("readRedissonClient")
+	private final RedissonClient readRedissonClient;
+
 	// 대기 큐
 	private final String USER_QUEUE_WAIT_KEY = "queue:wait";
 	// 진행 큐
@@ -35,6 +44,7 @@ public class QueueService {
 
 	private final String DUMMY_KEY = "dummy";
 
+	// 쓰기 작업 : 대기열 생성
 	public Boolean createQueue(Long boardIdx, LocalDateTime endedAt) {
 		String waitQueueKey = USER_QUEUE_WAIT_KEY + ":" + boardIdx;
 		String processedQueueKey = USER_QUEUE_PROCEED_KEY + ":" + boardIdx;
@@ -46,8 +56,8 @@ public class QueueService {
 		time += inst.getNano();  // 나노초를 더해 미세한 차이 부여
 
 		// Redisson의 ScoredSortedSet을 사용하여 대기열 생성, StringCodec을 사용
-		RScoredSortedSet<String> waitQueue = redissonClient.getScoredSortedSet(waitQueueKey);
-		RScoredSortedSet<String> processedQueue = redissonClient.getScoredSortedSet(processedQueueKey);
+		RScoredSortedSet<String> waitQueue = writeRedissonClient.getScoredSortedSet(waitQueueKey);
+		RScoredSortedSet<String> processedQueue = writeRedissonClient.getScoredSortedSet(processedQueueKey);
 
 		// 더미 데이터를 ZSet에 추가
 		boolean addedToWaitQueue = waitQueue.add(time, DUMMY_KEY);
@@ -63,8 +73,7 @@ public class QueueService {
 		return addedToWaitQueue && addedToProcessedQueue;
 	}
 
-
-	// **쿠키값 없고 대기열 등록 안돼있을 때** 대기열 등록하는 메소드
+	// 쓰기 작업 : 쿠키값 없고 대기열 등록 안돼있을 때, 대기열 등록하는 메소드
 	public Long registerWaitQueue(final Long boardIdx, final Long userIdx) {
 		String queueKey = choiceQueue(boardIdx);
 
@@ -74,7 +83,7 @@ public class QueueService {
 		time *= 1000000000l;
 		time += inst.getNano();
 
-		RScoredSortedSet<String> queue = redissonClient.getScoredSortedSet(queueKey);
+		RScoredSortedSet<String> queue = writeRedissonClient.getScoredSortedSet(queueKey);
 
 		// 대기 없이 바로 진입
 		if (queueKey.equals(getProceedQueueKey(boardIdx))) {
@@ -94,9 +103,10 @@ public class QueueService {
 		return (rank != null && rank >= 0) ? rank + 1 : -1;
 	}
 
+	// 쓰기 작업: 대기열에서 사용자 삭제
 	public boolean removeUserFromQueue(Long boardIdx, Long userIdx) {
-		RScoredSortedSet<String> waitQueue = redissonClient.getScoredSortedSet(getWaitQueueKey(boardIdx));
-		RScoredSortedSet<String> proceedQueue = redissonClient.getScoredSortedSet(getProceedQueueKey(boardIdx));
+		RScoredSortedSet<String> waitQueue = writeRedissonClient.getScoredSortedSet(getWaitQueueKey(boardIdx));
+		RScoredSortedSet<String> proceedQueue = writeRedissonClient.getScoredSortedSet(getProceedQueueKey(boardIdx));
 
 		boolean removedCount;
 		if (isUserInProcceedQueue(boardIdx, userIdx)) {
@@ -108,12 +118,13 @@ public class QueueService {
 		return removedCount;
 	}
 
+	// 읽기 작업: 큐 선택
 	private String choiceQueue(Long boardIdx) {
 		String waitQueueKey = getWaitQueueKey(boardIdx);
 		String proceedQueueKey = getProceedQueueKey(boardIdx);
 
-		RScoredSortedSet<String> waitQueue = redissonClient.getScoredSortedSet(waitQueueKey);
-		RScoredSortedSet<String> proceedQueue = redissonClient.getScoredSortedSet(proceedQueueKey);
+		RScoredSortedSet<String> waitQueue = readRedissonClient.getScoredSortedSet(waitQueueKey);
+		RScoredSortedSet<String> proceedQueue = readRedissonClient.getScoredSortedSet(proceedQueueKey);
 
 		if (waitQueue.size() == 1 && proceedQueue.size() < MAX_PROCEED_SIZE) {
 			return proceedQueueKey;
@@ -121,18 +132,20 @@ public class QueueService {
 		return waitQueueKey;
 	}
 
+	// 읽기 작업: 큐의 사용자 수 반환
 	private Long getCount(String queueKey) {
-		RScoredSortedSet<String> queue = redissonClient.getScoredSortedSet(queueKey);
+		RScoredSortedSet<String> queue = readRedissonClient.getScoredSortedSet(queueKey);
 		return (long) queue.size();  // ZSet에서 요소의 개수를 반환
 	}
 
 
-	// 현재 순위 반환
+	// 읽기 작업: 현재 순위 반환
 	public Long getRank(final Long boardIdx, final Long userIdx) {
-		RScoredSortedSet<String> waitQueue = redissonClient.getScoredSortedSet(getWaitQueueKey(boardIdx));
+		RScoredSortedSet<String> waitQueue = readRedissonClient.getScoredSortedSet(getWaitQueueKey(boardIdx));
 		Long rank = Long.valueOf(waitQueue.rank(userIdx.toString()));
 		return (rank != null && rank >= 0) ? rank + 1 : -1;
 	}
+
 	private String getWaitQueueKey(final Long boardIdx) {
 		return USER_QUEUE_WAIT_KEY + ":" + boardIdx;
 	}
@@ -153,23 +166,23 @@ public class QueueService {
 		return null;
 	}
 
+	// 읽기 작업: 진행 큐의 키들 가져오기
 	public Set<String> getProceedQueueKeys() {
 		Set<String> keys = new HashSet<>();
-		try {
-			Iterable<String> resultKeys = redissonClient.getKeys().getKeysByPattern("queue:proceed*");
-			resultKeys.forEach(keys::add);
-		} catch (RedisException e) {
-			log.error("Error retrieving keys from Redis: ", e);
-		}
+
+		Iterable<String> resultKeys = readRedissonClient.getKeys().getKeysByPattern("queue:proceed*");
+		resultKeys.forEach(keys::add);
+
 		return keys;
 	}
 
+	// 쓰기 작업: 진행 큐로 사용자 이동
 	public Long allowUser(final Long boardIdx, final Integer count) {
 		String waitQueueKey = getWaitQueueKey(boardIdx);
 		String proceedQueueKey = getProceedQueueKey(boardIdx);
 
-		RScoredSortedSet<String> waitQueue = redissonClient.getScoredSortedSet(waitQueueKey);
-		RScoredSortedSet<String> proceedQueue = redissonClient.getScoredSortedSet(proceedQueueKey);
+		RScoredSortedSet<String> waitQueue = writeRedissonClient.getScoredSortedSet(waitQueueKey);
+		RScoredSortedSet<String> proceedQueue = writeRedissonClient.getScoredSortedSet(proceedQueueKey);
 
 		// 상위 count명의 유저를 추출
 		Collection<String> members = waitQueue.valueRange(0, count - 1);
@@ -190,8 +203,9 @@ public class QueueService {
 		return (long) members.size();
 	}
 
+	// 읽기 작업 : 진행 큐에 사용자가 있는지 확인
 	public boolean isUserInProcceedQueue(Long boardIdx, Long userIdx) {
-		RScoredSortedSet<String> proceedQueue = redissonClient.getScoredSortedSet(getProceedQueueKey(boardIdx));
+		RScoredSortedSet<String> proceedQueue = readRedissonClient.getScoredSortedSet(getProceedQueueKey(boardIdx));
 		return proceedQueue.contains(userIdx.toString());
 	}
 
@@ -209,5 +223,4 @@ public class QueueService {
 			}
 		}
 	}
-
 }

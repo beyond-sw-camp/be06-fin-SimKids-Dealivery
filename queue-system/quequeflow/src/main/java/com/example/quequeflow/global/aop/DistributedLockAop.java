@@ -10,15 +10,21 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class DistributedLockAop {
     private final RedissonClient redissonClient;
     private final AopForTransaction aopForTransaction;
+
+    public DistributedLockAop(@Qualifier("writeRedissonClient") RedissonClient redissonClient,
+                              AopForTransaction aopForTransaction) {
+        this.redissonClient = redissonClient;
+        this.aopForTransaction = aopForTransaction;
+    }
 
     @Around("@annotation(com.example.quequeflow.global.aop.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
