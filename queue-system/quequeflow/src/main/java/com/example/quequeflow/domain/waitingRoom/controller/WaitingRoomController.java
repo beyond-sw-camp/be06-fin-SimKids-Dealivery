@@ -1,5 +1,6 @@
 package com.example.quequeflow.domain.waitingRoom.controller;
 
+import com.example.quequeflow.global.aop.DistributedLock;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import org.springframework.http.ResponseCookie;
@@ -25,6 +26,7 @@ public class WaitingRoomController {
 
 	// 1. 최초 대기열 진입점
 	@GetMapping("/waiting-room")
+	@DistributedLock(key="#boardIdx")
 	public BaseResponse enter(
 			@RequestParam(name = "boardIdx") Long boardIdx,
 			@RequestParam(name = "userIdx") Long userIdx, HttpServletRequest request, HttpServletResponse response) {
