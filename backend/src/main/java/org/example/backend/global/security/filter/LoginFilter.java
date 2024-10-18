@@ -18,6 +18,9 @@ import org.example.backend.global.security.jwt.model.entity.CompanyRefreshToken;
 import org.example.backend.global.security.jwt.model.entity.UserRefreshToken;
 import org.example.backend.global.security.jwt.repository.CompanyRefreshTokenRepository;
 import org.example.backend.global.security.jwt.repository.UserRefreshTokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -35,12 +38,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final Integer COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
-
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final CompanyRefreshTokenRepository companyRefreshTokenRepository;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
 
+    
 //    /login uri접속시 실행
 //    ;를 구분자로 email,type 분리
 //    type을 포함한 커스텀 authToken을 기반으로 인증절차 수행
