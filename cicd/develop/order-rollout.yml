@@ -3,19 +3,19 @@ kind: Rollout
 metadata:
   name: dev-order-rollout
 spec:
-  replicas: 1
+  replicas: 3
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: dev-order-service
+      app: dev-order
   template:
     metadata:
       labels:
-        app: dev-order-service
+        app: dev-order
     spec:
       containers:
         - name: dev-order
-          image: simkids/dealivery-backend:1.96
+          image: simkids/dealivery-order:1.96
           #image: simkids/dealivery:v2 <- 새로운 버전 배포 할 때
           imagePullPolicy: Always
           ports:

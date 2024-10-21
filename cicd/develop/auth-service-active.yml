@@ -5,7 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: dev-auth-service
+    app: dev-auth
   ports:
     - protocol: TCP
       port: 80

@@ -5,7 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: dev-board-service
+    app: dev-board
   ports:
     - protocol: TCP
       port: 80

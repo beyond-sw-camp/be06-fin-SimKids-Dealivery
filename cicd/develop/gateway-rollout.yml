@@ -7,22 +7,21 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: dev-gateway-service
+      app: dev-gateway
   template:
     metadata:
       labels:
-        app: dev-gateway-service
+        app: dev-gateway
     spec:
       containers:
         - name: dev-gateway
-          image: simkids/dealivery-backend:1.96
-          #image: simkids/dealivery:v2 <- 새로운 버전 배포 할 때
+          image: simkids/dealivery-gateway:1.96
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: dev-gateway-configmap
+                name: dev-gateway-service-configmap
   strategy:
     blueGreen:
       #activeService는 현재 운영중인 Blue 서비스

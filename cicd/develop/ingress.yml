@@ -27,20 +27,13 @@ spec:
                 name: grafana
                 port:
                   number: 80
-          - path: /api/oauth
-            pathType: Prefix
-            backend:
-              service:
-                name: dev-backend-service-oauth-active
-                port:
-                  number: 8080
           - path: /api
             pathType: Prefix
             backend:
               service:
-                name: dev-backend-service-active
+                name: dev-gateway-service-active
                 port:
-                  number: 8080
+                  number: 8000
           - path: /queue
             pathType: Prefix
             backend:

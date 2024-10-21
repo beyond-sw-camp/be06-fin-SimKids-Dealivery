@@ -5,7 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: dev-order-service
+    app: dev-order
   ports:
     - protocol: TCP
       port: 80
