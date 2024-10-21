@@ -37,10 +37,17 @@ pipeline {
                         }
                         else if (commitMessage.contains('queue')) {
                             TARGET_COMPONENT = 'queue'
-                        }
-                        else if (commitMessage.contains('backend')) {
-                            TARGET_COMPONENT = 'backend'
-                        } else if (commitMessage.contains('all')) {
+                        }else if (commitMessage.contains('auth')) {
+                            TARGET_COMPONENT = 'auth'
+                        }else if (commitMessage.contains('user')) {
+                            TARGET_COMPONENT = 'user'
+                        }else if (commitMessage.contains('board')) {
+                            TARGET_COMPONENT = 'board'
+                        }else if (commitMessage.contains('gateway')) {
+                            TARGET_COMPONENT = 'gateway'
+                        }else if (commitMessage.contains('order')) {
+                            TARGET_COMPONENT = 'order'
+                        }else if (commitMessage.contains('all')) {
                             TARGET_COMPONENT = 'all'
                         } else {
                             error 'No valid component specified in commit message.'
@@ -63,21 +70,43 @@ pipeline {
                            string(credentialsId: 'VUE_APP_PORTONE_STORE_ID', variable: 'VUE_APP_PORTONE_STORE_ID')
                        ]) {
 
-                        if (TARGET_COMPONENT == 'backend') {
+                        if (TARGET_COMPONENT == 'auth') {
                             sh '''
-                            chmod +x backend/gradlew
-                            cd backend
+                            chmod +x backend/auth/gradlew
+                            cd backend/auth
                             ./gradlew bootJar
                             '''
-                        }
-                        else if (TARGET_COMPONENT == 'queue') {
+                        }else if (TARGET_COMPONENT == 'gateway') {
+                            sh '''
+                            chmod +x backend/gateway/gradlew
+                            cd backend/gateway
+                            ./gradlew bootJar
+                            '''
+                        }else if (TARGET_COMPONENT == 'user') {
+                            sh '''
+                            chmod +x backend/user/gradlew
+                            cd backend/user
+                            ./gradlew bootJar
+                            '''
+                        }else if (TARGET_COMPONENT == 'board') {
+                            sh '''
+                            chmod +x backend/board/gradlew
+                            cd backend/board
+                            ./gradlew bootJar
+                            '''
+                        }else if (TARGET_COMPONENT == 'order') {
+                            sh '''
+                            chmod +x backend/order/gradlew
+                            cd backend/order
+                            ./gradlew bootJar
+                            '''
+                        }else if (TARGET_COMPONENT == 'queue') {
                              sh '''
                              chmod +x queue-system/quequeflow/gradlew
                              cd queue-system/quequeflow
                              ./gradlew bootJar
                              '''
-                        }
-                        else if (TARGET_COMPONENT == 'frontend') {
+                        }else if (TARGET_COMPONENT == 'frontend') {
                             // 프론트엔드 env파일 수정
                             sh """
                             sed -i "s|\\${VUE_APP_KAKAOPAY_CID}|${VUE_APP_KAKAOPAY_CID}|g" frontend/.env
@@ -93,12 +122,29 @@ pipeline {
                             // 프론트엔드 env파일 수정
                             
                             sh """
-                            chmod +x backend/gradlew
-                            cd backend
+                            chmod +x backend/auth/gradlew
+                            chmod +x backend/user/gradlew
+                            chmod +x backend/board/gradlew
+                            chmod +x backend/order/gradlew
+                            chmod +x backend/gateway/gradlew
+                            chmod +x queue-system/quequeflow/gradlew
+
+                            cd backend/auth
                             ./gradlew bootJar
 
-                            chmod +x ../queue-system/quequeflow/gradlew
-                            cd ../queue-system/quequeflow
+                            cd ../user
+                            ./gradlew bootJar
+
+                            cd ../board
+                            ./gradlew bootJar
+
+                            cd ../order
+                            ./gradlew bootJar
+
+                            cd ../gateway
+                            ./gradlew bootJar
+
+                            cd ../../queue-system/quequeflow
                             ./gradlew bootJar
 
                             cd ../../frontend
@@ -127,11 +173,35 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-credential', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                                                sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                                            }
-                    if (TARGET_COMPONENT == 'backend') {
+                    if (TARGET_COMPONENT == 'auth') {
                        // Docker 이미지 빌드 및 푸시
                        sh '''
-                       docker build --tag simkids/dealivery-backend:1.${BUILD_NUMBER} ./backend
-                       docker push simkids/dealivery-backend:1.${BUILD_NUMBER}
+                       docker build --tag simkids/dealivery-auth:1.${BUILD_NUMBER} ./backend/auth
+                       docker push simkids/dealivery-auth:1.${BUILD_NUMBER}
+                       '''
+                    }else if (TARGET_COMPONENT == 'user') {
+                       // Docker 이미지 빌드 및 푸시
+                       sh '''
+                       docker build --tag simkids/dealivery-user:1.${BUILD_NUMBER} ./backend/user
+                       docker push simkids/dealivery-user:1.${BUILD_NUMBER}
+                       '''
+                    }else if (TARGET_COMPONENT == 'board') {
+                       // Docker 이미지 빌드 및 푸시
+                       sh '''
+                       docker build --tag simkids/dealivery-board:1.${BUILD_NUMBER} ./backend/board
+                       docker push simkids/dealivery-board:1.${BUILD_NUMBER}
+                       '''
+                    }else if (TARGET_COMPONENT == 'order') {
+                       // Docker 이미지 빌드 및 푸시
+                       sh '''
+                       docker build --tag simkids/dealivery-order:1.${BUILD_NUMBER} ./backend/order
+                       docker push simkids/dealivery-order:1.${BUILD_NUMBER}
+                       '''
+                    }else if (TARGET_COMPONENT == 'gateway') {
+                       // Docker 이미지 빌드 및 푸시
+                       sh '''
+                       docker build --tag simkids/dealivery-gateway:1.${BUILD_NUMBER} ./backend/gateway
+                       docker push simkids/dealivery-gateway:1.${BUILD_NUMBER}
                        '''
                     }
                     else if (TARGET_COMPONENT == 'queue') {
@@ -149,10 +219,18 @@ pipeline {
                         '''
                     } else if (TARGET_COMPONENT == 'all') {
                         sh '''
-                        docker build --tag simkids/dealivery-backend:1.${BUILD_NUMBER} ./backend
+                        docker build --tag simkids/dealivery-auth:1.${BUILD_NUMBER} ./backend/auth
+                        docker build --tag simkids/dealivery-gateway:1.${BUILD_NUMBER} ./backend/gateway
+                        docker build --tag simkids/dealivery-user:1.${BUILD_NUMBER} ./backend/user
+                        docker build --tag simkids/dealivery-order:1.${BUILD_NUMBER} ./backend/order
+                        docker build --tag simkids/dealivery-gateway:1.${BUILD_NUMBER} ./backend/gateway
                         docker build --tag simkids/dealivery-frontend:1.${BUILD_NUMBER} ./frontend
                         docker build --tag simkids/dealivery-queue:1.${BUILD_NUMBER} ./queue-system/quequeflow
-                        docker push simkids/dealivery-backend:1.${BUILD_NUMBER}
+                        docker push simkids/dealivery-board:1.${BUILD_NUMBER}
+                        docker push simkids/dealivery-gateway:1.${BUILD_NUMBER}
+                        docker push simkids/dealivery-user:1.${BUILD_NUMBER}
+                        docker push simkids/dealivery-order:1.${BUILD_NUMBER}
+                        docker push simkids/dealivery-auth:1.${BUILD_NUMBER}
                         docker push simkids/dealivery-frontend:1.${BUILD_NUMBER}
                         docker push simkids/dealivery-queue:1.${BUILD_NUMBER}
                         '''
@@ -169,20 +247,38 @@ pipeline {
                     echo "Editing Manifest..."
                     sh 'cd ..'
                     sh 'git checkout argoCD'
-                       if (TARGET_COMPONENT == 'backend') {
+                       if (TARGET_COMPONENT == 'auth') {
                            // 백엔드 rollout 수정 후
                           sh """
                           cd cicd/develop
-                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' backend-rollout.yml
-                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' backend-oauth-rollout.yml
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' auth-rollout.yml
                           """
                        }
-                       else if (TARGET_COMPONENT == 'queue') {
+                       else if (TARGET_COMPONENT == 'user') {
+                       sh """
+                         cd cicd/develop
+                         sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' user-rollout.yml
+                         """
+                       }else if (TARGET_COMPONENT == 'board') {
+                       sh """
+                         cd cicd/develop
+                         sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' board-rollout.yml
+                         """
+                       }else if (TARGET_COMPONENT == 'order') {
+                       sh """
+                         cd cicd/develop
+                         sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' order-rollout.yml
+                         """
+                       }else if (TARGET_COMPONENT == 'gateway') {
+                       sh """
+                         cd cicd/develop
+                         sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' gateway-rollout.yml
+                         """
+                       }else if (TARGET_COMPONENT == 'queue') {
                        sh """
                          cd cicd/develop
                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' queue-rollout.yml
                          """
-
                        }
                        else if (TARGET_COMPONENT == 'frontend') {
                           sh """
@@ -192,8 +288,11 @@ pipeline {
                        } else if (TARGET_COMPONENT == 'all') {
                           sh """
                           cd cicd/develop
-                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' backend-rollout.yml
-                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' backend-oauth-rollout.yml
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' auth-rollout.yml
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' user-rollout.yml
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' order-rollout.yml
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' board-rollout.yml
+                          sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' gateway-rollout.yml
                           sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' queue-rollout.yml
                           sed -i 's/:1\\.[0-9]\\+/:1.${BUILD_NUMBER}/g' frontend-rollout.yml
                           """
