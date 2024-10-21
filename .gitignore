@@ -38,11 +38,25 @@ derby.log
 .gradle
 .gradletasknamecache
 /backend/build/
+/backend/.idea/
+/backend/eureka/build/
+/backend/gateway/build/
+/backend/gateway/.idea/
+/backend/user/build/
+/backend/user/.idea/
+/backend/board/build/
+/backend/board/.idea/
+/backend/orders/build/
+/backend/orders/.idea/
 /spring-*/build/
 /framework-*/build/
 /integration-tests/build/
 /src/asciidoc/build/
 spring-test/test-output/
+
+**/build/
+**/.idea/
+
 
 # Maven artifacts
 pom.xml
