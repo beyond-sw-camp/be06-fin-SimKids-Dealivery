@@ -22,7 +22,7 @@ spec:
             - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: dev-order-configmap
+                name: dev-order-service-configmap
   strategy:
     blueGreen:
       #activeService는 현재 운영중인 Blue 서비스
