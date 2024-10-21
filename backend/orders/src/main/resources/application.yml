@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        # default_batch_fetch_size: 15
+    database-platform: org.hibernate.dialect.MariaDBDialect
+
+imp:
+  imp_key: ${IMP_KEY}
+  imp_secret: ${IMP_SECRET}
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+    context-path: ${CONTEXT_PATH}
+
+# ex. https://www.dealivery.com
+domain: ${DOMAIN}
+
+custom:
+  kafka-url: ${KAFKA_URL}

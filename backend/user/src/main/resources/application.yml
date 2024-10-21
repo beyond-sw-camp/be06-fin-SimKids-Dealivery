@@ -1,0 +1,61 @@
+api:
+  nts-businessman:
+    v1:
+      validate:
+        serviceKey: ${NTS_KEY}
+        url: ${NTS_BASEURL}
+
+project:
+  mail:
+    url: ${MAIL_URL}
+
+spring:
+  application:
+    name: user-service
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+            required: true
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        # default_batch_fetch_size: 15
+    database-platform: org.hibernate.dialect.MariaDBDialect
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+    context-path: ${CONTEXT_PATH}
+
+custom:
+  kafka-url: ${KAFKA_URL}
