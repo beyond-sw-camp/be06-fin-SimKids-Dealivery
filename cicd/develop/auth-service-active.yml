@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dev-auth-service-active
+spec:
+  type: ClusterIP
+  selector:
+    app: dev-auth-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

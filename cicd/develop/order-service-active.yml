@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dev-order-service-active
+spec:
+  type: ClusterIP
+  selector:
+    app: dev-order-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

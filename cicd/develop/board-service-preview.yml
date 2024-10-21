@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: dev-board-service-preview
+spec:
+  type: ClusterIP
+  selector:
+    app: dev-board-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: dev-order-rollout
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: dev-order-service
+  template:
+    metadata:
+      labels:
+        app: dev-order-service
+    spec:
+      containers:
+        - name: dev-order
+          image: simkids/dealivery-backend:1.96
+          #image: simkids/dealivery:v2 <- 새로운 버전 배포 할 때
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: dev-order-configmap
+  strategy:
+    blueGreen:
+      #activeService는 현재 운영중인 Blue 서비스
+      activeService: dev-order-service-active
+
+      #previewService는 새롭게 배포될 Green 서비스
+      previewService: dev-order-service-preview
