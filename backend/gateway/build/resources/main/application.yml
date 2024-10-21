@@ -1,0 +1,41 @@
+server:
+  port: 8000
+
+redis:
+  master:
+    host: ${REDIS_MASTER_HOST}
+  slave:
+    host: ${REDIS_SLAVE_HOST}
+  port: ${REDIS_PORT}
+  password: ${REDIS_PASSWORD}
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+  jwt:
+    secret: ${JWT_SECRET}
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user-service-route
+          uri: ${LB_USER_SERVICE}
+          predicates:
+            - Path=/api/user/**, /api/company/**, /api/delivery/**
+        - id: auth-service-route
+          uri: ${LB_AUTH_SERVICE}
+          predicates:
+            - Path=/api/login, /api/logout, /api/oauth/**, /api/auth/**, /api/kakao/**
+        - id: order-service-route
+          uri: ${LB_ORDER_SERVICE}
+          predicates:
+            - Path=/api/orders/**
+        - id: board-service-route
+          uri: ${LB_BOARD_SERVICE}
+          predicates:
+            - Path=/api/product-boards/**, /api/likes/**, /api/qna/**
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

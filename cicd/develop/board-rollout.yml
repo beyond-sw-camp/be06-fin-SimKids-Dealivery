@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: dev-board
-          image: simkids/dealivery-board:1.96
+          image: simkids/dealivery-board:1.109
           #image: simkids/dealivery:v2 <- 새로운 버전 배포 할 때
           imagePullPolicy: Always
           ports:
