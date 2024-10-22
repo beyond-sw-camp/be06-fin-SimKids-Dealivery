@@ -301,12 +301,6 @@ export default {
       isModalVisible: false,
     };
   },
-  created() {
-    this.isHeartFilled = this.data.likes;
-    if (this.isHeartFilled) {
-      this.heartImage = this.filledHeartImage;
-    }
-  },
   computed: {
     isBeforeOpenTime() {
       return Date.now() < new Date(this.data.startedAt).getTime();
@@ -328,6 +322,7 @@ export default {
       handler(newValue) {
         if (newValue) {
           this.mapProductsToOptions();
+          this.changeHeart();
         }
       },
     },
@@ -339,6 +334,13 @@ export default {
         label: product.name, // 이름 앞에 '[99치킨]' 추가
         originalPrice: product.price,
       }));
+    },
+    changeHeart() {
+      this.isHeartFilled = this.data.likes;
+      if (this.isHeartFilled) {
+        console.log("likes 여부:", this.data.likes);
+        this.heartImage = this.filledHeartImage;
+      }
     },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
