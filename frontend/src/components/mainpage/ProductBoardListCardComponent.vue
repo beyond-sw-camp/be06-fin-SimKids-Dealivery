@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     getDiscountPrice() {
-      return this.data.price * (1 - this.data.discountRate / 100);
+      return Math.floor(this.data.price * (1 - this.data.discountRate / 100));
     },
     calculatePercentage() {
       const startDate = new Date(this.data.startedAt);

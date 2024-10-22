@@ -14,7 +14,9 @@
     <h2 class="css-abwjr2 e1q8tigr4">
       <span class="css-5nirzt e1q8tigr3">{{ data.discountRate }}%</span
       ><span class="css-9pf1ze e1q8tigr2">{{
-        (this.data.price * (1 - this.data.discountRate / 100)).toLocaleString()
+        Math.floor(
+          this.data.price * (1 - this.data.discountRate / 100)
+        ).toLocaleString()
       }}</span
       ><span class="css-1x9cx9j e1q8tigr1">원</span>
     </h2>

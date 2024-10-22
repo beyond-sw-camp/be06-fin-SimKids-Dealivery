@@ -109,9 +109,8 @@
                       >{{ data.discountRate }}%</span
                     ><span class="sales-price css-105zgxh ei5rudb1"
                       ><span class="price-number">{{
-                        (
-                          this.data.price *
-                          (1 - this.data.discountRate / 100)
+                        Math.floor(
+                          this.data.price * (1 - this.data.discountRate / 100)
                         ).toLocaleString()
                       }}</span
                       ><span class="won">원</span></span

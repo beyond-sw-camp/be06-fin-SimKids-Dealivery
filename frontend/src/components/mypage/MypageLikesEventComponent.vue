@@ -76,7 +76,9 @@
                         >
                         <span class="css-153tu4t e1alt0er1"
                           >{{
-                            data.price * (1 - data.discountRate / 100)
+                            Math.floor(
+                              data.price * (1 - data.discountRate / 100)
+                            ).toLocaleString()
                           }}원</span
                         >
                         <span class="css-1ufyr2r e1alt0er0"
@@ -442,6 +444,7 @@ th {
   flex-direction: column;
   width: calc(100% - 90px);
   padding-left: 16px;
+  padding-top: 10px;
 }
 
 .css-1nf3eox {
@@ -576,6 +579,7 @@ video {
 img {
   overflow-clip-margin: content-box;
   overflow: clip;
+  /* height: 130px; */
 }
 
 .css-ew8abz img {
@@ -646,5 +650,9 @@ input[type="submit"] {
   cursor: pointer;
   background-color: rgb(247, 247, 247);
   color: rgb(95, 0, 128);
+}
+.css-0 {
+  overflow: clip;
+  height: 130px;
 }
 </style>
