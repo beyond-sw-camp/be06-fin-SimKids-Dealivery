@@ -54,7 +54,9 @@
               required=""
               class="css-11ntk83 e1493ofl3"
               value=""
-              @keydown.enter="handleNavigation('search', search)"
+              @compositionend="handleCompositionEnd"
+              @keydown.enter="handleEnter"
+              @input="handleInput"
             /><button
               id="submit"
               aria-label="submit"
@@ -130,6 +132,20 @@ export default {
     };
   },
   methods: {
+    handleCompositionEnd() {
+      // 조합 문자가 끝났을 때 호출
+      this.isComposing = false;
+    },
+    handleInput(event) {
+      // 입력 중일 때 호출
+      this.isComposing = event.isComposing;
+    },
+    handleEnter() {
+      // 조합 중이 아니고 Enter를 눌렀을 때만 실행
+      if (!this.isComposing) {
+        this.handleNavigation("search", this.search);
+      }
+    },
     handleNavigation(type, value) {
       let query = {
         page: 1,
