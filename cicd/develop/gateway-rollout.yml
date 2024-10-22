@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: dev-gateway
-          image: simkids/dealivery-gateway:1.117
+          image: simkids/dealivery-gateway:1.118
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
