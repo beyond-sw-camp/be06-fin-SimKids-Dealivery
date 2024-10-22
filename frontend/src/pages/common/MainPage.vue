@@ -146,7 +146,7 @@ export default {
 .main-card-container > * {
   flex-basis: calc(50% - 30px);
   /* 카드의 너비를 50%로 설정 */
-  max-width: calc(50% - 30px);
+  /* max-width: calc(50% - 30px); */
   /* 너비 최대값 설정 */
   box-sizing: border-box;
 }
