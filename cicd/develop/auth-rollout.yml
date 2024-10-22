@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: dev-auth
-          image: simkids/dealivery-auth:1.116
+          image: simkids/dealivery-auth:1.117
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
