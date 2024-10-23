@@ -10,6 +10,7 @@ import org.example.board.domain.qna.model.dto.AnswerDto;
 import org.example.board.domain.qna.model.dto.QuestionDto;
 import org.example.board.domain.user.model.entity.User;
 import org.example.board.global.common.constants.AnswerStatus;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ public class Question {
     @JoinColumn(name = "product_board_idx")
     private ProductBoard productBoard;
 
+    @BatchSize(size = 5)  // 한 번에 가져올 배치 크기 설정
     @OneToMany(mappedBy = "question")
     private List<Answer> answers = new ArrayList<>();
 
@@ -65,22 +67,22 @@ public class Question {
     }
 
     // DTO 변환 메서드: 문의 목록 조회
-    public QuestionDto.QuestionListResponse toListResponse() {
-        List<AnswerDto.AnswerResponse> answerResponses = this.answers.stream()
+    public static QuestionDto.QuestionListResponse toListResponse(Question q) {
+        List<AnswerDto.AnswerResponse> answerResponses = q.answers.stream()
                 .map(answer -> answer.toResponse())
                 .collect(Collectors.toList());
 
         return QuestionDto.QuestionListResponse.builder()
-                .idx(this.idx)
-                .title(this.title)
-                .content(this.content)
-                .userName(this.user.getName())
-                .answerStatus(this.answerStatus)
-                .createdAt(this.createdAt)
-                .email(this.user.getEmail())
+                .idx(q.idx)
+                .title(q.title)
+                .content(q.content)
+                .userName(q.user.getName())
+                .answerStatus(q.answerStatus)
+                .createdAt(q.createdAt)
+                .email(q.user.getEmail())
                 .answers(answerResponses)  // 답변 리스트 포함
-                .productBoardIdx(getProductBoard().getIdx())
-                .productTitle(getProductBoard().getTitle())
+                .productBoardIdx(q.getProductBoard().getIdx())
+                .productTitle(q.getProductBoard().getTitle())
 
                 .build();
     }
@@ -93,12 +95,6 @@ public class Question {
     // 답변 상태를 "답변 대기"로 변경하는 메서드
     public void markAsWaiting() {
         this.answerStatus = AnswerStatus.ANSWER_WAITING.getStatus();
-    }
-
-    // 문의 수정 시에만 수정 시간(modifiedAt) 갱신
-    public void updateContent(String newContent) {
-        this.content = newContent;
-        this.modifiedAt = LocalDateTime.now();  // 문의가 수정될 때만 modifiedAt 갱신
     }
 
     // 문의 제목과 내용을 수정하는 메서드

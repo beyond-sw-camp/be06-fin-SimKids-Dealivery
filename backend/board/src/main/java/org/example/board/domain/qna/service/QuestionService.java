@@ -26,7 +26,6 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final ProductBoardRepository productBoardRepository;
     private final UserRepository userRepository;
-    private final AnswerRepository answerRepository;
 
     public QuestionDto.QuestionCreateResponse createQuestion(QuestionDto.QuestionCreateRequest request, String email, Long productBoardIdx) {
         // 사용자 조회
@@ -45,7 +44,14 @@ public class QuestionService {
     }
 
     public Page<QuestionDto.QuestionListResponse> getQuestionsByProductBoardIdx(Long productBoardIdx, Pageable pageable) {
-        return questionRepository.findByProductBoard_Idx(productBoardIdx, pageable).map(Question::toListResponse);
+        Page<Question> questions = questionRepository.findByProductBoard_Idx(productBoardIdx, pageable);
+        questions.forEach(this::loadAnswers); // 별도의 메서드로 필요 시 답변을 로딩
+        return questions.map(Question::toListResponse);
+    }
+
+    private void loadAnswers(Question question) {
+        // 지연 로딩된 answers를 필요할 때 불러오는 방식
+        question.getAnswers().size();
     }
 
     public void deleteQuestion(Long questionId, String email){
@@ -70,8 +76,9 @@ public class QuestionService {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new InvalidCustomException(BaseResponseStatus.QNA_USER_NOT_FOUND));
 
-        return questionRepository.findByUser(user, pageable)
-                .map(Question::toListResponse);
+        Page<Question> questions = questionRepository.findByUser(user, pageable);
+        questions.forEach(this::loadAnswers);
+        return questions.map(Question::toListResponse);
     }
 
     public void updateQuestion(Long id, QuestionDto.QuestionUpdateRequest request, String email) {
@@ -95,7 +102,8 @@ public class QuestionService {
             return Page.empty(pageable);
         }
 
-        return questionRepository.findByProductBoardIn(productBoards, pageable)
-                .map(Question::toListResponse);
+        Page<Question> questions = questionRepository.findByProductBoardIn(productBoards, pageable);
+        questions.forEach(this::loadAnswers);
+        return questions.map(Question::toListResponse);
     }
 }
