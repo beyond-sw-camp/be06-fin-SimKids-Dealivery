@@ -31,6 +31,7 @@ export const useUserStore = defineStore("user", {
   }),
   persist: {
     storage: sessionStorage,
+    paths: ['isLogined', 'roles', 'socialLoginResponse', 'userDetail', 'socialRedirect'] 
   },
   actions: {
     async login(type, loginRequest) {
