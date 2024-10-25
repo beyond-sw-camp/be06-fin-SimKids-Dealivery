@@ -7,10 +7,10 @@ spec:
   ingressClassName: "nginx"
   tls:
     - hosts:
-        - www.dev-dealivery.kro.kr
-      secretName: dev-tls-secret
+        - www.dealivery.kro.kr
+      secretName: tls-secret2
   rules:
-    - host: www.dev-dealivery.kro.kr
+    - host: www.dealivery.kro.kr
       http:
         paths:
           - path: /prometheus
