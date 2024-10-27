@@ -14,7 +14,7 @@
     <h2 class="css-abwjr2 e1q8tigr4">
       <span class="css-5nirzt e1q8tigr3">{{ data.discountRate }}%</span
       ><span class="css-9pf1ze e1q8tigr2">{{
-        Math.floor(
+        Math.round(
           this.data.price * (1 - this.data.discountRate / 100)
         ).toLocaleString()
       }}</span
@@ -358,7 +358,7 @@ export default {
         this.cartItems.push({
           idx: option.idx,
           name: option.name,
-          price: Math.floor(option.price * (1 - this.data.discountRate / 100)), // 소수점 내림 처리
+          price: Math.round(option.price * (1 - this.data.discountRate / 100)), // 소수점 내림 처리
           originalPrice: option.price,
           quantity: 1,
         });

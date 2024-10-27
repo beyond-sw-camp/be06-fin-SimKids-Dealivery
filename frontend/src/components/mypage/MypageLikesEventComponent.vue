@@ -76,7 +76,7 @@
                         >
                         <span class="css-153tu4t e1alt0er1"
                           >{{
-                            Math.floor(
+                            Math.round(
                               data.price * (1 - data.discountRate / 100)
                             ).toLocaleString()
                           }}원</span
@@ -228,12 +228,12 @@ export default {
     },
     // 이전 페이지 그룹으로 이동
     prevPageGroup() {
-      const newPage = this.startPage - 1;
+      const newPage = this.currentPage - 1;
       this.goToPage(newPage);
     },
     // 다음 페이지 그룹으로 이동
     nextPageGroup() {
-      const newPage = this.endPage + 1;
+      const newPage = this.currentPage + 1;
       this.goToPage(newPage);
     },
     removeItem(index) {
