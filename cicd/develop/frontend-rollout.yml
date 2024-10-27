@@ -14,7 +14,7 @@ spec:
     spec:  # spec 안에 template과 containers가 있어야 함
       containers:
         - name: dev-frontend
-          image: simkids/dealivery-frontend:1.142  # 새로운 이미지
+          image: simkids/dealivery-frontend:1.144  # 새로운 이미지
 
   strategy:
     canary:
