@@ -123,11 +123,11 @@ export default {
       }
     },
     prevPageGroup() {
-      const newPage = this.currentPage - 1;
+      const newPage = this.startPage - 1;
       this.goToPage(newPage);
     },
     nextPageGroup() {
-      const newPage = this.currentPage + 1;
+      const newPage = this.endPage + 1;
       this.goToPage(newPage);
     },
   },
