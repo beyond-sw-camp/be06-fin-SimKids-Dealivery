@@ -108,7 +108,7 @@
                       >{{ data.discountRate }}%</span
                     ><span class="sales-price css-105zgxh ei5rudb1"
                       ><span class="price-number">{{
-                        Math.floor(
+                        Math.round(
                           this.data.price * (1 - this.data.discountRate / 100)
                         ).toLocaleString()
                       }}</span
