@@ -1,11 +1,19 @@
 <template>
 <div class="css-1bb6q2p etkckst2">
+    <div class="test-account-container">
+        <p class="test-account-title"><strong>테스트 계정 안내</strong></p>
+        <div class="test-account-content">
+            <p><strong>일반 회원 1 :</strong> user01@test.com / Qwer1234!</p>
+            <p><strong>일반 회원 2 :</strong> user02@test.com / Qwer1234!</p>
+            <p><strong>업체 회원 :</strong> company01@test.com / Qwer1234!</p>
+        </div>
+    </div>
         <div class="css-19zrxsg etkckst1">로그인</div>
         <div class="css-1axolzg etkckst0">
             <div class="css-1izr46f e1fu5st01">
                 <button type="button"
                 :class="{'active': type === 'user', 'inactive': type !== 'user'}"
-                 class="e1fu5st00" @click="setUserType('user')">일반 회원</button>
+                class="e1fu5st00" @click="setUserType('user')">일반 회원</button>
                 <button type="button"
                 :class="{'active': type === 'company', 'inactive': type !== 'company'}"
                 class="inactive e1fu5st00" @click="setUserType('company')">업체 회원</button>
@@ -484,6 +492,26 @@ a {
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
+}
+
+.test-account-container {
+    background-color: #f0f4fa;
+    border: 1px solid #d0e4f7;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    olor: #2a3f54;
+}
+.test-account-title {
+    font-size: 16px;
+    color: #0c3c78;
+    margin-bottom: 10px;
+}
+.test-account-content p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #3b5267;
 }
 
 </style>

@@ -85,12 +85,6 @@
     </div>
     <div id="header" class="css-17tqugj e17w4cfr1">
       <div class="css-mlddcv e17w4cfr6">
-        <div class="css-0 e17w4cfr3">
-          <div class="css-axtlq9 eqn756m2">
-            <span class="css-1k5gn9s eqn756m1"></span>
-            <span class="css-t75x7c eqn756m0">카테고리</span>
-          </div>
-        </div>
         <div>
           <ul class="css-1887xqd e17w4cfr5">
             <li

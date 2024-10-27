@@ -132,9 +132,8 @@
                         <div class="css-t4macj e12wapb62">
                           <div class="css-1fvrsoi e12wapb60">
                             {{
-                              (
-                                option.price *
-                                (1 - this.data.discountRate / 100)
+                              Math.round(
+                                option.price * (1 - this.data.discountRate / 100)
                               ).toLocaleString()
                             }}원
                           </div>
@@ -359,7 +358,7 @@ export default {
         this.cartItems.push({
           idx: option.idx,
           name: option.name,
-          price: option.price * (1 - this.data.discountRate / 100),
+          price: Math.floor(option.price * (1 - this.data.discountRate / 100)), // 소수점 내림 처리
           originalPrice: option.price,
           quantity: 1,
         });

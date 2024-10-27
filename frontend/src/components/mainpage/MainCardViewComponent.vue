@@ -2,8 +2,8 @@
   <div v-if="data.price">
     <div class="e1e6st7u6 css-17p5a04 e1ne12di0">
       <div class="css-ghsdgz e1e6st7u4">
-        <h2 class="css-n9ehvd e1e6st7u3">일일특가</h2>
-        <h3 class="css-1fc0npt e1e6st7u2">24시간 한정 특가</h3>
+        <h2 class="css-n9ehvd e1e6st7u3">한정특가</h2>
+        <h3 class="css-1fc0npt e1e6st7u2">망설이면 늦어요!</h3>
         <div class="e1e6st7u5 css-we1gxf e17lobue1">
           <div class="lottie-timer">
             <img
@@ -17,7 +17,6 @@
             <span>{{ seconds }}</span>
           </div>
         </div>
-        <p class="css-d0y7nj e1e6st7u1">망설이면 늦어요!</p>
       </div>
       <div class="css-1yx948y e1e6st7u0">
         <div class="deal-size-2 e1nucwdg0 e14udynn0 css-ae5x66 e1cmg4vm6">
