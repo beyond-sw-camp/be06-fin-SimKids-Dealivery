@@ -76,7 +76,7 @@
                         >
                         <span class="css-153tu4t e1alt0er1"
                           >{{
-                            Math.floor(
+                            Math.round(
                               data.price * (1 - data.discountRate / 100)
                             ).toLocaleString()
                           }}원</span
